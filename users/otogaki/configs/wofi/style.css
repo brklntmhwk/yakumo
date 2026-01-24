@@ -1,0 +1,37 @@
+/* See wofi(5) for the CSS selectors  */
+
+* {
+    font-family: "HackGen Console NF", JetBrains Mono, Roboto, Helvetica, Ariel, sans-serif;
+    font-size: 25px;
+}
+
+#window {
+    margin: 0 auto;
+    background-color: rgba(41, 50, 67, 0.85);
+    border-radius: 6px;
+}
+
+#input {
+    color: rgb(204, 204, 204);
+    background-color: rgba(24, 29, 41, 0.8);
+    border: none;
+    margin: 10px;
+    padding: 10px 12px;
+}
+
+#inner-box {
+    border: none;
+}
+
+#text {
+    color: rgb(204, 204, 204);
+}
+
+.entry {
+    margin: 8px 12px;
+}
+
+#entry:selected {
+    background: rgba(147, 112, 208, 0.6);
+    border: none;
+}

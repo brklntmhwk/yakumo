@@ -1,0 +1,6 @@
+(
+  address: "Japan,Tokyo",
+  language: "en_US",
+  forecast: [day, week],
+  
+)

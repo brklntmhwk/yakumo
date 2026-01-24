@@ -1,0 +1,7 @@
+stylesheet=./style.css
+
+# Make navigation keys align with those of shells & Emacs
+key_up=Ctrl-p
+key_down=Ctrl-n
+key_left=Ctrl-b
+key_right=Ctrl-f

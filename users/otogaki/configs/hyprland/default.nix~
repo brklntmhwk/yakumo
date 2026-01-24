@@ -1,0 +1,19 @@
+{ pkgs, ... }:
+{
+  imports = [
+    ./hypridle
+    ./hyprlock
+  ];
+
+  home.packages = with pkgs; [
+    brightnessctl
+    swww
+    grim
+    slurp
+    swappy
+    wl-screenrec
+    hyprpaper
+    hyprpicker
+    pamixer
+  ];
+}

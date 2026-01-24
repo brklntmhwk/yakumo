@@ -1,0 +1,9 @@
+keys:
+  - &admin age1tdat96efnae3g6x5p5aw70kak804ar7jj94dx72vumn76rvf5qcsq82pp8
+  - &tsutsuyami age13eqkelhxncfe00s9zuwzparcg0xzl44h9an9syvs5wcnztlthpes84tqqj
+creation_rules:
+  - path_regex: secrets/[^/]+\.yaml$
+    key_groups:
+      - age:
+          - *admin
+          - *tsutsuyami

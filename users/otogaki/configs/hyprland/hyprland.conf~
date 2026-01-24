@@ -1,0 +1,60 @@
+# Use these variables hereafter
+      $mainMod = SUPER
+      $subMod = ALT
+      $browser = firefox
+      $fileManager = yazi
+      $launcher = wofi --show drun
+      $terminal = wezterm
+
+      # Execute One-shots
+      exec-once = hypridle
+      exec-once = $terminal
+      exec-once = waybar & hyprpaper
+      exec-once = wl-paste --type text --watch cliphist store
+      exec-once = wl-paste --type image --watch cliphist store
+
+      # Set environment variables
+      env = HYPRCURSOR_THEME,rose-pine-hyprcursor
+      env = HYPRCURSOR_SIZE,26
+
+      # Key-bind move focus
+      bind = $subMod, left, movefocus, left
+      bind = $subMod, right, movefocus, right
+      bind = $subMod, up, movefocus, up
+      bind = $subMod, down, movefocus, down
+      bind = $subMod, Tab, cyclenext
+      bind = $subMod SHIFT, Tab, cyclenext, prev
+
+      # Key-bind move window
+      bind = $mainMod, left, movewindow, left
+      bind = $mainMod, right, movewindow, right
+      bind = $mainMod, up, movewindow, up
+      bind = $mainMod, down, movewindow, down
+
+      # Key-bind executions of programs
+      bind = $mainMod, A, exec, $launcher
+      bind = $mainMod, B, exec, $browser
+      bind = $mainMod, E, exec, $fileManager
+      bind = $mainMod, Return, exec, $terminal
+
+      # Screen-lock by hyprlock
+      bind = $mainMod, L, exec, hyprlock
+
+      # Run screen recording
+      # bind = $mainMod, R, exec, wl-screenrec -g "${slurp}"
+      bind = $mainMod SHIFT, R, exec, wl-screenrec -o DP-1
+
+      # Show Cliphist's clipboard history on the Wofi dmenu
+      bind = $mainMod, V, exec, cliphist list | wofi -S dmenu | cliphist decode | wl-copy
+
+      # Suspend your machine
+      bind = $mainMod, X, exec, systemctl suspend
+
+      # Run color picker by hyprpicker
+      bind = $mainMod SHIFT, C, exec, hyprpicker --autocopy
+
+      # screenshot the display fully or partially by grimblast
+      bind = , Print, exec, grimblast save area --freeze
+      bind = SHIFT, Print, exec, grimblast save screen
+      bind = $mainMod, P, exec, grimblast copysave area --freeze
+      bind = $mainMod SHIFT, P, exec, grimblast copysave screen
