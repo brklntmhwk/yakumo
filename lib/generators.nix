@@ -256,4 +256,44 @@ in
         ${concatStringsSep "\n" (mapAttrsToList convertAttributeToKDL attrs)}
       '';
   };
+
+  mkRonLiteral = v: {
+    _type = "ron-literal";
+    inherit v;
+  };
+
+  toRon =
+    {
+      attrs,
+      indentLevel ? 0,
+    }:
+    let
+      indent = n: concatStrings (replicate n "  ");
+      toRon' =
+        lvl: v:
+        let
+          type = typeOf v;
+        in
+        if type == "set" && v ? _type && v._type == "ron-literal" then
+          v.value
+        else if type == "set" then
+          let
+            fields = mapAttrsToList (k: val: "${indent (lvl + 1)}${k}: ${toRon' (lvl + 1) val},") v;
+          in
+          "(\n${concatStringsSep "\n" fields}\n${indent lvl})"
+        else if type == "list" then
+          let
+            vals = map (x: "${indent (lvl + 1)}${toRon' (lvl + 1) x},") v;
+          in
+          "[\n${concatStringsSep "\n" vals}\n${indent lvl}]"
+        else if type == "string" then
+          ''"${replaceStrings [ ''"'' ] [ ''\"'' ] v}"''
+        else if type == "bool" then
+          (if v then "true" else "false")
+        else if type == "null" then
+          "None"
+        else
+          toString v;
+    in
+    toRon' indentLevel attrs;
 }

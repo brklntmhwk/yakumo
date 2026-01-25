@@ -225,6 +225,10 @@ in
       ];
       settings = import ./configs/television { inherit theme; };
     };
+    wthrr = {
+      enable = true;
+      settings = import ./configs/wthrr { };
+    };
   };
 
   yakumo.services = {

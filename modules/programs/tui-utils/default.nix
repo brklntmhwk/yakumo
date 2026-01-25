@@ -22,8 +22,6 @@ in
       # Install util TUIs altogether that you don't need to wrap with their configurations.
       inherit (pkgs)
         bandwhich # Terminal bandwidth util
-        television # General purpose fuzzy finder TUI
-        wthrr # Weather companion for the terminal
         ;
     };
   };

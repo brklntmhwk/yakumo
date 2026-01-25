@@ -27,16 +27,16 @@
   rebase = {
     # Automatically stash dirty changes before rebase and pop after.
     autoStash = true;
-    # Update refs of stacked branches when rebasing (Git 2.38+)
+    # Update refs of stacked branches when rebasing. (Git 2.38+)
     updateRefs = true;
   };
-  # "Reuse Recorded Resolution": Remembers how you fixed conflicts
+  # "Reuse Recorded Resolution": Remembers how you fixed conflicts.
   # and automatically applies it if you encounter the same conflict again later.
   rerere = {
     enabled = true;
     autoupdate = true;
   };
-  # URL shorthands (e.g., `git clone gh:nixos/nixpkgs`)
+  # URL shorthands. (e.g., `git clone gh:nixos/nixpkgs`)
   url = {
     "git@github.com:".insteadOf = [
       "gh:"

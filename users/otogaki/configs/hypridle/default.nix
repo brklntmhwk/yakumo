@@ -33,8 +33,8 @@ theme:
     {
       timeout = 330;
       command = "niri msg action power-off-monitors";
-      # Combines waking monitors and restoring brightness from Hypridle config
-      resumeCommand = "niri msg action power-on-monitors && brightnessctl -r";
+      # Combine waking monitors and restoring brightness from Hypridle config.
+      resumeCommand = "niri msg action power-on-monitors && brightnessctl b-r";
     }
     {
       timeout = 1800;

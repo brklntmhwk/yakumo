@@ -49,7 +49,7 @@ in
         # the Logjam Attack (2015).
         # The 5th column lists the bit size of the prime number used for encryption.
         # Other options: 2048, 4096.
-        moduliFile = pkgs.runCommand "filterModuliFile" {} ''
+        moduliFile = pkgs.runCommand "filterModuliFile" { } ''
           awk '$5 >= 3071' "${config.programs.ssh.package}/etc/ssh/moduli" >"$out"
         '';
       };
@@ -58,6 +58,8 @@ in
       # With this, Systemd will start OpenSSH on the first incoming connection
       # instead of having it permanently running as a daemon.
       services.openssh.startWhenNeeded = true;
+      # Start OpenSSH agent when you log in.
+      programs.ssh.startAgent = true;
     })
   ]);
 }

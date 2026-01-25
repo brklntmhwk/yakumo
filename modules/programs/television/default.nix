@@ -43,18 +43,18 @@ in
         https://alexpasmantier.github.io/television/docs/Users/configuration
       '';
       example = literalExpression ''
-                {
-                  tick_rate = 50;
-                  ui = {
-                    use_nerd_font_icons = true;
-                    ui_scale = 120;
-                    show_preview_panel = false;
-                  };
-                  keybindings = {
-                    quit = [ "esc" "ctrl-c" ];
-                  };
-                }
-        p      '';
+        {
+          tick_rate = 50;
+          ui = {
+            use_nerd_font_icons = true;
+            ui_scale = 120;
+            show_preview_panel = false;
+          };
+          keybindings = {
+            quit = [ "esc" "ctrl-c" ];
+          };
+        }
+      '';
     };
     channelSettings = lib.mkOption {
       type = lib.types.attrsOf tomlFormat.type;
