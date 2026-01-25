@@ -19,6 +19,7 @@ in
     {
       boot = {
         kernelPackages = mkDefault pkgs.linuxPackages; # Stable default.
+        # Kernel modules to be loaded in the second stage of the boot process.
         kernelModules = [
           "tcp_bbr" # TCP Bottleneck Bandwidth and Round-Trip
         ];
@@ -36,20 +37,8 @@ in
             # Add Memtest86+ (Memory testing tool) to the boot menu.
             memtest86.enable = mkDefault true;
           };
-          loader = {
-            timeout = mkDefault 3;
-          };
+          timeout = mkDefault 3;
         };
-        # For learning purposes.
-        # In most cases, these are automatically configured in
-        # 'hardware-configuration.nix' already.
-        initrd.availableKernelModules = [
-          "xhci_pci" # USB 3.x
-          "ahci" # SATA
-          "usbhid" # USB Human Interface Devices
-          "usb_storage" # USB Storage Devices
-          "sd_mod" # SCSI/SATA disks
-        ];
         # initrd.systemd.enable = true;
       };
     }
@@ -59,9 +48,21 @@ in
         kernelPackages = pkgs.linuxKernel.packages.linux_zen_latest;
         kernelModules = [ ];
         kernel = { };
+        # Kernel Modules needed to mount the root file system.
+        # In most cases, these are automatically configured in
+        # 'hardware-configuration.nix' already.
         initrd.availableKernelModules = [
-
+          "xhci_pci" # USB 3.x
+          "ahci" # SATA
+          "usbhid" # USB Human Interface Devices
+          "usb_storage" # USB Storage Devices
+          "sd_mod" # SCSI/SATA disks
         ];
+      };
+    })
+    (mkIf (systemRole == "server") {
+      boot = {
+        kernelPackages = pkgs.linuxKernel.packages.linux_6_12_hardened;
       };
     })
   ];

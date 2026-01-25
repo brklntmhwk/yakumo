@@ -9,7 +9,7 @@
 let
   inherit (murakumo.utils) mapModulesRecursively;
 in
-  # TODO: any more configs that should be here?
+# TODO: any more configs that should be here?
 {
   imports = mapModulesRecursively ./modules import;
 }

@@ -6,6 +6,9 @@
   ...
 }:
 
+let
+  inherit (lib) mkDefault;
+in
 {
   imports = [
     # Include the results of the hardware scan.
@@ -17,8 +20,9 @@
     nix = {
       enableFlake = true;
     };
-    network = {
+    networking = {
       manager = "networkd";
+      wifi.enable = true;
     };
   };
 
@@ -32,6 +36,7 @@
     modules = [
       "audio"
       "bluetooth/blueman"
+      "cpu/amd"
       "gpu/nvidia"
       "monitor"
       "printer/bambu-lab"
@@ -45,6 +50,10 @@
     };
   };
 
+  # Copied from the auto-generated 'hardware-configuration.nix' file.
+  # Run `ip link show` or `ip a` to check your interface name(s).
+  networking.interfaces.wlp111s0.useDHCP = mkDefault true;
+
   nix = {
     # Garbage Collection related settings.
     gc = {
@@ -56,12 +65,10 @@
     settings = {
       # Have Nix optimise the Nix store to free up more space in disk
       auto-optimise-store = true;
-      # Make it so any users in the wheel user group trusted.
+      # Make it so any users in the wheel user group are trusted.
       trusted-users = [ "@wheel" ];
       # No warning emitted when git is not pushed.
       warn-dirty = false;
-      # Force XDG Base Directory convention.
-      # use-xdg-base-directories = true;
     };
   };
 

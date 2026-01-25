@@ -9,6 +9,7 @@ let
   inherit (lib)
     mkAliasDefinitions
     mkDefault
+    mkForce
     mkIf
     mkOption
     types
@@ -34,12 +35,12 @@ in
     users.users.${cfg.name} = mkAliasDefinitions options.yakumo.user;
 
     # Disable mutable users.
-    users.mutableUsers = false;
+    users.mutableUsers = mkForce false;
 
     yakumo.user = {
       description = mkDefault cfg.name;
       extraGroups = mkDefault [ "wheel" ];
-      group = mkDefault "users";
+      group = mkDefault "yakumo";
       isNormalUser = mkDefault true;
       uid = mkDefault 1000;
     };

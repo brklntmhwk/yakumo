@@ -7,12 +7,12 @@
 }:
 
 let
-  inherit (builtins) attrValues;
   inherit (lib)
     mkDefault
     mkIf
     mkMerge
     mkOption
+    types
     ;
   systemRole = config.yakumo.system.role;
   cfg = config.yakumo.system.networking;
@@ -33,6 +33,8 @@ in
   config = mkMerge [
     {
       # Disable global DHCP.
+      # Enable it locally if necessary.
+      # (e.g., `networking.interfaces.enp112s0.useDHCP = true;`)
       networking.useDHCP = mkDefault false;
     }
     (mkIf (cfg.manager == "networkmanager") {
@@ -40,14 +42,42 @@ in
     })
     # TODO: enough with only this to setup networkd?
     (mkIf (cfg.manager == "networkd") {
-      useNetworkd = true;
+      systemd = {
+        network.enable = true;
+        services."systemd-networkd".environment.SYSTEMD_LOG_LEVEL = "debug";
+      };
+
+      # When enabled, this does all the heavy lifting behind the scenes for you.
+      # (e.g., Translation of some 'networking.interfaces' and 'networking.useDHCP'
+      # options into Networkd)
+      # Disable it if you want to write the network setup on your own.
+      # For the detailed instructions, see:
+      # https://nixos.wiki/wiki/Systemd-networkd
+      networking.useNetworkd = false;
     })
     # TODO: Any machine specific configs as for networking?
     (mkIf (systemRole == "workstation") {
-
+      systemd.network = {
+        # Cover all WAN & LAN interfaces.
+        # As for the number prefix, the smaller, the higher the priority is.
+        networks = {
+          "10-wan" = {
+            enable = true;
+            name = "en*"; # e.g., 'enp112s0'
+            networkConfig.DHCP = "yes";
+          };
+          "10-lan" = {
+            enable = true;
+            name = "wl*"; # e.g., 'wlp111s0'
+            networkConfig.DHCP = "yes";
+          };
+        };
+      };
     })
     (mkIf (systemRole == "server") {
-
+      # Networkd is better for servers/routers.
+      # https://nixos.wiki/wiki/Systemd-networkd
+      yakumo.networking.manager = mkDefault "networkd";
     })
   ];
 }

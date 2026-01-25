@@ -132,18 +132,30 @@ in
         "SHARE_HISTORY"
       ];
       shellAliases = {
-        ll = "ls -l";
         ".." = "cd ..";
       };
       abbreviations = {
-        cat = "bat";
+        bctl = "bluetoothctl";
+        jctl = "journalctl";
+        nctl = "networkctl";
+        snctl = "sudo networkctl";
+        sctl = "systemctl";
+        usctl = "systemctl --user";
+        usctlr = "systemctl --user restart";
+        usctls = "systemctl --user status";
+        ssctl = "sudo systemctl";
+        ssctlr = "sudo systemctl restart";
+        ssctls = "sudo systemctl status";
         ga = "git add";
         gc = "git commit";
         gco = "git checkout";
         gl = "git log";
         gp = "git push";
         ls = "eza";
-        mkdir = "mkdir -p";
+        lsl = "eza -al --accessed --binary --group --header --modified";
+        lsla = "lsl --sort=accessed";
+        lslm = "lsl --sort=modified";
+        mkdir = "mkdir -pv";
       };
       syntaxHighlighting = {
         highlighters = [ ];
