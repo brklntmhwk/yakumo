@@ -38,9 +38,11 @@ in
     (mkIf (cfg.manager == "networkmanager") {
       networking.networkmanager.enable = true;
     })
+    # TODO: enough with only this to setup networkd?
     (mkIf (cfg.manager == "networkd") {
       useNetworkd = true;
     })
+    # TODO: Any machine specific configs as for networking?
     (mkIf (systemRole == "workstation") {
 
     })

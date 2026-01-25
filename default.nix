@@ -7,8 +7,9 @@
 }:
 
 let
-  inherit (murakumo.utils) mapModulesRec';
+  inherit (murakumo.utils) mapModulesRecursively;
 in
+  # TODO: any more configs that should be here?
 {
-  imports = mapModulesRec' ./modules import;
+  imports = mapModulesRecursively ./modules import;
 }

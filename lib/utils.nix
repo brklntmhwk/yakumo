@@ -118,7 +118,7 @@ rec {
     filterAttrs (_: v: v != null) (mapAttrs' processEntry entries);
 
   # https://github.com/hlissner/dotfiles/commit/a75c64d04ab6c1bc90337d37acb234bde022f9f7
-  mapModulesRec' =
+  mapModulesRecursively =
     dir: fn:
     let
       dirs = mapAttrsToList (k: _: "${dir}/${k}") (
@@ -127,7 +127,7 @@ rec {
         )
       );
       files = attrValues (mapModules dir id);
-      paths = files ++ concatLists (map (d: mapModulesRec' d id) dirs);
+      paths = files ++ concatLists (map (d: mapModulesRecursively d id) dirs);
     in
     map fn paths;
 }

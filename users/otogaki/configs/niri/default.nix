@@ -74,6 +74,7 @@ in
   # Cursor
   cursor = { };
 
+  # TODO: Maybe change this to another one.
   # Environment Variables
   environment = {
     HYPRCURSOR_THEME = {

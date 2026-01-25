@@ -10,9 +10,6 @@
   imports = [
     # Include the results of the hardware scan.
     ./hardware-configuration.nix
-
-    # Host-specific configurations.
-    ./configs/i18n
   ];
 
   yakumo.system = {
@@ -66,6 +63,19 @@
       # Force XDG Base Directory convention.
       # use-xdg-base-directories = true;
     };
+  };
+
+  i18n = {
+    defaultLocale = "en_US.UTF-8";
+    extraLocaleSettings = {
+      # Run `locale` to see available options
+    };
+    extraLocales = [
+      "en_US.UTF-8/UTF-8"
+      "en_GB.UTF-8/UTF-8"
+      "es_ES.UTF-8/UTF-8"
+      "ja_JP.UTF-8/UTF-8"
+    ];
   };
 
   # Don't modify this unless you're sure about the effects.
