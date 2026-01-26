@@ -8,14 +8,14 @@
 {
   yaegaki = {
     pname = "yaegaki";
-    version = "172210972c899784220635aeb036e5145851a615";
+    version = "d11c6cef9b359be25cd237fc8b5a0152100165ab";
     src = fetchFromGitHub {
       owner = "brklntmhwk";
       repo = "yaegaki";
-      rev = "172210972c899784220635aeb036e5145851a615";
+      rev = "d11c6cef9b359be25cd237fc8b5a0152100165ab";
       fetchSubmodules = false;
-      sha256 = "sha256-UIXisiERqV9atWdMD6mEPrijg6cvFHaexa+9xfH0Ss0=";
+      sha256 = "sha256-i3vraJLh2zhcPQShv/rVxY9s2fuF7yim8pwkUwtIebU=";
     };
-    date = "2026-01-13";
+    date = "2026-01-26";
   };
 }

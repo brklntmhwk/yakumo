@@ -1,16 +1,14 @@
+# https://github.com/sioodmy/dotfiles/commit/0c2c94c828479180b34100606cc7c33e402a2375
 pkgs:
 
 let
   wallpaperPath = "maple-with-hidden-falls.jpg";
-  # TODO: Change this to a valid one.
-  avatorPath = "path/to/img.jpg";
+  avatorPath = "avators/otogaki.png";
   yaegaki = (pkgs.callPackage ./_sources/generated.nix { }).yaegaki;
 in
 {
-  # https://github.com/sioodmy/dotfiles/commit/0c2c94c828479180b34100606cc7c33e402a2375
   wallpaper = "${yaegaki.src}/${wallpaperPath}";
-
-  # TODO: Add avator images to Yaegaki.
+  
   avator = "${yaegaki.src}/${avatorPath}";
 
   fonts = {
