@@ -1,0 +1,67 @@
+* Yakumo 卍 八雲
+:PROPERTIES:
+:TOC:      :include descendants :depth 3
+:END:
+#+begin_quote
+Yakumo is the sanctuary - Rooted in the ancient song of building a dwelling for one's beloved, it stands as the home I weave from dotfiles, a shelter for my digital life.
+#+end_quote
+
+Table of Contents (auto-generated using [[https://github.com/alphapapa/org-make-toc][org-make-toc]]):
+:CONTENTS:
+- [[#overview][Overview]]
+  - [[#hosts][Hosts]]
+    - [[#tsutsuyami-卍-惣闇][tsutsuyami 卍 惣闇]]
+    - [[#momokagari-卍-百篝][momokagari 卍 百篝]]
+- [[#acknowledgments][Acknowledgments]]
+:END:
+
+** Overview
+:PROPERTIES:
+:CUSTOM_ID: overview
+:END:
+
+This repository is my home in the digital world weaved from dotfiles.
+
+*** Hosts
+:PROPERTIES:
+:CUSTOM_ID: hosts
+:END:
+| Type    | Name       | Hardware                                               | OS                 | Description                        | User         |
+|---------+------------+--------------------------------------------------------+--------------------+------------------------------------+--------------|
+| Desktop | tsutsuyami | Self-built Mini-ITX PC with AMD Ryzen 5 7600X and more | NixOS              | Main development workstation.      | Ohma Togaki  |
+| Desktop | momokagari | Mac Studio M2 Max                                      | MacOS (Nix Darwin) | Main workstation for creative work. | Reiji Kawata |
+**** tsutsuyami 卍 惣闇
+:PROPERTIES:
+:CUSTOM_ID: tsutsuyami-卍-惣闇
+:END:
+|               | Name           | Description                                                             |
+|---------------+----------------+-------------------------------------------------------------------------|
+| Compositor    | Niri           | A scrollable-tiling Wayland compositor.                                 |
+| Screen Locker | Swaylock       | Screen locker for Wayland.                                              |
+| Idle Daemon   | Swayidle       | Idle management daemon for Wayland.                                     |
+| Terminal      | WezTerm        | A powerful cross-platform terminal emulator and multiplexer.            |
+| Shell         | Zsh & Starship | The Z shell with The minimal and customizable shell prompt.             |
+| Editor        | Emacs          | An extensible, customizable, free/libre text editor.                    |
+| Status Bar    | Waybar         | Highly customizable Wayland bar for Sway and Wlroots based compositors. |
+| App Launcher  | Wofi           | A launcher/menu program for wlroots based wayland compositors.          |
+| Notification  | Mako           | A lightweight Wayland notification daemon.                              |
+| Browser       | Nyxt           | The hacker's browser.                                                   |
+
+**** momokagari 卍 百篝
+:PROPERTIES:
+:CUSTOM_ID: momokagari-卍-百篝
+:END:
+
+** Acknowledgments
+:PROPERTIES:
+:CUSTOM_ID: acknowledgments
+:END:
+
+Yakumo stands on the shoulders of great pioneers from all walks of life. Heartfelt thanks to all the developers involved in the Nix community, Nixpkgs development, and beyond.
+
+Especially, these projects brought Yakumo a large portion of inspiration in the following aspects:
+
+- *The custom modules system:* [[https://github.com/hlissner/dotfiles][Hlissner's Dotfiles]]
+- *The wrapper approach:* [[https://github.com/viperML/dotfiles][ViperML's Dotfiles]]
+- *The theming approach and the fewer ~with~ as possible policy:* [[https://github.com/sioodmy/dotfiles][Sioodmy's Dotfiles]]
+- *The overall service management:* [[https://github.com/oddlama/nix-config][Oddlama's Nix-config]]
