@@ -14,6 +14,7 @@ Table of Contents (auto-generated using [[https://github.com/alphapapa/org-make-
     - [[#tsutsuyami-卍-惣闇][tsutsuyami 卍 惣闇]]
     - [[#momokagari-卍-百篝][momokagari 卍 百篝]]
     - [[#niwatazumi-卍-潦][niwatazumi 卍 潦]]
+- [[#crossing-the-threshold][Crossing the Threshold]]
 - [[#acknowledgments][Acknowledgments]]
 - [[#license][License]]
 :END:
@@ -80,6 +81,13 @@ WIP.
 #+begin_quote
 Within the current.
 #+end_quote
+
+WIP.
+
+** Crossing the Threshold
+:PROPERTIES:
+:CUSTOM_ID: crossing-the-threshold
+:END:
 
 WIP.
 
