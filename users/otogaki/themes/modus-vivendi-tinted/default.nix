@@ -43,7 +43,11 @@ in
       name = "Adwaita";
       package = pkgs.adwaita-icon-theme;
     };
-    hyprcursor = {
+    rosePine = {
+      name = "BreezeX-RosePine-Linux";
+      package = pkgs.rose-pine-cursor;
+    };
+    rosePineHyprcursor = {
       name = "rose-pine-hyprcursor";
       package = pkgs.rose-pine-hyprcursor;
     };

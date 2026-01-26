@@ -72,17 +72,9 @@ in
   ];
 
   # Cursor
-  cursor = { };
-
-  # TODO: Maybe change this to another one.
-  # Environment Variables
-  environment = {
-    HYPRCURSOR_THEME = {
-      _args = [ cursorThemes.hyprcursor.name ];
-    };
-    HYPRCURSOR_SIZE = {
-      _args = [ 24 ];
-    };
+  cursor = {
+    xcursor-theme = cursorThemes.rosePine.name;
+    xcursor-size = 24;
   };
 
   # https://yalter.github.io/niri/Configuration:-Layout
@@ -337,7 +329,6 @@ in
       repeat = false;
       show-hotkey-overlay = { };
     };
-
     "Mod+T" = {
       repeat = false;
       _props.hotkey-overlay-title = "Open Wezterm";
@@ -345,7 +336,6 @@ in
         _args = [ "wezterm" ];
       };
     };
-
     "Mod+D" = {
       repeat = false;
       _props.hotkey-overlay-title = "Open Wofi App Launcher";
@@ -357,7 +347,6 @@ in
         ];
       };
     };
-
     "Mod+Y" = {
       repeat = false;
       _props.hotkey-overlay-title = "Open Cliphist List via Wofi";

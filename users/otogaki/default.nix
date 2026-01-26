@@ -8,6 +8,7 @@
 let
   inherit (builtins) attrValues;
   inherit (lib) catAttrs;
+  inherit (theme) cursorThemes fonts loginThemes;
   theme = import ./themes/modus-vivendi-tinted;
 in
 {
@@ -24,10 +25,12 @@ in
     # For the detailed implementation, see:
     # https://github.com/NixOS/nixpkgs/commit/a323d146b7be3bc066b4ec74db72888ea32792fb
     # shell = config.yakumo.shell.default;
-    packages = attrValues {
-      inherit (pkgs)
-        ;
-    };
+    packages =
+      attrValues {
+        inherit (pkgs)
+          ;
+      }
+      ++ (catAttrs "package" (attrValues cursorThemes));
   };
 
   yakumo.system = {
@@ -58,16 +61,16 @@ in
         settings = import ./configs/niri { inherit theme; };
         regreet = {
           theme = {
-            name = theme.loginThemes.adwaita.name;
-            package = theme.loginThemes.adwaita.package;
+            name = loginThemes.adwaita.name;
+            package = loginThemes.adwaita.package;
           };
           cursorTheme = {
-            name = theme.cursorThemes.adwaita.name;
-            package = theme.cursorThemes.adwaita.package;
+            name = cursorThemes.adwaita.name;
+            package = cursorThemes.adwaita.package;
           };
           font = {
-            name = theme.fonts.moralerspaceHw.name;
-            package = theme.fonts.moralerspaceHw.package;
+            name = fonts.moralerspaceHw.name;
+            package = fonts.moralerspaceHw.package;
             size = 16;
           };
         };
@@ -265,14 +268,14 @@ in
         inherit (pkgs)
           ;
       }
-      ++ (catAttrs "package" (attrValues theme.fonts));
+      ++ (catAttrs "package" (attrValues fonts));
     fontDir.enable = true;
     fontconfig = {
       defaultFonts = {
-        serif = [ theme.fonts.notoCjkSerif.name ];
-        sansSerif = [ theme.fonts.notoCjkSans.name ];
-        monospace = [ theme.fonts.hackgenNf.name ];
-        emoji = [ theme.fonts.notoEmoji.name ];
+        serif = [ fonts.notoCjkSerif.name ];
+        sansSerif = [ fonts.notoCjkSans.name ];
+        monospace = [ fonts.hackgenNf.name ];
+        emoji = [ fonts.notoEmoji.name ];
       };
     };
   };
