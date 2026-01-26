@@ -9,6 +9,7 @@ Yakumo is the sanctuary - Rooted in the ancient song of building a dwelling for 
 Table of Contents (auto-generated using [[https://github.com/alphapapa/org-make-toc][org-make-toc]]):
 :CONTENTS:
 - [[#overview][Overview]]
+  - [[#principles][Principles]]
   - [[#hosts][Hosts]]
     - [[#tsutsuyami-卍-惣闇][tsutsuyami 卍 惣闇]]
     - [[#momokagari-卍-百篝][momokagari 卍 百篝]]
@@ -24,6 +25,15 @@ Table of Contents (auto-generated using [[https://github.com/alphapapa/org-make-
 
 This repository is my home in the digital world weaved from dotfiles.
 
+*** Principles
+:PROPERTIES:
+:CUSTOM_ID: principles
+:END:
+- *Less is more:* Keep dependencies to a minimum and reduce attack surface.
+  - Not using such popular tools as Home Manager or Flake-parts.
+- *Low-maintenance:* Easy to maintain. You know where to tweak at a glance. (Maybe...)
+  - Sticking to the Dependency Inversion principle as much as possible to make updates a breeze.
+- *Cool:* After all, what drives us to tend our dotfiles is pure self-satisfaction, isn't it?
 *** Hosts
 :PROPERTIES:
 :CUSTOM_ID: hosts
@@ -82,6 +92,7 @@ Yakumo stands on the shoulders of great pioneers from all walks of life. Heartfe
 
 Especially, these projects brought Yakumo a large portion of inspiration in the following aspects:
 
+- *The module options:* [[https://github.com/nix-community/home-manager][Home Manager]]
 - *The custom modules system:* [[https://github.com/hlissner/dotfiles][Hlissner's Dotfiles]]
 - *The wrapper approach:* [[https://github.com/viperML/dotfiles][ViperML's Dotfiles]]
 - *The theming approach and the fewer with keywords as possible policy:* [[https://github.com/sioodmy/dotfiles][Sioodmy's Dotfiles]]
