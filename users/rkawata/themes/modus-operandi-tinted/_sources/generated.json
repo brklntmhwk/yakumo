@@ -1,0 +1,23 @@
+{
+    "yaegaki": {
+        "cargoLock": null,
+        "date": "2026-01-26",
+        "extract": null,
+        "name": "yaegaki",
+        "passthru": null,
+        "pinned": false,
+        "src": {
+            "deepClone": false,
+            "fetchSubmodules": false,
+            "leaveDotGit": false,
+            "name": null,
+            "owner": "brklntmhwk",
+            "repo": "yaegaki",
+            "rev": "d11c6cef9b359be25cd237fc8b5a0152100165ab",
+            "sha256": "sha256-i3vraJLh2zhcPQShv/rVxY9s2fuF7yim8pwkUwtIebU=",
+            "sparseCheckout": [],
+            "type": "github"
+        },
+        "version": "d11c6cef9b359be25cd237fc8b5a0152100165ab"
+    }
+}

@@ -8,7 +8,7 @@ let
 in
 {
   wallpaper = "${yaegaki.src}/${wallpaperPath}";
-  
+
   avator = "${yaegaki.src}/${avatorPath}";
 
   fonts = {

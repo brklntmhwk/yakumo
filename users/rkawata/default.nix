@@ -8,7 +8,7 @@
 let
   inherit (builtins) attrValues;
   inherit (lib) catAttrs;
-  # theme = import ./themes/path-to-theme;
+  theme = import ./themes/modus-operandi-tinted;
 in
 {
   yakumo.user = {
