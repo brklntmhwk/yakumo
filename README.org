@@ -12,7 +12,9 @@ Table of Contents (auto-generated using [[https://github.com/alphapapa/org-make-
   - [[#hosts][Hosts]]
     - [[#tsutsuyami-卍-惣闇][tsutsuyami 卍 惣闇]]
     - [[#momokagari-卍-百篝][momokagari 卍 百篝]]
+    - [[#niwatazumi-卍-潦][niwatazumi 卍 潦]]
 - [[#acknowledgments][Acknowledgments]]
+- [[#license][License]]
 :END:
 
 ** Overview
@@ -26,10 +28,11 @@ This repository is my home in the digital world weaved from dotfiles.
 :PROPERTIES:
 :CUSTOM_ID: hosts
 :END:
-| Type    | Name       | Hardware                                               | OS                 | Description                        | User         |
-|---------+------------+--------------------------------------------------------+--------------------+------------------------------------+--------------|
-| Desktop | tsutsuyami | Self-built Mini-ITX PC with AMD Ryzen 5 7600X and more | NixOS              | Main development workstation.      | Ohma Togaki  |
-| Desktop | momokagari | Mac Studio M2 Max                                      | MacOS (Nix Darwin) | Main workstation for creative work. | Reiji Kawata |
+| Type    | Name       | Hardware                                               | OS                 | Description                         | User         |
+|---------+------------+--------------------------------------------------------+--------------------+-------------------------------------+--------------|
+| Desktop | [[id:tsutsuyami-卍-惣闇][tsutsuyami]] | Self-built Mini-ITX PC (AMD Ryzen 5 7600X and more)    | NixOS              | Main development workstation.       | Ohma Togaki  |
+| Desktop | [[id:momokagari-卍-百篝][momokagari]] | Mac Studio M2 Max                                      | MacOS (Nix Darwin) | Main workstation for creative work. | Reiji Kawata |
+| Server  | [[id:niwatazumi-卍-潦][niwatazumi]] | Self-built Mini-ITX server (AMD Ryzen 5 7600 and more) | NixOS              | Main home server.                   | Ohma Togaki  |
 **** tsutsuyami 卍 惣闇
 :PROPERTIES:
 :CUSTOM_ID: tsutsuyami-卍-惣闇
@@ -51,6 +54,10 @@ This repository is my home in the digital world weaved from dotfiles.
 :PROPERTIES:
 :CUSTOM_ID: momokagari-卍-百篝
 :END:
+**** niwatazumi 卍 潦
+:PROPERTIES:
+:CUSTOM_ID: niwatazumi-卍-潦
+:END:
 
 ** Acknowledgments
 :PROPERTIES:
@@ -63,5 +70,11 @@ Especially, these projects brought Yakumo a large portion of inspiration in the 
 
 - *The custom modules system:* [[https://github.com/hlissner/dotfiles][Hlissner's Dotfiles]]
 - *The wrapper approach:* [[https://github.com/viperML/dotfiles][ViperML's Dotfiles]]
-- *The theming approach and the fewer ~with~ as possible policy:* [[https://github.com/sioodmy/dotfiles][Sioodmy's Dotfiles]]
+- *The theming approach and the fewer with keywords as possible policy:* [[https://github.com/sioodmy/dotfiles][Sioodmy's Dotfiles]]
 - *The overall service management:* [[https://github.com/oddlama/nix-config][Oddlama's Nix-config]]
+** License
+:PROPERTIES:
+:CUSTOM_ID: license
+:END:
+
+The MIT License. See [[file:LICENSE][LICENSE]] for details.
