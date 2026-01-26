@@ -125,6 +125,10 @@
           system = "x86_64-linux";
           username = "otogaki";
         };
+        # niwatazumi = {
+        #   system = "x86_64-linux";
+        #   username = "otogaki";
+        # };
       };
 
       # darwinModules = import ./.;
