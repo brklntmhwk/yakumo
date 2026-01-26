@@ -54,24 +54,6 @@ in
   # Run `ip link show` or `ip a` to check your interface name(s).
   networking.interfaces.wlp111s0.useDHCP = mkDefault true;
 
-  nix = {
-    # Garbage Collection related settings.
-    gc = {
-      automatic = true;
-      dates = "daily";
-      options = "--delete-older-than 7d";
-    };
-    package = pkgs.lix;
-    settings = {
-      # Have Nix optimise the Nix store to free up more space in disk
-      auto-optimise-store = true;
-      # Make it so any users in the wheel user group are trusted.
-      trusted-users = [ "@wheel" ];
-      # No warning emitted when git is not pushed.
-      warn-dirty = false;
-    };
-  };
-
   i18n = {
     defaultLocale = "en_US.UTF-8";
     extraLocaleSettings = {
