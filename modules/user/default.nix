@@ -41,6 +41,11 @@ in
       description = mkDefault cfg.name;
       extraGroups = mkDefault [ "wheel" ];
       group = mkDefault "yakumo";
+      # If set to true, this sets:
+      # - 'createHome' to true
+      # - 'home' to '/home/<username>'
+      # - 'useDefaultShell' to true
+      # - 'isSystemUser' to false
       isNormalUser = mkDefault true;
       uid = mkDefault 1000;
     };
