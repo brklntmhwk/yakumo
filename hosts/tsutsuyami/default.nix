@@ -41,6 +41,7 @@ in
       "monitor"
       "printer/bambu-lab"
       "scanner/scansnap"
+      "ssd"
     ];
   };
 
