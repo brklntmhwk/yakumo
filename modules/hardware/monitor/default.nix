@@ -10,12 +10,11 @@ let
     any
     hasPrefix
     mkIf
-    mkOption
     ;
   hardwareMods = config.yakumo.hardware.modules;
 in
 {
-  config = mkIf (any (mod: hasPrefix "monitor" mod) mediaMods) {
+  config = mkIf (any (mod: hasPrefix "monitor" mod) hardwareMods) {
     # https://discourse.nixos.org/t/brightness-control-of-external-monitors-with-ddcci-backlight/8639/18
     boot = {
       kernelModules = [
