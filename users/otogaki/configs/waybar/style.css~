@@ -1,9 +1,0 @@
-* {
-        font-family: JetBrains Mono, Roboto, Helvetica, Ariel, sans-serif;
-        font-size: 13px;
-      }
-
-      window#waybar {
-        background-color: rgba(43, 48, 59, 0.8);
-        color: #ffffff;
-      }
