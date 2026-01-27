@@ -18,10 +18,10 @@ in
 {
   options.yakumo.ai.mcp.filesystem = {
     enable = mkEnableOption "Filesystem MCP Server";
-    filePaths = mkOption {
+    paths = mkOption {
       type = types.listOf types.str;
       default = [ ];
-      description = "List of file paths to become accessible.";
+      description = "List of file or directory paths to become accessible.";
     };
   };
 
@@ -38,7 +38,7 @@ in
           programs.filesystem = {
             enable = true;
             args =
-              optional (cfg.filePaths != [ ]) cfg.filePaths
+              optional (cfg.paths != [ ]) cfg.paths
               ++ optional xdgCfg.enable [
                 "${userCfg.home}/Documents"
               ];

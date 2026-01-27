@@ -216,7 +216,12 @@ in
     };
     mcp = {
       enable = true;
-      filesystem.enable = true;
+      filesystem = {
+        enable = true;
+        paths = [
+          "${config.yakumo.user.home}/projects"
+        ];
+      };
       github.enable = true;
     };
   };
