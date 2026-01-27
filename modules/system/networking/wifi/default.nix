@@ -20,10 +20,15 @@ in
 
   config = mkIf cfg.enable (
     let
-      inherit (builtins) attrValues;
+      inherit (builtins) attrValues map;
       inherit (lib) genAttrs;
+      configDir = "/etc/wpa_supplicant.d";
     in
     {
+      environment.systemPackages = attrValues {
+        inherit (pkgs) wpa_supplicant; # wpa_cli & wpa_gui
+      };
+
       # Use `networking.supplicant.<name>.*` instead of `networking.wireless.*`
       # preferring per-interface definition.
       networking.supplicant = genAttrs interfaces (interface: {
@@ -32,7 +37,7 @@ in
           group = "yakumo"; # Created in `yakumo.user.group`.
         };
         configFile = {
-          path = "/etc/wpa_supplicant.d/${interface}.conf";
+          path = "${configDir}/${interface}.conf";
           writable = true;
         };
         # `update_config=1`: Explicitly allow overwriting the configuration.
@@ -53,9 +58,12 @@ in
           okc=1
         '';
       });
-      environment.systemPackages = attrValues {
-        inherit (pkgs) wpa_supplicant; # wpa_cli & wpa_gui
-      };
+
+      systemd.tmpfiles.rules = [
+        "d ${configDir} 700 root root - -"
+      ]
+      # # e.g., `[ "f /etc/wpa_supplicant.d/wlp111s0.conf 700 root root - -" ... ]`
+      ++ (map (interface: "f ${configDir}/${interface}.conf 700 root root - -") interfaces);
     }
   );
 }
