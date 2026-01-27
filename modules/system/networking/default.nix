@@ -40,7 +40,6 @@ in
     (mkIf (cfg.manager == "networkmanager") {
       networking.networkmanager.enable = true;
     })
-    # TODO: enough with only this to setup networkd?
     (mkIf (cfg.manager == "networkd") {
       # Increase the log level.
       # https://nixos.wiki/wiki/Systemd-networkd
@@ -49,9 +48,11 @@ in
       # When enabled, this does all the heavy lifting behind the scenes for you:
       # - Set `systemd.network.enable` to true
       # - Add some assertion rules regarding the default gateway and bridges
+      # - Set `networking.dhcpcd.enable` to false
       # - Add some definitions to `systemd.network.{links|netdevs|networks}`
-      # - and more
-      # 
+      # referring to those `networking.*` options (e.g., `bonds`, `fooOverUDP`,
+      # `greTunnels`, `ipips`, `macvlans`, etc.)
+      #
       # Disable it if you want to write the network setup on your own.
       # For the detailed instructions, see:
       # https://nixos.wiki/wiki/Systemd-networkd
@@ -63,14 +64,21 @@ in
         # Cover all LAN & WAN interfaces.
         # As for the number prefix, the smaller, the higher the priority is.
         networks = {
-          "10-cabled" = {
+          "30-wired" = {
             enable = true;
-            name = "en*"; # e.g., 'enp112s0'
+            # This may look more verbose than the one below, but semantically better;
+            # you can understand the associations on the face of it.
+            matchConfig.Name = "en*"; # e.g., 'enp112s0'
+            # This does the exact same thing as above. (i.e., Syntactic sugar)
+            # https://github.com/NixOS/nixpkgs/commit/f8dbe5f376978947067283c6d03087d7948c50de
+            # Is it just me, or wouldn't this sort of abstraction merely cause
+            # confusion?
+            # name = "en*";
             networkConfig.DHCP = "yes";
           };
-          "10-wireless" = {
+          "30-wireless" = {
             enable = true;
-            name = "wl*"; # e.g., 'wlp111s0'
+            matchConfig.Name = "wl*"; # e.g., 'wlp111s0'
             networkConfig.DHCP = "yes";
           };
         };
