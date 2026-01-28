@@ -58,6 +58,7 @@ let
       builder {
         inherit system;
         modules = [
+          baseModules
           hostConfigPath
           userConfigPath
           {
@@ -78,7 +79,6 @@ let
             }
           )
         ]
-        ++ attrValues baseModules
         ++ extraModules;
 
         # Put these into the modules' scope and make them accesible.
