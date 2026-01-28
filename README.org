@@ -13,6 +13,7 @@ Table of Contents (auto-generated using [[https://github.com/alphapapa/org-make-
   - [[#hosts][Hosts]]
     - [[#tsutsuyami-卍-惣闇][tsutsuyami 卍 惣闇]]
     - [[#momokagari-卍-百篝][momokagari 卍 百篝]]
+    - [[#utsusemi-卍-空蝉][utsusemi 卍 空蝉]]
     - [[#niwatazumi-卍-潦][niwatazumi 卍 潦]]
 - [[#crossing-the-threshold][Crossing the Threshold]]
 - [[#acknowledgments][Acknowledgments]]
@@ -39,11 +40,12 @@ This repository is my home in the digital world weaved from dotfiles.
 :PROPERTIES:
 :CUSTOM_ID: hosts
 :END:
-| Type    | Name       | Hardware                                               | OS                 | Description                         | User         |
-|---------+------------+--------------------------------------------------------+--------------------+-------------------------------------+--------------|
-| Desktop | [[#tsutsuyami-卍-惣闇][tsutsuyami]] | Self-built Mini-ITX PC (AMD Ryzen 5 7600X and more)    | NixOS              | Main development workstation.       | Ohma Togaki  |
-| Desktop | [[#momokagari-卍-百篝][momokagari]] | Mac Studio M2 Max                                      | MacOS (Nix Darwin) | Main workstation for creative work. | Reiji Kawata |
-| Server  | [[#niwatazumi-卍-潦][niwatazumi]] | Self-built Mini-ITX server (AMD Ryzen 5 7600 and more) | NixOS              | Main home server.                   | Ohma Togaki  |
+| Type    | Name       | Hardware                                               | OS                  | Description                         | User         |
+|---------+------------+--------------------------------------------------------+---------------------+-------------------------------------+--------------|
+| Desktop | [[#tsutsuyami-卍-惣闇][tsutsuyami]] | Self-built Mini-ITX PC (AMD Ryzen 5 7600X and more)    | NixOS               | Main development workstation.       | Ohma Togaki  |
+| Desktop | [[#momokagari-卍-百篝][momokagari]] | Mac Studio M2 Max                                      | MacOS (Nix Darwin)  | Main workstation for creative work. | Reiji Kawata |
+| Desktop | utsusemi   | ---                                                    | Windows (NixOS WSL) | Temporary workstation.              | Ohma Togaki  |
+| Server  | [[#niwatazumi-卍-潦][niwatazumi]] | Self-built Mini-ITX server (AMD Ryzen 5 7600 and more) | NixOS               | Main home server.                   | Ohma Togaki  |
 **** tsutsuyami 卍 惣闇
 :PROPERTIES:
 :CUSTOM_ID: tsutsuyami-卍-惣闇
@@ -70,6 +72,16 @@ Into the darkness.
 :END:
 #+begin_quote
 Upon the spark.
+#+end_quote
+
+WIP.
+
+**** utsusemi 卍 空蝉
+:PROPERTIES:
+:CUSTOM_ID: utsusemi-卍-空蝉
+:END:
+#+begin_quote
+Through the haze.
 #+end_quote
 
 WIP.
