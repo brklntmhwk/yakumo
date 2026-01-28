@@ -33,7 +33,7 @@ in
       type = types.nullOr (types.enum subroles);
       default = null;
       description = ''
-        Sub-role for server configuraion.
+        Sub-role for server configuration.
         This will be ignored when role != "server".
       '';
     };
@@ -43,11 +43,11 @@ in
     {
       assertions = [
         {
-          assertion = cfg.subrole != null;
+          assertion = (cfg.role == "server") -> (cfg.subrole != null);
           message = "A sub-role must be set when role = server";
         }
         {
-          assertion = cfg.role != "server" && cfg.subrole == null;
+          assertion = (cfg.role != "server") -> (cfg.subrole == null);
           message = "A sub-role is an exclusive option to server";
         }
       ];
