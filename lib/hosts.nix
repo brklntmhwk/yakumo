@@ -1,9 +1,8 @@
-{ self, lib, ... }:
+{ self, lib, mkMurakumo, ... }:
 
 let
   inherit (self) inputs;
   inherit (builtins)
-    attrValues
     mapAttrs
     pathExists
     toString
