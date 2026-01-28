@@ -12,7 +12,7 @@ let
     mkMerge
     ;
   cfg = config.yakumo.system.networking.wifi;
-  netManager = config.yakumo.system.networking.manager;  
+  netManager = config.yakumo.system.networking.manager;
 in
 {
   options.yakumo.system.networking.wifi = {
