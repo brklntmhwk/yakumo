@@ -1,4 +1,9 @@
-{ self, lib, mkMurakumo, ... }:
+{
+  self,
+  lib,
+  mkMurakumo,
+  ...
+}:
 
 let
   inherit (self) inputs;
@@ -7,7 +12,12 @@ let
     pathExists
     toString
     ;
-  inherit (lib) getName mkDefault warn;
+  inherit (lib)
+    getName
+    mkDefault
+    optional
+    warn
+    ;
 
   defaultOverlays = [
     self.overlays.default
@@ -29,7 +39,7 @@ let
     '';
 
   mkHost =
-    { builder, baseModules }:
+    { builder, platformType }:
     name:
     {
       username,
@@ -38,35 +48,34 @@ let
       extraModules ? [ ],
     }:
     let
-      hostConfigPath = ../hosts/${name};
-      userConfigPath = ../users/${username};
+      hostConfigs = ../hosts/${name};
+      userConfigs = ../users/${username};
     in
-    if !pathExists hostConfigPath then
+    if !pathExists hostConfigs then
       throwNotFoundErr {
         inherit name;
         target = "host";
-        configPath = hostConfigPath;
+        configPath = hostConfigs;
       }
-    else if !pathExists userConfigPath then
+    else if !pathExists userConfigs then
       throwNotFoundErr {
         name = username;
         target = "user";
-        configPath = userConfigPath;
+        configPath = userConfigs;
       }
     else
       builder {
         inherit system;
         modules = [
-          baseModules
-          hostConfigPath
-          userConfigPath
+          hostConfigs
+          userConfigs
           {
             # The name of this machine on the network.
             networking.hostName = mkDefault name;
             nixpkgs = {
               inherit overlays;
               config.allowUnfreePredicate = pkg: warn "Allowing unfree package: ${getName pkg}" true;
-              hostPlatform = system;
+              hostPlatformType = system;
             };
           }
           # Feed the current system's 'pkgs' into 'mkMurakumo' to build the Murakumo scope
@@ -78,6 +87,8 @@ let
             }
           )
         ]
+        ++ optional (platformType == "nixos") attrValues self.nixosModules
+        ++ optional (platformType == "darwin") attrValues self.darwinModules
         ++ extraModules;
 
         # Put these into the modules' scope and make them accesible.
@@ -94,11 +105,11 @@ in
 {
   mkNixOsHosts = mapAttrs (mkHost {
     builder = inputs.nixpkgs.lib.nixosSystem;
-    baseModules = self.nixosModules;
+    platformType = "nixos";
   });
 
   mkDarwinHosts = mapAttrs (mkHost {
     builder = inputs.darwin.lib.darwinSystem;
-    baseModules = self.darwinModules;
+    platformType = "darwin";
   });
 }

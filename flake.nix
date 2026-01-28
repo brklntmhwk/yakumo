@@ -117,7 +117,11 @@
         treefmtEval.config.build.wrapper
       );
 
-      nixosModules = import ./.;
+      # These are not for external use.
+      nixosModules = {
+        common = import ./modules/common;
+        nixos = import ./modules/nixos;
+      };
 
       nixosConfigurations = lib'.mkNixOsHosts {
         tsutsuyami = {
@@ -137,7 +141,11 @@
         # };
       };
 
-      # darwinModules = import ./.;
+      # These are not for external use.
+      # darwinModules = {
+      #   common = import ./modules/common;
+      #   darwin = import ./modules/darwin;
+      # };
 
       # darwinConfigurations = lib'.mkDarwinHosts {
       #   momokagari = {
