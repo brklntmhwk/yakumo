@@ -84,7 +84,6 @@
     inputs@{
       self,
       nixpkgs,
-      home-manager,
       treefmt-nix,
       ...
     }:
@@ -128,6 +127,13 @@
         # niwatazumi = {
         #   system = "x86_64-linux";
         #   username = "otogaki";
+        # };
+        # utsusemi = {
+        #   system = "x86_64-linux";
+        #   username = "otogaki";
+        #   extraModules = [
+        #     inputs.nixos-wsl.nixosModules.default
+        #   ];
         # };
       };
 
