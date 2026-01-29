@@ -1,5 +1,6 @@
 # NOTE: Exceptionally adopting the mutable user config directory using Nix-maid.
 {
+  inputs,
   config,
   lib,
   pkgs,
@@ -17,6 +18,8 @@ let
   cfg = config.yakumo.desktop.apps.nyxt;
 in
 {
+  imports = [ inputs.nix-maid.nixosModules.default ];
+
   options.yakumo.desktop.apps.nyxt = {
     enable = mkEnableOption "nyxt";
     # https://github.com/nix-community/home-manager/commit/2835e8ba0ad99ba86d4a5e497a962ec9fa35e48f

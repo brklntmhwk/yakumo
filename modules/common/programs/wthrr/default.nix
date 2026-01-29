@@ -1,6 +1,7 @@
 # NOTE: Exceptionally adopting the mutable user config directory using Nix-maid.
 # No CLI flag like '--config' found.
 {
+  inputs,
   config,
   lib,
   pkgs,
@@ -18,6 +19,8 @@ let
   cfg = config.yakumo.programs.wthrr;
 in
 {
+  imports = [ inputs.nix-maid.nixosModules.default ];
+
   options.yakumo.programs.wthrr = {
     enable = mkEnableOption "wthrr a.k.a. Weathercrab";
     settings = mkOption {

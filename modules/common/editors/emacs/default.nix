@@ -18,6 +18,7 @@ let
 in
 {
   imports = [
+    inputs.nix-maid.nixosModules.default
     inputs.ametsuchi.maidModules.ametsuchi
   ];
 
