@@ -48,12 +48,6 @@ in
 
   yakumo.desktop = {
     enable = true;
-    media = {
-      modules = [
-        "music"
-        "video"
-      ];
-    };
     compositors = {
       niri = {
         enable = true;
@@ -111,12 +105,22 @@ in
       };
     };
     apps = {
-      nyxt = {
-        enable = true;
-        config = import ./configs/nyxt/init.lisp { };
+      browsers = {
+        nyxt = {
+          enable = true;
+          config = import ./configs/nyxt/init.lisp { };
+        };
       };
-      thunar = {
-        enable = true;
+      media = {
+        modules = [
+          "music"
+          "video"
+        ];
+      };
+      misc = {
+        thunar = {
+          enable = true;
+        };
       };
     };
   };

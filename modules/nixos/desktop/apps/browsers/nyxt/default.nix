@@ -15,12 +15,12 @@ let
     mkPackageOption
     types
     ;
-  cfg = config.yakumo.desktop.apps.nyxt;
+  cfg = config.yakumo.desktop.apps.browsers.nyxt;
 in
 {
   imports = [ inputs.nix-maid.nixosModules.default ];
 
-  options.yakumo.desktop.apps.nyxt = {
+  options.yakumo.desktop.apps.browsers.nyxt = {
     enable = mkEnableOption "nyxt";
     # https://github.com/nix-community/home-manager/commit/2835e8ba0ad99ba86d4a5e497a962ec9fa35e48f
     config = mkOption {

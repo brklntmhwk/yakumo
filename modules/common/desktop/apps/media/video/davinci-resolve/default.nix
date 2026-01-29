@@ -10,7 +10,7 @@ let
     elem
     mkIf
     ;
-  mediaMods = config.yakumo.desktop.media.modules;
+  mediaMods = config.yakumo.desktop.apps.media.modules;
 in
 {
   config = mkIf (elem "video/davinci-resolve" mediaMods) {

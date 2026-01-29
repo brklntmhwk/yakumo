@@ -13,10 +13,10 @@ let
     mkPackageOption
     types
     ;
-  cfg = config.yakumo.desktop.apps.thunar;
+  cfg = config.yakumo.desktop.apps.misc.thunar;
 in
 {
-  options.yakumo.desktop.apps.thunar = {
+  options.yakumo.desktop.apps.misc.thunar = {
     enable = mkEnableOption "thunar";
     # https://github.com/NixOS/nixpkgs/commit/bb5ec4625ac3237631c7a0957c78cc79735fd2ad
     plugins = mkOption {

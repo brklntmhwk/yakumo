@@ -14,7 +14,7 @@ let
     mkOption
     types
     ;
-  mediaMods = config.yakumo.desktop.media.modules;
+  mediaMods = config.yakumo.desktop.apps.media.modules;
 in
 {
   config = mkIf (any (mod: hasPrefix "music" mod) mediaMods) {

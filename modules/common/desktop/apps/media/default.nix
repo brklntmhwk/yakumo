@@ -15,12 +15,16 @@ let
   mediaMods = getDirNamesRecursive ./.;
 in
 {
-  options.yakumo.desktop.media = {
-    # 'yakumo.desktop.media.*' modules look up this.
+  options.yakumo.desktop.apps.media = {
+    # 'yakumo.desktop.apps.media.*' modules look up this.
     modules = mkOption {
       type = types.listOf (types.enum mediaMods);
       default = [ ];
       description = "List of desktop media modules to enable.";
+      example = [
+        "music"
+        "video/davinci-resolve"
+      ];
     };
   };
 }
