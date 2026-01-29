@@ -1,7 +1,6 @@
 {
   config,
   lib,
-  pkgs,
   ...
 }:
 
@@ -10,11 +9,16 @@ let
   inherit (lib)
     mkEnableOption
     mkIf
-    mkMerge
     ;
   cfg = config.yakumo.secrets.sops;
 in
 {
+  # Add these to platform-spicific module files instead.
+  # imports = [
+  #   inputs.sops-nix.nixosModules.default
+  #   inputs.sops-nix.darwinModules.default
+  # ];
+
   options.yakumo.secrets.sops = {
     enable = mkEnableOption "sops-nix";
   };
@@ -26,7 +30,7 @@ in
     in
     {
       sops = {
-        defaultSopsFile = ../../secrets/default.yaml;
+        defaultSopsFile = ../../../../secrets/default.yaml;
         age = {
           sshKeyPaths =
             if opensshCfg.enable then
@@ -36,11 +40,11 @@ in
         };
         # NOTE: Add a new secret here whenever created.
         secrets = {
-          login_password_otogaki.sopsFile = ../../secrets/default.yaml;
-          login_password_rkawata.sopsFile = ../../secrets/default.yaml;
-          gh_token_for_mcp.sopsFile = ../../secrets/default.yaml;
+          login_password_otogaki.sopsFile = ../../../../secrets/default.yaml;
+          login_password_rkawata.sopsFile = ../../../../secrets/default.yaml;
+          gh_token_for_mcp.sopsFile = ../../../../secrets/default.yaml;
           git_signing_key = {
-            sopsFile = ../../../users/${username}/secrets/default.yaml;
+            sopsFile = "../../../../users/${username}/secrets/default.yaml";
             owner = username;
           };
         };

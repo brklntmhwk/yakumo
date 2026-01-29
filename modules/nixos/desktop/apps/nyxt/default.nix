@@ -69,6 +69,7 @@ in
     };
     package = mkPackageOption pkgs "nyxt" { };
   };
+
   config = mkIf cfg.enable {
     yakumo.user.maid = {
       file = {

@@ -14,12 +14,12 @@ let
     mkPackageOption
     types
     ;
-  cfg = config.yakumo.desktop.terms.wezterm;
+  cfg = config.yakumo.desktop.terminal.wezterm;
   luaFormat = pkgs.formats.lua { };
   tomlFormat = pkgs.formats.toml { };
 in
 {
-  options.yakumo.desktop.terms.wezterm = {
+  options.yakumo.desktop.terminal.wezterm = {
     enable = mkEnableOption "wezterm";
     settings = mkOption {
       inherit (luaFormat) type;
@@ -63,7 +63,7 @@ in
       };
     in
     {
-      yakumo.desktop.terms.wezterm.packageWrapped = weztermWrapped;
+      yakumo.desktop.terminal.wezterm.packageWrapped = weztermWrapped;
       yakumo.user.packages = [ weztermWrapped ];
     }
   );

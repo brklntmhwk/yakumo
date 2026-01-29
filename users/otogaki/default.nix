@@ -92,20 +92,13 @@ in
         settings = import ./configs/swaylock { inherit theme; };
       };
     };
-    terms = {
+    terminal = {
       wezterm = {
         enable = true;
         settings = import ./configs/wezterm { inherit theme; };
       };
     };
-    apps = {
-      nyxt = {
-        enable = true;
-        config = import ./configs/nyxt/init.lisp { };
-      };
-      thunar = {
-        enable = true;
-      };
+    ui = {
       waybar = {
         enable = true;
         settings = import ./configs/waybar { };
@@ -115,6 +108,15 @@ in
         enable = true;
         settings = import ./configs/wofi { };
         style = import ./configs/wofi/style.nix { inherit theme; };
+      };
+    };
+    apps = {
+      nyxt = {
+        enable = true;
+        config = import ./configs/nyxt/init.lisp { };
+      };
+      thunar = {
+        enable = true;
       };
     };
   };

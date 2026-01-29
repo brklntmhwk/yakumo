@@ -14,10 +14,10 @@ let
     mkPackageOption
     types
     ;
-  cfg = config.yakumo.desktop.apps.wofi;
+  cfg = config.yakumo.desktop.ui.wofi;
 in
 {
-  options.yakumo.desktop.apps.wofi = {
+  options.yakumo.desktop.ui.wofi = {
     enable = mkEnableOption "wofi";
     # https://github.com/nix-community/home-manager/commit/5160039edca28a7e66bad0cfc72a07c91d6768ad
     settings = mkOption {
@@ -78,7 +78,7 @@ in
       };
     in
     {
-      yakumo.desktop.apps.wofi.packageWrapped = wofiWrapped;
+      yakumo.desktop.ui.wofi.packageWrapped = wofiWrapped;
       yakumo.user.packages = [ wofiWrapped ];
     }
   );

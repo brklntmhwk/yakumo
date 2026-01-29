@@ -14,11 +14,11 @@ let
     mkPackageOption
     types
     ;
-  cfg = config.yakumo.desktop.apps.waybar;
+  cfg = config.yakumo.desktop.ui.waybar;
   jsonFormat = pkgs.formats.json { };
 in
 {
-  options.yakumo.desktop.apps.waybar = {
+  options.yakumo.desktop.ui.waybar = {
     enable = mkEnableOption "waybar";
     settings = mkOption {
       inherit (jsonFormat) type;
@@ -71,7 +71,7 @@ in
       };
     in
     {
-      yakumo.desktop.apps.waybar.packageWrapped = waybarWrapped;
+      yakumo.desktop.ui.waybar.packageWrapped = waybarWrapped;
       yakumo.user.packages = [ waybarWrapped ];
 
       # Ensure to remove any manual exec commands written in compositors' configs
