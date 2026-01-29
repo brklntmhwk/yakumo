@@ -8,9 +8,12 @@
 let
   inherit (builtins) attrValues;
   inherit (lib) catAttrs;
+  inherit (theme) cursorThemes fonts loginThemes;
   theme = import ./themes/modus-operandi-tinted;
 in
 {
+  imports = [ ../common ];
+
   yakumo.user = {
     name = "rkawata";
     description = "Reiji Kawata";
@@ -26,17 +29,19 @@ in
 
   yakumo.desktop = {
     enable = true;
-    media = {
-      modules = [
-        "music"
-        "video/davinci-resolve"
-      ];
-    };
-    compositors = {
-
+    terminal = {
+      wezterm = {
+        enable = true;
+        # settings = import ./configs/wezterm { };
+      };
     };
     apps = {
-
+      media = {
+        modules = [
+          "music"
+          "video/davinci-resolve"
+        ];
+      };
     };
   };
 
@@ -63,13 +68,6 @@ in
     };
   };
 
-  yakumo.editors = {
-    emacs = {
-      enable = true;
-      ametsuchi.enable = true;
-    };
-  };
-
   yakumo.ai = {
     agents = {
       claude-code = {
@@ -81,10 +79,13 @@ in
     };
     mcp = {
       enable = true;
-      # filesystem.enable = true;
+      filesystem = {
+        enable = true;
+        paths = [
+          "${config.yakumo.user.home}/projects"
+        ];
+      };
       github.enable = true;
     };
   };
-
-  time.timeZone = "Asia/Tokyo";
 }

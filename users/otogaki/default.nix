@@ -12,12 +12,12 @@ let
   theme = import ./themes/modus-vivendi-tinted;
 in
 {
+  imports = [ ../common ];
+
   yakumo.user = {
     name = "otokagi";
     description = "Ohma Togaki";
     extraGroups = [
-      "video"
-      "networkmanager"
       "wheel"
     ];
     hashedPasswordFile = config.sops.secrets.login_password_otogaki.path;
@@ -271,8 +271,6 @@ in
     settings = import ./configs/yazi { inherit theme; };
   };
 
-  time.timeZone = "Asia/Tokyo";
-
   fonts = {
     packages =
       attrValues {
@@ -290,20 +288,4 @@ in
       };
     };
   };
-
-  environment.systemPackages = (
-    let
-      inherit (pkgs) hunspellDicts;
-    in
-    attrValues {
-      # Dictionaries for multiple languages
-      inherit (hunspellDicts)
-        en-us
-        en-gb-ise
-        es-any
-        ;
-      inherit (pkgs)
-        ;
-    }
-  );
 }
