@@ -55,6 +55,24 @@ in
   # Run `ip link show` or `ip a` to check your interface name(s).
   networking.interfaces.wlp111s0.useDHCP = mkDefault true;
 
+  fileSystems."/" = {
+    device = "/dev/disk/by-uuid/d3bc9213-ebee-4ae4-befa-0340c1b07555";
+    fsType = "ext4";
+  };
+
+  fileSystems."/boot" = {
+    device = "/dev/disk/by-uuid/8018-1454";
+    fsType = "vfat";
+    options = [
+      "fmask=0022"
+      "dmask=0022"
+    ];
+  };
+
+  swapDevices = [
+    { device = "/dev/disk/by-uuid/c668f084-2996-4f68-bbd2-97a639656feb"; }
+  ];
+
   i18n = {
     defaultLocale = "en_US.UTF-8";
     extraLocaleSettings = {
