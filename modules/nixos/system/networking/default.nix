@@ -37,7 +37,9 @@ in
       networking.useDHCP = mkDefault false;
     }
     (mkIf (cfg.manager == "networkmanager") {
+      # https://wiki.nixos.org/wiki/NetworkManager
       networking.networkmanager.enable = true;
+      yakumo.user.extraGroups = [ "networkmanager" ];
     })
     (mkIf (cfg.manager == "networkd") {
       # Increase the log level.
@@ -57,7 +59,6 @@ in
       # https://nixos.wiki/wiki/Systemd-networkd
       networking.useNetworkd = true;
     })
-    # TODO: Any machine specific configs as for networking?
     (mkIf (systemRole == "workstation") {
       systemd.network = {
         # Cover all LAN & WAN interfaces.
