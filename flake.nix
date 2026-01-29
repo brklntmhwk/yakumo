@@ -127,16 +127,20 @@
           system = "x86_64-linux";
           username = "otogaki";
         };
-        # niwatazumi = {
-        #   system = "x86_64-linux";
-        #   username = "otogaki";
-        # };
         # utsusemi = {
         #   system = "x86_64-linux";
         #   username = "otogaki";
         #   extraModules = [
         #     inputs.nixos-wsl.nixosModules.default
         #   ];
+        # };
+        # niwatazumi = {
+        #   system = "x86_64-linux";
+        #   username = "otogaki";
+        # };
+        # sazanami = {
+        #   system = "x86_64-linux";
+        #   username = "otogaki";
         # };
       };
 
