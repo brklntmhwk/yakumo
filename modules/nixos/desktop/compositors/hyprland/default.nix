@@ -138,12 +138,10 @@ in
   config = mkIf cfg.enable (
     let
       inherit (builtins) attrValues hasAttr;
-      inherit (murakumo.assertions) assertPlatform;
     in
     mkMerge [
       {
         assertions = [
-          (assertPlatform "yakumo.desktop.compositors.hyprland" pkgs platforms.linux)
           # https://github.com/nix-community/home-manager/commit/1ecfd8e5626b27a9610f468be32cd6a7011f56a0
           {
             assertion = !hasAttr "reset" cfg.submaps;

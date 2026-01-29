@@ -4,7 +4,6 @@ let
   inherit (lib)
     mkEnableOption
     mkIf
-    mkMerge
     mkOption
     mkPackageOption
     types
@@ -50,58 +49,46 @@ in
     };
   };
 
-  config = mkIf cfg.enable (mkMerge [
-    {
-      assertions =
-        let
-          inherit (lib) platforms;
-          inherit (murakumo.assertions) assertPlatform;
-        in
-        [
-          (assertPlatform "yakumo.desktop.daemons.mako" pkgs platforms.linux)
+  config = mkIf cfg.enable (
+    let
+      inherit (lib) getExe getName;
+      inherit (pkgs) writeText;
+      inherit (murakumo.wrappers) mkAppWrapper;
+      inherit (murakumo.generators) toMakoConf;
+
+      makoConf = writeText "config" (toMakoConf {
+        attrs = cfg.settings;
+      });
+      makoWrapped = mkAppWrapper {
+        pkgs = cfg.package;
+        name = "${getName cfg.package}-${config.yakumo.user.name}";
+        flags = [
+          "--config"
+          makoConf
         ];
+      };
+    in
+    {
+      yakumo.desktop.daemons.mako.packageWrapped = makoWrapped;
+      yakumo.user.packages = [ makoWrapped ];
+
+      systemd.user.services.mako = {
+        unitConfig = {
+          After = [ "graphical-session.target" ];
+          Description = "Mako: Notification daemon";
+          Documentation = "man:mako(1)";
+          PartOf = [ "graphical-session.target" ];
+        };
+        serviceConfig = {
+          BusName = "org.freedesktop.Notifications";
+          ExecReload = "${makoWrapped}/bin/makoctl reload";
+          ExecStart = "${getExe makoWrapped}";
+          Restart = "on-failure";
+          RestartSec = 1;
+          Type = "dbus";
+        };
+        wantedBy = [ "graphical-session.target" ];
+      };
     }
-    (
-      let
-        inherit (lib) getExe getName;
-        inherit (pkgs) writeText;
-        inherit (murakumo.wrappers) mkAppWrapper;
-        inherit (murakumo.generators) toMakoConf;
-
-        makoConf = writeText "config" (toMakoConf {
-          attrs = cfg.settings;
-        });
-        makoWrapped = mkAppWrapper {
-          pkgs = cfg.package;
-          name = "${getName cfg.package}-${config.yakumo.user.name}";
-          flags = [
-            "--config"
-            makoConf
-          ];
-        };
-      in
-      {
-        yakumo.desktop.daemons.mako.packageWrapped = makoWrapped;
-        yakumo.user.packages = [ makoWrapped ];
-
-        systemd.user.services.mako = {
-          unitConfig = {
-            After = [ "graphical-session.target" ];
-            Description = "Mako: Notification daemon";
-            Documentation = "man:mako(1)";
-            PartOf = [ "graphical-session.target" ];
-          };
-          serviceConfig = {
-            BusName = "org.freedesktop.Notifications";
-            ExecReload = "${makoWrapped}/bin/makoctl reload";
-            ExecStart = "${getExe makoWrapped}";
-            Restart = "on-failure";
-            RestartSec = 1;
-            Type = "dbus";
-          };
-          wantedBy = [ "graphical-session.target" ];
-        };
-      }
-    )
-  ]);
+  );
 }

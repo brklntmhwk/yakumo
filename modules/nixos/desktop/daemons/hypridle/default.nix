@@ -58,18 +58,12 @@ in
 
   config = mkIf cfg.enable (mkMerge [
     {
-      assertions =
-        let
-          inherit (lib) platforms;
-          inherit (murakumo.assertions) assertPlatform;
-        in
-        [
-          (assertPlatform "yakumo.desktop.daemons.hypridle" pkgs platforms.linux)
-          {
-            assertion = config.yakumo.desktop.compositors.hyprland.enable;
-            message = "Hypridle requires Hyprland as a Wayland compositor";
-          }
-        ];
+      assertions = [
+        {
+          assertion = config.yakumo.desktop.compositors.hyprland.enable;
+          message = "Hypridle requires Hyprland as a Wayland compositor";
+        }
+      ];
     }
     (
       let

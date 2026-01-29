@@ -56,41 +56,29 @@ in
     };
   };
 
-  config = mkIf cfg.enable (mkMerge [
-    {
-      assertions =
-        let
-          inherit (lib) platforms;
-          inherit (murakumo.assertions) assertPlatform;
-        in
-        [
-          (assertPlatform "yakumo.desktop.lockers.hyprlock" pkgs platforms.linux)
+  config = mkIf cfg.enable (
+    let
+      inherit (lib) getName;
+      inherit (pkgs) writeText;
+      inherit (murakumo.wrappers) mkAppWrapper;
+      inherit (murakumo.generators) toHyprconf;
+
+      hyprlockConf = writeText "hyprlock.conf" (toHyprconf { } cfg.settings);
+      hyprlockWrapped = mkAppWrapper {
+        pkgs = cfg.package;
+        name = "${getName cfg.package}-${config.yakumo.user.name}";
+        flags = [
+          "--config"
+          hyprlockConf
         ];
+      };
+    in
+    {
+      yakumo.desktop.lockers.hyprlock.packageWrapped = hyprlockWrapped;
+      environment.systemPackages = [ hyprlockWrapped ];
+
+      # Enable PAM access for authentication.
+      security.pam.services.hyprlock = { };
     }
-    (
-      let
-        inherit (lib) getName;
-        inherit (pkgs) writeText;
-        inherit (murakumo.wrappers) mkAppWrapper;
-        inherit (murakumo.generators) toHyprconf;
-
-        hyprlockConf = writeText "hyprlock.conf" (toHyprconf { } cfg.settings);
-        hyprlockWrapped = mkAppWrapper {
-          pkgs = cfg.package;
-          name = "${getName cfg.package}-${config.yakumo.user.name}";
-          flags = [
-            "--config"
-            hyprlockConf
-          ];
-        };
-      in
-      {
-        yakumo.desktop.lockers.hyprlock.packageWrapped = hyprlockWrapped;
-        environment.systemPackages = [ hyprlockWrapped ];
-
-        # Enable PAM access for authentication.
-        security.pam.services.hyprlock = { };
-      }
-    )
-  ]);
+  );
 }

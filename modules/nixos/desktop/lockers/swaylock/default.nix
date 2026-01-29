@@ -56,60 +56,48 @@ in
     };
   };
 
-  config = mkIf cfg.enable (mkMerge [
-    {
-      assertions =
-        let
-          inherit (lib) platforms;
-          inherit (murakumo.assertions) assertPlatform;
-        in
-        [
-          (assertPlatform "yakumo.desktop.lockers.swaylock" pkgs platforms.linux)
+  config = mkIf cfg.enable (
+    let
+      inherit (builtins) isPath isString toString;
+      inherit (lib)
+        concatStrings
+        getName
+        hasPrefix
+        mapAttrsToList
+        removePrefix
+        ;
+      inherit (pkgs) writeText;
+      inherit (murakumo.wrappers) mkAppWrapper;
+
+      formatValue =
+        val:
+        if isPath val then
+          "${val}"
+        else if (isString val) && (hasPrefix "#" val) then
+          removePrefix "#" val
+        else
+          toString val;
+      swaylockConf = writeText "config" (
+        concatStrings (mapAttrsToList (
+          name: val:
+          if val == false then "" else (if val == true then name else name + "=" + (formatValue val)) + "\n"
+        )) cfg.settings
+      );
+      swaylockWrapped = mkAppWrapper {
+        pkgs = cfg.package;
+        name = "${getName cfg.package}-${config.yakumo.user.name}";
+        flags = [
+          "--config"
+          swaylockConf
         ];
+      };
+    in
+    {
+      yakumo.desktop.lockers.swaylock.packageWrapped = swaylockWrapped;
+      environment.systemPackages = [ swaylockWrapped ];
+
+      # Enable PAM access for authentication.
+      security.pam.services.swaylock = { };
     }
-    (
-      let
-        inherit (builtins) isPath isString toString;
-        inherit (lib)
-          concatStrings
-          getName
-          hasPrefix
-          mapAttrsToList
-          removePrefix
-          ;
-        inherit (pkgs) writeText;
-        inherit (murakumo.wrappers) mkAppWrapper;
-
-        formatValue =
-          val:
-          if isPath val then
-            "${val}"
-          else if (isString val) && (hasPrefix "#" val) then
-            removePrefix "#" val
-          else
-            toString val;
-        swaylockConf = writeText "config" (
-          concatStrings (mapAttrsToList (
-            name: val:
-            if val == false then "" else (if val == true then name else name + "=" + (formatValue val)) + "\n"
-          )) cfg.settings
-        );
-        swaylockWrapped = mkAppWrapper {
-          pkgs = cfg.package;
-          name = "${getName cfg.package}-${config.yakumo.user.name}";
-          flags = [
-            "--config"
-            swaylockConf
-          ];
-        };
-      in
-      {
-        yakumo.desktop.lockers.swaylock.packageWrapped = swaylockWrapped;
-        environment.systemPackages = [ swaylockWrapped ];
-
-        # Enable PAM access for authentication.
-        security.pam.services.swaylock = { };
-      }
-    )
-  ]);
+  );
 }

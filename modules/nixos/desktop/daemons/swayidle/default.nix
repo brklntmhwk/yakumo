@@ -10,7 +10,6 @@ let
   inherit (lib)
     mkEnableOption
     mkIf
-    mkMerge
     mkOption
     mkPackageOption
     types
@@ -90,57 +89,45 @@ in
     };
   };
 
-  config = mkIf cfg.enable (mkMerge [
-    {
-      assertions =
-        let
-          inherit (lib) platforms;
-          inherit (murakumo.assertions) assertPlatform;
-        in
-        [
-          (assertPlatform "services.swayidle" pkgs platforms.linux)
+  config = mkIf cfg.enable (
+    let
+      inherit (lib) getExe getName;
+      inherit (pkgs) writeText;
+      inherit (murakumo.wrappers) mkAppWrapper;
+      inherit (murakumo.generators) toSwayidleConf;
+
+      swayidleConf = writeText "config" (toSwayidleConf {
+        attrs = cfg.settings;
+      });
+      swayidleWrapped = mkAppWrapper {
+        pkgs = cfg.package;
+        name = "${getName cfg.package}-${config.yakumo.user.name}";
+        flags = [
+          "-w" # Wait for command to finish executing before continuing
+          "-C"
+          swayidleConf
         ];
+      };
+    in
+    {
+      yakumo.desktop.daemons.swayidle.packageWrapped = swayidleWrapped;
+      yakumo.user.packages = [ swayidleWrapped ];
+
+      systemd.user.services.swayidle = {
+        unitConfig = {
+          After = [ "graphical-session.target" ];
+          ConditionEnvironment = "WAYLAND_DISPLAY";
+          Description = "Swayidle: Idle daemon for Wayland desktop";
+          Documentation = "man:swayidle(1)";
+          PartOf = [ "graphical-session.target" ];
+        };
+        serviceConfig = {
+          ExecStart = "${getExe swayidleWrapped}";
+          Restart = "on-failure";
+          RestartSec = 1;
+        };
+        wantedBy = [ "graphical-session.target" ];
+      };
     }
-    (
-      let
-        inherit (lib) getExe getName;
-        inherit (pkgs) writeText;
-        inherit (murakumo.wrappers) mkAppWrapper;
-        inherit (murakumo.generators) toSwayidleConf;
-
-        swayidleConf = writeText "config" (toSwayidleConf {
-          attrs = cfg.settings;
-        });
-        swayidleWrapped = mkAppWrapper {
-          pkgs = cfg.package;
-          name = "${getName cfg.package}-${config.yakumo.user.name}";
-          flags = [
-            "-w" # Wait for command to finish executing before continuing
-            "-C"
-            swayidleConf
-          ];
-        };
-      in
-      {
-        yakumo.desktop.daemons.swayidle.packageWrapped = swayidleWrapped;
-        yakumo.user.packages = [ swayidleWrapped ];
-
-        systemd.user.services.swayidle = {
-          unitConfig = {
-            After = [ "graphical-session.target" ];
-            ConditionEnvironment = "WAYLAND_DISPLAY";
-            Description = "Swayidle: Idle daemon for Wayland desktop";
-            Documentation = "man:swayidle(1)";
-            PartOf = [ "graphical-session.target" ];
-          };
-          serviceConfig = {
-            ExecStart = "${getExe swayidleWrapped}";
-            Restart = "on-failure";
-            RestartSec = 1;
-          };
-          wantedBy = [ "graphical-session.target" ];
-        };
-      }
-    )
-  ]);
+  );
 }
