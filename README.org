@@ -46,8 +46,8 @@ This repository is my home in the digital world weaved from dotfiles.
 | Desktop | [[#tsutsuyami-卍-惣闇][tsutsuyami]] | Self-built Mini-ITX PC (AMD Ryzen 5 7600X and more)    | NixOS               | Main development workstation.       | Ohma Togaki  |
 | Desktop | [[#momokagari-卍-百篝][momokagari]] | Mac Studio M2 Max                                      | MacOS (Nix Darwin)  | Main workstation for creative work. | Reiji Kawata |
 | Desktop | [[#utsusemi-卍-空蝉][utsusemi]]   | N/A                                                    | Windows (NixOS WSL) | Temporary workstation(s).           | Ohma Togaki  |
-| Server  | [[#niwatazumi-卍-潦][niwatazumi]] | Self-built Mini-ITX server (AMD Ryzen 5 7600 and more) | NixOS               | Main home server.                   | Ohma Togaki  |
-| Server  | sazanami   | GMKtec NucBox G5 N97                                   | NixOS               | Smart home & geospatial data server | Ohma Togaki  |
+| Server  | [[#niwatazumi-卍-潦][niwatazumi]] | Self-built Mini-ITX server (AMD Ryzen 5 7600 and more) | NixOS               | Main home server cum NAS.           | Ohma Togaki  |
+| Server  | [[#sazanami-卍-漣][sazanami]]   | GMKtec NucBox G5 N97                                   | NixOS               | Smart home & geospatial data server | Ohma Togaki  |
 **** tsutsuyami 卍 惣闇
 :PROPERTIES:
 :CUSTOM_ID: tsutsuyami-卍-惣闇
