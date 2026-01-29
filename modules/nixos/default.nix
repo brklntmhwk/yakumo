@@ -4,7 +4,7 @@
 }:
 
 let
-  inherit (murakumo.utils) mapModulesRecursively;
+  inherit (murakumo.modules) mapModulesRecursively;
 in
 {
   imports = mapModulesRecursively ./. import;
