@@ -10,10 +10,10 @@ let
   inherit (lib) mkDefault;
 in
 {
-  imports = [
-    # Include the results of the hardware scan.
-    ./hardware-configuration.nix
-  ];
+  # imports = [
+  #   # hardware configurations are now scattered around custom modules and so on.
+  #   # ./hardware-configuration.nix
+  # ];
 
   yakumo.system = {
     role = "workstation";
