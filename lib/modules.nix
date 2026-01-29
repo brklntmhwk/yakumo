@@ -28,9 +28,9 @@ rec {
       entries = readDir dir;
       processEntry =
         n: v:
-# Remove those module directories or files specified by the user.
-if elem n exclude then
-null
+        # Remove those module directories or files specified by the user.
+        if elem n exclude then
+          null
         # e.g., '_foo', '_foo.nix'
         else if hasPrefix "_" n then
           null
@@ -54,10 +54,9 @@ null
           null;
     in
     # e.g., `{ foo = import "./foo"; ... }`
-      filterAttrs (_: v: v != null) (mapAttrs' processEntry entries);
+    filterAttrs (_: v: v != null) (mapAttrs' processEntry entries);
 
-  mapModules = dir: fn:
-  mapFilterModules dir fn [ ];
+  mapModules = dir: fn: mapFilterModules dir fn [ ];
 
   mapFilterModulesRecursively =
     dir: fn: exclude:
@@ -71,7 +70,7 @@ null
       paths = files ++ concatLists (map (d: mapModulesRecursively d id) dirs);
     in
     map fn paths;
-  
+
   mapModulesRecursively =
     dir: fn:
     let
