@@ -118,10 +118,9 @@
       );
 
       # These are not for external use.
-      nixosModules = {
-        common = import ./modules/common;
-        nixos = import ./modules/nixos;
-      };
+      nixosModules = lib'.mapFilterModules ./modules import [
+        "darwin"
+      ];
 
       nixosConfigurations = lib'.mkNixOsHosts {
         tsutsuyami = {
@@ -142,10 +141,9 @@
       };
 
       # These are not for external use.
-      # darwinModules = {
-      #   common = import ./modules/common;
-      #   darwin = import ./modules/darwin;
-      # };
+      # darwinModules = lib'.mapFilterModules ./modules import [
+      #   "nixos"
+      # ];
 
       # darwinConfigurations = lib'.mkDarwinHosts {
       #   momokagari = {

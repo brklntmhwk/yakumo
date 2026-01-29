@@ -3,13 +3,13 @@ let
   inherit (builtins)
     attrNames
     concatStringsSep
+    elem
     functionArgs
     isAttrs
     isPath
     toString
     ;
   inherit (lib)
-    elem
     filterAttrs
     intersectLists
     isDerivation
