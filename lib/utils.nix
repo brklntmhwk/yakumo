@@ -6,26 +6,25 @@ let
     attrValues
     concatLists
     concatMap
-    concatStringsSep
     head
+    map
     readDir
-    toString
-    tail
     ;
   inherit (lib)
     all
     any
+    attrsToList
+    count
     filterAttrs
     findFirst
-    id
+    hasSuffix
     isAttrs
-    isDerivation
     isList
-    isPath
     last
     length
-    mapAttrsToList
+    nameValuePair
     pipe
+    removeSuffix
     zipAttrsWith
     ;
 in
@@ -92,42 +91,4 @@ rec {
       else
         last values
     ) attrList;
-
-  mapModules =
-    dir: fn:
-    let
-      entries = readDir dir;
-      processEntry =
-        n: v:
-        if hasPrefix "_" n then
-          null
-        else if v == "directory" && pathExists "${dir}/${n}/default.nix" then
-          nameValuePair n (fn "${dir}/${n}")
-        else if
-          v == "regular"
-          && hasSuffix ".nix" n
-          && !elem n [
-            "default.nix"
-            "flake.nix"
-          ]
-        then
-          nameValuePair (removeSuffix ".nix" n) (fn "${dir}/${n}")
-        else
-          null;
-    in
-    filterAttrs (_: v: v != null) (mapAttrs' processEntry entries);
-
-  # https://github.com/hlissner/dotfiles/commit/a75c64d04ab6c1bc90337d37acb234bde022f9f7
-  mapModulesRecursively =
-    dir: fn:
-    let
-      dirs = mapAttrsToList (k: _: "${dir}/${k}") (
-        filterAttrs (n: v: v == "directory" && !(hasPrefix "_" n) && !(pathExists "${dir}/${n}/.noload")) (
-          readDir dir
-        )
-      );
-      files = attrValues (mapModules dir id);
-      paths = files ++ concatLists (map (d: mapModulesRecursively d id) dirs);
-    in
-    map fn paths;
 }
