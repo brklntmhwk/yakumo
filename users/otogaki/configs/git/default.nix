@@ -1,3 +1,5 @@
+{ config, ... }:
+
 {
   user = {
     name = "Ohma Togaki";
