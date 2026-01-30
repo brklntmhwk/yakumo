@@ -16,7 +16,6 @@ in
   yakumo.system = {
     i18n = {
       inputMethod = {
-        enable = true;
         fcitx5 = {
           enable = true;
           extraAddons = [ ];

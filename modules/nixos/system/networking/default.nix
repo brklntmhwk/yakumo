@@ -87,7 +87,7 @@ in
     (mkIf (systemRole == "server") {
       # Networkd is better for servers/routers.
       # https://nixos.wiki/wiki/Systemd-networkd
-      yakumo.networking.manager = mkDefault "networkd";
+      yakumo.system.networking.manager = mkDefault "networkd";
     })
   ];
 }

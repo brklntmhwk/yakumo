@@ -44,7 +44,7 @@ in
         flagsStr = concatStringsSep " " cfg.flags;
       in
       {
-        initExtra = ''
+        initExtraLast = ''
           # Initialize zoxide (generating the 'z' or 'cd' functions)
           eval "$(${getExe cfg.package} init zsh ${flagsStr})"
         '';
