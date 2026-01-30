@@ -35,7 +35,7 @@ in
     };
     apps = {
       browsers = {
-        
+
       };
     };
   };

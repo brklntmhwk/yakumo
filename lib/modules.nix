@@ -61,19 +61,13 @@ rec {
     dir: fn: exclude:
     let
       entries = readDir dir;
-      dirs = filterAttrs (n: v: 
-        v == "directory" 
-        && !(elem n exclude)
-        && !(hasPrefix "_" n) 
+      dirs = filterAttrs (n: v: v == "directory" && !(elem n exclude) && !(hasPrefix "_" n)) entries;
+      files = filterAttrs (
+        n: v:
+        v == "regular" && hasSuffix ".nix" n && !(elem n exclude) && n != "flake.nix" && !(hasPrefix "_" n)
       ) entries;
-      files = filterAttrs (n: v: 
-        v == "regular" 
-        && hasSuffix ".nix" n 
-        && !(elem n exclude)
-        && n != "flake.nix" 
-        && !(hasPrefix "_" n)
-      ) entries;
-      paths = (mapAttrsToList (n: _: "${dir}/${n}") files) 
+      paths =
+        (mapAttrsToList (n: _: "${dir}/${n}") files)
         ++ concatLists (mapAttrsToList (n: _: mapFilterModulesRecursively "${dir}/${n}" id exclude) dirs);
     in
     map fn paths;
