@@ -35,7 +35,7 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    # --- Home directory management ---
+    # --- Home directory management (Exclusive to NixOS/NixOS WSL) ---
     nix-maid.url = "github:viperML/nix-maid";
 
     # --- Declarative disk partitioning ---
@@ -57,6 +57,12 @@
     # --- Secrets ---
     sops-nix = {
       url = "github:Mic92/sops-nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
+    # --- VMs ---
+    microvm = {
+      url = "github:astro/microvm.nix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
@@ -127,13 +133,13 @@
           system = "x86_64-linux";
           username = "otogaki";
         };
-        # utsusemi = {
-        #   system = "x86_64-linux";
-        #   username = "otogaki";
-        #   extraModules = [
-        #     inputs.nixos-wsl.nixosModules.default
-        #   ];
-        # };
+        utsusemi = {
+          system = "x86_64-linux";
+          username = "otogaki";
+          extraModules = [
+            inputs.nixos-wsl.nixosModules.default
+          ];
+        };
         # niwatazumi = {
         #   system = "x86_64-linux";
         #   username = "otogaki";
