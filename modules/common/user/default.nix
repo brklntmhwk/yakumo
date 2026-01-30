@@ -18,10 +18,13 @@ let
   cfg = config.yakumo.user;
 in
 {
-  options.yakumo.user = {
-    name = mkOption {
-      type = types.str;
+  # https://github.com/hlissner/dotfiles/commit/2c31f918a45c7dd191970dff9dc9bb1c9bc8f73c
+  options.yakumo.user = mkOption {
+    type = types.attrs;
+    default = {
+      name = "";
     };
+    description = "Alias for users.users.<username>.";
   };
 
   config = {
