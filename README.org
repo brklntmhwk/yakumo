@@ -33,7 +33,7 @@ This repository is my home in the digital world weaved from dotfiles.
 :CUSTOM_ID: principles
 :END:
 - *Less is more:* Keep dependencies to a minimum and reduce attack surface.
-  - Not using such popular tools as Home Manager or Flake-parts.
+  - Not using such popular tools as Home Manager, Flake Parts, or Stylix.
 - *Low-maintenance:* Easy to maintain. You know where to tweak at a glance. (Maybe...)
   - Sticking to the Dependency Inversion principle as much as possible to make updates a breeze.
 - *Cool:* After all, what drives us to tend our dotfiles is pure self-satisfaction, isn't it?
