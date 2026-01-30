@@ -21,7 +21,7 @@ in
 {
   options.yakumo.desktop.daemons.mako = {
     enable = mkEnableOption "mako";
-    setting = mkOption {
+    settings = mkOption {
       type = types.attrsOf (
         types.oneOf [
           iniAtomType

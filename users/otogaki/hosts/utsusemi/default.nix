@@ -1,12 +1,13 @@
 {
   config,
   lib,
+  pkgs,
   ...
 }:
 
 let
   inherit (theme) fonts;
-  theme = import ../../themes/modus-vivendi-tinted;
+  theme = import ../../themes/modus-vivendi-tinted pkgs;
 in
 {
   imports = [

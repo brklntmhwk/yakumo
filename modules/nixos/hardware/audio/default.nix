@@ -17,7 +17,7 @@ in
 {
   config = mkIf (any (mod: hasPrefix "audio" mod) hardwareMods) {
     # See https://wiki.nixos.org/wiki/PipeWire for more details.
-    hardware.pulseaudio.enable = mkForce false;
+    services.pulseaudio.enable = mkForce false;
     services.pipewire = {
       enable = true;
       alsa.enable = true;

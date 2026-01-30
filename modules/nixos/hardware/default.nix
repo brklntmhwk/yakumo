@@ -12,7 +12,7 @@ let
     mkOption
     types
     ;
-  inherit (murakumo.util) getDirNamesRecursive;
+  inherit (murakumo.utils) getDirNamesRecursive;
   hardwareMods = getDirNamesRecursive ./.;
 in
 {

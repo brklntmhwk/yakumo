@@ -9,7 +9,7 @@ let
   inherit (builtins) attrValues;
   inherit (lib) catAttrs;
   inherit (theme) cursorThemes fonts loginThemes;
-  theme = import ../../themes/modus-operandi-tinted;
+  theme = import ../../themes/modus-operandi-tinted pkgs;
 in
 {
   imports = [

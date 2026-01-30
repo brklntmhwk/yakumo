@@ -9,7 +9,7 @@ let
   inherit (builtins) attrValues;
   inherit (lib) catAttrs;
   inherit (theme) cursorThemes fonts loginThemes;
-  theme = import ../../themes/modus-vivendi-tinted;
+  theme = import ../../themes/modus-vivendi-tinted pkgs;
 in
 {
   imports = [
@@ -33,7 +33,7 @@ in
     compositors = {
       niri = {
         enable = true;
-        xwayland = true;
+        xwayland.enable = true;
         settings = import ../../configs/niri { inherit theme; };
         regreet = {
           theme = {
