@@ -41,7 +41,7 @@ in
         inherit (builtins) concatStringsSep;
         inherit (lib) getExe;
 
-        flagesStr = concatStringsSep " " cfg.flags;
+        flagsStr = concatStringsSep " " cfg.flags;
       in
       {
         initExtra = ''

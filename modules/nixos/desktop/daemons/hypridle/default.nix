@@ -10,6 +10,7 @@ let
   inherit (lib)
     mkEnableOption
     mkIf
+    mkMerge
     mkOption
     mkPackageOption
     types
@@ -80,7 +81,7 @@ in
           name = "${getName cfg.package}-${config.yakumo.user.name}";
           flags = [
             "--config"
-            hypridleconf
+            hypridleConf
           ];
         };
       in

@@ -9,6 +9,7 @@
 let
   inherit (lib)
     attrNames
+    concatMapStringsSep
     literalExpression
     mkEnableOption
     mkIf
@@ -18,7 +19,7 @@ let
     types
     ;
   cfg = config.yakumo.shell.zsh;
-  bindKeyCommands = {
+  bindkeyCommands = {
     emacs = "bindkey -e";
     viins = "bindkey -v";
     vicmd = "bindkey -a";
@@ -235,7 +236,7 @@ in
         inherit (murakumo.wrappers) mkAppWrapper;
 
         optsStr = concatStringsSep "\n" (map (opt: "setopt ${opt}") cfg.setOptions);
-        keymapStr = optionalString (cfg.defaultKeymap != null) bindKeyCommands.${cfg.defaultKeymap};
+        keymapStr = optionalString (cfg.defaultKeymap != null) bindkeyCommands.${cfg.defaultKeymap};
         pluginsStr = concatStringsSep "\n" (
           map (plugin: ''
             # Plugin: ${plugin.name}

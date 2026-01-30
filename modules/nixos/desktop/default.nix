@@ -7,7 +7,7 @@
 }:
 
 let
-  inherit (builtins) attrValues;
+  inherit (builtins) attrValues isAttrs;
   inherit (lib)
     elem
     mkDefault
