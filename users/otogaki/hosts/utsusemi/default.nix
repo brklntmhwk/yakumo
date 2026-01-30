@@ -1,10 +1,13 @@
 {
   config,
   lib,
-  pkgs,
   ...
 }:
 
+let
+  inherit (theme) fonts;
+  theme = import ../../themes/modus-vivendi-tinted;
+in
 {
   imports = [
     ../common # Common configs among user's hosts
