@@ -12,6 +12,7 @@ let
     mkIf
     mkOption
     mkPackageOption
+    types
     ;
   cfg = config.yakumo.ai.agents.gemini-cli;
   jsonFormat = pkgs.formats.json { };

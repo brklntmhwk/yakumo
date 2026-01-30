@@ -12,6 +12,7 @@ let
     mkIf
     mkOption
     mkPackageOption
+    types
     ;
   cfg = config.yakumo.programs.ncspot;
   tomlFormat = pkgs.formats.toml { };

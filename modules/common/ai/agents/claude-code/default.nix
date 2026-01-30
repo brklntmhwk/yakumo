@@ -12,6 +12,7 @@ let
     mkIf
     mkOption
     mkPackageOption
+    types
     ;
   cfg = config.yakumo.ai.agents.claude-code;
   jsonFormat = pkgs.formats.json { };
