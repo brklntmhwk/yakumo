@@ -18,7 +18,7 @@ in
   };
 
   config = mkIf cfg.enable {
-    yakumo.user.packages = builtins.AttrValues {
+    yakumo.user.packages = builtins.attrValues {
       # Install util TUIs altogether that you don't need to wrap with their configurations.
       inherit (pkgs)
         bandwhich # Terminal bandwidth util
