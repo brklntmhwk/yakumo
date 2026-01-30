@@ -19,9 +19,6 @@ in
   yakumo.user = {
     name = "otokagi";
     description = "Ohma Togaki";
-    extraGroups = [
-      "wheel"
-    ];
     hashedPasswordFile = config.sops.secrets.login_password_otogaki.path;
     # The value of 'config.users.defaultUserShell' will be set here for normal users.
     # For the detailed implementation, see:

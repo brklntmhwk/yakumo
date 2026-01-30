@@ -16,9 +16,6 @@ in
   yakumo.user = {
     name = "rkawata";
     description = "Reiji Kawata";
-    extraGroups = [
-      "wheel"
-    ];
     hashedPasswordFile = config.sops.secrets.login_password_rkawata.path;
     packages = attrValues {
       inherit (pkgs)
