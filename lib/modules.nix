@@ -30,10 +30,10 @@ rec {
         n: v:
         # Remove those module directories or files specified by the user.
         if elem n exclude then
-          null
+          nameValuePair "" null
         # e.g., '_foo', '_foo.nix'
         else if hasPrefix "_" n then
-          null
+          nameValuePair "" null
         # e.g., 'foo/default.nix'
         # Let `dir` be `./.` and `fn` be `import`, then you get:
         # `{ name = "foo"; value = import "./foo"; }`
@@ -51,7 +51,7 @@ rec {
         then
           nameValuePair (removeSuffix ".nix" n) (fn "${dir}/${n}")
         else
-          null;
+          nameValuePair "" null;
     in
     # e.g., `{ foo = import "./foo"; ... }`
     filterAttrs (_: v: v != null) (mapAttrs' processEntry entries);
