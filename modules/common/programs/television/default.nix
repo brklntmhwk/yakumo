@@ -185,9 +185,9 @@ in
           televisionWrapped
         ]
         ++ optional (elem "nix-search-tv" cfg.channels) pkgs.nix-search-tv
-        ++ optional (elem "files" cfg.channels) attrValues {
+        ++ optional (elem "files" cfg.channels) (attrValues {
           inherit (pkgs) bat fd;
-        };
+        });
       }
     )
   ]);

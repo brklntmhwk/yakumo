@@ -88,8 +88,8 @@ let
             }
           )
         ]
-        ++ optional (platformType == "nixos") attrValues self.nixosModules
-        ++ optional (platformType == "darwin") attrValues self.darwinModules
+        ++ optional (platformType == "nixos") (attrValues self.nixosModules)
+        ++ optional (platformType == "darwin") (attrValues self.darwinModules)
         ++ extraModules;
 
         # Put these into the modules' scope and make them accesible.
