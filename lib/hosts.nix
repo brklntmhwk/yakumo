@@ -16,7 +16,7 @@ let
   inherit (lib)
     getName
     mkDefault
-    optional
+    optionals
     warn
     ;
 
@@ -88,8 +88,10 @@ let
             }
           )
         ]
-        ++ optional (platformType == "nixos") (attrValues self.nixosModules)
-        ++ optional (platformType == "darwin") (attrValues self.darwinModules)
+        # Use `lib.optionals` instead of `lib.optional` here;
+        # the former returns the given list as is if the condition is true.
+        ++ optionals (platformType == "nixos") (attrValues self.nixosModules)
+        ++ optionals (platformType == "darwin") (attrValues self.darwinModules)
         ++ extraModules;
 
         # Put these into the modules' scope and make them accesible.
