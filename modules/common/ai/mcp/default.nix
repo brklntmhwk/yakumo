@@ -7,6 +7,7 @@
 }:
 
 let
+  inherit (builtins) isAttrs;
   inherit (lib)
     mkEnableOption
     mkOption
