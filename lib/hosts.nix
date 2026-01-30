@@ -8,7 +8,6 @@
 let
   inherit (self) inputs;
   inherit (builtins)
-    attrValues
     mapAttrs
     pathExists
     toString
@@ -90,8 +89,8 @@ let
         ]
         # Use `lib.optionals` instead of `lib.optional` here;
         # the former returns the given list as is if the condition is true.
-        ++ optionals (platformType == "nixos") (attrValues self.nixosModules)
-        ++ optionals (platformType == "darwin") (attrValues self.darwinModules)
+        ++ optionals (platformType == "nixos") self.nixosModules
+        ++ optionals (platformType == "darwin") self.darwinModules
         ++ extraModules;
 
         # Put these into the modules' scope and make them accesible.

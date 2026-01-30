@@ -124,7 +124,7 @@
       );
 
       # These are not for external use.
-      nixosModules = lib'.mapFilterModules ./modules import [
+      nixosModules = lib'.mapFilterModulesRecursively ./modules import [
         "darwin"
       ];
 
@@ -151,7 +151,7 @@
       };
 
       # These are not for external use.
-      # darwinModules = lib'.mapFilterModules ./modules import [
+      # darwinModules = lib'.mapFilterModulesRecursively ./modules import [
       #   "nixos"
       # ];
 
