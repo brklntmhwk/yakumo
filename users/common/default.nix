@@ -7,14 +7,12 @@
     let
       inherit (pkgs) hunspellDicts;
     in
-    attrValues {
+    builtins.attrValues {
       # Dictionaries for multiple languages
       inherit (hunspellDicts)
         en-us
         en-gb-ise
         es-any
-        ;
-      inherit (pkgs)
         ;
     }
   );

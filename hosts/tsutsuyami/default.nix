@@ -10,10 +10,12 @@ let
   inherit (lib) mkDefault;
 in
 {
-  # imports = [
-  #   # hardware configurations are now scattered around custom modules and so on.
-  #   # ./hardware-configuration.nix
-  # ];
+  imports = [
+    ../common
+
+    # hardware configurations are now scattered around custom modules and so on.
+    # ./hardware-configuration.nix
+  ];
 
   yakumo.system = {
     role = "workstation";
@@ -23,12 +25,6 @@ in
     networking = {
       manager = "networkd";
       wifi.enable = true;
-    };
-  };
-
-  yakumo.secrets = {
-    sops = {
-      enable = true;
     };
   };
 
@@ -43,12 +39,6 @@ in
       "scanner/scansnap"
       "ssd"
     ];
-  };
-
-  yakumo.services = {
-    openssh = {
-      enable = true;
-    };
   };
 
   # Copied from the auto-generated 'hardware-configuration.nix' file.
