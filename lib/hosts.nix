@@ -50,7 +50,7 @@ let
     }:
     let
       hostConfigs = ../hosts/${name};
-      userConfigs = ../users/${username};
+      userConfigs = ../users/${username}/hosts/${name};
     in
     if !pathExists hostConfigs then
       throwNotFoundErr {

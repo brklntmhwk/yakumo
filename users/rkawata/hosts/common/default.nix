@@ -7,12 +7,11 @@
 
 let
   inherit (builtins) attrValues;
-  inherit (lib) catAttrs;
-  inherit (theme) cursorThemes fonts loginThemes;
-  theme = import ./themes/modus-operandi-tinted;
 in
 {
-  imports = [ ../common ];
+  imports = [
+    ../../../common # Common configs among users
+  ];
 
   yakumo.user = {
     name = "rkawata";
@@ -21,27 +20,9 @@ in
       "wheel"
     ];
     hashedPasswordFile = config.sops.secrets.login_password_rkawata.path;
-    packages = builtins.attrValues {
+    packages = attrValues {
       inherit (pkgs)
         ;
-    };
-  };
-
-  yakumo.desktop = {
-    enable = true;
-    terminal = {
-      wezterm = {
-        enable = true;
-        # settings = import ./configs/wezterm { };
-      };
-    };
-    apps = {
-      media = {
-        modules = [
-          "music"
-          "video/davinci-resolve"
-        ];
-      };
     };
   };
 

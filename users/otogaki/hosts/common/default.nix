@@ -8,11 +8,13 @@
 let
   inherit (builtins) attrValues;
   inherit (lib) catAttrs;
-  inherit (theme) cursorThemes fonts loginThemes;
-  theme = import ./themes/modus-vivendi-tinted;
+  inherit (theme) cursorThemes fonts;
+  theme = import ../../themes/modus-vivendi-tinted;
 in
 {
-  imports = [ ../common ];
+  imports = [
+    ../../../common # Common configs among users
+  ];
 
   yakumo.user = {
     name = "otokagi";
@@ -31,98 +33,6 @@ in
           ;
       }
       ++ (catAttrs "package" (attrValues cursorThemes));
-  };
-
-  yakumo.system = {
-    i18n = {
-      inputMethod = {
-        enable = true;
-        fcitx5 = {
-          enable = true;
-          extraAddons = [ ];
-          quickPhrase = { };
-        };
-      };
-    };
-  };
-
-  yakumo.desktop = {
-    enable = true;
-    compositors = {
-      niri = {
-        enable = true;
-        xwayland = true;
-        settings = import ./configs/niri { inherit theme; };
-        regreet = {
-          theme = {
-            name = loginThemes.adwaita.name;
-            package = loginThemes.adwaita.package;
-          };
-          cursorTheme = {
-            name = cursorThemes.adwaita.name;
-            package = cursorThemes.adwaita.package;
-          };
-          font = {
-            name = fonts.moralerspaceHw.name;
-            package = fonts.moralerspaceHw.package;
-            size = 16;
-          };
-        };
-      };
-    };
-    daemons = {
-      mako = {
-        enable = true;
-        settings = import ./configs/mako { inherit theme; };
-      };
-      swayidle = {
-        enable = true;
-        settings = import ./configs/swayidle { };
-      };
-    };
-    lockers = {
-      swaylock = {
-        enable = true;
-        settings = import ./configs/swaylock { inherit theme; };
-      };
-    };
-    terminal = {
-      wezterm = {
-        enable = true;
-        settings = import ./configs/wezterm { inherit theme; };
-      };
-    };
-    ui = {
-      waybar = {
-        enable = true;
-        settings = import ./configs/waybar { };
-        style = import ./configs/waybar/style.nix { inherit theme; };
-      };
-      wofi = {
-        enable = true;
-        settings = import ./configs/wofi { };
-        style = import ./configs/wofi/style.nix { inherit theme; };
-      };
-    };
-    apps = {
-      browsers = {
-        nyxt = {
-          enable = true;
-          config = import ./configs/nyxt/init.lisp { };
-        };
-      };
-      media = {
-        modules = [
-          "music"
-          "video"
-        ];
-      };
-      misc = {
-        thunar = {
-          enable = true;
-        };
-      };
-    };
   };
 
   yakumo.shell = {
@@ -197,17 +107,10 @@ in
     };
     starship = {
       enable = true;
-      settings = import ./configs/starship { inherit theme; };
+      settings = import ../../configs/starship { inherit theme; };
     };
     zoxide = {
       enable = true;
-    };
-  };
-
-  yakumo.editors = {
-    emacs = {
-      enable = true;
-      ametsuchi.enable = true;
     };
   };
 
@@ -237,11 +140,11 @@ in
     tui-utils.enable = true;
     bottom = {
       enable = true;
-      settings = import ./configs/bottom { inherit theme; };
+      settings = import ../../configs/bottom { inherit theme; };
     };
     git = {
       enable = true;
-      config = import ./configs/git { inherit theme; };
+      config = import ../../configs/git { inherit theme; };
     };
     television = {
       enable = true;
@@ -249,43 +152,11 @@ in
         "files"
         "nix-search-tv"
       ];
-      settings = import ./configs/television { inherit theme; };
-    };
-    wthrr = {
-      enable = true;
-      settings = import ./configs/wthrr { };
+      settings = import ../../configs/television { inherit theme; };
     };
   };
 
-  yakumo.services = {
-    xremap = {
-      enable = true;
-      userName = config.yakumo.user.name;
-      serviceMode = "user";
-      config = import ./configs/xremap { };
-    };
-  };
-
-  programs.yazi = {
-    enable = true;
-    settings = import ./configs/yazi { inherit theme; };
-  };
-
-  fonts = {
-    packages =
-      attrValues {
-        inherit (pkgs)
-          ;
-      }
-      ++ (catAttrs "package" (attrValues fonts));
-    fontDir.enable = true;
-    fontconfig = {
-      defaultFonts = {
-        serif = [ fonts.notoCjkSerif.name ];
-        sansSerif = [ fonts.notoCjkSans.name ];
-        monospace = [ fonts.hackgenNf.name ];
-        emoji = [ fonts.notoEmoji.name ];
-      };
-    };
-  };
+  # When it comes to fonts, this is the only option common between
+  # NixOS and Nix Darwin.
+  fonts.packages = catAttrs "package" (attrValues fonts);
 }
