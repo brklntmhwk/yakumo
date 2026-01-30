@@ -21,7 +21,7 @@ let
     naturalSort
     ;
 in
-{
+rec {
   mkConfig =
     {
       name,

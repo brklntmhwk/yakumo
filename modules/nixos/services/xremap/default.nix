@@ -1,4 +1,5 @@
 {
+  inputs,
   config,
   options,
   lib,
@@ -20,6 +21,8 @@ let
   upstream = options.services.xremap;
 in
 {
+  imports = [ inputs.xremap.nixosModules.default ];
+
   options.yakumo.services.xremap = {
     enable = mkEnableOption "Xremap key remapping service";
     # Hereafter, selectively inherit the upstream module options.

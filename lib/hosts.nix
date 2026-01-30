@@ -75,7 +75,7 @@ let
             nixpkgs = {
               inherit overlays;
               config.allowUnfreePredicate = pkg: warn "Allowing unfree package: ${getName pkg}" true;
-              hostPlatformType = system;
+              hostPlatform = system;
             };
           }
           # Feed the current system's 'pkgs' into 'mkMurakumo' to build the Murakumo scope

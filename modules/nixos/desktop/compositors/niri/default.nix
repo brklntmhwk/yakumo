@@ -254,16 +254,14 @@ in
                 package = regreetCfg.theme.package;
               };
             }
-            (
-              mkIf regreetCfg.background.path != null {
-                settings = {
-                  background = {
-                    path = regreetCfg.background.path;
-                    fit = regreetCfg.background.fit;
-                  };
+            (mkIf (regreetCfg.background.path != null) {
+              settings = {
+                background = {
+                  path = regreetCfg.background.path;
+                  fit = regreetCfg.background.fit;
                 };
-              }
-            )
+              };
+            })
           ];
 
           # https://github.com/rharish101/ReGreet?tab=readme-ov-file#set-as-default-session
