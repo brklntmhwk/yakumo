@@ -31,5 +31,5 @@ in
 {
   inherit mkMurakumo;
   inherit (hosts) mkNixOsHosts mkDarwinHosts;
-  inherit (modules) mapFilterModules;
+  inherit (modules) mapFilterModulesRecursively;
 }
