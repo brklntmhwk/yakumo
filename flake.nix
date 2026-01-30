@@ -104,12 +104,11 @@
         inherit self;
         inherit (nixpkgs) lib;
       };
-      overlays = import ./overlays {
-        inherit (nixpkgs) lib;
-      };
     in
     {
-      inherit overlays;
+      overlays.default = import ./overlays {
+        inherit (nixpkgs) lib;
+      };
 
       formatter = forAllSystems (
         system:
