@@ -104,8 +104,13 @@
         inherit self;
         inherit (nixpkgs) lib;
       };
+      overlays = import ./overlays {
+        inherit (nixpkgs) lib;
+      };
     in
     {
+      inherit overlays;
+
       formatter = forAllSystems (
         system:
         let
