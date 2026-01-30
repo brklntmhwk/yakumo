@@ -9,6 +9,7 @@
 let
   inherit (lib)
     literalExpression
+    mkEnableOption
     mkIf
     mkOption
     types

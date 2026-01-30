@@ -35,7 +35,7 @@ in
       };
     })
     (
-      mkIf systemRole == "workstation" {
+      mkIf (systemRole == "workstation") {
         nix = {
           gc = {
             automatic = true;
@@ -55,7 +55,7 @@ in
       }
     )
     (
-      mkIf systemRole == "server" {
+      mkIf (systemRole == "server") {
         nix = {
           gc = {
             # Results in mountains of garbage otherwise.

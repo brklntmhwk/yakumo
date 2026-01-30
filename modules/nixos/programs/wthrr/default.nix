@@ -10,11 +10,13 @@
 }:
 
 let
+  inherit (builtins) mapAttrs;
   inherit (lib)
     mkEnableOption
     mkIf
     mkOption
     mkPackageOption
+    types
     ;
   cfg = config.yakumo.programs.wthrr;
 in
