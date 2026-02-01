@@ -17,12 +17,14 @@ let
     count
     filterAttrs
     findFirst
+    hasPrefix
     hasSuffix
     isAttrs
     isList
     last
     length
     nameValuePair
+    pathExists
     pipe
     removeSuffix
     zipAttrsWith
@@ -47,7 +49,9 @@ rec {
   getDirNamesRecursive =
     dir:
     let
-      children = getDirNames dir;
+      entries = readDir dir;
+      validDirs = filterAttrs (n: v: v == "directory" && !hasPrefix "_" n) entries;
+      names = attrNames validDirs;
     in
     concatMap (
       name:
@@ -57,9 +61,10 @@ rec {
         # Prepend the current name to the sub-children to build the path string
         # e.g., "gpu" + "nvidia" --> "gpu/nvidia"
         prefixedSubChildren = map (child: "${name}/${child}") subChildren;
+        isModule = pathExists (path + "/default.nix");
       in
-      [ name ] ++ prefixedSubChildren
-    ) children;
+      (if isModule then [ name ] else [ ]) ++ prefixedSubChildren
+    ) names;
 
   findFirstAttrName =
     pred: attrs:
