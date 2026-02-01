@@ -11,7 +11,7 @@ let
     types
     ;
   inherit (murakumo.utils) getDirNamesRecursive;
-  commonMods = getDirNamesRecursive ./.;
+  commonMedia = getDirNamesRecursive ./.;
   cfg = config.yakumo.desktop.apps.media;
 in
 {
@@ -19,7 +19,8 @@ in
     availableModules = mkOption {
       type = types.listOf types.str;
       default = [ ];
-      readOnly = true;
+      internal = true;
+      # readOnly = true;
       description = "List of available media modules collected from all active platform layers.";
     };
     # 'yakumo.desktop.apps.media.*' modules look up this.

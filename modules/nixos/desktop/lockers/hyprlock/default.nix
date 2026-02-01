@@ -65,7 +65,7 @@ in
 
       hyprlockConf = writeText "hyprlock.conf" (toHyprconf { } cfg.settings);
       hyprlockWrapped = mkAppWrapper {
-        pkgs = cfg.package;
+        pkg = cfg.package;
         name = "${getName cfg.package}-${config.yakumo.user.name}";
         flags = [
           "--config"

@@ -60,7 +60,7 @@ in
       waybarStyle =
         if isPath cfg.style || isStorePath cfg.style then cfg.style else writeText "style.css" cfg.style;
       waybarWrapped = mkAppWrapper {
-        pkgs = cfg.package;
+        pkg = cfg.package;
         name = "${getName cfg.package}-${config.yakumo.user.name}";
         flags = [
           "--config"

@@ -45,7 +45,7 @@ in
     (mkIf (systemRole == "workstation") {
       boot = {
         # We don't play games on our workstations, so Xanmod is not our option.
-        kernelPackages = pkgs.linuxKernel.packages.linux_zen_latest;
+        kernelPackages = pkgs.linuxKernel.packages.linux_zen;
         kernelModules = [ ];
         kernel = { };
         # Kernel Modules needed to mount the root file system.

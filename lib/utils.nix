@@ -56,8 +56,9 @@ rec {
     concatMap (
       name:
       let
+        path = dir + "/${name}";
         # Recurse this function itself.
-        subChildren = getDirNamesRecursive (dir + "/${name}");
+        subChildren = getDirNamesRecursive path;
         # Prepend the current name to the sub-children to build the path string
         # e.g., "gpu" + "nvidia" --> "gpu/nvidia"
         prefixedSubChildren = map (child: "${name}/${child}") subChildren;

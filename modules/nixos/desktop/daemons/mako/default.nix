@@ -66,7 +66,7 @@ in
         attrs = cfg.settings;
       });
       makoWrapped = mkAppWrapper {
-        pkgs = cfg.package;
+        pkg = cfg.package;
         name = "${getName cfg.package}-${config.yakumo.user.name}";
         flags = [
           "--config"

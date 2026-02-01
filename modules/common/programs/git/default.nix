@@ -99,7 +99,7 @@ in
 
         gitConfig = writeText "config" (concatMapStringsSep "\n" generators.toGitINI cfg.config);
         gitWrapped = mkAppWrapper {
-          pkgs = cfg.package;
+          pkg = cfg.package;
           name = "${getName cfg.package}-${config.yakumo.user.name}";
           env = {
             GIT_CONFIG_GLOBAL = gitConfig;

@@ -54,7 +54,7 @@ in
 
       weztermLua = luaFormat.generate "wezterm.lua" cfg.settings;
       weztermWrapped = mkAppWrapper {
-        pkgs = cfg.package;
+        pkg = cfg.package;
         name = "${getName cfg.package}-${config.yakumo.user.name}";
         flags = [
           "--config-file"

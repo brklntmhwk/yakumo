@@ -1,4 +1,6 @@
-theme: {
+{ theme }:
+
+{
   tick_rate = 50;
   default_channel = "files";
   history_size = 250;

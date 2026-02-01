@@ -41,10 +41,13 @@ in
     # Disable mutable users.
     users.mutableUsers = mkForce false;
 
+    # Set a placeholder password to satisfy the NixOS anti-lockout assertion.
+    users.users.root.initialPassword = "password";
+
     yakumo.user = {
       description = mkDefault cfg.name;
       extraGroups = mkDefault [ "wheel" ];
-      group = mkDefault "yakumo";
+      group = mkDefault "users";
       # If set to true, this sets:
       # - 'createHome' to true
       # - 'home' to '/home/<username>'
@@ -52,6 +55,9 @@ in
       # - 'isSystemUser' to false
       isNormalUser = mkDefault true;
       uid = mkDefault 1000;
+      # Set a placeholder password to satisfy the NixOS anti-lockout assertion.
+      # This enables you to use 'sudo'. You can change it with the `passwd` command later.
+      initialPassword = "password";
     };
   };
 }

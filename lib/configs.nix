@@ -4,13 +4,13 @@ let
     attrNames
     concatStringsSep
     elem
-    functionArgs
     isAttrs
     isPath
     toString
     ;
   inherit (lib)
     filterAttrs
+    functionArgs
     intersectLists
     isDerivation
     isOption

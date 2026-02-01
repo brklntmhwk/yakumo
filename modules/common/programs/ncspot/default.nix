@@ -54,7 +54,7 @@ in
 
       configToml = tomlFormat.generate "config.toml" cfg.settings;
       ncspotWrapped = mkAppWrapper {
-        pkgs = cfg.package;
+        pkg = cfg.package;
         name = "${getName cfg.package}-${config.yakumo.user.name}";
         flags = [
           "--config"

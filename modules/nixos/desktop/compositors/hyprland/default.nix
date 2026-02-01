@@ -127,6 +127,7 @@ in
     cursorPackage = mkPackageOption pkgs "rose-pine-hyprcursor" { };
     packageWrapped = mkOption {
       type = types.package;
+      default = cfg.package;
       readOnly = true;
       description = ''
         The final wrapped Hyprland package, including all configurations.
@@ -230,7 +231,7 @@ in
           );
 
           hyprlandWrapped = mkAppWrapper {
-            pkgs = cfg.package;
+            pkg = cfg.package;
             name = "${getName cfg.package}-${config.yakumo.user.name}";
             flags = [
               "--config"

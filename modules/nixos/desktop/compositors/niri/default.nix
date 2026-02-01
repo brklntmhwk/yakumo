@@ -142,6 +142,7 @@ in
     package = mkPackageOption pkgs "niri" { };
     packageWrapped = mkOption {
       type = types.package;
+      default = cfg.package;
       readOnly = true;
       description = ''
         The final wrapped Niri package, including all configurations.

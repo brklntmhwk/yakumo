@@ -30,10 +30,10 @@ in
       # https://github.com/hlissner/dotfiles/commit/713cc540a72a2c4988e0757bbf4712c2d1800474
       assertions =
         let
-          isEnabled = _: v: v.enable or false;
+          isEnabled = _: v: isAttrs v && (v.enable or false);
           hasDesktopEnabled =
             cfg:
-            (anyAttrs isEnabled cfg) || !(anyAttrs (_: v: isAttrs v && anyAttrs isEnabled v) cfg.compositors);
+            (cfg.enable or false) || !(anyAttrs isEnabled cfg.compositors);
         in
         [
           {

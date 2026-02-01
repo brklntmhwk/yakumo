@@ -1,4 +1,4 @@
-theme:
+{ theme }:
 
 let
   inherit (theme) colors;

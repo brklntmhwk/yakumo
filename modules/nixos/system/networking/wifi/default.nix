@@ -37,7 +37,7 @@ in
         networking.supplicant = genAttrs interfaces (interface: {
           userControlled = {
             enable = true;
-            group = "yakumo"; # Created in `yakumo.user.group`.
+            group = "users"; # Created in `yakumo.user.group`.
           };
           configFile = {
             path = "${configDir}/${interface}.conf";

@@ -100,7 +100,7 @@ in
         attrs = cfg.settings;
       });
       swayidleWrapped = mkAppWrapper {
-        pkgs = cfg.package;
+        pkg = cfg.package;
         name = "${getName cfg.package}-${config.yakumo.user.name}";
         flags = [
           "-w" # Wait for command to finish executing before continuing

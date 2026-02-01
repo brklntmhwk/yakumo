@@ -172,7 +172,7 @@ in
           )}
         '';
         televisionWrapped = mkAppWrapper {
-          pkgs = cfg.package;
+          pkg = cfg.package;
           name = "${getName cfg.package}-${config.yakumo.user.name}";
           env = {
             TELEVISION_CONFIG = "${configDir}/config.toml";

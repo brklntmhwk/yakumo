@@ -77,7 +77,7 @@ in
           attrs = cfg.settings;
         });
         hypridleWrapped = mkAppWrapper {
-          pkgs = cfg.package;
+          pkg = cfg.package;
           name = "${getName cfg.package}-${config.yakumo.user.name}";
           flags = [
             "--config"

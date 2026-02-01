@@ -98,7 +98,7 @@ in
 
         starshipToml = tomlFormat.generate "starship.toml" cfg.settings;
         starshipWrapped = mkAppWrapper {
-          pkgs = cfg.package;
+          pkg = cfg.package;
           name = "${getName cfg.package}-${config.yakumo.user.name}";
           env = {
             STARSHIP_CONFIG = starshipToml;

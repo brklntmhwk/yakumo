@@ -9,7 +9,6 @@
 let
   inherit (lib)
     attrNames
-    concatMapStringsSep
     literalExpression
     mkEnableOption
     mkIf
@@ -250,7 +249,7 @@ in
         );
         # Use '--session' so it doesn't try to write to a read-only file.
         # Use '--force' to overwrite any existing ones without prompt.
-        abbrCmds = concatMapStringsSep "\n" (
+        abbrCmds = concatStringsSep "\n" (
           mapAttrsToList (
             k: v: "abbr --session --force ${escapeShellArg k}=${escapeShellArg v}"
           ) cfg.abbreviations
@@ -347,7 +346,7 @@ in
           ''}
         '';
         zshWrapped = mkAppWrapper {
-          pkgs = cfg.package;
+          pkg = cfg.package;
           name = "${getName cfg.package}-${config.yakumo.user.name}";
           env = {
             ZDOTDIR = zshConfigDir;
