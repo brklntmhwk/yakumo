@@ -31,9 +31,7 @@ in
       assertions =
         let
           isEnabled = _: v: isAttrs v && (v.enable or false);
-          hasDesktopEnabled =
-            cfg:
-            (cfg.enable or false) || !(anyAttrs isEnabled cfg.compositors);
+          hasDesktopEnabled = cfg: (cfg.enable or false) || !(anyAttrs isEnabled cfg.compositors);
         in
         [
           {
