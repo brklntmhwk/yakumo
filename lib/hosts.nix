@@ -101,7 +101,7 @@ let
             username
             system
             ;
-          flakeRoot = ./.;
+          flakeRoot = self;
         };
       };
 in

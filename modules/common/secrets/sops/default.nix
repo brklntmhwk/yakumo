@@ -44,11 +44,9 @@ in
         secrets = {
           login_password_otogaki = {
             sopsFile = flakeRoot + "/secrets/default.yaml";
-            owner = userCfg.otogaki.name;
           };
           login_password_rkawata = {
             sopsFile = flakeRoot + "/secrets/default.yaml";
-            owner = userCfg.rkawata.name;
           };
           gh_token_for_mcp.sopsFile = flakeRoot + "/secrets/default.yaml";
           git_signing_key = {
