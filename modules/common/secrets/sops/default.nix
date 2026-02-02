@@ -25,7 +25,7 @@ in
 
   config = mkIf cfg.enable (
     let
-      username = config.yakumo.user.name;
+      userCfg = config.users.users;
       opensshCfg = config.services.openssh;
     in
     {
@@ -40,12 +40,22 @@ in
         };
         # NOTE: Add a new secret here whenever created.
         secrets = {
-          login_password_otogaki.sopsFile = ../../../../secrets/default.yaml;
-          login_password_rkawata.sopsFile = ../../../../secrets/default.yaml;
+          login_password_otogaki.sopsFile = {
+            sopsFile = ../../../../secrets/default.yaml;
+            owner = userCfg.otogaki.name;
+          };
+          login_password_rkawata.sopsFile = {
+            sopsFile = ../../../../secrets/default.yaml;
+            owner = userCfg.rkawata.name;
+          };
           gh_token_for_mcp.sopsFile = ../../../../secrets/default.yaml;
-          git_signing_key = {
-            sopsFile = ../../../../users/${username}/secrets/default.yaml;
-            owner = username;
+          git_signing_key_otogaki = {
+            sopsFile = ../../../../users/otogaki/secrets/default.yaml;
+            owner = userCfg.otogaki.name;
+          };
+          git_signing_key_rkawata = {
+            sopsFile = ../../../../users/rkawata/secrets/default.yaml;
+            owner = userCfg.rkawata.name;
           };
         };
       };

@@ -5,7 +5,7 @@
     name = "Reiji Kawata";
     # TODO: Change this to an individual email.
     email = "contact@younagi.dev";
-    signingKey = config.sops.secrets.git_signing_key.path;
+    signingKey = config.sops.secrets.git_signing_key_rkawata.path;
   };
   help = {
     # Auto-correct typos immediately. (e.g., `git stats` -> `git status`)
