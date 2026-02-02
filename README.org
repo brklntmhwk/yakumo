@@ -26,7 +26,7 @@ Table of Contents (auto-generated using [[https://github.com/alphapapa/org-make-
 :CUSTOM_ID: overview
 :END:
 
-This repository is my home in the digital world weaved from dotfiles.
+Welcome to Yakumo! It's our home in the digital world weaved from dotfiles.
 
 *** Principles
 :PROPERTIES:
@@ -85,8 +85,11 @@ WIP.
 #+begin_quote
 Through the haze.
 #+end_quote
-
-WIP.
+|          | Name           | Description                                                  |
+|----------+----------------+--------------------------------------------------------------|
+| Terminal | WezTerm        | A powerful cross-platform terminal emulator and multiplexer. |
+| Shell    | Zsh & Starship | The Z shell with The minimal and customizable shell prompt.  |
+| Editor   | Emacs          | An extensible, customizable, free/libre text editor.         |
 
 **** niwatazumi 卍 潦
 :PROPERTIES:
