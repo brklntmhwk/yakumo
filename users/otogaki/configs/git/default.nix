@@ -4,7 +4,7 @@
   user = {
     name = "Ohma Togaki";
     email = "contact@younagi.dev";
-    signingKey = config.sops.secrets.git_signing_key.path;
+    # signingKey = config.sops.secrets.git_signing_key.path;
   };
   help = {
     # Auto-correct typos immediately. (e.g., `git stats` -> `git status`)
@@ -17,7 +17,7 @@
     format = "ssh";
   };
   commit = {
-    gpgSign = true;
+    gpgSign = false;
   };
   push = {
     # Automatically set upstream on push if it doesn't exist. (Git 2.37+)
