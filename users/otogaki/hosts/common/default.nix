@@ -17,7 +17,7 @@ in
   ];
 
   yakumo.user = {
-    name = "otokagi";
+    name = "otogaki";
     description = "Ohma Togaki";
     hashedPasswordFile = config.sops.secrets.login_password_otogaki.path;
     # The value of 'config.users.defaultUserShell' will be set here for normal users.
