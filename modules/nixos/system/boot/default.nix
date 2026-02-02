@@ -13,6 +13,7 @@ let
     mkMerge
     ;
   systemRole = config.yakumo.system.role;
+  isWsl = (config ? wsl) && config.wsl.enable;
 in
 {
   config = mkMerge [
@@ -28,7 +29,7 @@ in
           # Improve throughput and latency on WAN links.
           "net.ipv4.tcp_congestion_control" = "bbr";
         };
-        loader = {
+        loader = mkIf (!isWsl) {
           efi.canTouchEfiVariables = mkDefault true;
           systemd-boot = {
             enable = mkDefault true;
