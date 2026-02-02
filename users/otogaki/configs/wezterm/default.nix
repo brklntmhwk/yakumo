@@ -58,8 +58,8 @@ in
   # Use `mkLuaInline` to prevent these from being quoted as strings.
   font = generators.mkLuaInline ''
     wezterm.font_with_fallback({
-      { family = ${fonts.hackgenNf.name}, weight = "Regular" },
-      { family = ${fonts.jetbrainsMono.name}, weight = "Regular" },
+      { family = "${fonts.hackgenNf.name}", weight = "Regular" },
+      { family = "${fonts.jetbrainsMono.name}", weight = "Regular" },
     })
   '';
 
