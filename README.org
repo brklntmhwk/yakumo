@@ -61,7 +61,7 @@ Into the darkness.
 | Screen Locker | Swaylock       | Screen locker for Wayland.                                              |
 | Idle Daemon   | Swayidle       | Idle management daemon for Wayland.                                     |
 | Terminal      | WezTerm        | A powerful cross-platform terminal emulator and multiplexer.            |
-| Shell         | Zsh & Starship | The Z shell with The minimal and customizable shell prompt.             |
+| Shell         | Zsh & Starship | The Z shell with the minimal and customizable shell prompt.             |
 | Editor        | Emacs          | An extensible, customizable, free/libre text editor.                    |
 | Status Bar    | Waybar         | Highly customizable Wayland bar for Sway and Wlroots based compositors. |
 | App Launcher  | Wofi           | A launcher/menu program for wlroots based wayland compositors.          |
@@ -88,7 +88,7 @@ Through the haze.
 |          | Name           | Description                                                  |
 |----------+----------------+--------------------------------------------------------------|
 | Terminal | WezTerm        | A powerful cross-platform terminal emulator and multiplexer. |
-| Shell    | Zsh & Starship | The Z shell with The minimal and customizable shell prompt.  |
+| Shell    | Zsh & Starship | The Z shell with the minimal and customizable shell prompt.  |
 | Editor   | Emacs          | An extensible, customizable, free/libre text editor.         |
 
 **** niwatazumi 卍 潦
