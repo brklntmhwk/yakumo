@@ -117,7 +117,7 @@ in
   yakumo.programs = {
     wthrr = {
       enable = true;
-      settings = import ../../configs/wthrr { };
+      settings = import ../../configs/wthrr;
     };
   };
 

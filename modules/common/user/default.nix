@@ -2,7 +2,6 @@
   config,
   options,
   lib,
-  pkgs,
   ...
 }:
 
@@ -11,7 +10,6 @@ let
     mkAliasDefinitions
     mkDefault
     mkForce
-    mkIf
     mkOption
     types
     ;

@@ -257,9 +257,9 @@ in
       '';
   };
 
-  mkRonLiteral = v: {
+  mkRonLiteral = value: {
     _type = "ron-literal";
-    inherit v;
+    inherit value;
   };
 
   toRon =
