@@ -7,6 +7,9 @@
 
 let
   inherit (builtins) attrValues;
+  # inherit (lib) catAttrs;
+  inherit (theme) cursorThemes fonts;
+  theme = import ../../themes/modus-operandi-tinted pkgs;
 in
 {
   imports = [
@@ -17,10 +20,7 @@ in
     name = "rkawata";
     description = "Reiji Kawata";
     hashedPasswordFile = config.sops.secrets.login_password_rkawata.path;
-    packages = attrValues {
-      inherit (pkgs)
-        ;
-    };
+    # packages = catAttrs "package" (attrValues cursorThemes);
   };
 
   yakumo.shell = {

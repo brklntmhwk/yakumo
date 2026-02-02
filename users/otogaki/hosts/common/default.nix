@@ -24,12 +24,7 @@ in
     # For the detailed implementation, see:
     # https://github.com/NixOS/nixpkgs/commit/a323d146b7be3bc066b4ec74db72888ea32792fb
     # shell = config.yakumo.shell.default;
-    packages =
-      attrValues {
-        inherit (pkgs)
-          ;
-      }
-      ++ (catAttrs "package" (attrValues cursorThemes));
+    packages = catAttrs "package" (attrValues cursorThemes);
   };
 
   yakumo.shell = {
@@ -141,7 +136,7 @@ in
     };
     git = {
       enable = true;
-      config = import ../../configs/git { inherit theme; };
+      config = import ../../configs/git { inherit config; };
     };
     television = {
       enable = true;

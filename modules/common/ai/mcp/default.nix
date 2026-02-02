@@ -56,7 +56,7 @@ in
           };
         }
       );
-      readOnly = true;
+      internal = true;
       description = ''
         The merged mcpServers configuration of all enabled MCP servers in Nix-representable JSON format.
       '';

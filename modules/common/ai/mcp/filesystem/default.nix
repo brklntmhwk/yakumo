@@ -28,7 +28,7 @@ in
   config = mkIf cfg.enable (
     let
       inherit (inputs) mcp-servers;
-      inherit (lib) optional;
+      inherit (lib) optionals;
       userCfg = config.yakumo.user;
       xdgCfg = config.yakumo.xdg;
     in
@@ -38,8 +38,8 @@ in
           programs.filesystem = {
             enable = true;
             args =
-              optional (cfg.paths != [ ]) cfg.paths
-              ++ optional xdgCfg.enable [
+              cfg.paths
+              ++ optionals xdgCfg.enable [
                 "${userCfg.home}/Documents"
               ];
           };

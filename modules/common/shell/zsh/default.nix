@@ -367,7 +367,7 @@ in
 
         # Add the wrapped Zsh to a permissible login shell list
         # if the 'defaultUserShell' is set to true.
-        environment.shells = mkIf cfg.defaultUserShell [ zshWrapped ];
+        environment.shells = mkIf cfg.defaultShell [ zshWrapped ];
       }
     )
   ]);

@@ -2,6 +2,7 @@
   config,
   options,
   lib,
+  pkgs,
   ...
 }:
 
@@ -52,6 +53,8 @@ in
       # - 'useDefaultShell' to true
       # - 'isSystemUser' to false
       isNormalUser = mkDefault true;
+      # Explicitly define this so it can be read by other modules.
+      home = if pkgs.stdenv.isDarwin then "/Users/${cfg.name}" else "/home/${cfg.name}";
       uid = mkDefault 1000;
       # Set a placeholder password to satisfy the NixOS anti-lockout assertion.
       # This enables you to use 'sudo'. You can change it with the `passwd` command later.

@@ -44,7 +44,7 @@ in
           login_password_rkawata.sopsFile = ../../../../secrets/default.yaml;
           gh_token_for_mcp.sopsFile = ../../../../secrets/default.yaml;
           git_signing_key = {
-            sopsFile = "../../../../users/${username}/secrets/default.yaml";
+            sopsFile = ../../../../users/${username}/secrets/default.yaml;
             owner = username;
           };
         };

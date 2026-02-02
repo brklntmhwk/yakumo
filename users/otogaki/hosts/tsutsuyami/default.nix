@@ -71,7 +71,7 @@ in
     terminal = {
       wezterm = {
         enable = true;
-        settings = import ../../configs/wezterm { inherit theme; };
+        settings = import ../../configs/wezterm { inherit lib theme; };
       };
     };
     ui = {

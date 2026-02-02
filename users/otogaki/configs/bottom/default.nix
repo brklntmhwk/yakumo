@@ -45,7 +45,7 @@ in
           blue-warmer
           red-warmer
           cyan
-          gree
+          green
           blue
           red
           ;
