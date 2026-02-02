@@ -54,6 +54,12 @@ in
     };
   };
 
+  yakumo.services = {
+    # Explicitly set this to false to suppress the "module is imported but ... false"
+    # warning.
+    xremap.enable = false;
+  };
+
   fonts = {
     # 'fonts.packages' are configured in the common file.
     fontDir.enable = true;
