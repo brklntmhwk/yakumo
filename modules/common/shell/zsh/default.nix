@@ -345,19 +345,13 @@ in
             ${cfg.initExtraLast}
           ''}
         '';
-        zshWrapped =
-          (mkAppWrapper {
-            pkg = cfg.package;
-            name = "${getName cfg.package}-${config.yakumo.user.name}";
-            env = {
-              ZDOTDIR = zshConfigDir;
-            };
-          }).overrideAttrs
-            (_: {
-              passthru = {
-                shellPath = "/bin/zsh";
-              };
-            });
+        zshWrapped = mkAppWrapper {
+          pkg = cfg.package;
+          name = "${getName cfg.package}-${config.yakumo.user.name}";
+          env = {
+            ZDOTDIR = zshConfigDir;
+          };
+        };
       in
       {
         yakumo.shell.zsh.packageWrapped = zshWrapped;
