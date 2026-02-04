@@ -23,11 +23,11 @@
         "twist2elpa": "twist2elpa"
       },
       "locked": {
-        "lastModified": 1769996630,
-        "narHash": "sha256-+/1VktOJF6iXZrn+y64/eyUi/0G7iSD92EAJeeA8Tqw=",
+        "lastModified": 1770097763,
+        "narHash": "sha256-nfT2R5xoSnC6XozYZcjDC7Z/5QIqIHiZDZzjHih8g4w=",
         "owner": "brklntmhwk",
         "repo": "ametsuchi",
-        "rev": "fbc862f53663d57f66d13ea3229ceabb28af57b2",
+        "rev": "91aeed70397edb84dbc0d78ac382f6333100b7d5",
         "type": "github"
       },
       "original": {
