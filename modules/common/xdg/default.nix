@@ -16,7 +16,9 @@ let
 in
 {
   options.yakumo.xdg = {
-    enable = mkEnableOption "XDG Base Directory";
+    enable = mkEnableOption "XDG Base Directory" // {
+      default = true;
+    };
   };
 
   config = mkIf cfg.enable (mkMerge [
@@ -67,7 +69,7 @@ in
       in
       {
         # e.g., `[ "d /home/otogaki/Documents 0755 otogaki yakumo - -" ... ]`
-        systemd.tmpfiles.rules = map mkXdgRule xdgDirs;
+        systemd.user.tmpfiles.rules = map mkXdgRule xdgDirs;
       }
     ))
   ]);
