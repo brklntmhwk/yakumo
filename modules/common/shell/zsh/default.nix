@@ -292,7 +292,11 @@ in
           autoload -Uz compinit
 
           # Versioned cache path
-          _comp_path="''${XDG_CACHE_HOME}/zsh/zcompdump-''${ZSH_VERSION}"
+          _cache_dir="${XDG_CACHE_HOME:-$HOME/.cache}/zsh"
+          if [[ ! -d "$_cache_dir" ]]; then
+             mkdir -p "$_cache_dir"
+          fi
+          _comp_path="''${_cache_dir}/zcompdump-''${ZSH_VERSION}"
 
           # Use -C (skip check) to speed up init, but check if the file exists first.
           # If it doesn't exist, regular 'compinit' runs and generates it.

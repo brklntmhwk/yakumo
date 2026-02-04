@@ -74,7 +74,6 @@ in
         patterns = { };
       };
       initExtraFirst = ''
-        highlighters = [];
         export HISTFILE=""
         export HISTSIZE=10000
         export SAVEHIST=10000
@@ -88,7 +87,7 @@ in
         {
           name = "zsh-abbr";
           src = pkgs.zsh-abbr;
-          file = "share/zsh-abbr/zsh-abbr.zsh";
+          file = "share/zsh/zsh-abbr/zsh-abbr.zsh";
         }
         {
           name = "zsh-syntax-highlighting";
