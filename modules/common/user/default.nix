@@ -37,8 +37,9 @@ in
     # Prefer 'yakumo.user.*' over 'users.users.<username>.*'.
     users.users.${cfg.name} = mkAliasDefinitions options.yakumo.user;
 
-    # Disable mutable users.
-    users.mutableUsers = mkForce false;
+    # TEMPORARY: Enabled to allow manual password recovery.
+    # TODO: Revert to 'mkForce false' once Sops secrets are fixed.
+    users.mutableUsers = true;
 
     # Set a placeholder password to satisfy the NixOS anti-lockout assertion.
     users.users.root.initialPassword = "password";
