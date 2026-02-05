@@ -14,6 +14,7 @@ Table of Contents (auto-generated using [[https://github.com/alphapapa/org-make-
     - [[#tsutsuyami-卍-惣闇][tsutsuyami 卍 惣闇]]
     - [[#momokagari-卍-百篝][momokagari 卍 百篝]]
     - [[#utsusemi-卍-空蝉][utsusemi 卍 空蝉]]
+    - [[#shinonome-卍-東雲][shinonome 卍 東雲]]
     - [[#niwatazumi-卍-潦][niwatazumi 卍 潦]]
     - [[#sazanami-卍-漣][sazanami 卍 漣]]
 - [[#crossing-the-threshold][Crossing the Threshold]]
@@ -41,13 +42,14 @@ Welcome to Yakumo! It's our home in the digital world weaved from dotfiles.
 :PROPERTIES:
 :CUSTOM_ID: hosts
 :END:
-| Type    | Name       | Hardware                                               | OS                  | Description                         | User         |
-|---------+------------+--------------------------------------------------------+---------------------+-------------------------------------+--------------|
-| Desktop | [[#tsutsuyami-卍-惣闇][tsutsuyami]] | Self-built Mini-ITX PC (AMD Ryzen 5 7600X and more)    | NixOS               | Main development workstation.       | Ohma Togaki  |
-| Desktop | [[#momokagari-卍-百篝][momokagari]] | Mac Studio M2 Max                                      | MacOS (Nix Darwin)  | Main workstation for creative work. | Reiji Kawata |
-| Desktop | [[#utsusemi-卍-空蝉][utsusemi]]   | N/A                                                    | Windows (NixOS WSL) | Temporary workstation(s).           | Ohma Togaki  |
-| Server  | [[#niwatazumi-卍-潦][niwatazumi]] | Self-built Mini-ITX server (AMD Ryzen 5 7600 and more) | NixOS               | Main home server cum NAS.           | Ohma Togaki  |
-| Server  | [[#sazanami-卍-漣][sazanami]]   | GMKtec NucBox G5 N97                                   | NixOS               | Smart home & geospatial data server | Ohma Togaki  |
+| Type    | Name       | Hardware                                               | OS                                               | Description                               | User         |
+|---------+------------+--------------------------------------------------------+--------------------------------------------------+-------------------------------------------+--------------|
+| Desktop | [[#tsutsuyami-卍-惣闇][tsutsuyami]] | Self-built Mini-ITX PC (AMD Ryzen 5 7600X and more)    | NixOS                                            | Main development workstation.             | Ohma Togaki  |
+| Desktop | [[#momokagari-卍-百篝][momokagari]] | Mac Studio M2 Max                                      | macOS (Nix Darwin)                               | Main workstation for creative work.       | Reiji Kawata |
+| Laptop  | [[#shinonome-卍-東雲][shinonome]]  | MacBook Pro M1 2021                                    | macOS & NixOS (Asahi Linux, nixos-apple-silicon) | Main laptop, not limited to on-the-go use | Ohma Togaki  |
+| Desktop | [[#utsusemi-卍-空蝉][utsusemi]]   | N/A                                                    | Windows (NixOS WSL)                              | Temporary workstation(s).                 | Ohma Togaki  |
+| Server  | [[#niwatazumi-卍-潦][niwatazumi]] | Self-built Mini-ITX server (AMD Ryzen 5 7600 and more) | NixOS                                            | Main home server cum NAS.                 | Ohma Togaki  |
+| Server  | [[#sazanami-卍-漣][sazanami]]   | GMKtec NucBox G5 N97                                   | NixOS                                            | Smart home & geospatial data server       | Ohma Togaki  |
 **** tsutsuyami 卍 惣闇
 :PROPERTIES:
 :CUSTOM_ID: tsutsuyami-卍-惣闇
@@ -90,6 +92,16 @@ Through the haze.
 | Terminal | WezTerm        | A powerful cross-platform terminal emulator and multiplexer. |
 | Shell    | Zsh & Starship | The Z shell with the minimal and customizable shell prompt.  |
 | Editor   | Emacs          | An extensible, customizable, free/libre text editor.         |
+
+**** shinonome 卍 東雲
+:PROPERTIES:
+:CUSTOM_ID: shinonome-卍-東雲
+:END:
+#+begin_quote
+Towards the dawn.
+#+end_quote
+
+WIP.
 
 **** niwatazumi 卍 潦
 :PROPERTIES:
