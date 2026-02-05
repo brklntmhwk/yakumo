@@ -23,6 +23,9 @@
     nixpkgs.url = "git+https://github.com/nixos/nixpkgs?shallow=1&ref=nixos-25.05";
     nixpkgs-unstable.url = "git+https://github.com/nixos/nixpkgs?shallow=1&ref=nixos-unstable-small";
 
+    # --- Apple Silicon support for NixOS ---
+    nixos-apple-silicon.url = "github:nix-community/nixos-apple-silicon";
+
     # --- Nix Darwin ---
     darwin = {
       url = "github:LnL7/nix-darwin";
@@ -35,7 +38,7 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    # --- Home directory management (Exclusive to NixOS/NixOS WSL) ---
+    # --- Home directory management (Limited to NixOS) ---
     nix-maid.url = "github:viperML/nix-maid";
 
     # --- Declarative disk partitioning ---
@@ -43,6 +46,9 @@
       url = "github:nix-community/disko";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+
+    # --- Persistent state handler ---
+    impermanence.url = "github:nix-community/impermanence";
 
     # --- Nix utils ---
     nix-index-database = {
@@ -90,7 +96,6 @@
     inputs@{
       self,
       nixpkgs,
-      treefmt-nix,
       ...
     }:
     let
@@ -114,7 +119,7 @@
         system:
         let
           pkgs = nixpkgs.legacyPackages.${system};
-          treefmtEval = treefmt-nix.lib.evalModule pkgs {
+          treefmtEval = inputs.treefmt-nix.lib.evalModule pkgs {
             projectRootFile = "flake.nix";
             programs = {
               nixfmt.enable = true;
@@ -144,6 +149,13 @@
             inputs.nixos-wsl.nixosModules.default
           ];
         };
+        # shinonome = {
+        #   system = "aarch64-linux";
+        #   username = "otogaki";
+        #   extraModules = [
+        #     inputs.nixos-apple-silicon.nixosModules.apple-silicon-support
+        #   ];
+        # };
         # niwatazumi = {
         #   system = "x86_64-linux";
         #   username = "otogaki";
