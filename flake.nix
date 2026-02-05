@@ -153,7 +153,7 @@
         #   system = "aarch64-linux";
         #   username = "otogaki";
         #   extraModules = [
-        #     inputs.nixos-apple-silicon.nixosModules.apple-silicon-support
+        #     inputs.nixos-apple-silicon.nixosModules.default
         #   ];
         # };
         # niwatazumi = {
