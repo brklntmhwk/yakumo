@@ -53,6 +53,11 @@ in
               type = types.nullOr types.str;
               default = null;
             };
+            headers = mkOption {
+              type = types.nullOr (types.attrsOf types.str);
+              default = null;
+              description = "HTTP headers to be passed to the MCP server.";
+            };
           };
         }
       );
