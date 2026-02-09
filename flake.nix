@@ -163,6 +163,10 @@
         #   system = "x86_64-linux";
         #   username = "otogaki";
         # };
+        # tamazusa = {
+        #   system = "x86_64-linux";
+        #   username = "otogaki";
+        # };
       };
 
       # These are not for external use.
