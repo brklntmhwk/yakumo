@@ -19,6 +19,7 @@ in
   yakumo.user = {
     name = "rkawata";
     description = "Reiji Kawata";
+    uid = 1001;
     hashedPasswordFile = config.sops.secrets.login_password_rkawata.path;
     # packages = catAttrs "package" (attrValues cursorThemes);
   };
