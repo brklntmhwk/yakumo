@@ -292,7 +292,7 @@ in
           autoload -Uz compinit
 
           # Versioned cache path
-          _cache_dir="${XDG_CACHE_HOME:-$HOME/.cache}/zsh"
+          _cache_dir="''${XDG_CACHE_HOME:-$HOME/.cache}/zsh"
           if [[ ! -d "$_cache_dir" ]]; then
              mkdir -p "$_cache_dir"
           fi
