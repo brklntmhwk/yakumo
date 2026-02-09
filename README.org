@@ -17,6 +17,7 @@ Table of Contents (auto-generated using [[https://github.com/alphapapa/org-make-
     - [[#shinonome-卍-東雲][shinonome 卍 東雲]]
     - [[#niwatazumi-卍-潦][niwatazumi 卍 潦]]
     - [[#sazanami-卍-漣][sazanami 卍 漣]]
+    - [[#tamazusa-卍-玉梓][tamazusa 卍 玉梓]]
 - [[#crossing-the-threshold][Crossing the Threshold]]
 - [[#acknowledgments][Acknowledgments]]
 - [[#license][License]]
@@ -50,6 +51,7 @@ Welcome to Yakumo! It's our home in the digital world weaved from dotfiles.
 | Laptop  | [[#shinonome-卍-東雲][shinonome]]  | MacBook Pro M1 2021                                    | macOS & NixOS (Asahi Linux, nixos-apple-silicon) | Main laptop, not limited to on-the-go use | Ohma Togaki  |
 | Server  | [[#niwatazumi-卍-潦][niwatazumi]] | Self-built Mini-ITX server (AMD Ryzen 5 7600 and more) | NixOS                                            | Main home server cum NAS.                 | Ohma Togaki  |
 | Server  | [[#sazanami-卍-漣][sazanami]]   | GMKtec NucBox G5 N97                                   | NixOS                                            | Smart home & geospatial data server       | Ohma Togaki  |
+| Server  | [[#tamazusa-卍-玉梓][tamazusa]]   | Hetzner Cloud VPS                                      | NixOS                                            | Mail server cum Headscale control plane   | Ohma Togaki  |
 **** tsutsuyami 卍 惣闇
 :PROPERTIES:
 :CUSTOM_ID: tsutsuyami-卍-惣闇
@@ -119,6 +121,16 @@ WIP.
 :END:
 #+begin_quote
 Across the ripples.
+#+end_quote
+
+WIP.
+
+**** tamazusa 卍 玉梓
+:PROPERTIES:
+:CUSTOM_ID: tamazusa-卍-玉梓
+:END:
+#+begin_quote
+With the tidings.
 #+end_quote
 
 WIP.
