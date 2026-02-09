@@ -74,7 +74,6 @@
 
     # --- Desktop ---
     hyprland.url = "github:hyprwm/Hyprland";
-    wezterm.url = "github:wezterm/wezterm?dir=nix";
     xremap.url = "github:xremap/nix-flake";
 
     # --- LLM Integration ---
