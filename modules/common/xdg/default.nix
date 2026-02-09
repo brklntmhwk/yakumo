@@ -64,8 +64,9 @@ in
         ];
         # 'd': Create directory if it does not exist.
         # Otherwise, it safely fixes permissions/ownership without touching content.
+        # '%h' for the home directory.
         # Format: Type Path Mode User Group Age Argument
-        mkXdgRule = dir: "d /home/${userCfg.name}/${dir} 0755 ${userCfg.name} ${userCfg.group} - -";
+        mkXdgRule = dir: "d %h/${dir} 0755 - - - -";
       in
       {
         # e.g., `[ "d /home/otogaki/Documents 0755 otogaki yakumo - -" ... ]`
