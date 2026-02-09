@@ -53,9 +53,10 @@ in
               type = types.nullOr types.str;
               default = null;
             };
+            # https://github.com/natsukium/mcp-servers-nix/commit/9f461b2e3906063e65057905b0075fd34a9060de
             headers = mkOption {
-              type = types.nullOr (types.attrsOf types.str);
-              default = null;
+              type = types.attrsOf types.str;
+              default = { };
               description = "HTTP headers to be passed to the MCP server.";
             };
           };
