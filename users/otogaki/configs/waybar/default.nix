@@ -97,7 +97,6 @@
   "battery" = {
     "format" = "{icon} {capacity}%";
     "format-charging" = " {capacity}%";
-    "format-charging" = "  {capacity}%";
     "format-icons" = [ "" "" "" "" "" ];
     "states" = {
       "warning" = 30;
