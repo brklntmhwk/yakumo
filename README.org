@@ -18,6 +18,7 @@ Table of Contents (auto-generated using [[https://github.com/alphapapa/org-make-
     - [[#niwatazumi-卍-潦][niwatazumi 卍 潦]]
     - [[#sazanami-卍-漣][sazanami 卍 漣]]
     - [[#tamazusa-卍-玉梓][tamazusa 卍 玉梓]]
+  - [[#tools][Tools]]
 - [[#crossing-the-threshold][Crossing the Threshold]]
 - [[#acknowledgments][Acknowledgments]]
 - [[#license][License]]
@@ -59,18 +60,8 @@ Welcome to Yakumo! It's our home in the digital world weaved from dotfiles.
 #+begin_quote
 Into the darkness.
 #+end_quote
-|               | Name           | Description                                                             |
-|---------------+----------------+-------------------------------------------------------------------------|
-| Compositor    | Niri           | A scrollable-tiling Wayland compositor.                                 |
-| Screen Locker | Swaylock       | Screen locker for Wayland.                                              |
-| Idle Daemon   | Swayidle       | Idle management daemon for Wayland.                                     |
-| Terminal      | WezTerm        | A powerful cross-platform terminal emulator and multiplexer.            |
-| Shell         | Zsh & Starship | The Z shell with the minimal and customizable shell prompt.             |
-| Editor        | Emacs          | An extensible, customizable, free/libre text editor.                    |
-| Status Bar    | Waybar         | Highly customizable Wayland bar for Sway and Wlroots based compositors. |
-| App Launcher  | Wofi           | A launcher/menu program for wlroots based wayland compositors.          |
-| Notification  | Mako           | A lightweight Wayland notification daemon.                              |
-| Browser       | Nyxt           | The hacker's browser.                                                   |
+
+WIP.
 
 **** momokagari 卍 百篝
 :PROPERTIES:
@@ -89,11 +80,8 @@ WIP.
 #+begin_quote
 Through the haze.
 #+end_quote
-|          | Name           | Description                                                  |
-|----------+----------------+--------------------------------------------------------------|
-| Terminal | WezTerm        | A powerful cross-platform terminal emulator and multiplexer. |
-| Shell    | Zsh & Starship | The Z shell with the minimal and customizable shell prompt.  |
-| Editor   | Emacs          | An extensible, customizable, free/libre text editor.         |
+
+WIP.
 
 **** shinonome 卍 東雲
 :PROPERTIES:
@@ -134,7 +122,25 @@ With the tidings.
 #+end_quote
 
 WIP.
-
+*** Tools
+:PROPERTIES:
+:CUSTOM_ID: tools
+:END:
+| Category      | Name           | Description                                                                      |
+|---------------+----------------+----------------------------------------------------------------------------------|
+| Compositor    | Niri           | A scrollable-tiling Wayland compositor.                                          |
+|               | Hyprland       | Dynamic tiling Wayland compositor.                                               |
+| Screen Locker | Swaylock       | Screen locker for Wayland.                                                       |
+|               | Hyprlock       | A simple, yet fast, multi-threaded and GPU-accelerated screen lock for Hyprland. |
+| Idle Daemon   | Swayidle       | Idle management daemon for Wayland.                                              |
+|               | Hypridle       | Hyprland's idle management daemon.                                               |
+| Terminal      | WezTerm        | A powerful cross-platform terminal emulator and multiplexer.                     |
+| Shell         | Zsh & Starship | The Z shell with the minimal and customizable shell prompt.                      |
+| Editor        | Emacs          | An extensible, customizable, free/libre text editor.                             |
+| Status Bar    | Waybar         | Highly customizable Wayland bar for Sway and Wlroots based compositors.          |
+| App Launcher  | Wofi           | A launcher/menu program for wlroots based wayland compositors.                   |
+| Notification  | Mako           | A lightweight Wayland notification daemon.                                       |
+| Browser       | Nyxt           | The hacker's browser.                                                            |
 ** Crossing the Threshold
 :PROPERTIES:
 :CUSTOM_ID: crossing-the-threshold
