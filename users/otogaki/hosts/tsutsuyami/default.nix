@@ -53,7 +53,7 @@ in {
       };
       swayidle = {
         enable = true;
-        settings = import ../../configs/swayidle { };
+        settings = import ../../configs/swayidle;
       };
     };
     lockers = {
@@ -71,12 +71,12 @@ in {
     ui = {
       waybar = {
         enable = true;
-        settings = import ../../configs/waybar { };
+        settings = import ../../configs/waybar;
         style = import ../../configs/waybar/style.nix { inherit theme; };
       };
       wofi = {
         enable = true;
-        settings = import ../../configs/wofi { };
+        settings = import ../../configs/wofi;
         style = import ../../configs/wofi/style.nix { inherit theme; };
       };
     };
@@ -84,7 +84,7 @@ in {
       browsers = {
         nyxt = {
           enable = true;
-          config = import ../../configs/nyxt/init.lisp { };
+          config = ../../configs/nyxt/init.lisp;
         };
       };
       media = { modules = [ "music" "video" ]; };
@@ -106,12 +106,12 @@ in {
     };
   };
 
-  yakumo.services = {
+  services = {
     xremap = {
       enable = true;
       userName = config.yakumo.user.name;
       serviceMode = "user";
-      config = import ../../configs/xremap { };
+      config = import ../../configs/xremap;
     };
   };
 

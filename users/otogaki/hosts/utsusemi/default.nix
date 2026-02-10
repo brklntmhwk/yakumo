@@ -48,7 +48,7 @@ in {
     };
   };
 
-  yakumo.services = {
+  services = {
     # Explicitly set this to false to suppress the "module is imported but ... false"
     # warning.
     xremap.enable = false;
