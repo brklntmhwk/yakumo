@@ -1,9 +1,7 @@
 { theme }:
 
-let
-  inherit (theme) colors fonts;
-in
-{
+let inherit (theme) colors fonts;
+in {
   # --- General ---
   daemonize = true;
   ignore-empty-password = true;
@@ -46,6 +44,8 @@ in
   ring-ver-color = colors.blue-faint; # When verifying
   ring-wrong-color = colors.red-faint; # When invalid
 
-  caps-lock-bs-hl-color = colors.pink; # Color of backspace highlight segments when Caps Lock is active
-  caps-lock-key-hl-color = colors.olive; # Color of the key press highlight segments when Caps Lock is active
+  caps-lock-bs-hl-color =
+    colors.pink; # Color of backspace highlight segments when Caps Lock is active
+  caps-lock-key-hl-color =
+    colors.olive; # Color of the key press highlight segments when Caps Lock is active
 }

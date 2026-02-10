@@ -1,31 +1,11 @@
-{
-  config,
-  lib,
-  pkgs,
-  ...
-}:
+{ config, lib, pkgs, ... }:
 
 let
-  inherit (lib)
-    mkEnableOption
-    mkIf
-    mkMerge
-    mkOption
-    mkPackageOption
-    types
-    ;
+  inherit (lib) mkEnableOption mkIf mkMerge mkOption mkPackageOption types;
   cfg = config.yakumo.services.headscale;
-in
-{
-  options.yakumo.services.headscale = {
-    enable = mkEnableOption "headscale";
-  };
+in {
+  options.yakumo.services.headscale = { enable = mkEnableOption "headscale"; };
 
-  config = mkIf cfg.enable (mkMerge [
-    {
-      services.headscale = {
-        enable = true;
-      };
-    }
-  ]);
+  config =
+    mkIf cfg.enable (mkMerge [{ services.headscale = { enable = true; }; }]);
 }

@@ -1,20 +1,9 @@
-{
-  config,
-  lib,
-  pkgs,
-  ...
-}:
+{ config, lib, pkgs, ... }:
 
 let
-  inherit (lib)
-    any
-    hasPrefix
-    mkForce
-    mkIf
-    ;
+  inherit (lib) any hasPrefix mkForce mkIf;
   hardwareMods = config.yakumo.hardware.modules;
-in
-{
+in {
   config = mkIf (any (mod: hasPrefix "audio" mod) hardwareMods) {
     # See https://wiki.nixos.org/wiki/PipeWire for more details.
     services.pulseaudio.enable = mkForce false;
@@ -28,12 +17,7 @@ in
     security.rtkit.enable = true;
     yakumo.user = {
       extraGroups = [ "audio" ];
-      packages = builtins.attrValues {
-        inherit (pkgs)
-          alsa-utils
-          pavucontrol
-          ;
-      };
+      packages = builtins.attrValues { inherit (pkgs) alsa-utils pavucontrol; };
     };
   };
 }

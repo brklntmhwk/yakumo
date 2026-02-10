@@ -1,24 +1,11 @@
-{
-  config,
-  lib,
-  pkgs,
-  murakumo,
-  ...
-}:
+{ config, lib, pkgs, murakumo, ... }:
 
 let
   inherit (lib)
-    literalExpression
-    mkEnableOption
-    mkIf
-    mkOption
-    mkPackageOption
-    types
-    ;
+    literalExpression mkEnableOption mkIf mkOption mkPackageOption types;
   cfg = config.yakumo.programs.bottom;
   tomlFormat = pkgs.formats.toml { };
-in
-{
+in {
   options.yakumo.programs.bottom = {
     enable = mkEnableOption "bottom";
     # https://github.com/nix-community/home-manager/commit/4b964d2f7baca30655ac0780d3003eeb5a4929f0
@@ -54,24 +41,18 @@ in
     };
   };
 
-  config = mkIf cfg.enable (
-    let
-      inherit (lib) getName;
-      inherit (murakumo.wrappers) mkAppWrapper;
+  config = mkIf cfg.enable (let
+    inherit (lib) getName;
+    inherit (murakumo.wrappers) mkAppWrapper;
 
-      bottomToml = tomlFormat.generate "bottom.toml" cfg.settings;
-      bottomWrapped = mkAppWrapper {
-        pkg = cfg.package;
-        name = "${getName cfg.package}-${config.yakumo.user.name}";
-        flags = [
-          "--config_location"
-          bottomToml
-        ];
-      };
-    in
-    {
-      yakumo.programs.bottom.packageWrapped = bottomWrapped;
-      yakumo.user.packages = [ bottomWrapped ];
-    }
-  );
+    bottomToml = tomlFormat.generate "bottom.toml" cfg.settings;
+    bottomWrapped = mkAppWrapper {
+      pkg = cfg.package;
+      name = "${getName cfg.package}-${config.yakumo.user.name}";
+      flags = [ "--config_location" bottomToml ];
+    };
+  in {
+    yakumo.programs.bottom.packageWrapped = bottomWrapped;
+    yakumo.user.packages = [ bottomWrapped ];
+  });
 }

@@ -1,22 +1,10 @@
-{
-  config,
-  lib,
-  pkgs,
-  ...
-}:
+{ config, lib, pkgs, ... }:
 
 let
-  inherit (lib)
-    mkEnableOption
-    mkForce
-    mkIf
-    mkMerge
-    mkPackageOption
-    ;
+  inherit (lib) mkEnableOption mkForce mkIf mkMerge mkPackageOption;
   cfg = config.yakumo.system.nix;
   systemRole = config.yakumo.system.role;
-in
-{
+in {
   options.yakumo.system.nix = {
     enableFlake = mkEnableOption "Nix Flakes";
     package = mkPackageOption pkgs "nix" { };
@@ -27,16 +15,12 @@ in
       nix = {
         package = cfg.package;
         # Allow these users to connect to the Nix daemon.
-        allowed-users = [
-          "@wheel"
-        ];
+        allowed-users = [ "@wheel" ];
         # List of binary cache URLs to obtain pre-built binaries of Nix packages.
         # `trusted-substituters` differs from this in that non-root users can
         # also use it.
-        substituters = [
-          "https://cache.nixos.org"
-          "https://nix-community.cachix.org"
-        ];
+        substituters =
+          [ "https://cache.nixos.org" "https://nix-community.cachix.org" ];
         # List of public keys used to sign binary caches.
         trusted-public-keys = [
           "cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY="
@@ -63,10 +47,7 @@ in
           persistent = true;
         };
         settings = {
-          trusted-users = [
-            "root"
-            "@wheel"
-          ];
+          trusted-users = [ "root" "@wheel" ];
           auto-optimise-store = true;
         };
       };
@@ -80,9 +61,7 @@ in
           options = "--delete-older-than 14d";
         };
         settings = {
-          trusted-users = [
-            "root"
-          ];
+          trusted-users = [ "root" ];
           # If set to true, this "Auto" optimisation runs on every file write.
           # On a server performing updates or builds, this could add significant
           # CPU/IO overhead.

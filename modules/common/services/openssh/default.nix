@@ -1,25 +1,11 @@
-{
-  config,
-  lib,
-  pkgs,
-  ...
-}:
+{ config, lib, pkgs, ... }:
 
 let
-  inherit (lib)
-    mkEnableOption
-    mkForce
-    mkIf
-    mkMerge
-    types
-    ;
+  inherit (lib) mkEnableOption mkForce mkIf mkMerge types;
   cfg = config.yakumo.services.openssh;
   systemRole = config.yakumo.system.role;
-in
-{
-  options.yakumo.services.openssh = {
-    enable = mkEnableOption "openssh";
-  };
+in {
+  options.yakumo.services.openssh = { enable = mkEnableOption "openssh"; };
 
   config = mkIf cfg.enable (mkMerge [
     {
@@ -35,15 +21,13 @@ in
         };
         # Force only the ed25519 keys.
         # By default, this contains both RSA & ed25519 keys.
-        hostKeys = [
-          {
-            path = "/etc/ssh/ssh_host_ed25519_key";
-            type = "ed25519";
-            # Higher numbers result in slower passphrase verification but
-            # increased resistance to brute-force attacks should the keys be stolen.
-            rounds = 100; # Default: 16
-          }
-        ];
+        hostKeys = [{
+          path = "/etc/ssh/ssh_host_ed25519_key";
+          type = "ed25519";
+          # Higher numbers result in slower passphrase verification but
+          # increased resistance to brute-force attacks should the keys be stolen.
+          rounds = 100; # Default: 16
+        }];
         # https://github.com/hlissner/dotfiles/commit/9dbe3a62865cf51b9982236d52df271c93e4f013
         # Invalidate shorter (i.e., weak) moduli than 3072 as a hedge against
         # the Logjam Attack (2015).

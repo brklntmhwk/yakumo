@@ -1,19 +1,9 @@
-{
-  config,
-  lib,
-  pkgs,
-  ...
-}:
+{ config, lib, pkgs, ... }:
 
 let
-  inherit (lib)
-    any
-    hasPrefix
-    mkIf
-    ;
+  inherit (lib) any hasPrefix mkIf;
   hardwareMods = config.yakumo.hardware.modules;
-in
-{
+in {
   config = mkIf (any (mod: hasPrefix "monitor" mod) hardwareMods) {
     # https://discourse.nixos.org/t/brightness-control-of-external-monitors-with-ddcci-backlight/8639/18
     boot = {
@@ -31,7 +21,7 @@ in
       packages = builtins.attrValues {
         inherit (pkgs)
           brightnessctl # CLI tool to read and control device brightness.
-          ;
+        ;
       };
     };
   };

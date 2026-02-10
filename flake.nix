@@ -6,10 +6,8 @@
   '';
 
   nixConfig = {
-    extra-substituters = [
-      "https://hyprland.cachix.org"
-      "https://brklntmhwk.cachix.org"
-    ];
+    extra-substituters =
+      [ "https://hyprland.cachix.org" "https://brklntmhwk.cachix.org" ];
     extra-trusted-public-keys = [
       "hyprland.cachix.org-1:a7pgxzMz7+chwVL3/pzj6jIBMioiJM7ypFP8PwtkuGc="
       "brklntmhwk.cachix.org-1:mGWjznSV6FglvHR7/2sa4MrCtGHMLiAOc9Ru+tEkdyg="
@@ -18,8 +16,10 @@
 
   inputs = {
     # --- Nixpkgs ---
-    nixpkgs.url = "git+https://github.com/nixos/nixpkgs?shallow=1&ref=nixos-25.05";
-    nixpkgs-unstable.url = "git+https://github.com/nixos/nixpkgs?shallow=1&ref=nixos-unstable-small";
+    nixpkgs.url =
+      "git+https://github.com/nixos/nixpkgs?shallow=1&ref=nixos-25.05";
+    nixpkgs-unstable.url =
+      "git+https://github.com/nixos/nixpkgs?shallow=1&ref=nixos-unstable-small";
 
     # --- Apple Silicon support for NixOS ---
     nixos-apple-silicon.url = "github:nix-community/nixos-apple-silicon";
@@ -89,12 +89,7 @@
     twist.url = "github:emacs-twist/twist.nix";
   };
 
-  outputs =
-    inputs@{
-      self,
-      nixpkgs,
-      ...
-    }:
+  outputs = inputs@{ self, nixpkgs, ... }:
     let
       forAllSystems = nixpkgs.lib.genAttrs [
         "x86_64-linux"
@@ -106,14 +101,10 @@
         inherit self;
         inherit (nixpkgs) lib;
       };
-    in
-    {
-      overlays.default = import ./overlays {
-        inherit (nixpkgs) lib;
-      };
+    in {
+      overlays.default = import ./overlays { inherit (nixpkgs) lib; };
 
-      formatter = forAllSystems (
-        system:
+      formatter = forAllSystems (system:
         let
           pkgs = nixpkgs.legacyPackages.${system};
           treefmtEval = inputs.treefmt-nix.lib.evalModule pkgs {
@@ -125,14 +116,11 @@
               yamlfmt.enable = true;
             };
           };
-        in
-        treefmtEval.config.build.wrapper
-      );
+        in treefmtEval.config.build.wrapper);
 
       # These are not for external use.
-      nixosModules = lib'.mapFilterModulesRecursively ./modules import [
-        "darwin"
-      ];
+      nixosModules =
+        lib'.mapFilterModulesRecursively ./modules import [ "darwin" ];
 
       nixosConfigurations = lib'.mkNixOsHosts {
         tsutsuyami = {
@@ -142,9 +130,7 @@
         utsusemi = {
           system = "x86_64-linux";
           username = "otogaki";
-          extraModules = [
-            inputs.nixos-wsl.nixosModules.default
-          ];
+          extraModules = [ inputs.nixos-wsl.nixosModules.default ];
         };
         # shinonome = {
         #   system = "aarch64-linux";

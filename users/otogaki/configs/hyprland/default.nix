@@ -1,16 +1,14 @@
 { theme }:
 
-let
-  inherit (theme) colors fonts;
-in
-{
+let inherit (theme) colors fonts;
+in {
   # ---------------------------------------------------------
   # Variables
   # ---------------------------------------------------------
   "$hyperMod" = "SUPER + ALT + CTRL";
   "$superMod" = "SUPER";
   "$browser" = "zen";
-  "$editor" = "emacsclient -c -a \"\"";
+  "$editor" = ''emacsclient -c -a ""'';
   "$fileManager" = "yazi";
   "$launcher" = "wofi --show drun";
   "$terminal" = "wezterm";
@@ -18,9 +16,7 @@ in
   # ---------------------------------------------------------
   # Monitors & Environment
   # ---------------------------------------------------------
-  monitor = [
-    "HDMI-A-1, 2560x1440, 0x0, 1"
-  ];
+  monitor = [ "HDMI-A-1, 2560x1440, 0x0, 1" ];
 
   env = [
     "HYPRCURSOR_THEME, ${theme.cursorThemes.hyprcursor.name}"
@@ -75,9 +71,7 @@ in
   };
 
   # https://wiki.hyprland.org/Configuring/Variables/#input
-  input = {
-    follow_mouse = 2;
-  };
+  input = { follow_mouse = 2; };
 
   # https://wiki.hyprland.org/Configuring/Animations/
   animations = {
@@ -156,7 +150,7 @@ in
     "$superMod, Z, exec, $terminal"
 
     # Screen Recording
-    "$superMod, R, exec, wl-screenrec -g \"\${slurp}\""
+    ''$superMod, R, exec, wl-screenrec -g "''${slurp}"''
     "$superMod SHIFT, R, exec, wl-screenrec -o HDMI-A-1"
 
     # Clipboard & Picker
@@ -177,10 +171,8 @@ in
   ];
 
   # -- Mouse Bindings --
-  bindm = [
-    "$superMod, mouse:272, movewindow"
-    "$superMod, mouse:273, resizewindow"
-  ];
+  bindm =
+    [ "$superMod, mouse:272, movewindow" "$superMod, mouse:273, resizewindow" ];
 
   # ---------------------------------------------------------
   # Workspace & Window Rules

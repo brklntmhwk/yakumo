@@ -1,10 +1,7 @@
 {
   address = "";
   language = "en_US";
-  forecast = [
-    "day"
-    "week"
-  ];
+  forecast = [ "day" "week" ];
   units = {
     temperature = "celsius";
     speed = "kmh";

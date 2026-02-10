@@ -1,14 +1,7 @@
-{
-  inputs,
-  config,
-  lib,
-  ...
-}:
+{ inputs, config, lib, ... }:
 
-let
-  inherit (lib) mkDefault;
-in
-{
+let inherit (lib) mkDefault;
+in {
   imports = [
     ../common
 
@@ -18,9 +11,7 @@ in
 
   yakumo.system = {
     role = "workstation";
-    nix = {
-      enableFlake = true;
-    };
+    nix = { enableFlake = true; };
     networking = {
       manager = "networkd";
       wifi.enable = true;
@@ -52,15 +43,11 @@ in
   fileSystems."/boot" = {
     device = "/dev/disk/by-uuid/8018-1454";
     fsType = "vfat";
-    options = [
-      "fmask=0022"
-      "dmask=0022"
-    ];
+    options = [ "fmask=0022" "dmask=0022" ];
   };
 
-  swapDevices = [
-    { device = "/dev/disk/by-uuid/c668f084-2996-4f68-bbd2-97a639656feb"; }
-  ];
+  swapDevices =
+    [{ device = "/dev/disk/by-uuid/c668f084-2996-4f68-bbd2-97a639656feb"; }];
 
   i18n = {
     defaultLocale = "en_US.UTF-8";

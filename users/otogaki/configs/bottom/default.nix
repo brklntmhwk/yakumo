@@ -3,8 +3,7 @@
 let
   inherit (builtins) attrValues;
   inherit (theme) colors;
-in
-{
+in {
   flags = {
     hide_avg_cpu = true;
     temperature_type = "celsius";
@@ -20,15 +19,8 @@ in
       avg_entry_color = colors.red;
       cpu_core_colors = attrValues {
         inherit (colors)
-          magenta-warmer
-          yellow-warmer
-          cyan-warmer
-          green-warmer
-          blue-warmer
-          cyan
-          green
-          blue
-          ;
+          magenta-warmer yellow-warmer cyan-warmer green-warmer blue-warmer cyan
+          green blue;
       };
     };
     graphs = {
@@ -41,14 +33,7 @@ in
       swap_color = colors.yellow-warmer;
       arc_color = colors.cyan-warmer;
       gpu_colors = attrValues {
-        inherit (colors)
-          blue-warmer
-          red-warmer
-          cyan
-          green
-          blue
-          red
-          ;
+        inherit (colors) blue-warmer red-warmer cyan green blue red;
       };
     };
     network = {

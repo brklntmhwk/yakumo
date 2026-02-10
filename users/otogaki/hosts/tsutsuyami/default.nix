@@ -1,17 +1,11 @@
-{
-  config,
-  lib,
-  pkgs,
-  ...
-}:
+{ config, lib, pkgs, ... }:
 
 let
   inherit (builtins) attrValues;
   inherit (lib) catAttrs;
   inherit (theme) cursorThemes fonts loginThemes;
   theme = import ../../themes/modus-vivendi-tinted pkgs;
-in
-{
+in {
   imports = [
     ../common # Common configs among user's hosts
   ];
@@ -93,17 +87,8 @@ in
           config = import ../../configs/nyxt/init.lisp { };
         };
       };
-      media = {
-        modules = [
-          "music"
-          "video"
-        ];
-      };
-      misc = {
-        thunar = {
-          enable = true;
-        };
-      };
+      media = { modules = [ "music" "video" ]; };
+      misc = { thunar = { enable = true; }; };
     };
   };
 

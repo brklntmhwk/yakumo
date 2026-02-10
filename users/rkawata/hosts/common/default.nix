@@ -1,17 +1,11 @@
-{
-  config,
-  lib,
-  pkgs,
-  ...
-}:
+{ config, lib, pkgs, ... }:
 
 let
   inherit (builtins) attrValues;
   # inherit (lib) catAttrs;
   inherit (theme) cursorThemes fonts;
   theme = import ../../themes/modus-operandi-tinted pkgs;
-in
-{
+in {
   imports = [
     ../../../common # Common configs among users
   ];
@@ -42,27 +36,19 @@ in
       enable = true;
       settings = import ./configs/starship { inherit theme; };
     };
-    zoxide = {
-      enable = true;
-    };
+    zoxide = { enable = true; };
   };
 
   yakumo.ai = {
     agents = {
-      claude-code = {
-        enable = true;
-      };
-      gemini-cli = {
-        enable = true;
-      };
+      claude-code = { enable = true; };
+      gemini-cli = { enable = true; };
     };
     mcp = {
       enable = true;
       filesystem = {
         enable = true;
-        paths = [
-          "${config.yakumo.user.home}/projects"
-        ];
+        paths = [ "${config.yakumo.user.home}/projects" ];
       };
       github.enable = true;
     };

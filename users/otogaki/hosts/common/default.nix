@@ -1,17 +1,11 @@
-{
-  config,
-  lib,
-  pkgs,
-  ...
-}:
+{ config, lib, pkgs, ... }:
 
 let
   inherit (builtins) attrValues;
   inherit (lib) catAttrs;
   inherit (theme) cursorThemes fonts;
   theme = import ../../themes/modus-vivendi-tinted pkgs;
-in
-{
+in {
   imports = [
     ../../../common # Common configs among users
   ];
@@ -42,9 +36,7 @@ in
         "PUSHD_SILENT" # 'pushd' and 'popd' don't print the directory stack.
         "SHARE_HISTORY"
       ];
-      shellAliases = {
-        ".." = "cd ..";
-      };
+      shellAliases = { ".." = "cd .."; };
       abbreviations = {
         bctl = "bluetoothctl";
         jctl = "journalctl";
@@ -100,27 +92,19 @@ in
       enable = true;
       settings = import ../../configs/starship { inherit theme; };
     };
-    zoxide = {
-      enable = true;
-    };
+    zoxide = { enable = true; };
   };
 
   yakumo.ai = {
     agents = {
-      claude-code = {
-        enable = true;
-      };
-      gemini-cli = {
-        enable = true;
-      };
+      claude-code = { enable = true; };
+      gemini-cli = { enable = true; };
     };
     mcp = {
       enable = true;
       filesystem = {
         enable = true;
-        paths = [
-          "${config.yakumo.user.home}/projects"
-        ];
+        paths = [ "${config.yakumo.user.home}/projects" ];
       };
       github.enable = true;
     };
@@ -139,10 +123,7 @@ in
     };
     television = {
       enable = true;
-      channels = [
-        "files"
-        "nix-search-tv"
-      ];
+      channels = [ "files" "nix-search-tv" ];
       settings = import ../../configs/television { inherit theme; };
     };
   };

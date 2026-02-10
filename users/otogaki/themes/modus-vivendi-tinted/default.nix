@@ -5,8 +5,7 @@ let
   wallpaperPath = "maple-with-hidden-falls.jpg";
   avatorPath = "avators/otogaki.png";
   yaegaki = (pkgs.callPackage ./_sources/generated.nix { }).yaegaki;
-in
-{
+in {
   wallpaper = "${yaegaki.src}/${wallpaperPath}";
 
   avator = "${yaegaki.src}/${avatorPath}";

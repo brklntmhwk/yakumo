@@ -1,21 +1,11 @@
-{
-  config,
-  lib,
-  pkgs,
-  ...
-}:
+{ config, lib, pkgs, ... }:
 
 let
   inherit (builtins) attrValues;
-  inherit (lib)
-    mkDefault
-    mkIf
-    mkMerge
-    ;
+  inherit (lib) mkDefault mkIf mkMerge;
   systemRole = config.yakumo.system.role;
   isWsl = (config ? wsl) && config.wsl.enable;
-in
-{
+in {
   config = mkMerge [
     {
       boot = {

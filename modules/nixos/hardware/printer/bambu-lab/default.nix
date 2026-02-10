@@ -1,21 +1,10 @@
-{
-  config,
-  lib,
-  pkgs,
-  ...
-}:
+{ config, lib, pkgs, ... }:
 
 let
-  inherit (lib)
-    elem
-    mkIf
-    ;
+  inherit (lib) elem mkIf;
   hardwareMods = config.yakumo.hardware.modules;
-in
-{
+in {
   config = mkIf (elem "printer/bambu-lab" hardwareMods) {
-    yakumo.user.packages = builtins.attrValues {
-      inherit (pkgs) bambu-studio;
-    };
+    yakumo.user.packages = builtins.attrValues { inherit (pkgs) bambu-studio; };
   };
 }

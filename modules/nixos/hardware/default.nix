@@ -1,21 +1,10 @@
-{
-  config,
-  lib,
-  pkgs,
-  murakumo,
-  ...
-}:
+{ config, lib, pkgs, murakumo, ... }:
 
 let
-  inherit (lib)
-    mkDefault
-    mkOption
-    types
-    ;
+  inherit (lib) mkDefault mkOption types;
   inherit (murakumo.utils) getDirNamesRecursive;
   hardwareMods = getDirNamesRecursive ./.;
-in
-{
+in {
   options.yakumo.hardware = {
     # 'yakumo.hardware.*' modules look up this.
     modules = mkOption {

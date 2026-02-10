@@ -1,26 +1,12 @@
-{
-  inputs,
-  config,
-  options,
-  lib,
-  pkgs,
-  murakumo,
-  ...
-}:
+{ inputs, config, options, lib, pkgs, murakumo, ... }:
 
 let
-  inherit (lib)
-    mkEnableOption
-    mkIf
-    mkMerge
-    mkOption
-    ;
+  inherit (lib) mkEnableOption mkIf mkMerge mkOption;
   inherit (murakumo.configs) mkInherit;
   cfg = config.yakumo.services.xremap;
   compositorsCfg = config.yakumo.desktop.compositors;
   upstream = options.services.xremap;
-in
-{
+in {
   imports = [ inputs.xremap.nixosModules.default ];
 
   options.yakumo.services.xremap = {
@@ -28,7 +14,8 @@ in
     # Hereafter, selectively inherit the upstream module options.
     # For the exhaustive list of the module options, see:
     # https://github.com/xremap/nix-flake/blob/master/docs/HOWTO.md
-    config = mkInherit upstream.config; # Prefer Nix-representable format over YAML.
+    config =
+      mkInherit upstream.config; # Prefer Nix-representable format over YAML.
     deviceName = mkInherit upstream.deviceName;
     deviceNames = mkInherit upstream.deviceNames;
     debug = mkInherit upstream.debug;
@@ -61,12 +48,8 @@ in
         watch = cfg.watch;
       }
       # Add conditionals for DE or WM(compositor) specific integrations here.
-      (mkIf (compositorsCfg.hyprland.enable) {
-        withHypr = true;
-      })
-      (mkIf (compositorsCfg.niri.enable) {
-        withNiri = true;
-      })
+      (mkIf (compositorsCfg.hyprland.enable) { withHypr = true; })
+      (mkIf (compositorsCfg.niri.enable) { withNiri = true; })
     ];
   };
 }

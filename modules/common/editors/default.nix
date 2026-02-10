@@ -1,14 +1,8 @@
-{
-  config,
-  lib,
-  pkgs,
-  ...
-}:
+{ config, lib, pkgs, ... }:
 let
   inherit (lib) mkIf mkOption types;
   cfg = config.yakumo.editors;
-in
-{
+in {
   options.yakumo.editors = {
     default = mkOption {
       type = types.str;
@@ -16,7 +10,6 @@ in
     };
   };
 
-  config = mkIf (cfg.default != null) {
-    environment.variables.EDITOR = cfg.default;
-  };
+  config =
+    mkIf (cfg.default != null) { environment.variables.EDITOR = cfg.default; };
 }

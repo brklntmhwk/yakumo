@@ -1,24 +1,11 @@
-{
-  config,
-  lib,
-  pkgs,
-  murakumo,
-  ...
-}:
+{ config, lib, pkgs, murakumo, ... }:
 
 let
-  inherit (lib)
-    literalExpression
-    mkEnableOption
-    mkIf
-    mkOption
-    types
-    ;
+  inherit (lib) literalExpression mkEnableOption mkIf mkOption types;
   inherit (murakumo.utils) anyEnabled;
   cfg = config.yakumo.system.i18n.inputMethod.fcitx5;
   compositorsCfg = config.yakumo.desktop.compositors;
-in
-{
+in {
   options.yakumo.system.i18n.inputMethod.fcitx5 = {
     enable = mkEnableOption "fcitx5";
     extraAddons = mkOption {
@@ -44,10 +31,7 @@ in
     i18n.inputMethod = {
       type = "fcitx5";
       fcitx5 = {
-        addons =
-          builtins.attrValues {
-            inherit (pkgs) fcitx5-mozc;
-          }
+        addons = builtins.attrValues { inherit (pkgs) fcitx5-mozc; }
           ++ cfg.extraAddons;
         quickPhrase = cfg.quickPhrase;
         waylandFrontend = anyEnabled compositorsCfg;

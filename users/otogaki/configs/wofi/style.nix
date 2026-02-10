@@ -1,9 +1,7 @@
 { theme }:
 
-let
-  inherit (theme) colors fonts;
-in
-''
+let inherit (theme) colors fonts;
+in ''
   /* See wofi(5) for the CSS selectors  */
   * {
       font-family: ${fonts.moralerspaceHw.name}, ${fonts.jetbrainsMono.name}, Roboto, Helvetica, Ariel, sans-serif;
