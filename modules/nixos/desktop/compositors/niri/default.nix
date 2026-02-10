@@ -95,19 +95,19 @@ in {
           '';
         };
       };
-    };
-    iconTheme = {
-      name = lib.mkOption {
-        type = lib.types.str;
-        default = "Adwaita";
-        description = ''
-          Name of the icon theme to use for regreet.
-        '';
-      };
-      package = lib.mkPackageOption pkgs "adwaita-icon-theme" { } // {
-        description = ''
-          The package that provides the icon theme given in the name option.
-        '';
+      iconTheme = {
+        name = lib.mkOption {
+          type = lib.types.str;
+          default = "Adwaita";
+          description = ''
+            Name of the icon theme to use for regreet.
+          '';
+        };
+        package = lib.mkPackageOption pkgs "adwaita-icon-theme" { } // {
+          description = ''
+            The package that provides the icon theme given in the name option.
+          '';
+        };
       };
     };
     xwayland = {
