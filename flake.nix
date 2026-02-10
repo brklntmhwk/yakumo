@@ -45,9 +45,6 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    # --- Persistent state handler ---
-    impermanence.url = "github:nix-community/impermanence";
-
     # --- Nix utils ---
     nix-index-database = {
       url = "github:nix-community/nix-index-database";
@@ -104,6 +101,10 @@
     in {
       overlays.default = import ./overlays { inherit (nixpkgs) lib; };
 
+      checks = forAllSystems (system:
+        let pkgs = nixpkgs.legacyPackages.${system};
+        in import ./tests { inherit pkgs self; });
+
       formatter = forAllSystems (system:
         let
           pkgs = nixpkgs.legacyPackages.${system};
@@ -119,7 +120,7 @@
         in treefmtEval.config.build.wrapper);
 
       # These are not for external use.
-      nixosModules =
+      nixosModules.default =
         lib'.mapFilterModulesRecursively ./modules import [ "darwin" ];
 
       nixosConfigurations = lib'.mkNixOsHosts {
@@ -154,7 +155,7 @@
       };
 
       # These are not for external use.
-      # darwinModules = lib'.mapFilterModulesRecursively ./modules import [
+      # darwinModules.default = lib'.mapFilterModulesRecursively ./modules import [
       #   "nixos"
       # ];
 

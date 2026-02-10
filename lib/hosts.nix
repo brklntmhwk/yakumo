@@ -55,8 +55,8 @@ let
         ]
         # Use `lib.optionals` instead of `lib.optional` here;
         # the former returns the given list as is if the condition is true.
-          ++ optionals (platformType == "nixos") self.nixosModules
-          ++ optionals (platformType == "darwin") self.darwinModules
+          ++ optionals (platformType == "nixos") [ self.nixosModules.default ]
+          ++ optionals (platformType == "darwin") [ self.darwinModules.default ]
           ++ extraModules;
 
         # Put these into the modules' scope and make them accesible.
