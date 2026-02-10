@@ -120,8 +120,10 @@
         in treefmtEval.config.build.wrapper);
 
       # These are not for external use.
-      nixosModules.default =
-        lib'.mapFilterModulesRecursively ./modules import [ "darwin" ];
+      nixosModules.default = {
+        imports =
+          lib'.mapFilterModulesRecursively ./modules import [ "darwin" ];
+      };
 
       nixosConfigurations = lib'.mkNixOsHosts {
         tsutsuyami = {
@@ -155,9 +157,9 @@
       };
 
       # These are not for external use.
-      # darwinModules.default = lib'.mapFilterModulesRecursively ./modules import [
-      #   "nixos"
-      # ];
+      # darwinModules.default = {
+      #   imports = lib'.mapFilterModulesRecursively ./modules import [ "nixos" ];
+      # };
 
       # darwinConfigurations = lib'.mkDarwinHosts {
       #   momokagari = {
