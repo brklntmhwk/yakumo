@@ -3,8 +3,14 @@
 let
   inherit (builtins) genList toString;
   inherit (lib) generators;
-  inherit (theme) colors fonts;
+  inherit (theme) colors cursorThemes fonts;
 in {
+  # Set these explicitly to prevent the 'Cursor not found' error on WSL
+  # from proliferating.
+  # https://wezterm.org/faq.html?h=xcursor_theme#i-use-x11-or-wayland-and-my-mouse-cursor-theme-doesnt-seem-to-work
+  xcursor_theme = cursorThemes.rosePine.name;
+  xcursor_size = 24;
+
   colors = {
     foreground = colors.fg-main;
     background = colors.bg-main;
