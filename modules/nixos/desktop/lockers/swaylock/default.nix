@@ -53,8 +53,8 @@ in {
       if val == false then
         ""
       else
-        (if val == true then name else name + "=" + (formatValue val)) + "\n"))
-      cfg.settings);
+        (if val == true then name else name + "=" + (formatValue val)) + "\n")
+      cfg.settings));
     swaylockWrapped = mkAppWrapper {
       pkg = cfg.package;
       name = "${getName cfg.package}-${config.yakumo.user.name}";
