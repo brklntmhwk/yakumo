@@ -62,7 +62,7 @@ in {
   # Based on modus-themes (modus-vivendi-tinted)
   # https://protesilaos.com/emacs/modus-themes-colors
   colors = {
-    bg-main = "#0d0elc";
+    bg-main = "#0d0e1c";
     bg-dim = "#1d2235";
     fg-main = "#ffffff";
     fg-dim = "#989898";

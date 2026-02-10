@@ -9,7 +9,8 @@ in {
     foreground = colors.fg-main;
     background = colors.bg-main;
     cursor_fg = colors.fg-main;
-    # You don't need these unless `default_cursor_style` is set to either '{Steady|Blinking}Block'.
+    # You don't need these unless `default_cursor_style` is set to either
+    # 'SteadyBlock' or 'BlinkingBlock'.
     # cursor_bg = colors.magenta-intense;
     # cursor_border = colors.magenta-intense;
     selection_fg = colors.fg-main;
