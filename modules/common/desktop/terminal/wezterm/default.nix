@@ -4,7 +4,7 @@ let
   inherit (lib) mkEnableOption mkIf mkOption mkPackageOption types;
   cfg = config.yakumo.desktop.terminal.wezterm;
   luaFormat = pkgs.formats.lua { };
-  tomlFormat = pkgs.formats.toml { };
+  # tomlFormat = pkgs.formats.toml { };
 in {
   options.yakumo.desktop.terminal.wezterm = {
     enable = mkEnableOption "wezterm";
@@ -34,11 +34,15 @@ in {
   };
 
   config = mkIf cfg.enable (let
-    inherit (lib) getName;
+    inherit (lib) generators getName;
     inherit (pkgs) writeText;
     inherit (murakumo.wrappers) mkAppWrapper;
 
-    weztermLua = luaFormat.generate "wezterm.lua" cfg.settings;
+    configAsLua = generators.toLua { } cfg.settings;
+    weztermLua = writeText "wezterm.lua" ''
+      local wezterm = require "wezterm"
+      return ${configAsLua}
+    '';
     weztermWrapped = mkAppWrapper {
       pkg = cfg.package;
       name = "${getName cfg.package}-${config.yakumo.user.name}";
