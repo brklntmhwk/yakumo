@@ -137,8 +137,8 @@ in {
         where = file.name;
         options = concatStringsSep "," mountOptions;
         # Prepare the target and source before mounting.
-        serviceConfig.ExecStartPre =
-          pkgs.writeShellScript "ensure-target-${safeName}" ''
+        mountConfig = {
+          ExecStartPre = pkgs.writeShellScript "ensure-target-${safeName}" ''
             set -eu
             mkdir -p "$(dirname ${file.name})"
 
@@ -160,6 +160,7 @@ in {
               touch "${file.name}"
             fi
           '';
+        };
       }) cfg.files;
 
     system.activationScripts.persistent-storage.text = let
