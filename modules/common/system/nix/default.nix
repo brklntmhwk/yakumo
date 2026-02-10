@@ -35,7 +35,7 @@ in {
       nix.settings = {
         experimental-features = [
           "nix-command" # The next-gen Nix CLI for Nix Flakes
-          "flakes" # Nix Flake itself
+          "flakes" # Nix Flakes itself
         ];
       };
     })
