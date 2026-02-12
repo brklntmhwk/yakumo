@@ -12,6 +12,8 @@ in {
     enable = mkEnableOption "Yubikey integrations";
     protocols = mkOption {
       type = types.listOf (types.enum supportedProtocols);
+      default = [ ];
+      description = "List of authentication protocols to be used.";
     };
   };
 
