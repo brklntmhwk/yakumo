@@ -27,7 +27,7 @@ in {
         ;
       };
     }
-    (mkIf (pkgs.stdenv.isLinux {
+    (mkIf pkgs.stdenv.isLinux {
       services.udev.packages =
         attrValues { inherit (pkgs) yubikey-personalization; };
 
@@ -39,6 +39,6 @@ in {
         login.u2fAuth = true;
         sudo.u2fAuth = true;
       };
-    }))
+    })
   ]);
 }
