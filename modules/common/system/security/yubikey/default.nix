@@ -30,17 +30,15 @@ in {
     (mkIf (pkgs.stdenv.isLinux {
       services.udev.packages =
         attrValues { inherit (pkgs) yubikey-personalization; };
-    }))
-    (mkIf (pkgs.stdenv.isLinux && (elem "piv" cfg.protocols)) {
+
       # Enable PCSC-Lite daemon for accessing smart cards.
-      services.pcscd.enable = true;
-    })
-    (mkIf (pkgs.stdenv.isLinux && (elem "fido-u2f" cfg.protocols)) {
+      services.pcscd.enable = mkIf (elem "piv" cfg.protocols) true;
+
       # https://nixos.wiki/wiki/Yubikey
-      security.pam.services = {
+      security.pam.services = mkIf (elem "fido-u2f" cfg.protocols) {
         login.u2fAuth = true;
         sudo.u2fAuth = true;
       };
-    })
+    }))
   ]);
 }
