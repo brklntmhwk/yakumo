@@ -4,12 +4,12 @@ let
   inherit (lib) mkDefault mkIf mkMerge mkOption types;
   systemRole = config.yakumo.system.role;
   cfg = config.yakumo.system.networking;
-  managers = [ "networkmanager" "networkd" ];
+  managers = [ "networkmanager" "networkd" "none" ];
 in {
   options.yakumo.system.networking = {
     manager = mkOption {
       type = types.enum managers;
-      default = "networkmanager";
+      default = "none";
       description = "Manager of networking.";
     };
   };
@@ -45,7 +45,7 @@ in {
       # https://nixos.wiki/wiki/Systemd-networkd
       networking.useNetworkd = true;
     })
-    (mkIf (systemRole == "workstation") {
+    (mkIf (systemRole == "workstation" && cfg.manager == "networkd") {
       systemd.network = {
         # Cover all LAN & WAN interfaces.
         # As for the number prefix, the smaller, the higher the priority is.
