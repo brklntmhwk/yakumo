@@ -1,4 +1,4 @@
-{ config, pkgs, ... }:
+{ config, lib, pkgs, ... }:
 
 let
   inherit (lib) elem mkIf;
@@ -6,8 +6,10 @@ let
 in {
   config = mkIf (elem "ups/goldenmate" hardwareMods) {
     power.ups = {
+      # https://networkupstools.org/stable-hcl.html
+      # GoldenMate UPS 1000VA Pro USB is supported by NUT but the support level is
+      # "protocol based on reverse engineering" as of Feb 2026.
       ups.goldenmate = {
-        # Critical: Golden Mate uses specific USB IDs that auto-detection might miss.
         driver = "usbhid-ups";
         port = "auto";
         description = "Golden Mate LiFePO4 UPS.";
