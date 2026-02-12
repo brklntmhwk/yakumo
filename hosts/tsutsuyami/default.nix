@@ -5,7 +5,7 @@ in {
   imports = [
     ../common
 
-    # hardware configurations are now scattered around custom modules and so on.
+    # hardware configurations are scattered around custom modules and so on.
     # ./hardware-configuration.nix
   ];
 
@@ -28,6 +28,7 @@ in {
       "printer/bambu-lab"
       "scanner/scansnap"
       "ssd"
+      # "ups/goldenmate"
     ];
   };
 

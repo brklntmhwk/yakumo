@@ -15,6 +15,7 @@ in {
       # and possibly a specific LISTEN directive in `upsd.conf`.
       # - "netclient": only requires upsmon.
       mode = "standalone";
+      # TODO: revisit this user params and settings.
       users = {
         admin = {
           # https://networkupstools.org/docs/man/upsd.users.html#_fields
