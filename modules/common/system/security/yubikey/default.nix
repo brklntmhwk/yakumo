@@ -19,8 +19,6 @@ in {
 
   config = mkIf cfg.enable (mkMerge [
     {
-      services.udev.packages =
-        attrValues { inherit (pkgs) yubikey-personalization; };
       environment.systemPackages = attrValues {
         inherit (pkgs)
           yubikey-manager # The modern CLI tool (ykman)
@@ -29,6 +27,10 @@ in {
         ;
       };
     }
+    (mkIf (pkgs.stdenv.isLinux {
+      services.udev.packages =
+        attrValues { inherit (pkgs) yubikey-personalization; };
+    }))
     (mkIf (pkgs.stdenv.isLinux && (elem "piv" cfg.protocols)) {
       # Enable PCSC-Lite daemon for accessing smart cards.
       services.pcscd.enable = true;
