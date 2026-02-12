@@ -1,9 +1,7 @@
 { pkgs, lib, self, ... }:
 
-let
-  inherit (lib) mkForce;
-in
-pkgs.testers.runNixOSTest {
+let inherit (lib) mkForce;
+in pkgs.testers.runNixOSTest {
   name = "yosuga-test";
   nodes.machine = { config, pkgs, ... }: {
     imports = [ ../../modules/nixos/system/persistence/yosuga ];

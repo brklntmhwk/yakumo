@@ -27,11 +27,6 @@ in {
         settings = import ../../configs/wezterm { inherit lib theme; };
       };
     };
-    apps = {
-      browsers = {
-
-      };
-    };
   };
 
   yakumo.editors = {
