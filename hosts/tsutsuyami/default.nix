@@ -13,7 +13,7 @@ in {
     role = "workstation";
     nix = { enableFlake = true; };
     networking = {
-      manager = "networkd";
+      manager = "networkmanager";
       wifi.enable = true;
     };
   };
