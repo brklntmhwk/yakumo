@@ -11,7 +11,7 @@ let
 
   # Standardize module options for files and directories.
   mkPersistentOption = type: {
-    name = mkOption {
+    path = mkOption {
       type = types.str;
       example =
         if type == "directory" then "/var/lib/nixos" else "/etc/machine-id";
@@ -55,13 +55,16 @@ in {
       description = "The path where persistent data are stored.";
     };
     directories = mkOption {
-      type = types.listOf
-        (types.submodule { options = mkPersistentOption "directory"; });
+      type = types.listOf (types.coercedTo
+        types.str
+        (path: { inherit path; })
+        (types.submodule { options = mkPersistentOption "file"; })
+      );
       default = [ ];
       example = [
-        { name = "/var/log"; }
+        "/var/log"
         {
-          name = "/var/lib/bluetooth";
+          path = "/var/lib/bluetooth";
           mode = "0700";
         }
       ];
@@ -69,11 +72,15 @@ in {
     };
     files = mkOption {
       type =
-        types.listOf (types.submodule { options = mkPersistentOption "file"; });
+        types.listOf (types.coercedTo
+        types.str
+        (path: { inherit path; })
+        (types.submodule { options = mkPersistentOption "directory"; })
+      );
       default = [ ];
       example = [
-        { name = "/etc/machine-id"; }
-        { name = "/etc/ssh/ssh_host_ed25519_key"; }
+        "/etc/machine-id"
+        { path = "/etc/ssh/ssh_host_ed25519_key"; user = "root"; }
       ];
       description = "List of files to bind mount.";
     };
@@ -107,12 +114,12 @@ in {
         message = "The persistent storage path cannot be root";
       }
       {
-        assertion = (length (unique (map (x: x.name) cfg.directories)))
+        assertion = (length (unique (map (x: x.path) cfg.directories)))
           == (length cfg.directories);
         message = duplicationMsg "directories";
       }
       {
-        assertion = (length (unique (map (x: x.name) cfg.files)))
+        assertion = (length (unique (map (x: x.path) cfg.files)))
           == (length cfg.files);
         message = duplicationMsg "files";
       }
@@ -120,15 +127,15 @@ in {
 
     # https://github.com/nix-community/impermanence/commit/1b02741e3d154a4bc59af55989ea66528e84b371
     boot.initrd.systemd.suppressedUnits =
-      mkIf (any (f: f.name == "/etc/machine-id") cfg.files)
+      mkIf (any (f: f.path == "/etc/machine-id") cfg.files)
       [ "systemd-machine-id-commit.service" ];
     systemd.services.systemd-machine-id-commit.unitConfig.ConditionFirstBoot =
-      mkIf (any (f: f.name == "/etc/machine-id") cfg.files) true;
+      mkIf (any (f: f.path == "/etc/machine-id") cfg.files) true;
 
     fileSystems = listToAttrs (map (dir: {
-      name = dir.name;
+      name = dir.path;
       value = {
-        device = "${cfg.persistentStoragePath}${dir.name}";
+        device = "${cfg.persistentStoragePath}${dir.path}";
         fsType = "none";
         options = [
           "bind"
@@ -144,40 +151,40 @@ in {
 
     systemd.mounts = map (file:
       let
-        safeName = escapeSystemdPath file.name;
+        safePath = escapeSystemdPath file.path;
         mountOptions = [ "bind" ] ++ (optional cfg.hideMounts "x-gvfs-hide")
           ++ (optional cfg.allowTrash "x-gvfs-trash");
       in {
         type = "none";
-        description = "Bind mount for persistent file ${file.name}";
+        description = "Bind mount for persistent file ${file.path}";
         before = [ "local-fs.target" ];
         requiredBy = optional file.neededForBoot "sysinit.target";
         wantedBy = [ "local-fs.target" ];
-        what = "${cfg.persistentStoragePath}${file.name}";
-        where = file.name;
+        what = "${cfg.persistentStoragePath}${file.path}";
+        where = file.path;
         options = concatStringsSep "," mountOptions;
         # Prepare the target and source before mounting.
         mountConfig = {
-          ExecStartPre = pkgs.writeShellScript "ensure-target-${safeName}" ''
+          ExecStartPre = pkgs.writeShellScript "ensure-target-${safePath}" ''
             set -eu
-            mkdir -p "$(dirname ${file.name})"
+            mkdir -p "$(dirname ${file.path})"
 
             # Ensure source exists in the persistent storage path.
             # (This avoids the bind mount failing if the source is missing)
-            if [ ! -e "${cfg.persistentStoragePath}${file.name}" ]; then
-              mkdir -p "$(dirname "${cfg.persistentStoragePath}${file.name}")"
+            if [ ! -e "${cfg.persistentStoragePath}${file.path}" ]; then
+              mkdir -p "$(dirname "${cfg.persistentStoragePath}${file.path}")"
 
               # Treat machine-id specially.
-              if [ "${file.name}" = "/etc/machine-id" ]; then
-                 echo "uninitialized" > "${cfg.persistentStoragePath}${file.name}"
+              if [ "${file.path}" = "/etc/machine-id" ]; then
+                 echo "uninitialized" > "${cfg.persistentStoragePath}${file.path}"
               else
-                 touch "${cfg.persistentStoragePath}${file.name}"
+                 touch "${cfg.persistentStoragePath}${file.path}"
               fi
             fi
 
             # Ensure target exists (mount point).
-            if [ ! -e "${file.name}" ]; then
-              touch "${file.name}"
+            if [ ! -e "${file.path}" ]; then
+              touch "${file.path}"
             fi
           '';
         };
@@ -187,7 +194,7 @@ in {
       text = let
         mkScript = type: item: ''
           # Create source paths.
-          targetPath="${cfg.persistentStoragePath}${item.name}"
+          targetPath="${cfg.persistentStoragePath}${item.path}"
           dirPath=$(dirname "$targetPath")
 
           # Ensure directories and files exist.
