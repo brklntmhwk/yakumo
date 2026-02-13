@@ -25,6 +25,7 @@ in {
     #   directories = [
     #     "/etc/nixos"
     #     "/etc/NetworkManager/system-connections"
+    #     "/var/lib/bluetooth"
     #   ];
     #   files = [
     #     "/etc/machine-id"
@@ -37,14 +38,7 @@ in {
   };
 
   yakumo.hardware = {
-    modules = [
-      "audio"
-      "bluetooth/blueman"
-      "monitor"
-      "printer/bambu-lab"
-      "scanner/scansnap"
-      "ssd"
-    ];
+    modules = [ "audio" "bluetooth/blueman" "monitor" "ssd" ];
   };
 
   # Copied from the auto-generated 'hardware-configuration.nix' file.
