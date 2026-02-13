@@ -10,6 +10,7 @@ Table of Contents:
 :CONTENTS:
 - [[#overview][Overview]]
   - [[#principles][Principles]]
+  - [[#distinguishing-philosophies][Distinguishing Philosophies]]
   - [[#hosts][Hosts]]
   - [[#tools][Tools]]
 - [[#crossing-the-threshold][Crossing the Threshold]]
@@ -33,6 +34,18 @@ Welcome to Yakumo! It's our home in the digital world weaved from dotfiles.
 - *Low-maintenance:* Easy to maintain. You know where to tweak at a glance. (Maybe...)
   - Sticking to the Dependency Inversion principle as much as possible to make updates a breeze.
 - *Cool:* After all, what drives us to tend our dotfiles is pure self-satisfaction, isn't it?
+*** Distinguishing Philosophies
+:PROPERTIES:
+:CUSTOM_ID: distinguishing-philosophies
+:END:
+**** Yosuga - Custom Persistence Layer
+A lightweight, in-house implementation of [[https://github.com/nix-community/impermanence][Impermanence]]. Embracing the "[[https://grahamc.com/blog/erase-your-darlings/][Erase Your Darlings]]" ethos, Yosuga provides the essential "clue" (縁) to persist only what truly matters across the void of every reboot.
+
+**** Beyond Home Manager - The "Wrapper Frontier" Challenge
+An attempt to minimize reliance on external abstraction layers. By pushing the limits of native NixOS module wrapping with ~pkgs.symlinkJoin~ and its fellows, Yakumo maintains a high-fidelity relationship with the core system.
+
+**** Multi-User Architecture
+A rare implementation for multi-user environments.
 *** Hosts
 :PROPERTIES:
 :CUSTOM_ID: hosts
