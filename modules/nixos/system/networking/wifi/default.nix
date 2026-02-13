@@ -10,6 +10,18 @@ in {
   };
 
   config = mkIf cfg.enable (mkMerge [
+    (mkIf (netManager == "networkmanager") {
+      networking = {
+        networkmanager = {
+          # Prefer iwd(iNet wireless daemon) over wpa_supplicant as backend.
+          wifi.backend = "iwd";
+        };
+        wireless.iwd = {
+          enable = true;
+          settings = { General = { EnableNetworkConfiguration = true; }; };
+        };
+      };
+    })
     (mkIf (netManager == "networkd") (let
       inherit (builtins) attrValues map;
       inherit (lib) genAttrs;

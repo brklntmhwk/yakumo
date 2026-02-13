@@ -29,8 +29,8 @@ in {
     (mkIf (cfg.manager == "networkd") {
       # Increase the log level.
       # https://nixos.wiki/wiki/Systemd-networkd
-      systemd.services."systemd-networkd".environment.SYSTEMD_LOG_LEVEL =
-        "debug";
+      # systemd.services."systemd-networkd".environment.SYSTEMD_LOG_LEVEL =
+      #   "debug";
 
       # When enabled, this does all the heavy lifting behind the scenes for you:
       # - Set `systemd.network.enable` to true
