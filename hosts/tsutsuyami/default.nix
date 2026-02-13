@@ -53,7 +53,7 @@ in {
   i18n = {
     defaultLocale = "en_US.UTF-8";
     extraLocaleSettings = {
-      # Run `locale` to see available options
+      # Run `locale` to see available options.
     };
     extraLocales = [
       "en_US.UTF-8/UTF-8"

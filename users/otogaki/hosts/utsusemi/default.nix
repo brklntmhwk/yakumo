@@ -5,7 +5,7 @@ let
   theme = import ../../themes/modus-vivendi-tinted pkgs;
 in {
   imports = [
-    ../common # Common configs among user's hosts
+    ../common # Common configs among user's hosts.
   ];
 
   yakumo.system = {
