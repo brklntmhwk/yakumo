@@ -13,26 +13,32 @@ let
   mkPersistentOption = type: {
     name = mkOption {
       type = types.str;
+      example =
+        if type == "directory" then "/var/lib/nixos" else "/etc/machine-id";
       description = "The absolute path to the ${type} to persist.";
     };
     user = mkOption {
       type = types.str;
       default = "root";
+      example = "yakumo";
       description = "Owner of the source ${type}.";
     };
     group = mkOption {
       type = types.str;
       default = "root";
+      example = "users";
       description = "Group of the source ${type}.";
     };
     mode = mkOption {
       type = types.str;
       default = if type == "directory" then "0755" else "0644";
+      example = "0700";
       description = "Permissions mode for the source ${type}.";
     };
     neededForBoot = mkOption {
       type = types.bool;
       default = false;
+      example = true;
       description =
         "Whether this ${type} is needed for boot (i.e., Mounts in initrd/early boot).";
     };
@@ -45,23 +51,36 @@ in {
     persistentStoragePath = mkOption {
       type = types.path;
       default = "/yosuga";
+      example = "/persist";
       description = "The path where persistent data are stored.";
     };
     directories = mkOption {
       type = types.listOf
         (types.submodule { options = mkPersistentOption "directory"; });
       default = [ ];
+      example = [
+        { name = "/var/log"; }
+        {
+          name = "/var/lib/bluetooth";
+          mode = "0700";
+        }
+      ];
       description = "List of directories to bind mount.";
     };
     files = mkOption {
       type =
         types.listOf (types.submodule { options = mkPersistentOption "file"; });
       default = [ ];
+      example = [
+        { name = "/etc/machine-id"; }
+        { name = "/etc/ssh/ssh_host_ed25519_key"; }
+      ];
       description = "List of files to bind mount.";
     };
     hideMounts = mkOption {
       type = types.bool;
       default = true;
+      example = false;
       description = ''
         Whether to hide bind mounts from file managers.
         Uses x-gvfs-hide internally.
@@ -70,6 +89,7 @@ in {
     allowTrash = mkOption {
       type = types.bool;
       default = false;
+      example = true;
       description = ''
         Whether to allow trashing files on these mounts.
         Uses x-gvfs-trash internally.
@@ -163,31 +183,34 @@ in {
         };
       }) cfg.files;
 
-    system.activationScripts.persistent-storage.text = let
-      mkScript = type: item: ''
-        # Create source paths.
-        targetPath="${cfg.persistentStoragePath}${item.name}"
-        dirPath=$(dirname "$targetPath")
+    system.activationScripts.persistent-storage = {
+      text = let
+        mkScript = type: item: ''
+          # Create source paths.
+          targetPath="${cfg.persistentStoragePath}${item.name}"
+          dirPath=$(dirname "$targetPath")
 
-        # Ensure directories and files exist.
-        mkdir -p "$dirPath"
-        ${optionalString (type == "directory") ''mkdir -p "$targetPath"''}
-        ${optionalString (type == "file") ''
-          if [ ! -e "$targetPath" ]; then
-            touch "$targetPath"
+          # Ensure directories and files exist.
+          mkdir -p "$dirPath"
+          ${optionalString (type == "directory") ''mkdir -p "$targetPath"''}
+          ${optionalString (type == "file") ''
+            if [ ! -e "$targetPath" ]; then
+              touch "$targetPath"
+            fi
+          ''}
+
+          # Apply declared permissions.
+          if [ -e "$targetPath" ]; then
+            chown ${item.user}:${item.group} "$targetPath"
+            chmod ${item.mode} "$targetPath"
           fi
-        ''}
-
-        # Apply declared permissions.
-        if [ -e "$targetPath" ]; then
-          chown ${item.user}:${item.group} "$targetPath"
-          chmod ${item.mode} "$targetPath"
-        fi
+        '';
+      in ''
+        echo "Setting up persistent storage permissions..."
+        ${concatMapStringsSep "\n" (mkScript "directory") cfg.directories}
+        ${concatMapStringsSep "\n" (mkScript "file") cfg.files}
       '';
-    in ''
-      echo "Setting up persistent storage permissions..."
-      ${concatMapStringsSep "\n" (mkScript "directory") cfg.directories}
-      ${concatMapStringsSep "\n" (mkScript "file") cfg.files}
-    '';
+      deps = [ "users" "groups" ];
+    };
   };
 }
