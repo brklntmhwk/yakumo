@@ -55,11 +55,8 @@ in {
       description = "The path where persistent data are stored.";
     };
     directories = mkOption {
-      type = types.listOf (types.coercedTo
-        types.str
-        (path: { inherit path; })
-        (types.submodule { options = mkPersistentOption "file"; })
-      );
+      type = types.listOf (types.coercedTo types.str (path: { inherit path; })
+        (types.submodule { options = mkPersistentOption "file"; }));
       default = [ ];
       example = [
         "/var/log"
@@ -71,16 +68,15 @@ in {
       description = "List of directories to bind mount.";
     };
     files = mkOption {
-      type =
-        types.listOf (types.coercedTo
-        types.str
-        (path: { inherit path; })
-        (types.submodule { options = mkPersistentOption "directory"; })
-      );
+      type = types.listOf (types.coercedTo types.str (path: { inherit path; })
+        (types.submodule { options = mkPersistentOption "directory"; }));
       default = [ ];
       example = [
         "/etc/machine-id"
-        { path = "/etc/ssh/ssh_host_ed25519_key"; user = "root"; }
+        {
+          path = "/etc/ssh/ssh_host_ed25519_key";
+          user = "root";
+        }
       ];
       description = "List of files to bind mount.";
     };
