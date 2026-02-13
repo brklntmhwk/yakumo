@@ -1,23 +1,16 @@
 * Yakumo 卍 八雲
 :PROPERTIES:
-:TOC:      :include descendants :depth 3
+:TOC:      :include descendants :depth 2
 :END:
 #+begin_quote
 Yakumo is the sanctuary - Rooted in the ancient song of building a dwelling for one's beloved, it stands as the home I weave from dotfiles, a shelter for my digital life.
 #+end_quote
 
-Table of Contents (auto-generated using [[https://github.com/alphapapa/org-make-toc][org-make-toc]]):
+Table of Contents:
 :CONTENTS:
 - [[#overview][Overview]]
   - [[#principles][Principles]]
   - [[#hosts][Hosts]]
-    - [[#tsutsuyami-卍-惣闇][tsutsuyami 卍 惣闇]]
-    - [[#momokagari-卍-百篝][momokagari 卍 百篝]]
-    - [[#utsusemi-卍-空蝉][utsusemi 卍 空蝉]]
-    - [[#shinonome-卍-東雲][shinonome 卍 東雲]]
-    - [[#niwatazumi-卍-潦][niwatazumi 卍 潦]]
-    - [[#sazanami-卍-漣][sazanami 卍 漣]]
-    - [[#tamazusa-卍-玉梓][tamazusa 卍 玉梓]]
   - [[#tools][Tools]]
 - [[#crossing-the-threshold][Crossing the Threshold]]
 - [[#acknowledgments][Acknowledgments]]
