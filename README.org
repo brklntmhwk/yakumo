@@ -42,10 +42,11 @@ Welcome to Yakumo! It's our home in the digital world weaved from dotfiles.
 A lightweight, in-house implementation of [[https://github.com/nix-community/impermanence][Impermanence]]. Embracing the "[[https://grahamc.com/blog/erase-your-darlings/][Erase Your Darlings]]" ethos, Yosuga provides the essential "clue" (縁) to persist only what truly matters across the void of every reboot.
 
 **** Beyond Home Manager - The "Wrapper Frontier" Challenge
-An attempt to minimize reliance on external abstraction layers. By pushing the limits of native NixOS module wrapping with ~pkgs.symlinkJoin~ and its fellows, Yakumo maintains a high-fidelity relationship with the core system.
+An attempt to minimize reliance on external abstraction layers. By pushing the limits of native NixOS module wrapping with ~pkgs.symlinkJoin~ and its fellows, Yakumo maintains a high-fidelity relationship with the core system. Successfully ran away from "Home" - mission accomplished!
 
 **** Multi-User Architecture
-A rare implementation for multi-user environments.
+Within my filter bubble, very few precedents implement this for their dotfiles.
+
 *** Hosts
 :PROPERTIES:
 :CUSTOM_ID: hosts
