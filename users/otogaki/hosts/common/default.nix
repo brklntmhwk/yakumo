@@ -13,7 +13,7 @@ in {
   yakumo.user = {
     name = "otogaki";
     description = "Ohma Togaki";
-    hashedPasswordFile = config.sops.secrets.login_password_otogaki.path;
+    # hashedPasswordFile = config.sops.secrets.login_password_otogaki.path;
     # The value of 'config.users.defaultUserShell' will be set here for normal users.
     # For the detailed implementation, see:
     # https://github.com/NixOS/nixpkgs/commit/a323d146b7be3bc066b4ec74db72888ea32792fb
@@ -37,29 +37,29 @@ in {
         "SHARE_HISTORY"
       ];
       shellAliases = { ".." = "cd .."; };
-      abbreviations = {
-        bctl = "bluetoothctl";
-        jctl = "journalctl";
-        nctl = "networkctl";
-        snctl = "sudo networkctl";
-        sctl = "systemctl";
-        usctl = "systemctl --user";
-        usctlr = "systemctl --user restart";
-        usctls = "systemctl --user status";
-        ssctl = "sudo systemctl";
-        ssctlr = "sudo systemctl restart";
-        ssctls = "sudo systemctl status";
-        ga = "git add";
-        gc = "git commit";
-        gco = "git checkout";
-        gl = "git log";
-        gp = "git push";
-        ls = "eza";
-        lsl = "eza -al --accessed --binary --group --header --modified";
-        lsla = "lsl --sort=accessed";
-        lslm = "lsl --sort=modified";
-        mkdir = "mkdir -pv";
-      };
+      #      abbreviations = {
+      #        bctl = "bluetoothctl";
+      #        jctl = "journalctl";
+      #        nctl = "networkctl";
+      #        snctl = "sudo networkctl";
+      #        sctl = "systemctl";
+      #        usctl = "systemctl --user";
+      #        usctlr = "systemctl --user restart";
+      #        usctls = "systemctl --user status";
+      #        ssctl = "sudo systemctl";
+      #        ssctlr = "sudo systemctl restart";
+      #        ssctls = "sudo systemctl status";
+      #        ga = "git add";
+      #        gc = "git commit";
+      #        gco = "git checkout";
+      #        gl = "git log";
+      #        gp = "git push";
+      #        ls = "eza";
+      #        lsl = "eza -al --accessed --binary --group --header --modified";
+      #        lsla = "lsl --sort=accessed";
+      #        lslm = "lsl --sort=modified";
+      #        mkdir = "mkdir -pv";
+      #      };
       syntaxHighlighting = {
         highlighters = [ ];
         styles = { };

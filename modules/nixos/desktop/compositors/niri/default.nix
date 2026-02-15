@@ -53,7 +53,7 @@ in {
             Name of the theme to use for regreet.
           '';
         };
-        preferDark = { type = mkEnableOption "GTK dark theme"; };
+        preferDark = mkEnableOption "GTK dark theme";
         package = mkPackageOption pkgs "gnome-themes-extra" { } // {
           description = ''
             The package that provides the theme given in the name option.

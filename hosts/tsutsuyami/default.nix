@@ -56,51 +56,51 @@ in {
     allowDiscards = true;
   };
 
-  fileSystems."/" =
-    { device = "/dev/disk/by-label/TSU_ROOT";
-      fsType = "btrfs";
-      options = [ "subvol=root" "compress=zstd" "noatime" ];
-    };
+  fileSystems."/" = {
+    device = "/dev/disk/by-label/TSU_ROOT";
+    fsType = "btrfs";
+    options = [ "subvol=root" "compress=zstd" "noatime" ];
+  };
 
-  fileSystems."/nix" =
-    { device = "/dev/disk/by-label/TSU_ROOT";
-      fsType = "btrfs";
-      options = [ "subvol=nix" "compress=zstd" "noatime" ];
-    };
+  fileSystems."/nix" = {
+    device = "/dev/disk/by-label/TSU_ROOT";
+    fsType = "btrfs";
+    options = [ "subvol=nix" "compress=zstd" "noatime" ];
+  };
 
-  fileSystems."/home" =
-    { device = "/dev/disk/by-label/TSU_ROOT";
-      fsType = "btrfs";
-      options = [ "subvol=home" "compress=zstd" "noatime" ];
-    };
+  fileSystems."/home" = {
+    device = "/dev/disk/by-label/TSU_ROOT";
+    fsType = "btrfs";
+    options = [ "subvol=home" "compress=zstd" "noatime" ];
+  };
 
-  fileSystems."/yosuga" =
-    { device = "/dev/disk/by-label/TSU_ROOT";
-      fsType = "btrfs";
-      options = [ "subvol=yosuga" "compress=zstd" "noatime" ];
-      neededForBoot = true;
-    };
+  fileSystems."/yosuga" = {
+    device = "/dev/disk/by-label/TSU_ROOT";
+    fsType = "btrfs";
+    options = [ "subvol=yosuga" "compress=zstd" "noatime" ];
+    neededForBoot = true;
+  };
 
-  fileSystems."/var/log" =
-    { device = "/dev/disk/by-label/TSU_ROOT";
-      fsType = "btrfs";
-      options = [ "subvol=log" "compress=zstd" "noatime" ];
-      neededForBoot = true;
-    };
+  fileSystems."/var/log" = {
+    device = "/dev/disk/by-label/TSU_ROOT";
+    fsType = "btrfs";
+    options = [ "subvol=log" "compress=zstd" "noatime" ];
+    neededForBoot = true;
+  };
 
-  fileSystems."/swap" =
-    { device = "/dev/disk/by-label/TSU_ROOT";
-      fsType = "btrfs";
-      options = [ "subvol=swap" "noatime" ];
-    };
+  fileSystems."/swap" = {
+    device = "/dev/disk/by-label/TSU_ROOT";
+    fsType = "btrfs";
+    options = [ "subvol=swap" "noatime" ];
+  };
 
-  fileSystems."/boot" =
-    { device = "/dev/disk/by-label/TSU_BOOT";
-      fsType = "vfat";
-      options = [ "fmask=0022" "dmask=0022" ];
-    };
+  fileSystems."/boot" = {
+    device = "/dev/disk/by-label/TSU_BOOT";
+    fsType = "vfat";
+    options = [ "fmask=0022" "dmask=0022" ];
+  };
 
-  swapDevices = [ { device = "/swap/swapfile"; } ];
+  swapDevices = [{ device = "/swap/swapfile"; }];
 
   i18n = {
     defaultLocale = "en_US.UTF-8";

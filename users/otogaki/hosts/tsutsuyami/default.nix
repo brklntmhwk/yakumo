@@ -30,9 +30,11 @@ in {
         xwayland.enable = true;
         settings = import ../../configs/niri { inherit theme; };
         regreet = {
+          background = { path = theme.wallpaper; };
           theme = {
             name = loginThemes.adwaita.name;
             package = loginThemes.adwaita.package;
+            preferDark = true;
           };
           cursorTheme = {
             name = cursorThemes.adwaita.name;

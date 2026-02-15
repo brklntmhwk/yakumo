@@ -8,8 +8,20 @@ in {
 
     };
     touchpad = {
+      accel-speed = { _args = [ 0.2 ]; };
+      accel-profile = {
+        _args = [
+          "adaptive" # Enables pointer acceleration. Or "flat".
+        ];
+      };
+      click-method = {
+        _args = [
+          "left-right-middle" # Corresponds to one, two, and three finger, respectively.
+        ];
+      };
       tap = { };
       natural-scroll = { };
+      scroll-factor = { _args = [ 1.0 ]; };
       scroll-method = { _args = [ "two-finger" ]; };
     };
     mouse.scroll-method = { _args = [ "no-scroll" ]; };
@@ -197,14 +209,6 @@ in {
       default-column-width.proportion = { _args = [ 0.5 ]; };
     }
     {
-      match = [
-        { _props = { at-startup = true; }; }
-        { _props = { app-id = "^org\\.wezfurlong\\.wezterm$"; }; }
-      ];
-      open-on-workspace = { _args = [ "home" ]; };
-      default-column-width = { }; # Empty for workaround
-    }
-    {
       match = {
         _props = {
           app-id = "firefox$";
@@ -218,21 +222,21 @@ in {
   # Key Bindings
   binds = {
     "Mod+Shift+Slash" = {
-      repeat = false;
+      _props.repeat = false;
       show-hotkey-overlay = { };
     };
     "Mod+T" = {
-      repeat = false;
+      _props.repeat = false;
       _props.hotkey-overlay-title = "Open Wezterm";
       spawn = { _args = [ "wezterm" ]; };
     };
     "Mod+D" = {
-      repeat = false;
+      _props.repeat = false;
       _props.hotkey-overlay-title = "Open Wofi App Launcher";
       spawn = { _args = [ "sh" "-c" "wofi --show drun" ]; };
     };
     "Mod+Y" = {
-      repeat = false;
+      _props.repeat = false;
       _props.hotkey-overlay-title = "Open Cliphist List via Wofi";
       spawn-sh = {
         _args = [ "cliphist list | wofi -S dmenu | cliphist decode | wl-copy" ];
@@ -241,22 +245,22 @@ in {
 
     # System Control
     "Super+Ctrl+Alt+L" = {
-      repeat = false;
+      _props.repeat = false;
       _props.hotkey-overlay-title = "Lock the Screen";
       spawn = { _args = [ "hyprlock" ]; };
     };
     "Super+Ctrl+Alt+Comma" = {
-      repeat = false;
+      _props.repeat = false;
       _props.hotkey-overlay-title = "Put the System to Sleep";
       spawn = { _args = [ "systemctl suspend" ]; };
     };
     "Super+Ctrl+Alt+Shift+Comma" = {
-      repeat = false;
+      _props.repeat = false;
       _props.hotkey-overlay-title = "Put the System to Hibernation";
       spawn = { _args = [ "systemctl hibernate" ]; };
     };
     "Super+Ctrl+Alt+Period" = {
-      repeat = false;
+      _props.repeat = false;
       _props.hotkey-overlay-title = "Shutdown the System";
       spawn = { _args = [ "systemctl poweroff" ]; };
     };
@@ -309,11 +313,11 @@ in {
 
     # Window/Column Management
     "Mod+O" = {
-      repeat = false;
+      _props.repeat = false;
       toggle-overview = { };
     };
     "Mod+Q" = {
-      repeat = false;
+      _props.repeat = false;
       close-window = { };
     };
 
