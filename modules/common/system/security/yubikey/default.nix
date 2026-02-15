@@ -1,8 +1,9 @@
-{ pkgs, lib, ... }:
+{ config, pkgs, lib, ... }:
 
 let
   inherit (builtins) attrValues;
   inherit (lib) elem mkEnableOption mkIf mkMerge mkOption types;
+  cfg = config.yakumo.system.security.yubikey;
   supportedProtocols = [
     "fido-u2f" # FIDO-U2F
     "piv" # Peasonal Identity Verification

@@ -51,19 +51,56 @@ in {
   # Run `ip link show` or `ip a` to check your interface name(s).
   networking.interfaces.wlp111s0.useDHCP = mkDefault true;
 
-  fileSystems."/" = {
-    device = "/dev/disk/by-uuid/d3bc9213-ebee-4ae4-befa-0340c1b07555";
-    fsType = "ext4";
+  boot.initrd.luks.devices."crypted" = {
+    device = "/dev/disk/by-label/TSU_CRYPT";
+    allowDiscards = true;
   };
 
-  fileSystems."/boot" = {
-    device = "/dev/disk/by-uuid/8018-1454";
-    fsType = "vfat";
-    options = [ "fmask=0022" "dmask=0022" ];
-  };
+  fileSystems."/" =
+    { device = "/dev/disk/by-label/TSU_ROOT";
+      fsType = "btrfs";
+      options = [ "subvol=root" "compress=zstd" "noatime" ];
+    };
 
-  swapDevices =
-    [{ device = "/dev/disk/by-uuid/c668f084-2996-4f68-bbd2-97a639656feb"; }];
+  fileSystems."/nix" =
+    { device = "/dev/disk/by-label/TSU_ROOT";
+      fsType = "btrfs";
+      options = [ "subvol=nix" "compress=zstd" "noatime" ];
+    };
+
+  fileSystems."/home" =
+    { device = "/dev/disk/by-label/TSU_ROOT";
+      fsType = "btrfs";
+      options = [ "subvol=home" "compress=zstd" "noatime" ];
+    };
+
+  fileSystems."/yosuga" =
+    { device = "/dev/disk/by-label/TSU_ROOT";
+      fsType = "btrfs";
+      options = [ "subvol=yosuga" "compress=zstd" "noatime" ];
+      neededForBoot = true;
+    };
+
+  fileSystems."/var/log" =
+    { device = "/dev/disk/by-label/TSU_ROOT";
+      fsType = "btrfs";
+      options = [ "subvol=log" "compress=zstd" "noatime" ];
+      neededForBoot = true;
+    };
+
+  fileSystems."/swap" =
+    { device = "/dev/disk/by-label/TSU_ROOT";
+      fsType = "btrfs";
+      options = [ "subvol=swap" "noatime" ];
+    };
+
+  fileSystems."/boot" =
+    { device = "/dev/disk/by-label/TSU_BOOT";
+      fsType = "vfat";
+      options = [ "fmask=0022" "dmask=0022" ];
+    };
+
+  swapDevices = [ { device = "/swap/swapfile"; } ];
 
   i18n = {
     defaultLocale = "en_US.UTF-8";
@@ -79,5 +116,5 @@ in {
   };
 
   # Don't modify this unless you're sure about the effects.
-  system.stateVersion = "24.11";
+  system.stateVersion = "25.11";
 }
