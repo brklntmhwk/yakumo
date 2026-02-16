@@ -31,7 +31,7 @@ in {
     emacsCfg = config.yakumo.editors.emacs;
     mozcPkg = if emacsCfg.enable then
       pkgs.fcitx5-mozc.overrideAttrs (old: {
-        buildTargets = old.buildTargets
+        bazelTargets = old.bazelTargets
           ++ [ "unix/emacs:mozc_emacs_helper" ];
         postInstall = (old.postInstall or "") + ''
           install -Dm555 bazel-bin/unix/emacs/mozc_emacs_helper $out/bin/mozc_emacs_helper
