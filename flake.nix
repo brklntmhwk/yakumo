@@ -17,7 +17,7 @@
   inputs = {
     # --- Nixpkgs ---
     nixpkgs.url =
-      "git+https://github.com/nixos/nixpkgs?shallow=1&ref=nixos-25.05";
+      "git+https://github.com/nixos/nixpkgs?shallow=1&ref=nixos-25.11";
     nixpkgs-unstable.url =
       "git+https://github.com/nixos/nixpkgs?shallow=1&ref=nixos-unstable-small";
 
