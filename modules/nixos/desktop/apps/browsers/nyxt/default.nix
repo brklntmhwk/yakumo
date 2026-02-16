@@ -58,8 +58,9 @@ in {
   };
 
   config = mkIf cfg.enable {
-    yakumo.user.maid = {
-      file = {
+    yakumo.user = {
+      packages = [ cfg.package ];
+      maid.file = {
         # https://github.com/nix-community/home-manager/commit/2835e8ba0ad99ba86d4a5e497a962ec9fa35e48f
         xdg_config = mkIf (cfg.config != "") {
           # https://nyxt.atlas.engineer/documentation#configuration

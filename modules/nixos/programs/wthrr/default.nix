@@ -56,8 +56,9 @@ in {
             v;
       in mapAttrs convert settings;
   in {
-    yakumo.user.maid = {
-      file = {
+    yakumo.user = {
+      packages = [ cfg.package ];
+      maid.file = {
         xdg_config = mkIf (cfg.settings != { }) {
           # https://github.com/ttytm/wthrr-the-weathercrab?tab=readme-ov-file#config
           "weathercrab/wthrr.ron".text =
