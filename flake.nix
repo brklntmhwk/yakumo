@@ -103,6 +103,8 @@
     {
       overlays.default = import ./overlays { inherit (nixpkgs) lib; };
 
+      packages = forAllSystems (system: import ./pkgs { pkgs = nixpkgs.legacyPackages.${system}; });
+
       checks = forAllSystems (
         system:
         let
