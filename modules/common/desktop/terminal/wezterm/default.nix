@@ -1,11 +1,24 @@
-{ config, lib, pkgs, murakumo, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  murakumo,
+  ...
+}:
 
 let
-  inherit (lib) mkEnableOption mkIf mkOption mkPackageOption types;
+  inherit (lib)
+    mkEnableOption
+    mkIf
+    mkOption
+    mkPackageOption
+    types
+    ;
   cfg = config.yakumo.desktop.terminal.wezterm;
   luaFormat = pkgs.formats.lua { };
   # tomlFormat = pkgs.formats.toml { };
-in {
+in
+{
   options.yakumo.desktop.terminal.wezterm = {
     enable = mkEnableOption "wezterm";
     settings = mkOption {
@@ -33,23 +46,29 @@ in {
     };
   };
 
-  config = mkIf cfg.enable (let
-    inherit (lib) generators getName;
-    inherit (pkgs) writeText;
-    inherit (murakumo.wrappers) mkAppWrapper;
+  config = mkIf cfg.enable (
+    let
+      inherit (lib) generators getName;
+      inherit (pkgs) writeText;
+      inherit (murakumo.wrappers) mkAppWrapper;
 
-    configAsLua = generators.toLua { } cfg.settings;
-    weztermLua = writeText "wezterm.lua" ''
-      local wezterm = require "wezterm"
-      return ${configAsLua}
-    '';
-    weztermWrapped = mkAppWrapper {
-      pkg = cfg.package;
-      name = "${getName cfg.package}-${config.yakumo.user.name}";
-      flags = [ "--config-file" weztermLua ];
-    };
-  in {
-    yakumo.desktop.terminal.wezterm.packageWrapped = weztermWrapped;
-    yakumo.user.packages = [ weztermWrapped ];
-  });
+      configAsLua = generators.toLua { } cfg.settings;
+      weztermLua = writeText "wezterm.lua" ''
+        local wezterm = require "wezterm"
+        return ${configAsLua}
+      '';
+      weztermWrapped = mkAppWrapper {
+        pkg = cfg.package;
+        name = "${getName cfg.package}-${config.yakumo.user.name}";
+        flags = [
+          "--config-file"
+          weztermLua
+        ];
+      };
+    in
+    {
+      yakumo.desktop.terminal.wezterm.packageWrapped = weztermWrapped;
+      yakumo.user.packages = [ weztermWrapped ];
+    }
+  );
 }

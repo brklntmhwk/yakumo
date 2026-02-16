@@ -5,7 +5,11 @@
   "spacing" = 3;
   "reload_style_on_change" = true;
 
-  "modules-left" = [ "custom/launcher" "hyprland/workspaces" "wlr/taskbar" ];
+  "modules-left" = [
+    "custom/launcher"
+    "hyprland/workspaces"
+    "wlr/taskbar"
+  ];
 
   "modules-center" = [ ];
 
@@ -91,13 +95,29 @@
 
   "backlight" = {
     "format" = "{percent}% {icon}";
-    "format-icons" = [ "" "" "" "" "" "" "" "" "" ];
+    "format-icons" = [
+      ""
+      ""
+      ""
+      ""
+      ""
+      ""
+      ""
+      ""
+      ""
+    ];
   };
 
   "battery" = {
     "format" = "{icon} {capacity}%";
     "format-charging" = " {capacity}%";
-    "format-icons" = [ "" "" "" "" "" ];
+    "format-icons" = [
+      ""
+      ""
+      ""
+      ""
+      ""
+    ];
     "states" = {
       "warning" = 30;
       "critical" = 15;
@@ -108,7 +128,13 @@
     "format-wifi" = "{icon}";
     "format-ethernet" = "";
     "format-disconnected" = "󰌙";
-    "format-icons" = [ "󰤯" "󰤟" "󰤢" "󰤢" "󰤨" ];
+    "format-icons" = [
+      "󰤯"
+      "󰤟"
+      "󰤢"
+      "󰤢"
+      "󰤨"
+    ];
     "tooltip-format" = "{ifname} {essid} ({signalStrength}%)";
   };
 
@@ -122,7 +148,11 @@
     "format" = "{icon} {volume}%";
     "format-muted" = "󰝟 {volume}%";
     "format-icons" = {
-      "default" = [ "󰕿" "󰖀" "󰕾" ];
+      "default" = [
+        "󰕿"
+        "󰖀"
+        "󰕾"
+      ];
       "headphone" = "󰋋";
       "headset" = "󰋋";
     };

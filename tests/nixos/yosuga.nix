@@ -1,40 +1,55 @@
-{ pkgs, lib, self, ... }:
+{
+  pkgs,
+  lib,
+  self,
+  ...
+}:
 
-let inherit (lib) mkForce;
-in pkgs.testers.runNixOSTest {
+let
+  inherit (lib) mkForce;
+in
+pkgs.testers.runNixOSTest {
   name = "yosuga-test";
-  nodes.machine = { config, pkgs, ... }: {
-    imports = [ ../../modules/nixos/system/persistence/yosuga ];
+  nodes.machine =
+    { config, pkgs, ... }:
+    {
+      imports = [ ../../modules/nixos/system/persistence/yosuga ];
 
-    # VM Storage Layout (Tmpfs as root).
-    virtualisation.fileSystems = {
-      "/" = {
-        device = mkForce "none";
-        fsType = mkForce "tmpfs";
-        options = [ "defaults" "size=50%" "mode=755" ];
+      # VM Storage Layout (Tmpfs as root).
+      virtualisation.fileSystems = {
+        "/" = {
+          device = mkForce "none";
+          fsType = mkForce "tmpfs";
+          options = [
+            "defaults"
+            "size=50%"
+            "mode=755"
+          ];
+        };
+        "/yosuga" = {
+          device = "/dev/vdb"; # The test runner attaches a 2nd disk here.
+          fsType = "ext4";
+          # Ensure the physical disk is ready before Yosuga tries to bind from it.
+          neededForBoot = true;
+        };
       };
-      "/yosuga" = {
-        device = "/dev/vdb"; # The test runner attaches a 2nd disk here.
-        fsType = "ext4";
-        # Ensure the physical disk is ready before Yosuga tries to bind from it.
-        neededForBoot = true;
+
+      yakumo.system.persistence.yosuga = {
+        enable = true;
+        persistentStoragePath = "/yosuga";
+        directories = [
+          {
+            name = "/var/lib/precious_data";
+            mode = "0700";
+          }
+        ];
+        files = [ { name = "/etc/precious_file"; } ];
       };
-    };
 
-    yakumo.system.persistence.yosuga = {
-      enable = true;
-      persistentStoragePath = "/yosuga";
-      directories = [{
-        name = "/var/lib/precious_data";
-        mode = "0700";
-      }];
-      files = [{ name = "/etc/precious_file"; }];
+      # Disable stuff that slows down tests.
+      documentation.enable = false;
+      networking.useDHCP = false;
     };
-
-    # Disable stuff that slows down tests.
-    documentation.enable = false;
-    networking.useDHCP = false;
-  };
 
   testScript = ''
     # --- PHASE 1: FIRST BOOT ---

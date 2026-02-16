@@ -1,13 +1,31 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
-  inherit (lib) mkEnableOption mkIf mkMerge mkOption mkPackageOption types;
+  inherit (lib)
+    mkEnableOption
+    mkIf
+    mkMerge
+    mkOption
+    mkPackageOption
+    types
+    ;
   cfg = config.yakumo.services.vaultwarden;
-in {
+in
+{
   options.yakumo.services.vaultwarden = {
     enable = mkEnableOption "vaultwarden";
   };
 
-  config =
-    mkIf cfg.enable (mkMerge [{ services.vaultwarden = { enable = true; }; }]);
+  config = mkIf cfg.enable (mkMerge [
+    {
+      services.vaultwarden = {
+        enable = true;
+      };
+    }
+  ]);
 }

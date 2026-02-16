@@ -1,10 +1,23 @@
-{ config, lib, pkgs, murakumo, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  murakumo,
+  ...
+}:
 
 let
-  inherit (lib) mkEnableOption mkIf mkOption mkPackageOption types;
+  inherit (lib)
+    mkEnableOption
+    mkIf
+    mkOption
+    mkPackageOption
+    types
+    ;
   cfg = config.yakumo.programs.ncspot;
   tomlFormat = pkgs.formats.toml { };
-in {
+in
+{
   options.yakumo.programs.ncspot = {
     enable = mkEnableOption "ncspot";
     # https://github.com/nix-community/home-manager/commit/2f857761d0506d3c4c51455aafb1df5180ad7e34
@@ -34,18 +47,24 @@ in {
     };
   };
 
-  config = mkIf cfg.enable (let
-    inherit (lib) getName;
-    inherit (murakumo.wrappers) mkAppWrapper;
+  config = mkIf cfg.enable (
+    let
+      inherit (lib) getName;
+      inherit (murakumo.wrappers) mkAppWrapper;
 
-    configToml = tomlFormat.generate "config.toml" cfg.settings;
-    ncspotWrapped = mkAppWrapper {
-      pkg = cfg.package;
-      name = "${getName cfg.package}-${config.yakumo.user.name}";
-      flags = [ "--config" configToml ];
-    };
-  in {
-    yakumo.programs.ncspot.packageWrapped = ncspotWrapped;
-    yakumo.user.packages = [ ncspotWrapped ];
-  });
+      configToml = tomlFormat.generate "config.toml" cfg.settings;
+      ncspotWrapped = mkAppWrapper {
+        pkg = cfg.package;
+        name = "${getName cfg.package}-${config.yakumo.user.name}";
+        flags = [
+          "--config"
+          configToml
+        ];
+      };
+    in
+    {
+      yakumo.programs.ncspot.packageWrapped = ncspotWrapped;
+      yakumo.user.packages = [ ncspotWrapped ];
+    }
+  );
 }

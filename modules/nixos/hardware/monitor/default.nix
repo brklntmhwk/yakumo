@@ -1,16 +1,27 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
-  inherit (lib) any hasPrefix mkIf mkMerge;
+  inherit (lib)
+    any
+    hasPrefix
+    mkIf
+    mkMerge
+    ;
   hardwareMods = config.yakumo.hardware.modules;
   isX86 = pkgs.stdenv.hostPlatform.isx86_64;
-in {
+in
+{
   config = mkIf (any (mod: hasPrefix "monitor" mod) hardwareMods) (mkMerge [
     {
       yakumo.user.packages = builtins.attrValues {
         inherit (pkgs)
           brightnessctl # CLI tool to read and control device brightness.
-        ;
+          ;
       };
     }
     (mkIf isX86 {

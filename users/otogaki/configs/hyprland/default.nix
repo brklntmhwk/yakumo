@@ -1,7 +1,9 @@
 { theme }:
 
-let inherit (theme) colors fonts;
-in {
+let
+  inherit (theme) colors fonts;
+in
+{
   # ---------------------------------------------------------
   # Variables
   # ---------------------------------------------------------
@@ -71,7 +73,9 @@ in {
   };
 
   # https://wiki.hyprland.org/Configuring/Variables/#input
-  input = { follow_mouse = 2; };
+  input = {
+    follow_mouse = 2;
+  };
 
   # https://wiki.hyprland.org/Configuring/Animations/
   animations = {
@@ -171,8 +175,10 @@ in {
   ];
 
   # -- Mouse Bindings --
-  bindm =
-    [ "$superMod, mouse:272, movewindow" "$superMod, mouse:273, resizewindow" ];
+  bindm = [
+    "$superMod, mouse:272, movewindow"
+    "$superMod, mouse:273, resizewindow"
+  ];
 
   # ---------------------------------------------------------
   # Workspace & Window Rules

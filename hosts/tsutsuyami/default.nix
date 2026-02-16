@@ -1,7 +1,14 @@
-{ inputs, config, lib, ... }:
+{
+  inputs,
+  config,
+  lib,
+  ...
+}:
 
-let inherit (lib) mkDefault;
-in {
+let
+  inherit (lib) mkDefault;
+in
+{
   imports = [
     ../common
 
@@ -11,7 +18,9 @@ in {
 
   yakumo.system = {
     role = "workstation";
-    nix = { enableFlake = true; };
+    nix = {
+      enableFlake = true;
+    };
     networking = {
       manager = "networkmanager";
       wifi.enable = true;
@@ -59,48 +68,74 @@ in {
   fileSystems."/" = {
     device = "/dev/disk/by-label/TSU_ROOT";
     fsType = "btrfs";
-    options = [ "subvol=root" "compress=zstd" "noatime" ];
+    options = [
+      "subvol=root"
+      "compress=zstd"
+      "noatime"
+    ];
   };
 
   fileSystems."/nix" = {
     device = "/dev/disk/by-label/TSU_ROOT";
     fsType = "btrfs";
-    options = [ "subvol=nix" "compress=zstd" "noatime" ];
+    options = [
+      "subvol=nix"
+      "compress=zstd"
+      "noatime"
+    ];
   };
 
   fileSystems."/home" = {
     device = "/dev/disk/by-label/TSU_ROOT";
     fsType = "btrfs";
-    options = [ "subvol=home" "compress=zstd" "noatime" ];
+    options = [
+      "subvol=home"
+      "compress=zstd"
+      "noatime"
+    ];
   };
 
   fileSystems."/yosuga" = {
     device = "/dev/disk/by-label/TSU_ROOT";
     fsType = "btrfs";
-    options = [ "subvol=yosuga" "compress=zstd" "noatime" ];
+    options = [
+      "subvol=yosuga"
+      "compress=zstd"
+      "noatime"
+    ];
     neededForBoot = true;
   };
 
   fileSystems."/var/log" = {
     device = "/dev/disk/by-label/TSU_ROOT";
     fsType = "btrfs";
-    options = [ "subvol=log" "compress=zstd" "noatime" ];
+    options = [
+      "subvol=log"
+      "compress=zstd"
+      "noatime"
+    ];
     neededForBoot = true;
   };
 
   fileSystems."/swap" = {
     device = "/dev/disk/by-label/TSU_ROOT";
     fsType = "btrfs";
-    options = [ "subvol=swap" "noatime" ];
+    options = [
+      "subvol=swap"
+      "noatime"
+    ];
   };
 
   fileSystems."/boot" = {
     device = "/dev/disk/by-label/TSU_BOOT";
     fsType = "vfat";
-    options = [ "fmask=0022" "dmask=0022" ];
+    options = [
+      "fmask=0022"
+      "dmask=0022"
+    ];
   };
 
-  swapDevices = [{ device = "/swap/swapfile"; }];
+  swapDevices = [ { device = "/swap/swapfile"; } ];
 
   i18n = {
     defaultLocale = "en_US.UTF-8";

@@ -1,11 +1,29 @@
 # Based on:
 # https://github.com/nix-community/impermanence/blob/7b1d382faf603b6d264f58627330f9faa5cba149/nixos.nix
-{ config, lib, pkgs, utils, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  utils,
+  ...
+}:
 
 let
   inherit (lib)
-    any catAttrs concatMapStringsSep concatStringsSep length listToAttrs
-    mkEnableOption mkIf mkOption optional optionalString types unique;
+    any
+    catAttrs
+    concatMapStringsSep
+    concatStringsSep
+    length
+    listToAttrs
+    mkEnableOption
+    mkIf
+    mkOption
+    optional
+    optionalString
+    types
+    unique
+    ;
   inherit (utils) escapeSystemdPath;
   cfg = config.yakumo.system.persistence.yosuga;
 
@@ -13,8 +31,7 @@ let
   mkPersistentOption = type: {
     path = mkOption {
       type = types.str;
-      example =
-        if type == "directory" then "/var/lib/nixos" else "/etc/machine-id";
+      example = if type == "directory" then "/var/lib/nixos" else "/etc/machine-id";
       description = "The absolute path to the ${type} to persist.";
     };
     user = mkOption {
@@ -39,11 +56,11 @@ let
       type = types.bool;
       default = false;
       example = true;
-      description =
-        "Whether this ${type} is needed for boot (i.e., Mounts in initrd/early boot).";
+      description = "Whether this ${type} is needed for boot (i.e., Mounts in initrd/early boot).";
     };
   };
-in {
+in
+{
   options.yakumo.system.persistence.yosuga = {
     enable = mkEnableOption ''
       yosuga (the "Erase Your Darlings" philosophy)
@@ -55,8 +72,11 @@ in {
       description = "The path where persistent data are stored.";
     };
     directories = mkOption {
-      type = types.listOf (types.coercedTo types.str (path: { inherit path; })
-        (types.submodule { options = mkPersistentOption "file"; }));
+      type = types.listOf (
+        types.coercedTo types.str (path: { inherit path; }) (
+          types.submodule { options = mkPersistentOption "file"; }
+        )
+      );
       default = [ ];
       example = [
         "/var/log"
@@ -68,8 +88,11 @@ in {
       description = "List of directories to bind mount.";
     };
     files = mkOption {
-      type = types.listOf (types.coercedTo types.str (path: { inherit path; })
-        (types.submodule { options = mkPersistentOption "directory"; }));
+      type = types.listOf (
+        types.coercedTo types.str (path: { inherit path; }) (
+          types.submodule { options = mkPersistentOption "directory"; }
+        )
+      );
       default = [ ];
       example = [
         "/etc/machine-id"
@@ -92,57 +115,70 @@ in {
   };
 
   config = mkIf cfg.enable {
-    assertions = let
-      duplicationMsg = target:
-        "Duplicate ${target} found in persistence configuration";
-      hasUniquePaths = list:
-        let paths = catAttrs "path" list;
-        in length (unique paths) == length paths;
-    in [
-      {
-        assertion = cfg.persistentStoragePath != "/";
-        message = "The persistent storage path cannot be root";
-      }
-      {
-        assertion = hasUniquePaths cfg.directories;
-        message = duplicationMsg "directories";
-      }
-      {
-        assertion = hasUniquePaths cfg.files;
-        message = duplicationMsg "files";
-      }
-    ];
+    assertions =
+      let
+        duplicationMsg = target: "Duplicate ${target} found in persistence configuration";
+        hasUniquePaths =
+          list:
+          let
+            paths = catAttrs "path" list;
+          in
+          length (unique paths) == length paths;
+      in
+      [
+        {
+          assertion = cfg.persistentStoragePath != "/";
+          message = "The persistent storage path cannot be root";
+        }
+        {
+          assertion = hasUniquePaths cfg.directories;
+          message = duplicationMsg "directories";
+        }
+        {
+          assertion = hasUniquePaths cfg.files;
+          message = duplicationMsg "files";
+        }
+      ];
 
     # https://github.com/nix-community/impermanence/commit/1b02741e3d154a4bc59af55989ea66528e84b371
-    boot.initrd.systemd.suppressedUnits =
-      mkIf (any (f: f.path == "/etc/machine-id") cfg.files)
-      [ "systemd-machine-id-commit.service" ];
-    systemd.services.systemd-machine-id-commit.unitConfig.ConditionFirstBoot =
-      mkIf (any (f: f.path == "/etc/machine-id") cfg.files) true;
+    boot.initrd.systemd.suppressedUnits = mkIf (any (f: f.path == "/etc/machine-id") cfg.files) [
+      "systemd-machine-id-commit.service"
+    ];
+    systemd.services.systemd-machine-id-commit.unitConfig.ConditionFirstBoot = mkIf (any (
+      f: f.path == "/etc/machine-id"
+    ) cfg.files) true;
 
-    fileSystems = listToAttrs (map (dir: {
-      name = dir.path;
-      value = {
-        device = "${cfg.persistentStoragePath}${dir.path}";
-        fsType = "none";
-        options = [
-          "bind"
-          "noatime" # No Access Time. Disable atime updates.
-          "X-mount.mkdir" # Allow to execute mkdir if the target does not exist yet.
-          "X-fstrim.notrim" # Disable trimming.
-          "x-gvfs-hide" # Hide bind mounts from file managers.
-        ] ++ (optional cfg.allowTrash "x-gvfs-trash");
-        neededForBoot = dir.neededForBoot;
-        noCheck = true; # Skip fsck on this.
-      };
-    }) cfg.directories);
+    fileSystems = listToAttrs (
+      map (dir: {
+        name = dir.path;
+        value = {
+          device = "${cfg.persistentStoragePath}${dir.path}";
+          fsType = "none";
+          options = [
+            "bind"
+            "noatime" # No Access Time. Disable atime updates.
+            "X-mount.mkdir" # Allow to execute mkdir if the target does not exist yet.
+            "X-fstrim.notrim" # Disable trimming.
+            "x-gvfs-hide" # Hide bind mounts from file managers.
+          ]
+          ++ (optional cfg.allowTrash "x-gvfs-trash");
+          neededForBoot = dir.neededForBoot;
+          noCheck = true; # Skip fsck on this.
+        };
+      }) cfg.directories
+    );
 
-    systemd.mounts = map (file:
+    systemd.mounts = map (
+      file:
       let
         safePath = escapeSystemdPath file.path;
-        mountOptions = [ "bind" "x-gvfs-hide" ]
-          ++ (optional cfg.allowTrash "x-gvfs-trash");
-      in {
+        mountOptions = [
+          "bind"
+          "x-gvfs-hide"
+        ]
+        ++ (optional cfg.allowTrash "x-gvfs-trash");
+      in
+      {
         type = "none";
         description = "Bind mount for persistent file ${file.path}";
         before = [ "local-fs.target" ];
@@ -176,36 +212,42 @@ in {
             fi
           '';
         };
-      }) cfg.files;
+      }
+    ) cfg.files;
 
     system.activationScripts.persistent-storage = {
-      text = let
-        mkScript = type: item: ''
-          # Create source paths.
-          targetPath="${cfg.persistentStoragePath}${item.path}"
-          dirPath=$(dirname "$targetPath")
+      text =
+        let
+          mkScript = type: item: ''
+            # Create source paths.
+            targetPath="${cfg.persistentStoragePath}${item.path}"
+            dirPath=$(dirname "$targetPath")
 
-          # Ensure directories and files exist.
-          mkdir -p "$dirPath"
-          ${optionalString (type == "directory") ''mkdir -p "$targetPath"''}
-          ${optionalString (type == "file") ''
-            if [ ! -e "$targetPath" ]; then
-              touch "$targetPath"
+            # Ensure directories and files exist.
+            mkdir -p "$dirPath"
+            ${optionalString (type == "directory") ''mkdir -p "$targetPath"''}
+            ${optionalString (type == "file") ''
+              if [ ! -e "$targetPath" ]; then
+                touch "$targetPath"
+              fi
+            ''}
+
+            # Apply declared permissions.
+            if [ -e "$targetPath" ]; then
+              chown ${item.user}:${item.group} "$targetPath"
+              chmod ${item.mode} "$targetPath"
             fi
-          ''}
-
-          # Apply declared permissions.
-          if [ -e "$targetPath" ]; then
-            chown ${item.user}:${item.group} "$targetPath"
-            chmod ${item.mode} "$targetPath"
-          fi
+          '';
+        in
+        ''
+          echo "Setting up persistent storage permissions..."
+          ${concatMapStringsSep "\n" (mkScript "directory") cfg.directories}
+          ${concatMapStringsSep "\n" (mkScript "file") cfg.files}
         '';
-      in ''
-        echo "Setting up persistent storage permissions..."
-        ${concatMapStringsSep "\n" (mkScript "directory") cfg.directories}
-        ${concatMapStringsSep "\n" (mkScript "file") cfg.files}
-      '';
-      deps = [ "users" "groups" ];
+      deps = [
+        "users"
+        "groups"
+      ];
     };
   };
 }

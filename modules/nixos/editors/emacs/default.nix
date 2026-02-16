@@ -1,9 +1,22 @@
-{ inputs, config, lib, pkgs, ... }:
+{
+  inputs,
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
-  inherit (lib) mkEnableOption mkIf mkMerge mkOption types;
+  inherit (lib)
+    mkEnableOption
+    mkIf
+    mkMerge
+    mkOption
+    types
+    ;
   cfg = config.yakumo.editors.emacs;
-in {
+in
+{
   imports = [
     inputs.nix-maid.nixosModules.default
     inputs.ametsuchi.maidModules.ametsuchi
@@ -11,7 +24,9 @@ in {
 
   options.yakumo.editors.emacs = {
     enable = mkEnableOption "emacs";
-    ametsuchi = { enable = mkEnableOption "Ametsuchi"; };
+    ametsuchi = {
+      enable = mkEnableOption "Ametsuchi";
+    };
   };
 
   config = mkIf cfg.enable (mkMerge [

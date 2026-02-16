@@ -1,9 +1,21 @@
-{ inputs, config, lib, pkgs, ... }:
+{
+  inputs,
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
-  inherit (lib) mkEnableOption mkIf mkOption types;
+  inherit (lib)
+    mkEnableOption
+    mkIf
+    mkOption
+    types
+    ;
   cfg = config.yakumo.ai.mcp.filesystem;
-in {
+in
+{
   options.yakumo.ai.mcp.filesystem = {
     enable = mkEnableOption "Filesystem MCP Server";
     paths = mkOption {
@@ -13,18 +25,21 @@ in {
     };
   };
 
-  config = mkIf cfg.enable (let
-    inherit (inputs) mcp-servers;
-    inherit (lib) optionals;
-    userCfg = config.yakumo.user;
-    xdgCfg = config.yakumo.xdg;
-  in {
-    yakumo.ai.mcp.servers = (mcp-servers.lib.evalModule pkgs {
-      programs.filesystem = {
-        enable = true;
-        args = cfg.paths
-          ++ optionals xdgCfg.enable [ "${userCfg.home}/Documents" ];
-      };
-    }).config.settings.servers;
-  });
+  config = mkIf cfg.enable (
+    let
+      inherit (inputs) mcp-servers;
+      inherit (lib) optionals;
+      userCfg = config.yakumo.user;
+      xdgCfg = config.yakumo.xdg;
+    in
+    {
+      yakumo.ai.mcp.servers =
+        (mcp-servers.lib.evalModule pkgs {
+          programs.filesystem = {
+            enable = true;
+            args = cfg.paths ++ optionals xdgCfg.enable [ "${userCfg.home}/Documents" ];
+          };
+        }).config.settings.servers;
+    }
+  );
 }

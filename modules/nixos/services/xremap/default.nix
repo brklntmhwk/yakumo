@@ -1,10 +1,16 @@
-{ inputs, config, lib, ... }:
+{
+  inputs,
+  config,
+  lib,
+  ...
+}:
 
 let
   inherit (lib) mkIf mkMerge;
   cfg = config.services.xremap;
   compositorsCfg = config.yakumo.desktop.compositors;
-in {
+in
+{
   imports = [ inputs.xremap.nixosModules.default ];
 
   config = mkIf cfg.enable {

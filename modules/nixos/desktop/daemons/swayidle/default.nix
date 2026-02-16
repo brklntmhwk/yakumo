@@ -1,7 +1,19 @@
-{ config, lib, pkgs, murakumo, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  murakumo,
+  ...
+}:
 
 let
-  inherit (lib) mkEnableOption mkIf mkOption mkPackageOption types;
+  inherit (lib)
+    mkEnableOption
+    mkIf
+    mkOption
+    mkPackageOption
+    types
+    ;
   cfg = config.yakumo.desktop.daemons.swayidle;
 
   # https://github.com/nix-community/home-manager/commit/65e5b835a94b3bca9a1e219e5c43c1bc5fc04598
@@ -26,7 +38,12 @@ let
   eventSubmodule = types.submodule {
     options = {
       event = mkOption {
-        type = types.enum [ "after-resume" "before-sleep" "lock" "unlock" ];
+        type = types.enum [
+          "after-resume"
+          "before-sleep"
+          "lock"
+          "unlock"
+        ];
         description = "Valid event name.";
       };
       command = mkOption {
@@ -35,7 +52,8 @@ let
       };
     };
   };
-in {
+in
+{
   options.yakumo.desktop.daemons.swayidle = {
     enable = mkEnableOption "swayidle";
     settings = mkOption {
@@ -71,41 +89,45 @@ in {
     };
   };
 
-  config = mkIf cfg.enable (let
-    inherit (lib) getExe getName;
-    inherit (pkgs) writeText;
-    inherit (murakumo.wrappers) mkAppWrapper;
-    inherit (murakumo.generators) toSwayidleConf;
+  config = mkIf cfg.enable (
+    let
+      inherit (lib) getExe getName;
+      inherit (pkgs) writeText;
+      inherit (murakumo.wrappers) mkAppWrapper;
+      inherit (murakumo.generators) toSwayidleConf;
 
-    swayidleConf =
-      writeText "config" (toSwayidleConf { attrs = cfg.settings; });
-    swayidleWrapped = mkAppWrapper {
-      pkg = cfg.package;
-      name = "${getName cfg.package}-${config.yakumo.user.name}";
-      flags = [
-        "-w" # Wait for command to finish executing before continuing
-        "-C"
-        swayidleConf
-      ];
-    };
-  in {
-    yakumo.desktop.daemons.swayidle.packageWrapped = swayidleWrapped;
-    yakumo.user.packages = [ swayidleWrapped ];
+      swayidleConf = writeText "config" (toSwayidleConf {
+        attrs = cfg.settings;
+      });
+      swayidleWrapped = mkAppWrapper {
+        pkg = cfg.package;
+        name = "${getName cfg.package}-${config.yakumo.user.name}";
+        flags = [
+          "-w" # Wait for command to finish executing before continuing
+          "-C"
+          swayidleConf
+        ];
+      };
+    in
+    {
+      yakumo.desktop.daemons.swayidle.packageWrapped = swayidleWrapped;
+      yakumo.user.packages = [ swayidleWrapped ];
 
-    systemd.user.services.swayidle = {
-      unitConfig = {
-        After = [ "graphical-session.target" ];
-        ConditionEnvironment = "WAYLAND_DISPLAY";
-        Description = "Swayidle: Idle daemon for Wayland desktop";
-        Documentation = "man:swayidle(1)";
-        PartOf = [ "graphical-session.target" ];
+      systemd.user.services.swayidle = {
+        unitConfig = {
+          After = [ "graphical-session.target" ];
+          ConditionEnvironment = "WAYLAND_DISPLAY";
+          Description = "Swayidle: Idle daemon for Wayland desktop";
+          Documentation = "man:swayidle(1)";
+          PartOf = [ "graphical-session.target" ];
+        };
+        serviceConfig = {
+          ExecStart = "${getExe swayidleWrapped}";
+          Restart = "on-failure";
+          RestartSec = 1;
+        };
+        wantedBy = [ "graphical-session.target" ];
       };
-      serviceConfig = {
-        ExecStart = "${getExe swayidleWrapped}";
-        Restart = "on-failure";
-        RestartSec = 1;
-      };
-      wantedBy = [ "graphical-session.target" ];
-    };
-  });
+    }
+  );
 }

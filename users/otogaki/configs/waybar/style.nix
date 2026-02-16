@@ -1,7 +1,9 @@
 { theme }:
 
-let inherit (theme) colors fonts;
-in ''
+let
+  inherit (theme) colors fonts;
+in
+''
   /* Note that only a limited subset of CSS works properly in Waybar. */
   /* For more details, see: https://github.com/Alexays/Waybar/wiki/Styling#interactive-styling */
   /* You can consult this doc for supported CSS props: https://docs.gtk.org/gtk3/css-properties.html */

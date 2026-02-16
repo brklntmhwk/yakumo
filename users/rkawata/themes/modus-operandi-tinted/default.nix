@@ -5,7 +5,8 @@ let
   wallpaperPath = "stone-stacking.jpg";
   avatorPath = "avators/rkawata.png";
   yaegaki = (pkgs.callPackage ./_sources/generated.nix { }).yaegaki;
-in {
+in
+{
   wallpaper = "${yaegaki.src}/${wallpaperPath}";
 
   avator = "${yaegaki.src}/${avatorPath}";

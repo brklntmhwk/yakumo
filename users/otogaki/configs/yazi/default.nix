@@ -1,11 +1,17 @@
 { theme }:
 
-let inherit (theme) colors fonts;
-in {
+let
+  inherit (theme) colors fonts;
+in
+{
   yazi = {
     # Manager
     mgr = {
-      ratio = [ 2 3 3 ];
+      ratio = [
+        2
+        3
+        3
+      ];
       sort_by = "natural";
       sort_sensitive = true;
       sort_reverse = false;
@@ -15,7 +21,10 @@ in {
       show_hidden = true;
       show_symlink = true;
       scrolloff = 5;
-      mouse_event = [ "click" "scroll" ];
+      mouse_event = [
+        "click"
+        "scroll"
+      ];
       title_format = "Yazi: {cwd}";
     };
     preview = {
@@ -29,7 +38,12 @@ in {
       image_quality = 75;
       sixel_fraction = 15;
       ueberzug_scale = 1;
-      ueberzug_offset = [ 0 0 0 0 ];
+      ueberzug_offset = [
+        0
+        0
+        0
+        0
+      ];
     };
   };
   keymap = {

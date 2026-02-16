@@ -1,17 +1,29 @@
-{ config, lib, pkgs, murakumo, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  murakumo,
+  ...
+}:
 
 let
-  inherit (lib) mkEnableOption mkIf mkOption mkPackageOption types;
+  inherit (lib)
+    mkEnableOption
+    mkIf
+    mkOption
+    mkPackageOption
+    types
+    ;
   cfg = config.yakumo.ai.agents.gemini-cli;
   jsonFormat = pkgs.formats.json { };
-in {
+in
+{
   options.yakumo.ai.agents.gemini-cli = {
     enable = mkEnableOption "Gemini CLI";
     settings = mkOption {
       inherit (jsonFormat) type;
       default = { };
-      description =
-        "Gemini CLI's settings.json in Nix-representable JSON format.";
+      description = "Gemini CLI's settings.json in Nix-representable JSON format.";
     };
     package = mkPackageOption pkgs "gemini-cli" { };
     packageWrapped = mkOption {
@@ -24,24 +36,28 @@ in {
     };
   };
 
-  config = mkIf cfg.enable (let
-    inherit (lib) getName;
-    inherit (murakumo.wrappers) mkAppWrapper;
+  config = mkIf cfg.enable (
+    let
+      inherit (lib) getName;
+      inherit (murakumo.wrappers) mkAppWrapper;
 
-    mcpCfg = config.yakumo.ai.mcp;
-    mcpServersAttr = { mcpServers = mcpCfg.servers; };
-    settingsJson =
-      jsonFormat.generate "settings.json" (cfg.settings // mcpServersAttr);
-    geminiCliWrapped = mkAppWrapper {
-      pkg = cfg.package;
-      name = "${getName pkgs.gemini-cli}-${config.yakumo.user.name}";
-      env = {
-        # https://geminicli.com/docs/cli/configuration/#settings-files
-        GEMINI_CLI_SYSTEM_SETTINGS_PATH = settingsJson;
+      mcpCfg = config.yakumo.ai.mcp;
+      mcpServersAttr = {
+        mcpServers = mcpCfg.servers;
       };
-    };
-  in {
-    yakumo.ai.agents.gemini-cli.packageWrapped = geminiCliWrapped;
-    yakumo.user.packages = [ geminiCliWrapped ];
-  });
+      settingsJson = jsonFormat.generate "settings.json" (cfg.settings // mcpServersAttr);
+      geminiCliWrapped = mkAppWrapper {
+        pkg = cfg.package;
+        name = "${getName pkgs.gemini-cli}-${config.yakumo.user.name}";
+        env = {
+          # https://geminicli.com/docs/cli/configuration/#settings-files
+          GEMINI_CLI_SYSTEM_SETTINGS_PATH = settingsJson;
+        };
+      };
+    in
+    {
+      yakumo.ai.agents.gemini-cli.packageWrapped = geminiCliWrapped;
+      yakumo.user.packages = [ geminiCliWrapped ];
+    }
+  );
 }

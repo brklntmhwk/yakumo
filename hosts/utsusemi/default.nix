@@ -1,4 +1,9 @@
-{ inputs, config, lib, ... }:
+{
+  inputs,
+  config,
+  lib,
+  ...
+}:
 
 {
   imports = [ ../common ];
@@ -11,7 +16,9 @@
 
   yakumo.system = {
     role = "workstation";
-    nix = { enableFlake = true; };
+    nix = {
+      enableFlake = true;
+    };
     # persistence.yosuga = {
     #   enable = true;
     #   directories = [

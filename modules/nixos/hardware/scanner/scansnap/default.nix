@@ -1,10 +1,18 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
   inherit (lib) elem mkIf;
   hardwareMods = config.yakumo.hardware.modules;
-in {
+in
+{
   config = mkIf (elem "scanner/scansnap" hardwareMods) {
-    hardware.sane.drivers.scanSnap = { enable = true; };
+    hardware.sane.drivers.scanSnap = {
+      enable = true;
+    };
   };
 }

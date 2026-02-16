@@ -4,7 +4,8 @@ let
   inherit (builtins) genList toString;
   inherit (lib) generators;
   inherit (theme) colors cursorThemes fonts;
-in {
+in
+{
   # Set these explicitly to prevent the 'Cursor not found' error on WSL
   # from proliferating.
   # https://wezterm.org/faq.html?h=xcursor_theme#i-use-x11-or-wayland-and-my-mouse-cursor-theme-doesnt-seem-to-work
@@ -28,12 +29,24 @@ in {
     compose_cursor = colors.red-warmer;
 
     # Colors for copy_mode and quick_select
-    copy_mode_active_highlight_bg = { Color = colors.bg-hl-line; };
-    copy_mode_active_highlight_fg = { Color = colors.fg-main; };
-    copy_mode_inactive_highlight_bg = { Color = colors.bg-dim; };
-    copy_mode_inactive_highlight_fg = { Color = colors.fg-dim; };
-    quick_select_label_bg = { Color = colors.bg-hl-line; };
-    quick_select_label_fg = { Color = colors.fg-main; };
+    copy_mode_active_highlight_bg = {
+      Color = colors.bg-hl-line;
+    };
+    copy_mode_active_highlight_fg = {
+      Color = colors.fg-main;
+    };
+    copy_mode_inactive_highlight_bg = {
+      Color = colors.bg-dim;
+    };
+    copy_mode_inactive_highlight_fg = {
+      Color = colors.fg-dim;
+    };
+    quick_select_label_bg = {
+      Color = colors.bg-hl-line;
+    };
+    quick_select_label_fg = {
+      Color = colors.fg-main;
+    };
   };
   font_size = 16.0;
   default_cursor_style = "SteadyBar";
@@ -68,14 +81,12 @@ in {
     {
       key = "|";
       mods = "LEADER";
-      action = generators.mkLuaInline
-        "wezterm.action.SplitVertical({ domain = 'CurrentPaneDomain' })";
+      action = generators.mkLuaInline "wezterm.action.SplitVertical({ domain = 'CurrentPaneDomain' })";
     }
     {
       key = "-";
       mods = "LEADER";
-      action = generators.mkLuaInline
-        "wezterm.action.SplitHorizontal({ domain = 'CurrentPaneDomain' })";
+      action = generators.mkLuaInline "wezterm.action.SplitHorizontal({ domain = 'CurrentPaneDomain' })";
     }
     {
       key = "Tab";
@@ -90,37 +101,32 @@ in {
     {
       key = "b";
       mods = "LEADER";
-      action =
-        generators.mkLuaInline "wezterm.action.AdjustPaneSize({ 'Left', 5 })";
+      action = generators.mkLuaInline "wezterm.action.AdjustPaneSize({ 'Left', 5 })";
     }
     {
       key = "f";
       mods = "LEADER";
-      action =
-        generators.mkLuaInline "wezterm.action.AdjustPaneSize({ 'Right', 5 })";
+      action = generators.mkLuaInline "wezterm.action.AdjustPaneSize({ 'Right', 5 })";
     }
     {
       key = "n";
       mods = "LEADER";
-      action =
-        generators.mkLuaInline "wezterm.action.AdjustPaneSize({ 'Down', 5 })";
+      action = generators.mkLuaInline "wezterm.action.AdjustPaneSize({ 'Down', 5 })";
     }
     {
       key = "p";
       mods = "LEADER";
-      action =
-        generators.mkLuaInline "wezterm.action.AdjustPaneSize({ 'Up', 5 })";
+      action = generators.mkLuaInline "wezterm.action.AdjustPaneSize({ 'Up', 5 })";
     }
   ]
   # You cannot use a Lua 'for' loop in a static table.
   # Instead, generate the list elements using Nix.
-    ++ (genList (i: {
-      key = toString (i + 1);
-      mods = "LEADER";
-      # Lua index in user config was (i - 1), so 0-based index for ActivateTab
-      action =
-        generators.mkLuaInline "wezterm.action.ActivateTab(${toString i})";
-    }) 8);
+  ++ (genList (i: {
+    key = toString (i + 1);
+    mods = "LEADER";
+    # Lua index in user config was (i - 1), so 0-based index for ActivateTab
+    action = generators.mkLuaInline "wezterm.action.ActivateTab(${toString i})";
+  }) 8);
 
   # WARNING: You cannot easily replicate `wezterm.gui.default_key_tables()` here
   # because Nix runs at build time and cannot query WezTerm's runtime defaults.

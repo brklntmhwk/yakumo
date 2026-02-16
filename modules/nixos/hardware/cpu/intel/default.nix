@@ -1,12 +1,17 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
   inherit (lib) elem mkDefault mkIf;
   hardwareMods = config.yakumo.hardware.modules;
-in {
+in
+{
   config = mkIf (elem "cpu/intel" hardwareMods) {
-    hardware.cpu.intel.updateMicrocode =
-      lib.mkDefault config.hardware.enableRedistributableFirmware;
+    hardware.cpu.intel.updateMicrocode = lib.mkDefault config.hardware.enableRedistributableFirmware;
     boot.kernelModules = [ "kvm-intel" ];
   };
 }

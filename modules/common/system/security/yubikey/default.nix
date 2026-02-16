@@ -1,14 +1,27 @@
-{ config, pkgs, lib, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 
 let
   inherit (builtins) attrValues;
-  inherit (lib) elem mkEnableOption mkIf mkMerge mkOption types;
+  inherit (lib)
+    elem
+    mkEnableOption
+    mkIf
+    mkMerge
+    mkOption
+    types
+    ;
   cfg = config.yakumo.system.security.yubikey;
   supportedProtocols = [
     "fido-u2f" # FIDO-U2F
     "piv" # Peasonal Identity Verification
   ];
-in {
+in
+{
   options.yakumo.system.security.yubikey = {
     enable = mkEnableOption "Yubikey integrations";
     protocols = mkOption {
@@ -25,12 +38,11 @@ in {
           yubikey-manager # The modern CLI tool (ykman)
           yubikey-personalization # The legacy tools
           yubikey-touch-detector # Lets you know when Yubikey's waiting for skinship.
-        ;
+          ;
       };
     }
     (mkIf pkgs.stdenv.isLinux {
-      services.udev.packages =
-        attrValues { inherit (pkgs) yubikey-personalization; };
+      services.udev.packages = attrValues { inherit (pkgs) yubikey-personalization; };
 
       # Enable PCSC-Lite daemon for accessing smart cards.
       services.pcscd.enable = mkIf (elem "piv" cfg.protocols) true;

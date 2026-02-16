@@ -1,11 +1,27 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
-  inherit (lib) mkDefault mkIf mkMerge mkOption types;
+  inherit (lib)
+    mkDefault
+    mkIf
+    mkMerge
+    mkOption
+    types
+    ;
   systemRole = config.yakumo.system.role;
   cfg = config.yakumo.system.networking;
-  managers = [ "networkmanager" "networkd" "none" ];
-in {
+  managers = [
+    "networkmanager"
+    "networkd"
+    "none"
+  ];
+in
+{
   options.yakumo.system.networking = {
     manager = mkOption {
       type = types.enum managers;

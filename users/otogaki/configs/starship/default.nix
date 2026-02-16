@@ -1,7 +1,9 @@
 { theme }:
 
-let inherit (theme) colors;
-in {
+let
+  inherit (theme) colors;
+in
+{
   # https://starship.rs/advanced-config/#style-strings
   add_newline = true;
   character = {

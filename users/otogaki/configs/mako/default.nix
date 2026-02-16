@@ -1,7 +1,9 @@
 { theme }:
 
-let inherit (theme) colors fonts;
-in {
+let
+  inherit (theme) colors fonts;
+in
+{
   actions = true;
   anchor = "bottom-right";
   background-color = colors.bg-dim;

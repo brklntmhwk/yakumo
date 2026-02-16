@@ -1,9 +1,15 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
   inherit (lib) any hasPrefix mkIf;
   hardwareMods = config.yakumo.hardware.modules;
-in {
+in
+{
   config = mkIf (any (mod: hasPrefix "ups" mod) hardwareMods) {
     power.ups = {
       enable = true;
@@ -23,7 +29,10 @@ in {
           # an 'on battery + low battery' situation for the monitoring purposes.
           # - "secondary": follows critical situations to shut down when needed.
           upsmon = "primary";
-          actions = [ "set" "fsd" ];
+          actions = [
+            "set"
+            "fsd"
+          ];
           instcmds = [ "all" ];
           passwordFile = config.sops.secrets.nut_password_admin.path;
         };

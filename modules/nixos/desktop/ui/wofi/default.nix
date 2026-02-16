@@ -1,9 +1,22 @@
-{ config, lib, pkgs, murakumo, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  murakumo,
+  ...
+}:
 
 let
-  inherit (lib) mkEnableOption mkIf mkOption mkPackageOption types;
+  inherit (lib)
+    mkEnableOption
+    mkIf
+    mkOption
+    mkPackageOption
+    types
+    ;
   cfg = config.yakumo.desktop.ui.wofi;
-in {
+in
+{
   options.yakumo.desktop.ui.wofi = {
     enable = mkEnableOption "wofi";
     # https://github.com/nix-community/home-manager/commit/5160039edca28a7e66bad0cfc72a07c91d6768ad
@@ -35,26 +48,38 @@ in {
     };
   };
 
-  config = mkIf cfg.enable (let
-    inherit (builtins) isPath;
-    inherit (lib) filterAttrs getName generators isStorePath;
-    inherit (pkgs) writeText;
-    inherit (murakumo.wrappers) mkAppWrapper;
+  config = mkIf cfg.enable (
+    let
+      inherit (builtins) isPath;
+      inherit (lib)
+        filterAttrs
+        getName
+        generators
+        isStorePath
+        ;
+      inherit (pkgs) writeText;
+      inherit (murakumo.wrappers) mkAppWrapper;
 
-    # https://github.com/nix-community/home-manager/commit/5160039edca28a7e66bad0cfc72a07c91d6768ad
-    wofiConf = writeText "config" (generators.toKeyValue { }
-      (filterAttrs (name: value: value != null) cfg.settings));
-    wofiStyle = if isPath cfg.style || isStorePath cfg.style then
-      cfg.style
-    else
-      writeText "style.css" cfg.style;
-    wofiWrapped = mkAppWrapper {
-      pkg = cfg.package;
-      name = "${getName cfg.package}-${config.yakumo.user.name}";
-      flags = [ "--conf" wofiConf "--style" wofiStyle ];
-    };
-  in {
-    yakumo.desktop.ui.wofi.packageWrapped = wofiWrapped;
-    yakumo.user.packages = [ wofiWrapped ];
-  });
+      # https://github.com/nix-community/home-manager/commit/5160039edca28a7e66bad0cfc72a07c91d6768ad
+      wofiConf = writeText "config" (
+        generators.toKeyValue { } (filterAttrs (name: value: value != null) cfg.settings)
+      );
+      wofiStyle =
+        if isPath cfg.style || isStorePath cfg.style then cfg.style else writeText "style.css" cfg.style;
+      wofiWrapped = mkAppWrapper {
+        pkg = cfg.package;
+        name = "${getName cfg.package}-${config.yakumo.user.name}";
+        flags = [
+          "--conf"
+          wofiConf
+          "--style"
+          wofiStyle
+        ];
+      };
+    in
+    {
+      yakumo.desktop.ui.wofi.packageWrapped = wofiWrapped;
+      yakumo.user.packages = [ wofiWrapped ];
+    }
+  );
 }

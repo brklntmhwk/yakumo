@@ -1,11 +1,17 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
   inherit (builtins) attrValues;
   inherit (lib) catAttrs;
   inherit (theme) cursorThemes fonts loginThemes;
   theme = import ../../themes/modus-operandi-tinted pkgs;
-in {
+in
+{
   imports = [
     ../common # Common configs among user's hosts
   ];
@@ -18,6 +24,13 @@ in {
         # settings = import ./configs/wezterm { };
       };
     };
-    apps = { media = { modules = [ "music" "video/davinci-resolve" ]; }; };
+    apps = {
+      media = {
+        modules = [
+          "music"
+          "video/davinci-resolve"
+        ];
+      };
+    };
   };
 }

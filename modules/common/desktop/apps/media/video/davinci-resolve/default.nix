@@ -1,11 +1,16 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
   inherit (lib) elem mkIf;
   mediaMods = config.yakumo.desktop.apps.media.modules;
-in {
+in
+{
   config = mkIf (elem "video/davinci-resolve" mediaMods) {
-    yakumo.user.packages =
-      builtins.attrValues { inherit (pkgs) davinci-resolve; };
+    yakumo.user.packages = builtins.attrValues { inherit (pkgs) davinci-resolve; };
   };
 }

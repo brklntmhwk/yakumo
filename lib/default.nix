@@ -6,7 +6,8 @@ let
   # Murakumo is a collection of library functions whose scope encapsulates
   # themselves and allows for referring to each other.
   # This will later be available inside the NixOS and Darwin module systems.
-  mkMurakumo = pkgs:
+  mkMurakumo =
+    pkgs:
     makeScope pkgs.newScope (final: {
       # Inject 'self' into this scope so the lib modules below can refer to it.
       inherit self;
@@ -22,7 +23,8 @@ let
 
   hosts = import ./hosts.nix { inherit self lib mkMurakumo; };
   modules = import ./modules.nix { inherit lib; };
-in {
+in
+{
   inherit mkMurakumo;
   inherit (hosts) mkNixOsHosts mkDarwinHosts;
   inherit (modules) mapFilterModulesRecursively;

@@ -6,8 +6,10 @@
   '';
 
   nixConfig = {
-    extra-substituters =
-      [ "https://hyprland.cachix.org" "https://brklntmhwk.cachix.org" ];
+    extra-substituters = [
+      "https://hyprland.cachix.org"
+      "https://brklntmhwk.cachix.org"
+    ];
     extra-trusted-public-keys = [
       "hyprland.cachix.org-1:a7pgxzMz7+chwVL3/pzj6jIBMioiJM7ypFP8PwtkuGc="
       "brklntmhwk.cachix.org-1:mGWjznSV6FglvHR7/2sa4MrCtGHMLiAOc9Ru+tEkdyg="
@@ -16,10 +18,8 @@
 
   inputs = {
     # --- Nixpkgs ---
-    nixpkgs.url =
-      "git+https://github.com/nixos/nixpkgs?shallow=1&ref=nixos-25.11";
-    nixpkgs-unstable.url =
-      "git+https://github.com/nixos/nixpkgs?shallow=1&ref=nixos-unstable-small";
+    nixpkgs.url = "git+https://github.com/nixos/nixpkgs?shallow=1&ref=nixos-25.11";
+    nixpkgs-unstable.url = "git+https://github.com/nixos/nixpkgs?shallow=1&ref=nixos-unstable-small";
 
     # --- Apple Silicon support for NixOS ---
     nixos-apple-silicon.url = "github:nix-community/nixos-apple-silicon";
@@ -86,7 +86,8 @@
     twist.url = "github:emacs-twist/twist.nix";
   };
 
-  outputs = inputs@{ self, nixpkgs, ... }:
+  outputs =
+    inputs@{ self, nixpkgs, ... }:
     let
       forAllSystems = nixpkgs.lib.genAttrs [
         "x86_64-linux"
@@ -98,14 +99,20 @@
         inherit self;
         inherit (nixpkgs) lib;
       };
-    in {
+    in
+    {
       overlays.default = import ./overlays { inherit (nixpkgs) lib; };
 
-      checks = forAllSystems (system:
-        let pkgs = nixpkgs.legacyPackages.${system};
-        in import ./tests { inherit pkgs self; });
+      checks = forAllSystems (
+        system:
+        let
+          pkgs = nixpkgs.legacyPackages.${system};
+        in
+        import ./tests { inherit pkgs self; }
+      );
 
-      formatter = forAllSystems (system:
+      formatter = forAllSystems (
+        system:
         let
           pkgs = nixpkgs.legacyPackages.${system};
           treefmtEval = inputs.treefmt-nix.lib.evalModule pkgs {
@@ -117,12 +124,13 @@
               yamlfmt.enable = true;
             };
           };
-        in treefmtEval.config.build.wrapper);
+        in
+        treefmtEval.config.build.wrapper
+      );
 
       # These are not for external use.
       nixosModules.default = {
-        imports =
-          lib'.mapFilterModulesRecursively ./modules import [ "darwin" ];
+        imports = lib'.mapFilterModulesRecursively ./modules import [ "darwin" ];
       };
 
       nixosConfigurations = lib'.mkNixOsHosts {

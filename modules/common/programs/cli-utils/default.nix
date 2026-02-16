@@ -1,9 +1,15 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
   inherit (lib) mkEnableOption mkIf;
   cfg = config.yakumo.programs.cli-utils;
-in {
+in
+{
   options.yakumo.programs.cli-utils = {
     enable = mkEnableOption "CLI utilities";
   };
@@ -31,7 +37,7 @@ in {
         tealdeer # Faster and modern implementation of `tldr` - a community-maintained simpler version of the `man` cheatsheets for commands
         tokei # Code counting & statistics CLI tool
         tre-command # Directory tree viewer in the terminal - an improved 'tree' alternative
-      ;
+        ;
     };
   };
 }

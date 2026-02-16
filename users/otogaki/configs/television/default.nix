@@ -21,7 +21,9 @@
       separator_close = "";
       hidden = false;
     };
-    results_panel = { border_type = "rounded"; };
+    results_panel = {
+      border_type = "rounded";
+    };
     preview_panel = {
       size = 50;
       scrollbar = true;
@@ -101,9 +103,19 @@
   shell_integration = {
     fallback_channel = "files";
     channel_triggers = {
-      alias = [ "alias" "unalias" ];
-      dirs = [ "cd" "ls" "rmdir" ];
-      env = [ "export" "unset" ];
+      alias = [
+        "alias"
+        "unalias"
+      ];
+      dirs = [
+        "cd"
+        "ls"
+        "rmdir"
+      ];
+      env = [
+        "export"
+        "unset"
+      ];
       files = [
         "cat"
         "less"
@@ -125,7 +137,10 @@
         "gunzip"
         "xz"
       ];
-      "git-diff" = [ "git add" "git restore" ];
+      "git-diff" = [
+        "git add"
+        "git restore"
+      ];
       "git-branch" = [
         "git checkout"
         "git branch"
@@ -134,9 +149,16 @@
         "git pull"
         "git push"
       ];
-      "git-log" = [ "git log" "git show" ];
+      "git-log" = [
+        "git log"
+        "git show"
+      ];
       "docker-images" = [ "docker run" ];
-      "git-repos" = [ "code" "hx" "git clone" ];
+      "git-repos" = [
+        "code"
+        "hx"
+        "git clone"
+      ];
     };
     keybindings = {
       smart_autocomplete = "ctrl-t";

@@ -1,7 +1,14 @@
-{ inputs, config, lib, ... }:
+{
+  inputs,
+  config,
+  lib,
+  ...
+}:
 
-let inherit (lib) mkDefault mkForce;
-in {
+let
+  inherit (lib) mkDefault mkForce;
+in
+{
   imports = [
     ../common
 
@@ -11,11 +18,15 @@ in {
 
   # hardware.asahi = { };
 
-  boot = { loader.efi.canTouchEfiVariables = mkForce false; };
+  boot = {
+    loader.efi.canTouchEfiVariables = mkForce false;
+  };
 
   yakumo.system = {
     role = "workstation";
-    nix = { enableFlake = true; };
+    nix = {
+      enableFlake = true;
+    };
     networking = {
       manager = "networkmanager";
       wifi.enable = true;
@@ -38,7 +49,12 @@ in {
   };
 
   yakumo.hardware = {
-    modules = [ "audio" "bluetooth/blueman" "monitor" "ssd" ];
+    modules = [
+      "audio"
+      "bluetooth/blueman"
+      "monitor"
+      "ssd"
+    ];
   };
 
   # Copied from the auto-generated 'hardware-configuration.nix' file.

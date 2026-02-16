@@ -10,9 +10,15 @@
     # Auto-correct typos immediately. (e.g., `git stats` -> `git status`)
     autocorrect = "prompt";
   };
-  init = { defaultBranch = "main"; };
-  gpg = { format = "ssh"; };
-  commit = { gpgSign = false; };
+  init = {
+    defaultBranch = "main";
+  };
+  gpg = {
+    format = "ssh";
+  };
+  commit = {
+    gpgSign = false;
+  };
   push = {
     # Automatically set upstream on push if it doesn't exist. (Git 2.37+)
     autoSetupRemote = true;
@@ -34,7 +40,13 @@
   };
   # URL shorthands. (e.g., `git clone gh:nixos/nixpkgs`)
   url = {
-    "git@github.com:".insteadOf = [ "gh:" "github:" ];
-    "git@gitlab.com:".insteadOf = [ "gl:" "gitlab:" ];
+    "git@github.com:".insteadOf = [
+      "gh:"
+      "github:"
+    ];
+    "git@gitlab.com:".insteadOf = [
+      "gl:"
+      "gitlab:"
+    ];
   };
 }

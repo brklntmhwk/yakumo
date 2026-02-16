@@ -1,9 +1,15 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
   inherit (theme) fonts;
   theme = import ../../themes/modus-vivendi-tinted pkgs;
-in {
+in
+{
   imports = [
     ../common # Common configs among user's hosts.
   ];

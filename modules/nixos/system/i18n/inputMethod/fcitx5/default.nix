@@ -1,11 +1,24 @@
-{ config, lib, pkgs, murakumo, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  murakumo,
+  ...
+}:
 
 let
-  inherit (lib) literalExpression mkEnableOption mkIf mkOption types;
+  inherit (lib)
+    literalExpression
+    mkEnableOption
+    mkIf
+    mkOption
+    types
+    ;
   inherit (murakumo.utils) anyEnabled;
   cfg = config.yakumo.system.i18n.inputMethod.fcitx5;
   compositorsCfg = config.yakumo.desktop.compositors;
-in {
+in
+{
   options.yakumo.system.i18n.inputMethod.fcitx5 = {
     enable = mkEnableOption "fcitx5";
     extraAddons = mkOption {
@@ -27,26 +40,20 @@ in {
     };
   };
 
-  config = mkIf cfg.enable (let
-    emacsCfg = config.yakumo.editors.emacs;
-    mozcPkg = if emacsCfg.enable then
-      pkgs.fcitx5-mozc.overrideAttrs (old: {
-        bazelTargets = old.bazelTargets
-          ++ [ "unix/emacs:mozc_emacs_helper" ];
-        postInstall = (old.postInstall or "") + ''
-          install -Dm555 bazel-bin/unix/emacs/mozc_emacs_helper $out/bin/mozc_emacs_helper
-        '';
-      })
-    else
-      pkgs.fcitx5-mozc;
-  in {
-    i18n.inputMethod = {
-      type = "fcitx5";
-      fcitx5 = {
-        addons = [ mozcPkg ] ++ cfg.extraAddons;
-        quickPhrase = cfg.quickPhrase;
-        waylandFrontend = anyEnabled compositorsCfg;
+  config = mkIf cfg.enable (
+    let
+      emacsCfg = config.yakumo.editors.emacs;
+      mozcPkg = if emacsCfg.enable then pkgs.fcitx5-mozc-with-emacs-helper else pkgs.fcitx5-mozc;
+    in
+    {
+      i18n.inputMethod = {
+        type = "fcitx5";
+        fcitx5 = {
+          addons = [ mozcPkg ] ++ cfg.extraAddons;
+          quickPhrase = cfg.quickPhrase;
+          waylandFrontend = anyEnabled compositorsCfg;
+        };
       };
-    };
-  });
+    }
+  );
 }

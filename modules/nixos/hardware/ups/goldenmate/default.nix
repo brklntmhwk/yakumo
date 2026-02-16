@@ -1,9 +1,15 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
   inherit (lib) elem mkIf;
   hardwareMods = config.yakumo.hardware.modules;
-in {
+in
+{
   config = mkIf (elem "ups/goldenmate" hardwareMods) {
     power.ups = {
       # https://networkupstools.org/stable-hcl.html

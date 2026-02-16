@@ -1,9 +1,15 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
   inherit (lib) mkEnableOption mkIf;
   cfg = config.yakumo.services.printing;
-in {
+in
+{
   options.yakumo.services.printing = {
     enable = mkEnableOption "printing service";
   };

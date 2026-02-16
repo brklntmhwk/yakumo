@@ -1,10 +1,16 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
   inherit (lib) mkIf;
   yosugaCfg = config.yakumo.system.persistence.yosuga;
   isBtrfs = config.fileSystems."/".fsType or "" == "btrfs";
-in {
+in
+{
   config = mkIf yosugaCfg.enable {
     # Based on:
     # https://notashelf.dev/posts/impermanence

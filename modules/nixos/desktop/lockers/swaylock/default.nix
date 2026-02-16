@@ -1,15 +1,35 @@
-{ config, lib, pkgs, murakumo, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  murakumo,
+  ...
+}:
 
 let
-  inherit (lib) mkEnableOption mkIf mkOption mkPackageOption types;
+  inherit (lib)
+    mkEnableOption
+    mkIf
+    mkOption
+    mkPackageOption
+    types
+    ;
   cfg = config.yakumo.desktop.lockers.swaylock;
-in {
+in
+{
   options.yakumo.desktop.lockers.swaylock = {
     enable = mkEnableOption "swaylock";
     # https://github.com/nix-community/home-manager/commit/2df3d5d39c5ef3a4eebe80d478d75c9e20d5c820
     settings = mkOption {
-      type = types.attrsOf
-        (types.oneOf [ types.bool types.float types.int types.path types.str ]);
+      type = types.attrsOf (
+        types.oneOf [
+          types.bool
+          types.float
+          types.int
+          types.path
+          types.str
+        ]
+      );
       default = { };
       description = ''
         Swaylock configuraion in Nix-representable format.
@@ -36,35 +56,50 @@ in {
     };
   };
 
-  config = mkIf cfg.enable (let
-    inherit (builtins) isPath isString toString;
-    inherit (lib) concatStrings getName hasPrefix mapAttrsToList removePrefix;
-    inherit (pkgs) writeText;
-    inherit (murakumo.wrappers) mkAppWrapper;
+  config = mkIf cfg.enable (
+    let
+      inherit (builtins) isPath isString toString;
+      inherit (lib)
+        concatStrings
+        getName
+        hasPrefix
+        mapAttrsToList
+        removePrefix
+        ;
+      inherit (pkgs) writeText;
+      inherit (murakumo.wrappers) mkAppWrapper;
 
-    formatValue = val:
-      if isPath val then
-        "${val}"
-      else if (isString val) && (hasPrefix "#" val) then
-        removePrefix "#" val
-      else
-        toString val;
-    swaylockConf = writeText "config" (concatStrings (mapAttrsToList (name: val:
-      if val == false then
-        ""
-      else
-        (if val == true then name else name + "=" + (formatValue val)) + "\n")
-      cfg.settings));
-    swaylockWrapped = mkAppWrapper {
-      pkg = cfg.package;
-      name = "${getName cfg.package}-${config.yakumo.user.name}";
-      flags = [ "--config" swaylockConf ];
-    };
-  in {
-    yakumo.desktop.lockers.swaylock.packageWrapped = swaylockWrapped;
-    environment.systemPackages = [ swaylockWrapped ];
+      formatValue =
+        val:
+        if isPath val then
+          "${val}"
+        else if (isString val) && (hasPrefix "#" val) then
+          removePrefix "#" val
+        else
+          toString val;
+      swaylockConf = writeText "config" (
+        concatStrings (
+          mapAttrsToList (
+            name: val:
+            if val == false then "" else (if val == true then name else name + "=" + (formatValue val)) + "\n"
+          ) cfg.settings
+        )
+      );
+      swaylockWrapped = mkAppWrapper {
+        pkg = cfg.package;
+        name = "${getName cfg.package}-${config.yakumo.user.name}";
+        flags = [
+          "--config"
+          swaylockConf
+        ];
+      };
+    in
+    {
+      yakumo.desktop.lockers.swaylock.packageWrapped = swaylockWrapped;
+      environment.systemPackages = [ swaylockWrapped ];
 
-    # Enable PAM access for authentication.
-    security.pam.services.swaylock = { };
-  });
+      # Enable PAM access for authentication.
+      security.pam.services.swaylock = { };
+    }
+  );
 }

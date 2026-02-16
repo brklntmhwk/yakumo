@@ -1,9 +1,20 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
-  inherit (lib) any hasPrefix mkIf mkOption;
+  inherit (lib)
+    any
+    hasPrefix
+    mkIf
+    mkOption
+    ;
   hardwareMods = config.yakumo.hardware.modules;
-in {
+in
+{
   config = mkIf (any (mod: hasPrefix "bluetooth" mod) hardwareMods) {
     hardware.bluetooth = {
       enable = true;

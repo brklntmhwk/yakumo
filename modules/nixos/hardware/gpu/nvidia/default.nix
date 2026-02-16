@@ -1,9 +1,15 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
   inherit (lib) elem mkDefault mkIf;
   hardwareMods = config.yakumo.hardware.modules;
-in {
+in
+{
   config = mkIf (elem "gpu/nvidia" hardwareMods) {
     services.xserver.videoDrivers = mkDefault [ "nvidia" ];
     hardware.graphics = {
