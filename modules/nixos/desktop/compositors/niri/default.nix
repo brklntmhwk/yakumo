@@ -162,12 +162,31 @@ in {
       };
     }
     (let
-      inherit (lib) getName optional;
+      inherit (lib) getName optional mapAttrs isAttrs;
       inherit (pkgs) writeText;
       inherit (murakumo.wrappers) mkAppWrapper;
       inherit (murakumo.generators) toKDL;
 
-      configKdl = writeText "config.kdl" (toKDL { } cfg.settings);
+      addBindSemicolons = binds:
+        mapAttrs (key: bindDef:
+          if !isAttrs bindDef then
+            bindDef
+          else
+            mapAttrs (action: def:
+              # Skip metadata props, apply terminator to actual action nodes
+              if elem action [ "_args" "_props" "_children" ] then
+                def
+              else
+                def // { _terminator = ";"; }) bindDef) binds;
+
+      finalSettings = cfg.settings // {
+        binds = if cfg.settings ? binds then
+          addBindSemicolons cfg.settings.binds
+        else
+          { };
+      };
+
+      configKdl = writeText "config.kdl" (toKDL { } finalSettings);
       niriWrapped = mkAppWrapper {
         pkg = cfg.package;
         name = "${getName cfg.package}-${config.yakumo.user.name}";

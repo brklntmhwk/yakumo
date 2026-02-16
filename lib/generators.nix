@@ -127,8 +127,8 @@ in {
             flatten
           ];
           unorderedChildren = pipe attrs [
-            (filterAttrs
-              (name: _: !(elem name [ "_args" "_props" "_children" ])))
+            (filterAttrs (name: _:
+              !(elem name [ "_args" "_props" "_children" "_terminator" ])))
             (mapAttrsToList convertAttributeToKDL)
           ];
           children = orderedChildren ++ unorderedChildren;
@@ -136,8 +136,10 @@ in {
             {
             ${indentStrings children}
             }'';
-        in concatStringsSep " "
-        ([ name ] ++ optArgs ++ optProps ++ optChildren);
+          # Handle terminator suffix (e.g., Semicolons in Niri's `binds` entry).
+          terminator = attrs._terminator or "";
+        in concatStringsSep " " ([ name ] ++ optArgs ++ optProps ++ optChildren)
+        + terminator;
 
       # List Conversion
       # String -> ListOf (OneOf [Int Float String Bool Null])  -> String
@@ -146,10 +148,8 @@ in {
         in "${name} ${concatStringsSep " " flatElements}";
 
       # String -> ListOf Anything -> String
-      convertListOfNonFlatAttrsToKDL = name: list: ''
-        ${name} {
-        ${indentStrings (map (x: convertAttributeToKDL "-" x) list)}
-        }'';
+      convertListOfNonFlatAttrsToKDL = name: list:
+        concatMapStringsSep "\n" (x: convertAttributeToKDL name x) list;
 
       # String -> ListOf Anything  -> String
       convertListToKDL = name: list:
