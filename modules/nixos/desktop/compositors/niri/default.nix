@@ -162,18 +162,19 @@ in {
       };
     }
     (let
-      inherit (lib) getName optional mapAttrs isAttrs;
+      inherit (builtins) isAttrs mapAttrs;
+      inherit (lib) getName optional;
       inherit (pkgs) writeText;
       inherit (murakumo.wrappers) mkAppWrapper;
       inherit (murakumo.generators) toKDL;
 
       addBindSemicolons = binds:
-        mapAttrs (key: bindDef:
+        mapAttrs (_: bindDef:
           if !isAttrs bindDef then
             bindDef
           else
             mapAttrs (action: def:
-              # Skip metadata props, apply terminator to actual action nodes
+              # Skip metadata props, apply terminator to actual action nodes.
               if elem action [ "_args" "_props" "_children" ] then
                 def
               else
