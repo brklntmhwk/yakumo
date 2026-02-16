@@ -163,7 +163,7 @@ in {
     }
     (let
       inherit (builtins) isAttrs mapAttrs;
-      inherit (lib) getName optional;
+      inherit (lib) elem getName optional;
       inherit (pkgs) writeText;
       inherit (murakumo.wrappers) mkAppWrapper;
       inherit (murakumo.generators) toKDL;
