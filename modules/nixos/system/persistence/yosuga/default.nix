@@ -4,8 +4,8 @@
 
 let
   inherit (lib)
-    any concatMapStringsSep concatStringsSep length listToAttrs mkEnableOption
-    mkIf mkOption optional optionalString types unique;
+    any catAttrs concatMapStringsSep concatStringsSep length listToAttrs
+    mkEnableOption mkIf mkOption optional optionalString types unique;
   inherit (utils) escapeSystemdPath;
   cfg = config.yakumo.system.persistence.yosuga;
 
@@ -80,15 +80,6 @@ in {
       ];
       description = "List of files to bind mount.";
     };
-    hideMounts = mkOption {
-      type = types.bool;
-      default = true;
-      example = false;
-      description = ''
-        Whether to hide bind mounts from file managers.
-        Uses x-gvfs-hide internally.
-      '';
-    };
     allowTrash = mkOption {
       type = types.bool;
       default = false;
@@ -104,19 +95,20 @@ in {
     assertions = let
       duplicationMsg = target:
         "Duplicate ${target} found in persistence configuration";
+      hasUniquePaths = list:
+        let paths = catAttrs "path" list;
+        in length (unique paths) == length paths;
     in [
       {
         assertion = cfg.persistentStoragePath != "/";
         message = "The persistent storage path cannot be root";
       }
       {
-        assertion = (length (unique (map (x: x.path) cfg.directories)))
-          == (length cfg.directories);
+        assertion = hasUniquePaths cfg.directories;
         message = duplicationMsg "directories";
       }
       {
-        assertion = (length (unique (map (x: x.path) cfg.files)))
-          == (length cfg.files);
+        assertion = hasUniquePaths cfg.files;
         message = duplicationMsg "files";
       }
     ];
@@ -138,8 +130,8 @@ in {
           "noatime" # No Access Time. Disable atime updates.
           "X-mount.mkdir" # Allow to execute mkdir if the target does not exist yet.
           "X-fstrim.notrim" # Disable trimming.
-        ] ++ (optional cfg.hideMounts "x-gvfs-hide")
-          ++ (optional cfg.allowTrash "x-gvfs-trash");
+          "x-gvfs-hide" # Hide bind mounts from file managers.
+        ] ++ (optional cfg.allowTrash "x-gvfs-trash");
         neededForBoot = dir.neededForBoot;
         noCheck = true; # Skip fsck on this.
       };
@@ -148,7 +140,7 @@ in {
     systemd.mounts = map (file:
       let
         safePath = escapeSystemdPath file.path;
-        mountOptions = [ "bind" ] ++ (optional cfg.hideMounts "x-gvfs-hide")
+        mountOptions = [ "bind" "x-gvfs-hide" ]
           ++ (optional cfg.allowTrash "x-gvfs-trash");
       in {
         type = "none";
