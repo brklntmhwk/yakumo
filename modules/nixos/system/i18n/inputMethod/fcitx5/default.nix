@@ -27,15 +27,26 @@ in {
     };
   };
 
-  config = mkIf cfg.enable {
+  config = mkIf cfg.enable (let
+    emacsCfg = config.yakumo.editors.emacs;
+    mozcPkg = if emacsCfg.enable then
+      pkgs.fcitx5-mozc.overrideAttrs (old: {
+        buildTargets = oldAttrs.buildTargets
+          ++ [ "unix/emacs:mozc_emacs_helper" ];
+        postInstall = (oldAttrs.postInstall or "") + ''
+          install -Dm555 bazel-bin/unix/emacs/mozc_emacs_helper $out/bin/mozc_emacs_helper
+        '';
+      })
+    else
+      pkgs.fcitx5-mozc;
+  in {
     i18n.inputMethod = {
       type = "fcitx5";
       fcitx5 = {
-        addons = builtins.attrValues { inherit (pkgs) fcitx5-mozc; }
-          ++ cfg.extraAddons;
+        addons = [ mozcPkg ] ++ cfg.extraAddons;
         quickPhrase = cfg.quickPhrase;
         waylandFrontend = anyEnabled compositorsCfg;
       };
     };
-  };
+  });
 }
