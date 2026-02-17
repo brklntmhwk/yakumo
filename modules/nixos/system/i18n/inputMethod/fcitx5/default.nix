@@ -42,14 +42,20 @@ in
 
   config = mkIf cfg.enable (
     let
+      inherit (builtins) attrValues;
+      inherit (lib) optional;
       emacsCfg = config.yakumo.editors.emacs;
-      mozcPkg = if emacsCfg.enable then pkgs.fcitx5-mozc-with-emacs-helper else pkgs.fcitx5-mozc;
     in
     {
       i18n.inputMethod = {
         type = "fcitx5";
         fcitx5 = {
-          addons = [ mozcPkg ] ++ cfg.extraAddons;
+          addons =
+            attrValues {
+              inherit (pkgs) fcitx5-mozc;
+            }
+            ++ optional emacsCfg.enable pkgs.mozc
+            ++ cfg.extraAddons;
           quickPhrase = cfg.quickPhrase;
           waylandFrontend = anyEnabled compositorsCfg;
         };

@@ -4,6 +4,6 @@
 let
   inherit (lib) composeManyExtensions;
 
-  overlayPkgs = final: prev: import ../pkgs { pkgs = final; };
+  overlayPkgs = final: prev: import ../pkgs { pkgs = prev; };
 in
 composeManyExtensions [ overlayPkgs ]
