@@ -13,7 +13,7 @@ in
 
   fonts = {
     moralerspaceHw = {
-      name = "Moralerspace Neon HWNF";
+      name = "Moralerspace Neon HW";
       package = pkgs.moralerspace-hw;
     };
     hackgenNf = {
