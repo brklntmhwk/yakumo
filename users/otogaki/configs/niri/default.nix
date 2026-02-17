@@ -18,7 +18,7 @@ in
           "adaptive" # Enables pointer acceleration. Or "flat".
         ];
       };
-      click-method = {
+      tap-button-map = {
         _args = [
           "left-right-middle" # Corresponds to one, two, and three finger, respectively.
         ];
@@ -513,9 +513,6 @@ in
     "Mod+Ctrl+P" = {
       move-window-up = { };
     };
-    "Mod+Ctrl+F" = {
-      move-column-right = { };
-    };
 
     "Mod+Home" = {
       focus-column-first = { };
@@ -541,18 +538,6 @@ in
       focus-monitor-up = { };
     };
     "Mod+Shift+Right" = {
-      focus-monitor-right = { };
-    };
-    "Mod+Shift+B" = {
-      focus-monitor-left = { };
-    };
-    "Mod+Shift+N" = {
-      focus-monitor-down = { };
-    };
-    "Mod+Shift+P" = {
-      focus-monitor-up = { };
-    };
-    "Mod+Shift+F" = {
       focus-monitor-right = { };
     };
 
