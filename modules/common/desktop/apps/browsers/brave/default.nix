@@ -25,7 +25,7 @@ in
         description = "Brave Browser.";
         genericName = "Web Browser";
         icon = "brave";
-        exec = "${brave}/bin/brave --incognito";
+        exec = "${pkgs.brave}/bin/brave --incognito";
         categories = [ "Network" ];
       });
   };
