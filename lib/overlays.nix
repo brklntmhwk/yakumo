@@ -21,10 +21,10 @@ in
           let
             isDirectory = name: type: type == "directory";
             dirs = filterAttrs isDirectory (readDir packagesDir);
-            callPackageByName = name: _: final.callPackage (dir + "/${name}") { };
+            callPackageByName = name: _: final.callPackage (packagesDir + "/${name}") { };
           in
           # Map over the directories to create the package set.
-          mapAttrs callPackageByName packageDirs;
+          mapAttrs callPackageByName dirs;
 
       allOverlays = (optional (overlayAuto != null) overlayAuto) ++ extraOverlays;
     in
