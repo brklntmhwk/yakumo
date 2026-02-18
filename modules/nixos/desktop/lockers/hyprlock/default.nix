@@ -63,7 +63,9 @@ in
       inherit (murakumo.wrappers) mkAppWrapper;
       inherit (murakumo.generators) toHyprconf;
 
-      hyprlockConf = writeText "hyprlock.conf" (toHyprconf { } cfg.settings);
+      hyprlockConf = writeText "hyprlock.conf" (toHyprconf {
+        attrs = cfg.settings;
+      });
       hyprlockWrapped = mkAppWrapper {
         pkg = cfg.package;
         name = "${getName cfg.package}-${config.yakumo.user.name}";
