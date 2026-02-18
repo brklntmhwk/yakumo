@@ -3,14 +3,14 @@
 :TOC:      :include descendants :depth 2
 :END:
 #+begin_quote
-Yakumo is the sanctuary - Rooted in the ancient song of building a dwelling for one's beloved, it stands as the home I weave from dotfiles, a shelter for my digital life.
+Yakumo is the sanctuary — Rooted in the ancient song of building a dwelling for one's beloved, it stands as the home I weave from dotfiles, a shelter for my digital life.
 #+end_quote
 
 Table of Contents:
 :CONTENTS:
 - [[#overview][Overview]]
-  - [[#principles][Principles]]
-  - [[#distinguishing-philosophies][Distinguishing Philosophies]]
+  - [[#philosophies][Philosophies]]
+  - [[#distinguishing-features][Distinguishing Features]]
   - [[#hosts][Hosts]]
   - [[#tools][Tools]]
 - [[#crossing-the-threshold][Crossing the Threshold]]
@@ -25,24 +25,24 @@ Table of Contents:
 
 Welcome to Yakumo! It's our home in the digital world weaved from dotfiles.
 
-*** Principles
+*** Philosophies
 :PROPERTIES:
-:CUSTOM_ID: principles
+:CUSTOM_ID: philosophies
 :END:
 - *Less is more:* Keep dependencies to a minimum and reduce attack surface.
   - Not using such popular tools as Home Manager, Flake Parts, or Stylix.
 - *Low-maintenance:* Easy to maintain. You know where to tweak at a glance. (Maybe...)
   - Sticking to the Dependency Inversion principle as much as possible to make updates a breeze.
 - *Cool:* After all, what drives us to tend our dotfiles is pure self-satisfaction, isn't it?
-*** Distinguishing Philosophies
+*** Distinguishing Features
 :PROPERTIES:
-:CUSTOM_ID: distinguishing-philosophies
+:CUSTOM_ID: distinguishing-features
 :END:
-**** Yosuga - Custom Persistence Layer
+**** Yosuga 卍 縁 — Custom Persistence Layer
 A lightweight, in-house implementation of [[https://github.com/nix-community/impermanence][Impermanence]]. Embracing the "[[https://grahamc.com/blog/erase-your-darlings/][Erase Your Darlings]]" ethos, Yosuga provides the essential "clue" (縁) to persist only what truly matters across the void of every reboot.
 
 **** Beyond Home Manager - The "Wrapper Frontier" Challenge
-An attempt to minimize reliance on external abstraction layers. By pushing the limits of native NixOS module wrapping with ~pkgs.symlinkJoin~ and its fellows, Yakumo maintains a high-fidelity relationship with the core system. Successfully ran away from "Home" - mission accomplished!
+An attempt to minimize reliance on external abstraction layers. By pushing the limits of native NixOS module wrapping with ~pkgs.symlinkJoin~ and its fellows, Yakumo maintains a high-fidelity relationship with the core system. Successfully ran away from "Home"—mission accomplished! (家出)
 
 **** Multi-User Architecture
 Within my filter bubble, very few precedents implement this for their dotfiles.
@@ -164,11 +164,12 @@ Yakumo stands on the shoulders of great pioneers from all walks of life. Heartfe
 
 Especially, these projects brought Yakumo a large portion of inspiration in the following aspects:
 
-- *The module options:* [[https://github.com/nix-community/home-manager][Home Manager]]
-- *The custom modules system:* [[https://github.com/hlissner/dotfiles][Hlissner's Dotfiles]]
-- *The wrapper approach:* [[https://github.com/viperML/dotfiles][ViperML's Dotfiles]]
-- *The theming approach and the fewer with keywords as possible policy:* [[https://github.com/sioodmy/dotfiles][Sioodmy's Dotfiles]]
-- *The overall service management:* [[https://github.com/oddlama/nix-config][Oddlama's Nix-config]]
+- *Module options:* [[https://github.com/nix-community/home-manager][Home Manager]]
+- *Custom modules system:* [[https://github.com/hlissner/dotfiles][Hlissner's Dotfiles]]
+- *Wrapper approach:* [[https://github.com/viperML/dotfiles][ViperML's Dotfiles]]
+- *Per-user theming approach and some philosopies:* [[https://github.com/sioodmy/dotfiles][Sioodmy's Dotfiles]]
+- *Overall service management:* [[https://github.com/oddlama/nix-config][Oddlama's Nix-Config]]
+- *Impermanence:* [[https://github.com/nix-community/impermanence][Impermanence]], [[https://notashelf.dev/posts/impermanence][Blog Article by NotAShelf]]
 ** License
 :PROPERTIES:
 :CUSTOM_ID: license
