@@ -11,6 +11,7 @@ let
   compositorsCfg = config.yakumo.desktop.compositors;
 in
 {
+  # TODO: migrate to custom xremap package and refactor this module.
   imports = [ inputs.xremap.nixosModules.default ];
 
   config = mkIf cfg.enable {
