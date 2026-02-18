@@ -6,9 +6,7 @@ in
 {
   # https://yalter.github.io/niri/Configuration:-Input
   input = {
-    keyboard.xkb = {
-
-    };
+    # keyboard.xkb = { };
     touchpad = {
       accel-speed = {
         _args = [ 0.2 ];
@@ -87,7 +85,6 @@ in
     }
   ];
 
-  # Cursor
   cursor = {
     xcursor-theme = cursorThemes.rosePine.name;
     xcursor-size = 24;
@@ -113,7 +110,6 @@ in
         _args = [ 0.5 ];
       };
     };
-    prefer-no-csd = { };
     focus-ring = {
       width = {
         _args = [ 4 ];
@@ -160,7 +156,7 @@ in
     struts = { };
   };
 
-  # Startup Applications
+  # Start up apps.
   spawn-sh-at-startup = [
     { _args = [ "fcitx5 -d -r" ]; }
     { _args = [ "wl-paste --type text --watch cliphist store" ]; }
@@ -174,12 +170,14 @@ in
     { _args = [ "wezterm" ]; }
   ];
 
-  # Hotkey Overlay
   hotkey-overlay = {
-    # skip-at-startup = {}; # Uncomment to disable popup
+    # Skip the hotkey cheetsheet displayed at startup.
+    skip-at-startup = { };
   };
 
-  # Screenshots
+  # Prefer no client-side decorations.
+  prefer-no-csd = { };
+
   screenshot-path = {
     _args = [ "~/Pictures/Screenshots/%Y%m%d%H%M%S.png" ];
   };
@@ -479,6 +477,7 @@ in
     "Mod+Right" = {
       focus-column-right = { };
     };
+    # Add these Emacs style keybindings.
     "Mod+B" = {
       focus-column-left = { };
     };
@@ -504,6 +503,7 @@ in
     "Mod+Ctrl+Right" = {
       move-column-right = { };
     };
+    # Add these Emacs style keybindings.
     "Mod+Ctrl+B" = {
       move-column-left = { };
     };
@@ -512,6 +512,9 @@ in
     };
     "Mod+Ctrl+P" = {
       move-window-up = { };
+    };
+    "Mod+Ctrl+F" = {
+      move-column-right = { };
     };
 
     "Mod+Home" = {
@@ -540,6 +543,19 @@ in
     "Mod+Shift+Right" = {
       focus-monitor-right = { };
     };
+    # Add these Emacs style keybindings.
+    "Mod+Shift+B" = {
+      focus-monitor-left = { };
+    };
+    "Mod+Shift+N" = {
+      focus-monitor-down = { };
+    };
+    "Mod+Shift+P" = {
+      focus-monitor-up = { };
+    };
+    "Mod+Shift+F" = {
+      focus-monitor-right = { };
+    };
 
     "Mod+Shift+Ctrl+Left" = {
       move-column-to-monitor-left = { };
@@ -553,6 +569,7 @@ in
     "Mod+Shift+Ctrl+Right" = {
       move-column-to-monitor-right = { };
     };
+    # Add these Emacs style keybindings.
     "Mod+Shift+Ctrl+B" = {
       move-column-to-monitor-left = { };
     };
@@ -770,13 +787,16 @@ in
     "Mod+Ctrl+R" = {
       reset-window-height = { };
     };
-    "Mod+F" = {
+    # Default: "Mod+F"
+    "Mod+M" = {
       maximize-column = { };
     };
-    "Mod+Shift+F" = {
+    # Default: "Mod+Shift+F"
+    "Mod+Shift+M" = {
       fullscreen-window = { };
     };
-    "Mod+Ctrl+F" = {
+    # Default: "Mod+Ctrl+F"
+    "Mod+Ctrl+E" = {
       expand-column-to-available-width = { };
     };
     "Mod+C" = {
@@ -828,7 +848,6 @@ in
       screenshot-window = { };
     };
 
-    # Miscellaneous
     "Mod+Escape" = {
       _props.allow-inhibiting = false;
       toggle-keyboard-shortcuts-inhibit = { };
@@ -836,10 +855,8 @@ in
     "Mod+Shift+E" = {
       quit = { };
     };
-    "Ctrl+Alt+Delete" = {
-      quit = { };
-    };
-    "Mod+Shift+P" = {
+    # Default: "Mod+Shift+P"
+    "Mod+Shift+Period" = {
       power-off-monitors = { };
     };
   };
