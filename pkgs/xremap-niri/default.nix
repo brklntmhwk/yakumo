@@ -5,7 +5,6 @@
   fetchFromGitHub,
   rustPlatform,
   pkg-config,
-  xremap,
 }:
 
 let
