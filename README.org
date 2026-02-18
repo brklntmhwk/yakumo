@@ -43,7 +43,7 @@ Welcome to Yakumo! It's our home in the digital world weaved from dotfiles.
 **** Yosuga 卍 縁 — Custom Persistence Layer
 A lightweight, in-house implementation of [[https://github.com/nix-community/impermanence][Impermanence]]. Embracing the "[[https://grahamc.com/blog/erase-your-darlings/][Erase Your Darlings]]" ethos, Yosuga provides the essential "clue" (縁) to persist only what truly matters across the void of every reboot.
 
-**** Beyond Home Manager - The "Wrapper Frontier" Challenge
+**** Beyond Home Manager — The "Wrapper Frontier" Challenge
 An attempt to minimize reliance on external abstraction layers. By pushing the limits of native NixOS module wrapping with ~pkgs.symlinkJoin~ and its fellows, Yakumo maintains a high-fidelity relationship with the core system. Successfully ran away from "Home"—mission accomplished! (家出)
 
 **** Multi-User Architecture
@@ -137,19 +137,20 @@ WIP.
 :END:
 | Category      | Name           | Description                                                                      |
 |---------------+----------------+----------------------------------------------------------------------------------|
-| Compositor    | Niri           | A scrollable-tiling Wayland compositor.                                          |
-|               | Hyprland       | Dynamic tiling Wayland compositor.                                               |
-| Screen Locker | Swaylock       | Screen locker for Wayland.                                                       |
-|               | Hyprlock       | A simple, yet fast, multi-threaded and GPU-accelerated screen lock for Hyprland. |
-| Idle Daemon   | Swayidle       | Idle management daemon for Wayland.                                              |
-|               | Hypridle       | Hyprland's idle management daemon.                                               |
+| Compositor    | Hyprland       | Dynamic tiling Wayland compositor.                                               |
+|               | Niri           | A scrollable-tiling Wayland compositor.                                          |
+| Screen Locker | Hyprlock       | A simple, yet fast, multi-threaded and GPU-accelerated screen lock for Hyprland. |
+|               | Swaylock       | Screen locker for Wayland.                                                       |
+| Idle Daemon   | Hypridle       | Hyprland's idle management daemon.                                               |
+|               | Swayidle       | Idle management daemon for Wayland.                                              |
 | Terminal      | WezTerm        | A powerful cross-platform terminal emulator and multiplexer.                     |
 | Shell         | Zsh & Starship | The Z shell with the minimal and customizable shell prompt.                      |
 | Editor        | Emacs          | An extensible, customizable, free/libre text editor.                             |
 | Status Bar    | Waybar         | Highly customizable Wayland bar for Sway and Wlroots based compositors.          |
 | App Launcher  | Wofi           | A launcher/menu program for wlroots based wayland compositors.                   |
 | Notification  | Mako           | A lightweight Wayland notification daemon.                                       |
-| Browser       | Nyxt           | The hacker's browser.                                                            |
+| Browser       | Brave          | The browser that puts you first.                                                 |
+|               | Nyxt           | The hacker's browser.                                                            |
 ** Crossing the Threshold
 :PROPERTIES:
 :CUSTOM_ID: crossing-the-threshold
