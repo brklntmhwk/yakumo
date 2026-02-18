@@ -7,9 +7,6 @@
   pkg-config,
 }:
 
-let
-  inherit (lib) const;
-in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "xremap-niri";
   version = "0.14.9";
