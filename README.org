@@ -30,9 +30,11 @@ Welcome to Yakumo! It's our home in the digital world weaved from dotfiles.
 :CUSTOM_ID: philosophies
 :END:
 - *Less is more:* Keep dependencies to a minimum and reduce attack surface.
-  - Not using such popular tools as Home Manager, Flake Parts, or Stylix.
+  - Not using such popular tools as Home Manager, Flake-Parts, Impermanence, Stylix, etc.
+  - Leads to more control over stuff and better maintainability.
 - *Low-maintenance:* Easy to maintain. You know where to tweak at a glance. (Maybe...)
-  - Sticking to the Dependency Inversion principle as much as possible to make updates a breeze.
+  - Sticking to [[https://en.wikipedia.org/wiki/Dependency_inversion_principle][the Dependency Inversion Principle]] as much as possible to make updates a breeze.
+  - Predictability is king: The directory structure has a few things in common. (e.g., ~common~)
 - *Cool:* After all, what drives us to tend our dotfiles is pure self-satisfaction, isn't it?
 *** Distinguishing Features
 :PROPERTIES:
@@ -166,7 +168,7 @@ Especially, these projects brought Yakumo a large portion of inspiration in the 
 
 - *Module options:* [[https://github.com/nix-community/home-manager][Home Manager]]
 - *Custom modules system:* [[https://github.com/hlissner/dotfiles][Hlissner's Dotfiles]]
-- *Wrapper approach:* [[https://github.com/viperML/dotfiles][ViperML's Dotfiles]]
+- *Wrapper approach:* [[https://github.com/viperML/wrapper-manager][Wrapper Manager]], [[https://github.com/viperML/dotfiles][ViperML's Dotfiles]]
 - *Per-user theming approach and some philosopies:* [[https://github.com/sioodmy/dotfiles][Sioodmy's Dotfiles]]
 - *Overall service management:* [[https://github.com/oddlama/nix-config][Oddlama's Nix-Config]]
 - *Impermanence:* [[https://github.com/nix-community/impermanence][Impermanence]], [[https://notashelf.dev/posts/impermanence][Blog Article by NotAShelf]]
