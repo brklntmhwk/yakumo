@@ -9,6 +9,7 @@ let
   inherit (self) inputs;
   inherit (builtins) mapAttrs pathExists toString;
   inherit (lib)
+    genAttrs
     getName
     mkDefault
     optionals
@@ -100,6 +101,13 @@ let
       };
 in
 {
+  forAllSystems = genAttrs [
+    "x86_64-linux"
+    "aarch64-linux"
+    "x86_64-darwin"
+    "aarch64-darwin"
+  ];
+
   mkNixOsHosts = mapAttrs (mkHost {
     builder = inputs.nixpkgs.lib.nixosSystem;
     platformType = "nixos";

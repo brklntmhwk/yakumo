@@ -89,12 +89,6 @@
   outputs =
     inputs@{ self, nixpkgs, ... }:
     let
-      forAllSystems = nixpkgs.lib.genAttrs [
-        "x86_64-linux"
-        "aarch64-linux"
-        "x86_64-darwin"
-        "aarch64-darwin"
-      ];
       lib' = import ./lib {
         inherit self;
         inherit (nixpkgs) lib;
@@ -103,17 +97,22 @@
     {
       overlays.default = import ./overlays { inherit (nixpkgs) lib; };
 
-      packages = forAllSystems (system: import ./pkgs { pkgs = nixpkgs.legacyPackages.${system}; });
-
-      checks = forAllSystems (
+      packages = lib'.forAllSystems (
         system:
-        let
+        import ./pkgs {
           pkgs = nixpkgs.legacyPackages.${system};
-        in
-        import ./tests { inherit pkgs self; }
+        }
       );
 
-      formatter = forAllSystems (
+      checks = lib'.forAllSystems (
+        system:
+        import ./tests {
+          inherit self;
+          pkgs = nixpkgs.legacyPackages.${system};
+        }
+      );
+
+      formatter = lib'.forAllSystems (
         system:
         let
           pkgs = nixpkgs.legacyPackages.${system};

@@ -26,6 +26,6 @@ let
 in
 {
   inherit mkMurakumo;
-  inherit (hosts) mkNixOsHosts mkDarwinHosts;
+  inherit (hosts) forAllSystems mkNixOsHosts mkDarwinHosts;
   inherit (modules) mapFilterModulesRecursively;
 }
