@@ -29,6 +29,7 @@ Welcome to Yakumo! It's our home in the digital world weaved from dotfiles.
 :PROPERTIES:
 :CUSTOM_ID: philosophies
 :END:
+
 These philosopies are not isolated tenets, but are deeply interwoven.
 
 - *Less is more:* Keep dependencies to a minimum and reduce attack surface.
