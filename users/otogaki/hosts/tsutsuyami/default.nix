@@ -67,9 +67,9 @@ in
       };
     };
     lockers = {
-      swaylock = {
+      hyprlock = {
         enable = true;
-        settings = import ../../configs/swaylock { inherit theme; };
+        settings = import ../../configs/hyprlock { inherit theme; };
       };
     };
     terminal = {
