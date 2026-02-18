@@ -95,12 +95,14 @@
       };
     in
     {
-      overlays.default = import ./overlays { inherit (nixpkgs) lib; };
+      overlays.default = lib'.mkOverlays {
+        packagesDir = ./pkgs;
+        extraOverlays = [
+          # Add manual overrides and external overlays here.
+        ];
+      };
 
-      packages = lib'.forAllSystems (
-        system:
-        lib'.mkPackages ./pkgs nixpkgs.legacyPackages.${system} { }
-      );
+      packages = lib'.forAllSystems (system: lib'.mkPackages ./pkgs nixpkgs.legacyPackages.${system} { });
 
       checks = lib'.forAllSystems (
         system:
