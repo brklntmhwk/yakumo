@@ -29,12 +29,17 @@ Welcome to Yakumo! It's our home in the digital world weaved from dotfiles.
 :PROPERTIES:
 :CUSTOM_ID: philosophies
 :END:
+These philosopies are not isolated tenets, but are deeply interwoven.
+
 - *Less is more:* Keep dependencies to a minimum and reduce attack surface.
   - Not using such popular tools as Home Manager, Flake-Parts, Impermanence, Stylix, etc.
-  - Leads to more control over stuff and better maintainability.
-- *Low-maintenance:* Easy to maintain. You know where to tweak at a glance. (Maybe...)
+  - Leads to more control over stuff and actually better maintainability.
+- *Low-maintenance:* Easy to maintain. You know where to tweak at a glance (Maybe).
   - Sticking to [[https://en.wikipedia.org/wiki/Dependency_inversion_principle][the Dependency Inversion Principle]] as much as possible to make updates a breeze.
-  - Predictability is king: The directory structure has a few things in common. (e.g., ~common~)
+- *Predictability:* Easy to read. You know what comes next when you're drilling down the directories (Maybe).
+  - The directory structure has a few things in common (e.g., ~common~).
+  - Deliberate distinction between module and configuration Nix files (i.e., ~modules~ vs. ~hosts~ & ~users~).
+- *Reinvent The Wheel:* Preferring the deliberate labor of creation over the opacity of magic. We build it from scratch to fully understand it—turning potential debugging nightmares into simple tweaks.
 - *Cool:* After all, what drives us to tend our dotfiles is pure self-satisfaction, isn't it?
 *** Distinguishing Features
 :PROPERTIES:
