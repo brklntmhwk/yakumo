@@ -73,4 +73,8 @@ rec {
     map fn paths;
 
   mapModulesRecursively = dir: fn: mapFilterModulesRecursively dir fn [ ];
+
+  mkPackages =
+    dir: pkgs: extraArgs:
+    mapModules dir (path: pkgs.callPackage path extraArgs);
 }

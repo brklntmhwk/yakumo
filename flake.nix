@@ -99,16 +99,13 @@
 
       packages = lib'.forAllSystems (
         system:
-        import ./pkgs {
-          pkgs = nixpkgs.legacyPackages.${system};
-        }
+        lib'.mkPackages ./pkgs nixpkgs.legacyPackages.${system} { }
       );
 
       checks = lib'.forAllSystems (
         system:
-        import ./tests {
+        lib'.mkPackages ./tests nixpkgs.legacyPackages.${system} {
           inherit self;
-          pkgs = nixpkgs.legacyPackages.${system};
         }
       );
 
