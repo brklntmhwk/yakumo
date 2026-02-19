@@ -115,10 +115,10 @@ in
         _args = [ 4 ];
       };
       active-color = {
-        _args = [ colors.blue-faint ];
+        _args = [ colors.magenta ];
       };
       inactive-color = {
-        _args = [ colors.fg-dim ];
+        _args = [ colors.fg-main ];
       };
     };
     border = {
