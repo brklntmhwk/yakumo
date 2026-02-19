@@ -125,12 +125,11 @@ in
     };
   };
 
-  services = {
+  yakumo.services = {
     xremap = {
       enable = true;
       userName = config.yakumo.user.name;
-      serviceMode = "user";
-      config = import ../../configs/xremap;
+      settings = import ../../configs/xremap;
     };
   };
 
