@@ -15,16 +15,20 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "awww";
-  version = "0.11.2";
+  # Clarify that this is not a versioned release but a snapshot for the quick fix.
+  version = "0.11.2-unstable-2026-02-19";
 
   src = fetchFromCodeberg {
     owner = "LGFae";
     repo = "awww";
-    rev = "v${version}";
-    hash = lib.fakeHash;
+    # Commit: "rename project -> An Answer to your Wayland Wallpaper Woes".
+    # Directly specify the commit hash because the latest release version (0.11.2)
+    # doesn't contain the renaming as of Feb 2026.
+    rev = "a132243eb4989c2cce22656b8f038bc8bf710f12";
+    hash = "sha256-nusv5h1NwkVgjNdFeUFcWJcIjbWbCn+UM1Ee91svpS8=";
   };
 
-  cargoHash = "sha256-BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB=";
+  cargoHash = "sha256-epMjXCod90ftWzJyJwxBtbwcTvwoc/RRDLJbRCYzbcY=";
 
   nativeBuildInputs = [
     installShellFiles
