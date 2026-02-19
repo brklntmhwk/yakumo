@@ -290,37 +290,37 @@ in
 
   # https://yalter.github.io/niri/Configuration:-Window-Rules
   window-rule = [
-    {
-      match = [
-        {
-          _props = {
-            at-startup = true;
-          };
-        }
-        {
-          _props = {
-            app-id = "firefox";
-          };
-        }
-      ];
-      open-on-workspace = {
-        _args = [ "study" ];
-      };
-      default-column-width.proportion = {
-        _args = [ 0.5 ];
-      };
-    }
-    {
-      match = {
-        _props = {
-          app-id = "firefox$";
-          title = "^Picture-in-Picture$";
-        };
-      };
-      open-floating = {
-        _args = [ true ];
-      };
-    }
+    # {
+    #   match = [
+    #     {
+    #       _props = {
+    #         at-startup = true;
+    #       };
+    #     }
+    #     {
+    #       _props = {
+    #         app-id = "firefox";
+    #       };
+    #     }
+    #   ];
+    #   open-on-workspace = {
+    #     _args = [ "study" ];
+    #   };
+    #   default-column-width.proportion = {
+    #     _args = [ 0.5 ];
+    #   };
+    # }
+    # {
+    #   match = {
+    #     _props = {
+    #       app-id = "firefox$";
+    #       title = "^Picture-in-Picture$";
+    #     };
+    #   };
+    #   open-floating = {
+    #     _args = [ true ];
+    #   };
+    # }
   ];
 
   # Key Bindings
