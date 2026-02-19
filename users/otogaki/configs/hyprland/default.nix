@@ -32,7 +32,7 @@ in
   # Auto-Start (Exec-Once)
   # ---------------------------------------------------------
   exec-once = [
-    "swww-daemon && swww img ${theme.wallpaper}"
+    "swww img ${theme.wallpaper}"
     "hypridle"
     "$terminal"
     "mako"

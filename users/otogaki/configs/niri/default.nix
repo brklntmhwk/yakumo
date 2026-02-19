@@ -161,7 +161,7 @@ in
     { _args = [ "fcitx5 -d -r" ]; }
     { _args = [ "wl-paste --type text --watch cliphist store" ]; }
     { _args = [ "wl-paste --type image --watch cliphist store" ]; }
-    { _args = [ "swww-daemon && swww img ${theme.wallpaper}" ]; }
+    { _args = [ "swww img ${theme.wallpaper}" ]; }
     { _args = [ "emacsclient -c -a ''" ]; }
   ];
   spawn-at-startup = [
