@@ -17,6 +17,7 @@ let
     mkEnableOption
     mkIf
     mkMerge
+    mkOption
     mkPackageOption
     types
     ;
