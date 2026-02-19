@@ -69,7 +69,6 @@
 
     # --- Desktop ---
     hyprland.url = "github:hyprwm/Hyprland";
-    xremap.url = "github:xremap/nix-flake";
 
     # --- LLM Integration ---
     mcp-servers = {
