@@ -8,6 +8,7 @@
   # inputs,
   config,
   lib,
+  pkgs,
   ...
 }:
 
