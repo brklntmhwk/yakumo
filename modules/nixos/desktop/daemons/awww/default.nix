@@ -42,11 +42,11 @@ in
       yakumo.user.package = [ cfg.package ];
 
       # https://github.com/nix-community/home-manager/blob/b3ccd4bb262f4e6d3248b46cede92b90c4a42094/modules/services/swww.nix
-      systemd.user.services.awww-daemon = {
+      systemd.user.services.awww = {
         unitConfig = {
           After = [ "graphical-session.target" ];
           ConditionEnvironment = "WAYLAND_DISPLAY";
-          Description = "Awww-Daemon: An Answer to your Wayland Wallpaper Woes.";
+          Description = "Awww: An Answer to your Wayland Wallpaper Woes.";
           Documentation = "https://codeberg.org/LGFae/awww/src/branch/main/README.md";
           PartOf = [ "graphical-session.target" ];
         };
@@ -54,7 +54,7 @@ in
           Environment = [
             "PATH=$PATH:${makeBinPath [ cfg.package ]}"
           ];
-          ExecStart = "${getExe' cfg.package "swww-daemon"} ${escapeShellArgs cfg.extraArgs}";
+          ExecStart = "${getExe' cfg.package "awww-daemon"} ${escapeShellArgs cfg.extraArgs}";
           Restart = "always";
           RestartSec = 10;
         };

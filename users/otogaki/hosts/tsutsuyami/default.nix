@@ -57,6 +57,9 @@ in
       };
     };
     daemons = {
+      awww = {
+        enable = true;
+      };
       mako = {
         enable = true;
         settings = import ../../configs/mako { inherit theme; };
