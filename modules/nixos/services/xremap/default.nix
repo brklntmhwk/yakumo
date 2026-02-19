@@ -67,6 +67,12 @@ in
         ];
       };
     };
+    userName = mkOption {
+      type = types.nullOr types.str;
+      description = "Name of the user logging in to graphical session.";
+      default = null;
+      example = "otogaki";
+    };
     deviceNames = mkOption {
       type = types.nullOr (types.listOf types.nonEmptyStr);
       default = null;
@@ -124,6 +130,13 @@ in
         );
     in
     {
+      assertions = [
+        {
+          assertion = cfg ? userName;
+          message = "Username must be set";
+        }
+      ];
+
       # https://github.com/xremap/nix-flake/blob/9a2224aa01a3c86e94b398c33329c8ff6496dc5d/modules/user-service.nix
       hardware.uinput.enable = true;
       # Uinput group owns the /uinput.
