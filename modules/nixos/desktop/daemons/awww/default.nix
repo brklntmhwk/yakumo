@@ -39,7 +39,7 @@ in
       inherit (lib) escapeShellArgs getExe' makeBinPath;
     in
     {
-      yakumo.user.package = [ cfg.package ];
+      yakumo.user.packages = [ cfg.package ];
 
       # https://github.com/nix-community/home-manager/blob/b3ccd4bb262f4e6d3248b46cede92b90c4a42094/modules/services/swww.nix
       systemd.user.services.awww = {
