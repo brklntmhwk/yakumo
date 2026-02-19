@@ -158,10 +158,10 @@ in
 
   # Start up apps.
   spawn-sh-at-startup = [
+    { _args = [ "awww img ${theme.wallpaper}" ]; }
     { _args = [ "fcitx5 -d -r" ]; }
     { _args = [ "wl-paste --type text --watch cliphist store" ]; }
     { _args = [ "wl-paste --type image --watch cliphist store" ]; }
-    { _args = [ "swww img ${theme.wallpaper}" ]; }
     { _args = [ "emacsclient -c -a ''" ]; }
   ];
   spawn-at-startup = [
@@ -171,6 +171,7 @@ in
     # "exited with status 101" error at startup.
     # See: https://niri-wm.github.io/niri/Xwayland.html#using-xwayland-satellite
     # { _args = [ "xwayland-satellite" ]; }
+
     { _args = [ "wezterm" ]; }
   ];
 
@@ -280,12 +281,6 @@ in
         _args = [ "DP-2" ];
       };
     }
-    {
-      _args = [ "study" ];
-      open-on-output = {
-        _args = [ "HDMI-A-1" ];
-      };
-    }
   ];
 
   # https://yalter.github.io/niri/Configuration:-Window-Rules
@@ -304,21 +299,10 @@ in
     #     }
     #   ];
     #   open-on-workspace = {
-    #     _args = [ "study" ];
+    #     _args = [ "dev" ];
     #   };
     #   default-column-width.proportion = {
     #     _args = [ 0.5 ];
-    #   };
-    # }
-    # {
-    #   match = {
-    #     _props = {
-    #       app-id = "firefox$";
-    #       title = "^Picture-in-Picture$";
-    #     };
-    #   };
-    #   open-floating = {
-    #     _args = [ true ];
     #   };
     # }
   ];

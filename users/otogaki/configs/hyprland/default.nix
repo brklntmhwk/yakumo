@@ -32,12 +32,10 @@ in
   # Auto-Start (Exec-Once)
   # ---------------------------------------------------------
   exec-once = [
-    "swww img ${theme.wallpaper}"
-    "hypridle"
+    "awww img ${theme.wallpaper}"
     "$terminal"
-    "mako"
     "fcitx5 -d -r"
-    "emacs --daemon"
+    "emacsclient -c -a ''"
     "wl-paste --type text --watch cliphist store"
     "wl-paste --type image --watch cliphist store"
     "[workspace name:Dev silent] $browser"
