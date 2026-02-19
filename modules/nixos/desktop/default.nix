@@ -57,7 +57,6 @@ in
           cliphist # Wayland clipboard manager for both text and images
           slurp # Screen capture tool
           swappy # Screenshot editing tool
-          swww # Wallpaper manager
           wev # Wayland Key event viewer
           wl-clipboard # Clipboard tool
           wl-screenrec # Screen recorder
