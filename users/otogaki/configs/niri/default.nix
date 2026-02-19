@@ -18,7 +18,7 @@ in
       };
       tap-button-map = {
         _args = [
-          "left-right-middle" # Corresponds to one, two, and three finger, respectively.
+          "left-right-middle" # Corresponds to one, two, and three fingers, respectively.
         ];
       };
       tap = { };
@@ -165,8 +165,12 @@ in
     { _args = [ "emacsclient -c -a ''" ]; }
   ];
   spawn-at-startup = [
-    { _args = [ "xwayland-satellite" ]; }
-    { _args = [ "firefox" ]; }
+    # Since 25.08, Niri integrates with xwayland-satellite out of the box;
+    # you don't have to manually launch it here anymore.
+    # Actually, you ought to remove it, or you might end up with the
+    # "exited with status 101" error at startup.
+    # See: https://niri-wm.github.io/niri/Xwayland.html#using-xwayland-satellite
+    # { _args = [ "xwayland-satellite" ]; }
     { _args = [ "wezterm" ]; }
   ];
 
