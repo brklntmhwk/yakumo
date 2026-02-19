@@ -16,7 +16,12 @@ in
     # ./hardware-configuration.nix
   ];
 
-  # hardware.asahi = { };
+  # hardware.asahi = {
+  #   enable = true;
+  #   extractPeripheralFirmware = true;
+  #   peripheralFirmwareDirectory = ./firmware;
+  #   setupAsahiSound = true;
+  # };
 
   boot = {
     loader.efi.canTouchEfiVariables = mkForce false;
