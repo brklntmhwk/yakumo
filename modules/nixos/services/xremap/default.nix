@@ -33,7 +33,7 @@ in
   options.yakumo.services.xremap = {
     enable = mkEnableOption "xremap";
     settings = mkOption {
-      inherit (yamlFormat) type;
+      type = types.submodule { freeformType = yamlFormat.type; };
       default = { };
       description = ''
         Xremap configuration in Nix-representable YAML format.
@@ -114,6 +114,8 @@ in
         singleton
         ;
 
+      configYaml = yamlFormat.generate "config.yml" cfg.settings;
+
       # https://github.com/xremap/nix-flake/blob/9a2224aa01a3c86e94b398c33329c8ff6496dc5d/lib/default.nix
       mkExecStart =
         configFile:
@@ -170,7 +172,7 @@ in
             LockPersonality = true;
             UMask = "077";
             RestrictAddressFamilies = "AF_UNIX";
-            ExecStart = mkExecStart cfg.settings;
+            ExecStart = mkExecStart configYaml;
           }
           (optionalAttrs cfg.debug { Environment = [ "RUST_LOG=debug" ]; })
         ];
