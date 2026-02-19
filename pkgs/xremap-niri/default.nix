@@ -29,8 +29,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
     description = "Key remapper for X11 and Wayland (Niri support).";
     homepage = "https://github.com/xremap/xremap";
     changelog = "https://github.com/xremap/xremap/blob/v${finalAttrs.version}/CHANGELOG.md";
-    license = lib.licenses.mit;
     mainProgram = "xremap";
+    license = lib.licenses.mit;
     platforms = lib.platforms.linux;
   };
 })
