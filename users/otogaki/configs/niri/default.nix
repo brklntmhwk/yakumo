@@ -351,21 +351,30 @@ in
       _props.repeat = false;
       _props.hotkey-overlay-title = "Put the System to Sleep";
       spawn = {
-        _args = [ "systemctl suspend" ];
+        _args = [
+          "systemctl"
+          "suspend"
+        ];
       };
     };
     "Super+Ctrl+Alt+Shift+Comma" = {
       _props.repeat = false;
       _props.hotkey-overlay-title = "Put the System to Hibernation";
       spawn = {
-        _args = [ "systemctl hibernate" ];
+        _args = [
+          "systemctl"
+          "hibernate"
+        ];
       };
     };
     "Super+Ctrl+Alt+Period" = {
       _props.repeat = false;
       _props.hotkey-overlay-title = "Shutdown the System";
       spawn = {
-        _args = [ "systemctl poweroff" ];
+        _args = [
+          "systemctl"
+          "poweroff"
+        ];
       };
     };
 
