@@ -58,6 +58,7 @@ in
           Restart = "always";
           RestartSec = 10;
         };
+        wantedBy = [ "graphical-session.target" ];
       };
     }
   );
