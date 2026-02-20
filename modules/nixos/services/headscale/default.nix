@@ -1,7 +1,7 @@
+# WIP
 {
   config,
   lib,
-  pkgs,
   ...
 }:
 
@@ -10,9 +10,6 @@ let
     mkEnableOption
     mkIf
     mkMerge
-    mkOption
-    mkPackageOption
-    types
     ;
   cfg = config.yakumo.services.headscale;
 in

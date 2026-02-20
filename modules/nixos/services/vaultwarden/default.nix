@@ -1,7 +1,7 @@
+# WIP
 {
   config,
   lib,
-  pkgs,
   ...
 }:
 
@@ -9,10 +9,6 @@ let
   inherit (lib)
     mkEnableOption
     mkIf
-    mkMerge
-    mkOption
-    mkPackageOption
-    types
     ;
   cfg = config.yakumo.services.vaultwarden;
 in
@@ -21,11 +17,20 @@ in
     enable = mkEnableOption "vaultwarden";
   };
 
-  config = mkIf cfg.enable (mkMerge [
-    {
-      services.vaultwarden = {
-        enable = true;
+  config = mkIf cfg.enable {
+    services.vaultwarden = {
+      enable = true;
+      backupDir = "/var/backup/vaultwarden"; # Default: null
+      # Use Caddy instead.
+      configureNginx = false; # Default: false
+      configurePostgres = true; # Default: false
+      dbBackend = "postgresql"; # Default: 'sqlite' (Options: 'mysql', 'postgresql')
+      domain = "";
+      environmentFile = "/var/lib/vaultwarden.env";
+      config = {
+        ROCKET_ADDRESS = "::1";
+        ROCKET_PORT = 8222;
       };
-    }
-  ]);
+    };
+  };
 }

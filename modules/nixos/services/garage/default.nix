@@ -1,7 +1,7 @@
+# WIP
 {
   config,
   lib,
-  pkgs,
   ...
 }:
 
@@ -9,10 +9,6 @@ let
   inherit (lib)
     mkEnableOption
     mkIf
-    mkMerge
-    mkOption
-    mkPackageOption
-    types
     ;
   cfg = config.yakumo.services.garage;
 in
@@ -25,6 +21,10 @@ in
     {
       services.garage = {
         enable = true;
+        environmentFile = "path/to/environment-file";
+        extraEnvironment = { };
+        logLevel = "info"; # Default: 'info' (Options: 'debug', 'error', 'trace', 'warn')
+        settings = { };
       };
     }
   ]);

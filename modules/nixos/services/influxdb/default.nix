@@ -1,7 +1,7 @@
+# WIP
 {
   config,
   lib,
-  pkgs,
   ...
 }:
 
@@ -9,10 +9,6 @@ let
   inherit (lib)
     mkEnableOption
     mkIf
-    mkMerge
-    mkOption
-    mkPackageOption
-    types
     ;
   cfg = config.yakumo.services.influxdb;
 in
@@ -21,11 +17,13 @@ in
     enable = mkEnableOption "influxdb";
   };
 
-  config = mkIf cfg.enable (mkMerge [
-    {
-      services.influxdb = {
-        enable = true;
-      };
-    }
-  ]);
+  config = mkIf cfg.enable {
+    services.influxdb = {
+      enable = true;
+      group = "influxdb"; # Default: 'influxdb'
+      user = "influxdb"; # Default: 'influxdb'
+      dataDir = "/var/db/influxdb";
+      extraConfig = { };
+    };
+  };
 }

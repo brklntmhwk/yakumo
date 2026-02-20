@@ -1,7 +1,7 @@
+# WIP
 {
   config,
   lib,
-  pkgs,
   ...
 }:
 
@@ -9,10 +9,6 @@ let
   inherit (lib)
     mkEnableOption
     mkIf
-    mkMerge
-    mkOption
-    mkPackageOption
-    types
     ;
   cfg = config.yakumo.services.shiori;
 in
@@ -25,6 +21,12 @@ in
     {
       services.shiori = {
         enable = true;
+        address = "";
+        # Shiori can use MySQL or PostgreSQL.
+        databaseUrl = "postgres:///shiori?host=/run/postgresql";
+        environmentFile = "/path/to/environmentFile";
+        port = 8080; # Default: 8080
+        webRoot = "/"; # Default: '/'
       };
     }
   ]);
