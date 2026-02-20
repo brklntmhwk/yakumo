@@ -12,6 +12,8 @@ in
   xcursor_theme = cursorThemes.rosePine.name;
   xcursor_size = 24;
 
+  front_end = "WebGpu";
+
   colors = {
     foreground = colors.fg-main;
     background = colors.bg-main;
