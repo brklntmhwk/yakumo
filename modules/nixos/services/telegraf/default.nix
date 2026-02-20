@@ -17,28 +17,26 @@ in
     enable = mkEnableOption "telegraf";
   };
 
-  config = mkIf cfg.enable (mkMerge [
-    {
-      services.telegraf = {
-        enable = true;
-        environmentFile = [ ];
-        extraConfig = {
-          inputs = {
-            statsd = {
-              delete_timings = true;
-              service_address = ":8125";
-            };
+  config = mkIf cfg.enable {
+    services.telegraf = {
+      enable = true;
+      environmentFiles = [ ];
+      extraConfig = {
+        inputs = {
+          statsd = {
+            delete_timings = true;
+            service_address = ":8125";
           };
-          outputs = {
-            influxdb = {
-              database = "telegraf";
-              urls = [
-                "http://localhost:8086"
-              ];
-            };
+        };
+        outputs = {
+          influxdb = {
+            database = "telegraf";
+            urls = [
+              "http://localhost:8086"
+            ];
           };
         };
       };
-    }
-  ]);
+    };
+  };
 }

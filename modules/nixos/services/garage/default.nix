@@ -17,15 +17,13 @@ in
     enable = mkEnableOption "garage";
   };
 
-  config = mkIf cfg.enable (mkMerge [
-    {
-      services.garage = {
-        enable = true;
-        environmentFile = "path/to/environment-file";
-        extraEnvironment = { };
-        logLevel = "info"; # Default: 'info' (Options: 'debug', 'error', 'trace', 'warn')
-        settings = { };
-      };
-    }
-  ]);
+  config = mkIf cfg.enable {
+    services.garage = {
+      enable = true;
+      environmentFile = "path/to/environment-file";
+      extraEnvironment = { };
+      logLevel = "info"; # Default: 'info' (Options: 'debug', 'error', 'trace', 'warn')
+      settings = { };
+    };
+  };
 }
