@@ -194,9 +194,14 @@ in
       }
       (
         let
-          inherit (builtins) isAttrs mapAttrs;
+          inherit (builtins)
+            concatStringsSep
+            isAttrs
+            map
+            mapAttrs
+            ;
           inherit (lib) elem getName optional;
-          inherit (pkgs) writeTextDir;
+          inherit (pkgs) runCommand;
           inherit (murakumo.wrappers) mkAppWrapper;
           inherit (murakumo.generators) toKDL;
 
@@ -223,8 +228,26 @@ in
                 ) bindDef
             ) binds;
 
+          envVariables = concatStringsSep " " [
+            "WAYLAND_DISPLAY"
+            "XDG_CURRENT_DESKTOP"
+          ];
+
+          systemdSessionCmds = concatStringsSep " " (
+            map (f: "&& ${f}") [
+              "systemctl --user start niri-session.target"
+            ]
+          );
+
+          systemdInit = {
+            _args = [
+              "${pkgs.dbus}/bin/dbus-update-activation-environment --systemd ${envVariables} ${systemdSessionCmds}"
+            ];
+          };
+
           finalSettings = cfg.settings // {
             binds = if cfg.settings ? binds then addBindSemicolons cfg.settings.binds else { };
+            spawn-sh-at-startup = [ systemdInit ] ++ (cfg.settings.spawn-sh-at-startup or [ ]);
           };
 
           configKdl = writeText "config.kdl" (toKDL { } finalSettings);
@@ -246,14 +269,26 @@ in
           # Expose the custom Niri wrapper to display managers so
           # we can see it on the login screen as a pickable session.
           services.displayManager.sessionPackages = [
-            (writeTextDir "share/wayland-sessions/niri-yakumo.desktop" ''
-              [Desktop Entry]
-              Name=Niri (Yakumo ver.)
-              Comment=A scrollable-tiling Wayland compositor
-              Exec=${getExe niriWrapped}
-              Type=Application
-              DesktopNames=niri
-            '')
+            (runCommand "niri-yakumo-session"
+              {
+                # This satisfies the display manager's requirement by explicitly
+                # declaring the base name of the .desktop file.
+                # "Package, 'foo.desktop', did not specify any session names, as string,
+                # in 'passthru.providedSessions'. This is required when used as a session package".
+                passthru.providedSessions = [ "niri-yakumo" ];
+              }
+              ''
+                mkdir -p $out/share/wayland-sessions
+                cat > $out/share/wayland-sessions/niri-yakumo.desktop <<EOF
+                [Desktop Entry]
+                Name=Niri (Yakumo ver.)
+                Comment=A scrollable-tiling Wayland compositor
+                Exec=${getExe niriWrapped}
+                Type=Application
+                DesktopNames=niri
+                EOF
+              ''
+            )
           ];
         }
       )
