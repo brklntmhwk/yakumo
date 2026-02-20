@@ -152,6 +152,8 @@ in
   config = mkIf cfg.enable (
     let
       inherit (builtins) attrValues;
+      inherit (lib) getExe;
+      inherit (pkgs) writeText;
     in
     mkMerge [
       {
@@ -194,7 +196,7 @@ in
         let
           inherit (builtins) isAttrs mapAttrs;
           inherit (lib) elem getName optional;
-          inherit (pkgs) writeText;
+          inherit (pkgs) writeTextDir;
           inherit (murakumo.wrappers) mkAppWrapper;
           inherit (murakumo.generators) toKDL;
 
@@ -240,77 +242,83 @@ in
           yakumo.user.packages =
             attrValues { inherit (pkgs) ; } ++ optional cfg.xwayland.enable pkgs.xwayland-satellite;
           environment.systemPackages = [ niriWrapped ];
+
+          # Expose the custom Niri wrapper to display managers so
+          # we can see it on the login screen as a pickable session.
+          services.displayManager.sessionPackages = [
+            (writeTextDir "share/wayland-sessions/niri-yakumo.desktop" ''
+              [Desktop Entry]
+              Name=Niri (Yakumo ver.)
+              Comment=A scrollable-tiling Wayland compositor
+              Exec=${getExe niriWrapped}
+              Type=Application
+              DesktopNames=niri
+            '')
+          ];
         }
       )
-      (
-        let
-          regreetCfg = cfg.regreet;
-        in
-        {
-          programs.regreet = mkMerge [
-            {
-              enable = true;
-              settings = {
-                GTK.application_prefer_dark_theme = regreetCfg.theme.preferDark;
-                widget.clock = {
-                  format = "%a, %d %b %Y %I:%M";
-                };
-              };
-              cursorTheme = {
-                name = regreetCfg.cursorTheme.name;
-                package = regreetCfg.cursorTheme.package;
-              };
-              font = {
-                name = regreetCfg.font.name;
-                size = regreetCfg.font.size;
-                package = regreetCfg.font.package;
-              };
-              iconTheme = {
-                name = regreetCfg.iconTheme.name;
-                package = regreetCfg.iconTheme.package;
-              };
-              theme = {
-                name = regreetCfg.theme.name;
-                package = regreetCfg.theme.package;
-              };
-            }
-            (mkIf (regreetCfg.background.path != null) {
-              settings = {
-                background = {
-                  path = regreetCfg.background.path;
-                  fit = regreetCfg.background.fit;
-                };
-              };
-            })
-          ];
-
-          # https://github.com/rharish101/ReGreet?tab=readme-ov-file#set-as-default-session
-          services.greetd =
-            let
-              inherit (lib) getExe;
-
-              loginCfg = pkgs.writeText "login-config.kdl" ''
-                hotkey-overlay {
-                    skip-at-startup
-                }
-                binds {
-
-                }
-                spawn-at-startup "sh" "-c" "${getExe pkgs.greetd.regreet}; niri msg action quit --skip-confirmation"
-              '';
-            in
-            {
-              enable = true;
-              settings = {
-                default_session = {
-                  # We don't use the wrapped Niri here.
-                  command = "${getExe cfg.package} --config ${loginCfg}";
-                  user = "greeter";
-                };
+      {
+        programs.regreet = mkMerge [
+          {
+            enable = true;
+            settings = {
+              GTK.application_prefer_dark_theme = cfg.regreet.theme.preferDark;
+              widget.clock = {
+                format = "%a, %d %b %Y %I:%M";
               };
             };
-        }
-      )
+            cursorTheme = {
+              name = cfg.regreet.cursorTheme.name;
+              package = cfg.regreet.cursorTheme.package;
+            };
+            font = {
+              name = cfg.regreet.font.name;
+              size = cfg.regreet.font.size;
+              package = cfg.regreet.font.package;
+            };
+            iconTheme = {
+              name = cfg.regreet.iconTheme.name;
+              package = cfg.regreet.iconTheme.package;
+            };
+            theme = {
+              name = cfg.regreet.theme.name;
+              package = cfg.regreet.theme.package;
+            };
+          }
+          (mkIf (cfg.regreet.background.path != null) {
+            settings = {
+              background = {
+                path = cfg.regreet.background.path;
+                fit = cfg.regreet.background.fit;
+              };
+            };
+          })
+        ];
+
+        # https://github.com/rharish101/ReGreet?tab=readme-ov-file#set-as-default-session
+        services.greetd =
+          let
+            loginCfg = writeText "login-config.kdl" ''
+              hotkey-overlay {
+                  skip-at-startup
+              }
+              binds { }
+              spawn-at-startup "sh" "-c" "${getExe pkgs.greetd.regreet}; niri msg action quit --skip-confirmation"
+            '';
+          in
+          {
+            enable = true;
+            settings = {
+              default_session = {
+                # We don't use the wrapped Niri here.
+                # Wrap the greeter session in a localized DBus session to provide
+                # the app with an immediate DBus context.
+                command = "${pkgs.dbus}/bin/dbus-run-session ${getExe cfg.package} --config ${loginCfg}";
+                user = "greeter";
+              };
+            };
+          };
+      }
     ]
   );
 }
