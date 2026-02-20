@@ -7,11 +7,11 @@
 
   nixConfig = {
     extra-substituters = [
-      "https://hyprland.cachix.org"
+      # "https://hyprland.cachix.org"
       "https://brklntmhwk.cachix.org"
     ];
     extra-trusted-public-keys = [
-      "hyprland.cachix.org-1:a7pgxzMz7+chwVL3/pzj6jIBMioiJM7ypFP8PwtkuGc="
+      # "hyprland.cachix.org-1:a7pgxzMz7+chwVL3/pzj6jIBMioiJM7ypFP8PwtkuGc="
       "brklntmhwk.cachix.org-1:mGWjznSV6FglvHR7/2sa4MrCtGHMLiAOc9Ru+tEkdyg="
     ];
   };
@@ -67,9 +67,6 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    # --- Desktop ---
-    hyprland.url = "github:hyprwm/Hyprland";
-
     # --- LLM Integration ---
     mcp-servers = {
       url = "github:natsukium/mcp-servers-nix";
@@ -83,6 +80,9 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     twist.url = "github:emacs-twist/twist.nix";
+
+    # --- Desktop ---
+    # hyprland.url = "github:hyprwm/Hyprland";
   };
 
   outputs =
@@ -118,9 +118,6 @@
             projectRootFile = "flake.nix";
             programs = {
               nixfmt.enable = true;
-              stylua.enable = true;
-              taplo.enable = true;
-              yamlfmt.enable = true;
             };
           };
         in
@@ -142,13 +139,13 @@
           username = "otogaki";
           extraModules = [ inputs.nixos-wsl.nixosModules.default ];
         };
-        # shinonome = {
-        #   system = "aarch64-linux";
-        #   username = "otogaki";
-        #   extraModules = [
-        #     inputs.nixos-apple-silicon.nixosModules.default
-        #   ];
-        # };
+        shinonome = {
+          system = "aarch64-linux";
+          username = "otogaki";
+          extraModules = [
+            inputs.nixos-apple-silicon.nixosModules.default
+          ];
+        };
         # niwatazumi = {
         #   system = "x86_64-linux";
         #   username = "otogaki";

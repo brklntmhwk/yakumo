@@ -60,7 +60,6 @@ let
       }
     else
       builder {
-        inherit system;
         modules = [
           hostConfigs
           userConfigs
