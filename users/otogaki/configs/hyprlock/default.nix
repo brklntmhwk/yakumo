@@ -110,7 +110,7 @@ in
       font_color = colors.fg-alt;
       fade_on_empty = false;
       font_family = fonts.moralerspaceHw.name;
-      placeholder_text = ''<i><span foreground="${colors.fg-alt}">Enter Password...</span></i>'';
+      placeholder_text = "<i>Enter Password...</i>";
       hide_input = false;
       position = "0, -210";
       halign = "center";
