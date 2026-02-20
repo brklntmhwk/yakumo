@@ -15,6 +15,7 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "awww";
+  # TODO: replace this with a version when the time comes.
   # Clarify that this is not a versioned release but a snapshot for the quick fix.
   version = "0.11.2-unstable-2026-02-19";
 
