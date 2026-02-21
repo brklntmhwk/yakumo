@@ -8,18 +8,15 @@ in
   /* For more details, see: https://github.com/Alexays/Waybar/wiki/Styling#interactive-styling */
   /* You can consult this doc for supported CSS props: https://docs.gtk.org/gtk3/css-properties.html */
 
-  /* Import the color scheme file generated with Wallust to use it */
-  @import url("colors.css");
-
   * {
-      font-family: "HackGen Console NF", JetBrains Mono, Roboto, Helvetica, Ariel, sans-serif;
+      font-family: "${fonts.moralerspaceHw.name}", ${fonts.jetbrainsMono.name}, Roboto, Helvetica, Ariel, sans-serif;
       font-size: 15px;
   }
 
   /* Status bar  */
   window#waybar {
-      background-color: rgba(43, 48, 59, 0.9);
-      color: rgba(204, 204, 204, 1);
+      background-color: ${colors.bg-lavender};
+      color: ${colors.fg-main};
   }
 
   /* Module(s) on the left side */
@@ -49,18 +46,18 @@ in
   #workspaces button {
       background: transparent;
       min-width: 35px;
-      border-bottom: 2px solid rgba(255, 255, 255, 0.5);
+      border-bottom: 2px solid ${colors.bg-inactive};
       border-radius: 3px;
       margin-left: 4px;
       margin-right: 4px;
   }
 
   #workspaces button.active {
-      border-bottom: 2px solid rgba(255, 255, 255, 1);
+      border-bottom: 2px solid ${colors.bg-active};
   }
 
   #workspaces button:hover {
-      background: rgba(147, 112, 208, 0.5);
+      background: ${colors.bg-active};
   }
 
   /* Module to show running apps & programs */
@@ -71,9 +68,9 @@ in
 
   #taskbar button {
       min-width: 140px;
-      color: rgba(204, 204, 204, 0.8);
+      color: ${colors.fg-main};
       background: transparent;
-      border-bottom: 2px solid rgba(255, 255, 255, 0.3);
+      border-bottom: 2px solid ${colors.bg-inactive};
       margin-left: 2px;
       margin-right: 2px;
       padding-left: 3px;
@@ -82,12 +79,12 @@ in
   }
 
   #taskbar button.active {
-      border-bottom: 2px solid rgba(255, 255, 255, 1);
+      border-bottom: 2px solid ${colors.bg-active};
   }
 
   #taskbar button:hover {
-      color: rgba(204, 204, 204, 1);
-      background: rgba(147, 112, 208, 0.5);
+      color: ${colors.fg-main};
+      background: ${colors.bg-active};
   }
 
   /* System control related modules  */
