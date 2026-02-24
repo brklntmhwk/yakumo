@@ -3,15 +3,19 @@ keys:
   # Users per machine
   - &otogaki_tsutsuyami age1tdat96efnae3g6x5p5aw70kak804ar7jj94dx72vumn76rvf5qcsq82pp8
   - &otogaki_utsusemi age143wa96cj9xywqhdm6kv77uqngg0tumdhvfyqh7pz89jsrujpev0slsz43x
+  # - &otogaki_shinonome xxxxx
   # - &otogaki_niwatazumi xxxxx
   # - &otogaki_sazanami xxxxx
+  # - &otogaki_tamazusa xxxxx
   # - &rkawata_momokagari xxxxx
   # Machines
   - &tsutsuyami age13eqkelhxncfe00s9zuwzparcg0xzl44h9an9syvs5wcnztlthpes84tqqj
   - &utsusemi age1245wq459mrmqvaywx6flatke2m557j8azsvs4kf2alnvxu5063sqzsjj8v
-  # - &momokagari xxxxx
+  # - &shinonome xxxxx
   # - &niwatazumi xxxxx
   # - &sazanami xxxxx
+  # - &tamazusa xxxxx
+  # - &momokagari xxxxx
 creation_rules:
   - path_regex: secrets/[^/]+\.yaml$
     key_groups:
@@ -20,9 +24,11 @@ creation_rules:
       - age:
           - *tsutsuyami
           - *utsusemi
-          # - *momokagari
+          # - *shinonome
           # - *niwatazumi
           # - *sazanami
+          # - *tamazusa
+          # - *momokagari
   - path_regex: users/otogaki/secrets/[^/]+\.yaml$
     key_groups:
       # - gpg:
@@ -30,8 +36,10 @@ creation_rules:
       - age:
           - *otogaki_tsutsuyami
           - *otogaki_utsusemi
+          # - *otogaki_shinonome
           # - *otogaki_niwatazumi
           # - *otogaki_sazanami
+          # - *otogaki_tamazusa
 # - path_regex: users/rkawata/secrets/[^/]+\.yaml$
 #   key_groups:
 #     - gpg:
@@ -50,12 +58,12 @@ creation_rules:
 #         - *admin
 #     - age:
 #         - *utsusemi
-# - path_regex: hosts/momokagari/secrets/[^/]+\.yaml$
+# - path_regex: hosts/shinonome/secrets/[^/]+\.yaml$
 #   key_groups:
 #     - gpg:
 #         - *admin
 #     - age:
-#         - *momokagari
+#         - *shinonome
 # - path_regex: hosts/niwatazumi/secrets/[^/]+\.yaml$
 #   key_groups:
 #     - gpg:
@@ -68,3 +76,15 @@ creation_rules:
 #         - *admin
 #     - age:
 #         - *sazanami
+# - path_regex: hosts/tamazusa/secrets/[^/]+\.yaml$
+#   key_groups:
+#     - gpg:
+#         - *admin
+#     - age:
+#         - *tamazusa
+# - path_regex: hosts/momokagari/secrets/[^/]+\.yaml$
+#   key_groups:
+#     - gpg:
+#         - *admin
+#     - age:
+#         - *momokagari
