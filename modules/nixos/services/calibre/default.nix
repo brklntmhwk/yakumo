@@ -54,7 +54,8 @@ in
         host = "0.0.0.0"; # Default: '0.0.0.0'
         port = 8080; # Default: 8080
         openFirewall = false; # Default: false
-        extraFlags = [];
+        extraFlags = [ ];
+        libraries = [ ];
         auth = {
           enable = true; # Default: false
           mode = "auto"; # Default: 'auto' (Options: 'basic', 'digest')
