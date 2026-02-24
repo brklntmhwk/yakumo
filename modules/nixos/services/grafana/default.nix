@@ -13,6 +13,7 @@ let
     mkIf
     mkMerge
     mkOption
+    optional
     ;
   cfg = config.yakumo.services.grafana;
   grafanaStack = [
@@ -41,9 +42,12 @@ in
         openFirewall = false; # Default: false
         # Install these Grafana plugins declaratively.
         # If set, plugins cannot be installed manually.
-        declarativePlugins = builtins.attrValues {
-          inherit (pkgs) grafana-lokiexplore-app;
-        };
+        declarativePlugins =
+          builtins.attrValues {
+            inherit (pkgs) fetzerch-sunandmoon-datasource;
+          }
+          ++ optional (elem "loki" cfg.stack) pkgs.grafana-lokiexplore-app
+          ++ optional config.yakumo.services.mosquitto.enable pkgs.grafana-mqtt-datasource;
         provision = {
           enable = true; # Default: false
           alerting = {
