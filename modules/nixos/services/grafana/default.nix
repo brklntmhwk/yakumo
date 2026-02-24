@@ -8,15 +8,29 @@
 
 let
   inherit (lib)
+    elem
     mkEnableOption
     mkIf
     mkMerge
+    mkOption
     ;
   cfg = config.yakumo.services.grafana;
+  grafanaStack = [
+    "loki"
+    "tempo"
+  ];
 in
 {
   options.yakumo.services.grafana = {
     enable = mkEnableOption "grafana";
+    stack = mkOption {
+      type = types.listOf (types.enum grafanaStack);
+      default = [ ];
+      description = "";
+      example = [
+        "loki"
+      ];
+    };
   };
 
   config = mkIf cfg.enable (mkMerge [
@@ -142,15 +156,15 @@ in
             protocol = "http"; # Default: 'http' (Options: 'https', 'h2', 'socket')
             cdn_url = null; # Default: null
             # These 'cert_' prefixed options are valid only when
-            # the protocol option value is 'https' or 'h2'.
+            # the protocol option value is either 'https' or 'h2'.
             cert_file = null; # Default: null
             cert_key = null; # Default: null
             enable_gzip = false; # Default: false
             enforce_domain = false; # Default: false
             http_addr = "127.0.0.1"; # '127.0.0.1'
             http_port = 3000; # Default: 3000
-            # Set the maximum time before timing out read of an incoming request
-            # and closing idle connections in the duration format (e.g., 5s/5m/5ms).
+            # Set the maximum time in the duration format (e.g., 5s/5m/5ms) before
+            # timing out read of an incoming request and closing idle connections.
             # '0' means no timeout for reading the request.
             read_timeout = "0"; # Default: '0'
             # Specify the full URL to access Grafana from a web browser.
@@ -211,5 +225,24 @@ in
         };
       };
     }
+    (mkIf (elem "loki" cfg.stack) {
+      services.loki = {
+        enable = true;
+        group = "loki"; # Default: 'loki'
+        user = "loki"; # Default: 'loki'
+        dataDir = "/var/lib/loki";
+        extraFlags = [ ];
+        # We use this Nix-representable JSON format instead of the configFile option.
+        configuration = { };
+      };
+    })
+    (mkIf (elem "tempo" cfg.stack) {
+      services.tempo = {
+        enable = true;
+        extraFlags = [ ];
+        # We use this Nix-representable YAML format instead of the configFile option.
+        settings = { };
+      };
+    })
   ]);
 }
