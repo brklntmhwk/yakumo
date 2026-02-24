@@ -1,0 +1,43 @@
+# WIP
+{
+  config,
+  lib,
+  ...
+}:
+
+let
+  inherit (lib)
+    mkEnableOption
+    mkIf
+    ;
+  cfg = config.yakumo.services.mosquitto;
+in
+{
+  options.yakumo.services.mosquitto = {
+    enable = mkEnableOption "mosquitto";
+  };
+
+  config = mkIf cfg.enable {
+    services.mosquitto = {
+      enable = true;
+      dataDir = "/var/lib/mosquitto";
+      includeDirs = [ ];
+      # Add destinations of log messages.
+      # (Options: 'stdout', 'stderr', 'syslog', 'topic', 'dlt')
+      logDest = [
+        "stderr"
+      ];
+      # Add types of messages to log.
+      # (Options: 'debug', 'error', 'warning', 'notice', 'information', 'subscribe',
+      # 'unsubscribe', 'websockets', 'none', 'all')
+      logType = [
+
+      ]; # Default: [ ]
+      # Enable persistent storage of subscriptions and messages.
+      persistence = true; # Default: true
+      bridges = { };
+      listeners = [ ];
+      settings = { };
+    };
+  };
+}
