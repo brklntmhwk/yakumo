@@ -95,6 +95,9 @@ in
     };
     apps = {
       browsers = {
+        brave = {
+          enable = true;
+        };
         nyxt = {
           enable = true;
           config = ../../configs/nyxt/init.lisp;
