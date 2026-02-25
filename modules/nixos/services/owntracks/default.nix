@@ -98,7 +98,12 @@ in
   config = mkIf cfg.enable (
     let
       inherit (builtins) isPath isStorePath toString;
-      inherit (lib) mkForce mkMerge optional;
+      inherit (lib)
+        mkForce
+        mkMerge
+        optional
+        optionalAttrs
+        ;
       inherit (pkgs) runCommand writeText;
 
       mqttCfg = config.yakumo.services.owntracks.mqttIntegration;
@@ -107,13 +112,20 @@ in
         if isPath cfg.frontend.config || isStorePath cfg.frontend.config then
           cfg.frontend.config
         else
-          pkgs.writeText "config.js" cfg.frontend.config;
+          writeText "config.js" cfg.frontend.config;
       configDir = runCommand "owntracks-frontend-config" { } ''
         mkdir -p $out/config
         cp ${configFile} $out/config/config.js
       '';
     in
     {
+      assertions = [
+        (optionalAttrs mqttCfg.enable {
+          assertion = (mqttCfg.broker == "mosquitto") -> config.yakumo.services.mosquitto.enable;
+          message = "Mosquitto must be enabled for MQTT integration if used as a broker";
+        })
+      ];
+
       environment.systemPackages = [ cfg.package ] ++ optional cfg.frontend.enable cfg.frontend.package;
 
       users.groups.owntracks = { };
