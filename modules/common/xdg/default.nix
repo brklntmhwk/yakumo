@@ -2,11 +2,13 @@
   config,
   lib,
   pkgs,
+  murakumo,
   ...
 }:
 
 let
   inherit (lib) mkEnableOption mkIf mkMerge;
+  inherit (murakumo.platforms) isLinux;
   cfg = config.yakumo.xdg;
   userCfg = config.yakumo.user;
 in
@@ -38,7 +40,7 @@ in
       # your "Music" or "Downloads" folders actually are.
       environment.systemPackages = [ pkgs.xdg-user-dirs ];
     }
-    (mkIf pkgs.stdenv.isLinux (
+    (mkIf isLinux (
       let
         xdgDirs = [
           "Desktop"

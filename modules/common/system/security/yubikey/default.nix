@@ -2,6 +2,7 @@
   config,
   pkgs,
   lib,
+  murakumo,
   ...
 }:
 
@@ -15,6 +16,7 @@ let
     mkOption
     types
     ;
+  inherit (murakumo.platforms) isLinux;
   cfg = config.yakumo.system.security.yubikey;
   supportedProtocols = [
     "fido-u2f" # FIDO-U2F
@@ -41,7 +43,7 @@ in
           ;
       };
     }
-    (mkIf pkgs.stdenv.isLinux {
+    (mkIf isLinux {
       services.udev.packages = attrValues { inherit (pkgs) yubikey-personalization; };
 
       # Enable PCSC-Lite daemon for accessing smart cards.

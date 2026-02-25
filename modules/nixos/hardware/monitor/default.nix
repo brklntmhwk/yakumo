@@ -2,6 +2,7 @@
   config,
   lib,
   pkgs,
+  murakumo,
   ...
 }:
 
@@ -12,8 +13,8 @@ let
     mkIf
     mkMerge
     ;
+  inherit (murakumo.platforms) isx86_64;
   hardwareMods = config.yakumo.hardware.modules;
-  isX86 = pkgs.stdenv.hostPlatform.isx86_64;
 in
 {
   config = mkIf (any (mod: hasPrefix "monitor" mod) hardwareMods) (mkMerge [
@@ -24,7 +25,7 @@ in
           ;
       };
     }
-    (mkIf isX86 {
+    (mkIf isx86_64 {
       # https://discourse.nixos.org/t/brightness-control-of-external-monitors-with-ddcci-backlight/8639/18
       boot = {
         kernelModules = [

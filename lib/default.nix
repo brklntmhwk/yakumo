@@ -17,6 +17,7 @@ let
       configs = final.callPackage ./configs.nix { };
       generators = final.callPackage ./generators.nix { };
       modules = final.callPackage ./modules.nix { };
+      platforms = final.callPackage ./platforms.nix { };
       utils = final.callPackage ./utils.nix { };
       wrappers = final.callPackage ./wrappers.nix { };
     });

@@ -3,6 +3,7 @@
   options,
   lib,
   pkgs,
+  murakumo,
   ...
 }:
 
@@ -14,6 +15,7 @@ let
     mkOption
     types
     ;
+  inherit (murakumo.platforms) isDarwin;
   cfg = config.yakumo.user;
 in
 {
@@ -58,7 +60,7 @@ in
       # - 'isSystemUser' to false
       isNormalUser = true;
       # Explicitly define this so it can be read by other modules.
-      home = if pkgs.stdenv.isDarwin then "/Users/${cfg.name}" else "/home/${cfg.name}";
+      home = if isDarwin then "/Users/${cfg.name}" else "/home/${cfg.name}";
       uid = mkDefault 1000;
       # TODO: remove this after figuring out how to manage passwords.
       # Set a placeholder password to satisfy the NixOS anti-lockout assertion.
