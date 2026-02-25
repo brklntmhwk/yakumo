@@ -19,14 +19,15 @@ in
       builtins.attrValues {
         inherit (pkgs) brave;
       }
-      ++ (pkgs.makeDesktopItem {
-        name = "brave";
-        desktopName = "Brave";
-        description = "Brave Browser.";
-        genericName = "Web Browser";
-        icon = "brave";
-        exec = "${pkgs.brave}/bin/brave --incognito";
-        categories = [ "Network" ];
-      });
+      ++ [
+        (pkgs.makeDesktopItem {
+          name = "brave";
+          desktopName = "Brave";
+          genericName = "Web Browser";
+          icon = "brave";
+          exec = "${pkgs.brave}/bin/brave --incognito";
+          categories = [ "Network" ];
+        })
+      ];
   };
 }
