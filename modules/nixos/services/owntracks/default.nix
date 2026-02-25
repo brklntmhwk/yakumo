@@ -213,6 +213,8 @@ in
       };
 
       services.caddy.virtualHosts."${cfg.frontend.domain}" = {
+        # useACMEHost = "yakumo.com";
+
         # Have Caddy handling the config file instead of relying on the package
         # override (i.e., `pkgs.foo.override`), as it will trigger a full rebuild of
         # the Node.js package every time the user changes a single setting in `config.js`.
