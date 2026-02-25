@@ -20,7 +20,8 @@ in
   config = mkIf cfg.enable {
     services.shiori = {
       enable = true;
-      address = "";
+      # If empty, Shiori listens on all interfaces.
+      address = ""; # Default: ''
       # Shiori can use MySQL or PostgreSQL.
       databaseUrl = "postgres:///shiori?host=/run/postgresql";
       environmentFile = "/path/to/environmentFile";
