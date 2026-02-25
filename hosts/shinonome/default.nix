@@ -64,77 +64,80 @@ in
 
   # Copied from the auto-generated 'hardware-configuration.nix' file.
   # Run `ip link show` or `ip a` to check your interface name(s).
-  # networking.interfaces.wlp111s0.useDHCP = mkDefault true;
+  networking.interfaces.wlan0.useDHCP = mkDefault true;
 
   boot.initrd.luks.devices."crypted" = {
     device = "/dev/disk/by-label/SHI_CRYPT";
     allowDiscards = true;
   };
 
-  fileSystems."/" =
-    { device = "/dev/disk/by-label/SHI_ROOT";
-      fsType = "btrfs";
-      options = [
-        "subvol=root"
+  fileSystems."/" = {
+    device = "/dev/disk/by-label/SHI_ROOT";
+    fsType = "btrfs";
+    options = [
+      "subvol=root"
       "compress=zstd"
       "noatime"
-      ];
-    };
+    ];
+  };
 
-  fileSystems."/home" =
-    { device = "/dev/disk/by-label/SHI_ROOT";
-      fsType = "btrfs";
-      options = [
-"subvol=home"
+  fileSystems."/home" = {
+    device = "/dev/disk/by-label/SHI_ROOT";
+    fsType = "btrfs";
+    options = [
+      "subvol=home"
       "compress=zstd"
       "noatime"
-];
-    };
+    ];
+  };
 
-  fileSystems."/nix" =
-    { device = "/dev/disk/by-label/SHI_ROOT";
-      fsType = "btrfs";
-      options = [
-"subvol=nix"
+  fileSystems."/nix" = {
+    device = "/dev/disk/by-label/SHI_ROOT";
+    fsType = "btrfs";
+    options = [
+      "subvol=nix"
       "compress=zstd"
       "noatime"
-];
-    };
+    ];
+  };
 
-  fileSystems."/yosuga" =
-    { device = "/dev/disk/by-label/SHI_ROOT";
-      fsType = "btrfs";
-      options = [ 
-"subvol=yosuga"
+  fileSystems."/yosuga" = {
+    device = "/dev/disk/by-label/SHI_ROOT";
+    fsType = "btrfs";
+    options = [
+      "subvol=yosuga"
       "compress=zstd"
       "noatime"
-];
-    };
+    ];
+  };
 
-  fileSystems."/var/log" =
-    { device = "/dev/disk/by-label/SHI_ROOT";
-      fsType = "btrfs";
-      options = [
-"subvol=log"
+  fileSystems."/var/log" = {
+    device = "/dev/disk/by-label/SHI_ROOT";
+    fsType = "btrfs";
+    options = [
+      "subvol=log"
       "compress=zstd"
       "noatime"
-];
-    };
+    ];
+  };
 
-  fileSystems."/swap" =
-    { device = "/dev/disk/by-label/SHI_ROOT";
-      fsType = "btrfs";
-      options = [
-"subvol=swap"
+  fileSystems."/swap" = {
+    device = "/dev/disk/by-label/SHI_ROOT";
+    fsType = "btrfs";
+    options = [
+      "subvol=swap"
       "noatime"
-];
-    };
+    ];
+  };
 
-  fileSystems."/boot" =
-    { device = "/dev/disk/by-uuid/2DBD-07F0";
-      fsType = "vfat";
-      options = [ "fmask=0022" "dmask=0022" ];
-    };
+  fileSystems."/boot" = {
+    device = "/dev/disk/by-uuid/2DBD-07F0";
+    fsType = "vfat";
+    options = [
+      "fmask=0022"
+      "dmask=0022"
+    ];
+  };
 
   swapDevices = [ { device = "/swap/swapfile"; } ];
 

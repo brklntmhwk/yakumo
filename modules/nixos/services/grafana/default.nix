@@ -14,7 +14,7 @@ let
     mkMerge
     mkOption
     optional
-types
+    types
     ;
   cfg = config.yakumo.services.grafana;
   grafanaStack = [
