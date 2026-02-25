@@ -32,7 +32,6 @@ buildNpmPackage (finalAttrs: {
     description = "Web interface for OwnTracks.";
     homepage = "https://github.com/owntracks/frontend";
     changelog = "https://github.com/owntracks/frontend/blob/master/Changelog";
-    mainProgram = "owntracks-frontend";
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.linux;
   };
