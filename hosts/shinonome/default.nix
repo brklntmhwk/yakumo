@@ -16,12 +16,12 @@ in
     # ./hardware-configuration.nix
   ];
 
-  # hardware.asahi = {
-  #   enable = true;
-  #   extractPeripheralFirmware = true;
-  #   peripheralFirmwareDirectory = ./firmware;
-  #   setupAsahiSound = true;
-  # };
+  hardware.asahi = {
+    enable = true;
+    extractPeripheralFirmware = true;
+    peripheralFirmwareDirectory = ./firmware;
+    setupAsahiSound = true;
+  };
 
   boot = {
     loader.efi.canTouchEfiVariables = mkForce false;
@@ -66,7 +66,77 @@ in
   # Run `ip link show` or `ip a` to check your interface name(s).
   # networking.interfaces.wlp111s0.useDHCP = mkDefault true;
 
-  # fileSystems."/" = { };
+  boot.initrd.luks.devices."crypted" = {
+    device = "/dev/disk/by-label/SHI_CRYPT";
+    allowDiscards = true;
+  };
+
+  fileSystems."/" =
+    { device = "/dev/disk/by-label/SHI_ROOT";
+      fsType = "btrfs";
+      options = [
+        "subvol=root"
+      "compress=zstd"
+      "noatime"
+      ];
+    };
+
+  fileSystems."/home" =
+    { device = "/dev/disk/by-label/SHI_ROOT";
+      fsType = "btrfs";
+      options = [
+"subvol=home"
+      "compress=zstd"
+      "noatime"
+];
+    };
+
+  fileSystems."/nix" =
+    { device = "/dev/disk/by-label/SHI_ROOT";
+      fsType = "btrfs";
+      options = [
+"subvol=nix"
+      "compress=zstd"
+      "noatime"
+];
+    };
+
+  fileSystems."/yosuga" =
+    { device = "/dev/disk/by-label/SHI_ROOT";
+      fsType = "btrfs";
+      options = [ 
+"subvol=yosuga"
+      "compress=zstd"
+      "noatime"
+];
+    };
+
+  fileSystems."/var/log" =
+    { device = "/dev/disk/by-label/SHI_ROOT";
+      fsType = "btrfs";
+      options = [
+"subvol=log"
+      "compress=zstd"
+      "noatime"
+];
+    };
+
+  fileSystems."/swap" =
+    { device = "/dev/disk/by-label/SHI_ROOT";
+      fsType = "btrfs";
+      options = [
+"subvol=swap"
+      "noatime"
+];
+    };
+
+  fileSystems."/boot" =
+    { device = "/dev/disk/by-uuid/2DBD-07F0";
+      fsType = "vfat";
+      options = [ "fmask=0022" "dmask=0022" ];
+    };
+
+  swapDevices = [ { device = "/swap/swapfile"; } ];
 
   i18n = {
     defaultLocale = "en_US.UTF-8";
@@ -82,5 +152,5 @@ in
   };
 
   # Don't modify this unless you're sure about the effects.
-  # system.stateVersion = "xx.yy";
+  system.stateVersion = "25.11";
 }
