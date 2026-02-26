@@ -105,6 +105,7 @@ in
       "compress=zstd"
       "noatime"
     ];
+    neededForBoot = true;
   };
 
   fileSystems."/var/log" = {
@@ -115,6 +116,7 @@ in
       "compress=zstd"
       "noatime"
     ];
+    neededForBoot = true;
   };
 
   fileSystems."/swap" = {
