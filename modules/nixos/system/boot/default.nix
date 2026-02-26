@@ -8,7 +8,12 @@
 
 let
   inherit (builtins) attrValues;
-  inherit (lib) mkDefault mkForce mkIf mkMerge;
+  inherit (lib)
+    mkDefault
+    mkForce
+    mkIf
+    mkMerge
+    ;
   inherit (murakumo.platforms) isx86_64 isAarch64;
   systemRole = config.yakumo.system.role;
   isWsl = (config ? wsl) && config.wsl.enable;
