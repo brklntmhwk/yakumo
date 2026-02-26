@@ -82,5 +82,28 @@ in
         };
       }
     );
+
+    yakumo.services.rustic.backups = {
+      forgejo = {
+        environmentFile = config.sops.secrets.xxx.path;
+        timerConfig = {
+          OnCalendar = "*-*-* 05:30:00"; # Run daily at 5:30 a.m.
+          Persistent = true;
+        };
+        settings = {
+          repository = "";
+          backup = {
+            sources = [
+              "${config.services.forgejo.stateDir}/dump"
+            ];
+          };
+          forget = {
+            keep-daily = 7;
+            keep-weekly = 4;
+            prune = true;
+          };
+        };
+      };
+    };
   };
 }
