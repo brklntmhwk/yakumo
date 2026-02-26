@@ -22,7 +22,7 @@ in
   };
 
   config = {
-    # Enable unfree (proprietary) firmware support. (especially Wi-Fi cards and GPUs)
+    # Enable unfree (proprietary) firmware support (especially Wi-Fi cards and GPUs).
     # This line is written in "/nix/store/.../modules/installer/scan/not-detected.nix".
     # 'hardware-configuration.nix' usually imports this like:
     # `imports = [ (modulesPath + "/installer/scan/not-detected.nix") ];`

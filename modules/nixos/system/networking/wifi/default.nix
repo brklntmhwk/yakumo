@@ -77,7 +77,7 @@ in
         systemd.tmpfiles.rules = [
           "d ${configDir} 700 root root - -"
         ]
-        # # e.g., `[ "f /etc/wpa_supplicant.d/wlp111s0.conf 700 root root - -" ... ]`
+        # e.g., `[ "f /etc/wpa_supplicant.d/wlp111s0.conf 700 root root - -" ... ]`
         ++ (map (interface: "f ${configDir}/${interface}.conf 700 root root - -") interfaces);
 
         # Prevent `systemd-networkd-wait-online` from waiting for all network interfaces
