@@ -50,10 +50,6 @@
       url = "github:nix-community/nix-index-database";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    treefmt-nix = {
-      url = "github:numtide/treefmt-nix";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
 
     # --- Secrets ---
     sops-nix = {
@@ -113,15 +109,10 @@
       formatter = lib'.forAllSystems (
         system:
         let
+          inherit (pkgs) callPackage;
           pkgs = nixpkgs.legacyPackages.${system};
-          treefmtEval = inputs.treefmt-nix.lib.evalModule pkgs {
-            projectRootFile = "flake.nix";
-            programs = {
-              nixfmt.enable = true;
-            };
-          };
         in
-        treefmtEval.config.build.wrapper
+        callPackage ./formatter.nix { }
       );
 
       # These are not for external use.
