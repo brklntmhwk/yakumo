@@ -79,7 +79,7 @@ in
       position = {
         _props = {
           x = 0;
-          y = 2160;
+          y = 1080; # Use DP-2's logical height.
         };
       };
     }

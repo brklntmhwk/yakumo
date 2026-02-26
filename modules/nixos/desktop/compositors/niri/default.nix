@@ -41,6 +41,15 @@ in
         input.focus-follows-mouse._props.max-scroll-amount = "0%";
       };
     };
+    loginSettings = mkOption {
+      type = yamlFormat.type;
+      default = { };
+      description = ''
+        Niri configuration for the greetd login session in Nix-representable KDL format.
+        For the valid setting options, see:
+        https://yalter.github.io/niri/Configuration%3A-Introduction.html
+      '';
+    };
     # https://github.com/NixOS/nixpkgs/commit/ab65220a1af24cc46a67021e624fce3f4c87ebfa
     regreet = {
       background = {
@@ -155,6 +164,7 @@ in
       inherit (lib) getExe optionalAttrs;
       inherit (pkgs) writeText;
       inherit (murakumo.platforms) isAarch64;
+      inherit (murakumo.generators) toKDL;
     in
     mkMerge [
       {
@@ -172,7 +182,7 @@ in
           # Asahi's Vulkan driver (Honeykrisp) is still experimental and under
           # bleeding-edge development, causing some GTK4 apps to crash and triggering
           # an unrecoverable GPU freeze.
-          GSK_RENDERER = "ngl";
+          # GSK_RENDERER = "ngl";
         };
 
         xdg.portal = {
@@ -200,6 +210,23 @@ in
             Wants = [ "graphical-session-pre.target" ];
           };
         };
+
+        # Set the minimum config for the greetd login session.
+        # This will be automatically merged with user-defined settings.
+        # https://github.com/rharish101/ReGreet?tab=readme-ov-file#set-as-default-session
+        yakumo.desktop.compositors.niri.loginSettings = {
+          hotkey-overlay.skip-at-startup = { };
+          binds = { };
+          spawn-at-startup = [
+            {
+              _args = [
+                "sh"
+                "-c"
+                "${getExe pkgs.greetd.regreet}; niri msg action quit --skip-confirmation"
+              ];
+            }
+          ];
+        };
       }
       (
         let
@@ -212,7 +239,6 @@ in
           inherit (lib) elem getName optional;
           inherit (pkgs) runCommand;
           inherit (murakumo.wrappers) mkAppWrapper;
-          inherit (murakumo.generators) toKDL;
 
           addBindSemicolons =
             binds:
@@ -283,7 +309,8 @@ in
                 # This satisfies the display manager's requirement by explicitly
                 # declaring the base name of the .desktop file.
                 # "Package, 'foo.desktop', did not specify any session names, as string,
-                # in 'passthru.providedSessions'. This is required when used as a session package".
+                # in 'passthru.providedSessions'. This is required when used as
+                # a session package".
                 passthru.providedSessions = [ "niri-yakumo" ];
               }
               ''
@@ -339,16 +366,9 @@ in
           })
         ];
 
-        # https://github.com/rharish101/ReGreet?tab=readme-ov-file#set-as-default-session
         services.greetd =
           let
-            loginCfg = writeText "login-config.kdl" ''
-              hotkey-overlay {
-                  skip-at-startup
-              }
-              binds { }
-              spawn-at-startup "sh" "-c" "${getExe pkgs.greetd.regreet}; niri msg action quit --skip-confirmation"
-            '';
+            loginCfg = writeText "login-config.kdl" (toKDL { } cfg.loginSettings);
           in
           {
             enable = true;
