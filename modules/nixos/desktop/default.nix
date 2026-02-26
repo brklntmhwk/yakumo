@@ -45,6 +45,9 @@ in
         ];
     }
     (mkIf cfg.enable {
+      # Guarantee graphics for any desktop environment.
+      hardware.graphics.enable = true;
+
       xdg.portal = {
         enable = cfg.enable;
         xdgOpenUsePortal = mkDefault true;

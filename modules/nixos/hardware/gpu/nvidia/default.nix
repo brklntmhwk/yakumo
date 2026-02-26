@@ -13,17 +13,16 @@ in
   config = mkIf (elem "gpu/nvidia" hardwareMods) {
     services.xserver.videoDrivers = mkDefault [ "nvidia" ];
     hardware.graphics = {
-      enable = true;
+      # Enabling desktop automatically turns this on.
+      # enable = true;
       enable32Bit = true;
-      extraPackages = [
-
-      ];
+      extraPackages = [ ];
     };
     hardware.nvidia = {
-      modesetting.enable = true; # Most Wayland compositors need this
+      modesetting.enable = true; # Most Wayland compositors need this.
       powerManagement.enable = true;
       nvidiaSettings = true;
-      open = mkDefault false; # Use proprietary drivers
+      open = mkDefault false; # Use proprietary drivers.
       package = config.boot.kernelPackages.nvidiaPackages.stable;
     };
   };
