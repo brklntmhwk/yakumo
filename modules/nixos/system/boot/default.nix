@@ -2,15 +2,16 @@
   config,
   lib,
   pkgs,
+  murakumo,
   ...
 }:
 
 let
   inherit (builtins) attrValues;
   inherit (lib) mkDefault mkIf mkMerge;
+  inherit (murakumo.platforms) isx86_64;
   systemRole = config.yakumo.system.role;
   isWsl = (config ? wsl) && config.wsl.enable;
-  isX86_64 = pkgs.stdenv.hostPlatform.isx86_64;
 in
 {
   config = mkMerge [
@@ -33,7 +34,7 @@ in
             # Maximum number of latest generations in the boot menu.
             configurationLimit = mkDefault 10;
             # Add Memtest86+ (Memory testing tool) to the boot menu.
-            memtest86.enable = mkIf isX86_64 (mkDefault true);
+            memtest86.enable = mkIf isx86_64 (mkDefault true);
           };
           timeout = mkDefault 3;
         };
@@ -43,7 +44,7 @@ in
     (mkIf (systemRole == "workstation") {
       boot = {
         # We don't play games on our workstations, so Xanmod is not our option.
-        kernelPackages = mkIf isX86_64 pkgs.linuxKernel.packages.linux_zen;
+        kernelPackages = mkIf isx86_64 pkgs.linuxKernel.packages.linux_zen;
         kernelModules = [ ];
         kernel = { };
         # Kernel Modules needed to mount the root file system.
@@ -60,7 +61,7 @@ in
     })
     (mkIf (systemRole == "server") {
       boot = {
-        kernelPackages = mkIf isX86_64 pkgs.linuxKernel.packages.linux_6_12_hardened;
+        kernelPackages = mkIf isx86_64 pkgs.linuxKernel.packages.linux_6_12_hardened;
       };
     })
   ];
