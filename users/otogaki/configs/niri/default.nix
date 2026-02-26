@@ -93,7 +93,7 @@ in
   # https://yalter.github.io/niri/Configuration:-Layout
   layout = {
     gaps = {
-      _args = [ 12 ];
+      _args = [ 8 ];
     };
     center-focused-column = {
       _args = [ "never" ];
@@ -112,10 +112,10 @@ in
     };
     focus-ring = {
       width = {
-        _args = [ 2 ];
+        _args = [ 3 ];
       };
       active-color = {
-        _args = [ colors.bg-lavender ];
+        _args = [ colors.indigo ];
       };
       inactive-color = {
         _args = [ colors.bg-dim ];
@@ -124,7 +124,7 @@ in
     border = {
       off = { };
       width = {
-        _args = [ 2 ];
+        _args = [ 3 ];
       };
       active-color = {
         _args = [ colors.yellow-faint ];

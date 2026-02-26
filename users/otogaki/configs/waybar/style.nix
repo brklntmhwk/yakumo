@@ -15,7 +15,7 @@ in
 
   /* Status bar  */
   window#waybar {
-      background-color: ${colors.bg-lavender};
+      background-color: ${colors.bg-dim};
       color: ${colors.fg-main};
   }
 
