@@ -29,13 +29,12 @@ writeShellApplication {
 
     for target in "''${targets[@]}"; do
         if [ -f "$target" ]; then
-            # If the target is a specific file, add it directly (if it's a .nix file)
+            # Add a Nix file directly to the target list.
             if [[ "$target" == *.nix ]]; then
                 files+=("$target")
             fi
         elif [ -d "$target" ]; then
-            # If it's a directory, use `fd` to find all .nix files.
-            # `fd` correctly handles spaces and .gitignore.
+            # Use `fd` to find all Nix files in a directory.
             while IFS= read -r file; do
                 files+=("$file")
             done < <(fd --type file --extension nix --hidden --exclude .git . "$target")
@@ -45,7 +44,7 @@ writeShellApplication {
     total="''${#files[@]}"
 
     if [ "$total" -eq 0 ]; then
-        echo "🔍️ No Nix files found to format."
+        echo "🙅 No Nix files found to format."
         exit 0
     fi
 
