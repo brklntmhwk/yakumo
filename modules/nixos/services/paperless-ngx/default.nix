@@ -62,7 +62,7 @@ in
           repository = "";
           backup = {
             sources = [
-              "${config.services.paperless.dataDir}/export"
+              config.services.paperless.exporter.directory
             ];
           };
           forget = {

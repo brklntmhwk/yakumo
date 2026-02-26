@@ -94,7 +94,7 @@ in
           repository = "";
           backup = {
             sources = [
-              "${config.services.forgejo.stateDir}/dump"
+              config.services.forgejo.dump.backupDir
             ];
           };
           forget = {
