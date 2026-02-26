@@ -8,10 +8,11 @@
 
 let
   inherit (builtins) attrValues;
-  inherit (lib) mkDefault mkIf mkMerge;
-  inherit (murakumo.platforms) isx86_64;
+  inherit (lib) mkDefault mkForce mkIf mkMerge;
+  inherit (murakumo.platforms) isx86_64 isAarch64;
   systemRole = config.yakumo.system.role;
   isWsl = (config ? wsl) && config.wsl.enable;
+  isAsahi = isAarch64 && (config ? hardware.asahi);
 in
 {
   config = mkMerge [
@@ -41,6 +42,9 @@ in
         # initrd.systemd.enable = true;
       };
     }
+    (mkIf isAsahi {
+      loader.efi.canTouchEfiVariables = mkForce false;
+    })
     (mkIf (systemRole == "workstation") {
       boot = {
         # We don't play games on our workstations, so Xanmod is not our option.

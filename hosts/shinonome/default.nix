@@ -22,10 +22,6 @@ in
     setupAsahiSound = true;
   };
 
-  boot = {
-    loader.efi.canTouchEfiVariables = mkForce false;
-  };
-
   yakumo.system = {
     role = "workstation";
     nix = {
@@ -152,6 +148,15 @@ in
       "es_ES.UTF-8/UTF-8"
       "ja_JP.UTF-8/UTF-8"
     ];
+  };
+
+  environment.systemPackages = builtins.attrValues {
+    inherit (pkgs)
+      asahi-btsync # Bluetooth pairing keys sync with macOS on ARM Macs.
+      asahi-wifisync # Wifi passwords sync with macOS on ARM Macs.
+      asahi-bless # Tool to select active boot partition on ARM Macs.
+      asahi-nvram # Tool to read and write nvram variables on ARM Macs.
+      ;
   };
 
   # Don't modify this unless you're sure about the effects.
