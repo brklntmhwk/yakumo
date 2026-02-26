@@ -48,7 +48,7 @@ in
       };
     }
     (mkIf isAsahi {
-      loader.efi.canTouchEfiVariables = mkForce false;
+      boot.loader.efi.canTouchEfiVariables = mkForce false;
     })
     (mkIf (systemRole == "workstation") {
       boot = {
