@@ -68,7 +68,12 @@ in
 
   config = mkIf cfg.enable (
     let
-      inherit (lib) filterAttrs mapAttrs' nameValuePair optionalAttrs;
+      inherit (lib)
+        filterAttrs
+        mapAttrs'
+        nameValuePair
+        optionalAttrs
+        ;
     in
     {
       systemd.services = mapAttrs' (

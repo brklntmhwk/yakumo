@@ -26,7 +26,7 @@ in
       configurePostgres = true; # Default: false
       dbBackend = "postgresql"; # Default: 'sqlite' (Options: 'mysql', 'postgresql')
       domain = "";
-      environmentFile = "/var/lib/vaultwarden.env";
+      environmentFile = config.sops.secrets.xxx.path; # Default: [ ]
       config = {
         ROCKET_ADDRESS = "::1";
         ROCKET_PORT = 8222;

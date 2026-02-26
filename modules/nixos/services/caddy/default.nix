@@ -32,7 +32,7 @@ in
       # Specify your email address, which will be used when creating an ACME account
       # with your CA.
       email = null; # Default: null
-      environmentFile = null; # Default: null
+      environmentFile = config.sops.secrets.xxx.path; # Default: null
       dataDir = "/var/lib/caddy";
       logDir = "/var/log/caddy";
       # See: https://caddyserver.com/docs/caddyfile/options#log

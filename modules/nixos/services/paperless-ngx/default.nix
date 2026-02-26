@@ -28,7 +28,7 @@ in
       dataDir = "/var/db/paperless";
       mediaDir = "${config.services.paperless.dataDir}/media";
       domain = "paperless.example.com"; # Default: null
-      environmentFile = "path/to/environment-file";
+      environmentFile = config.sops.secrets.xxx.path; # Default: null
       passwordFile = "/run/keys/paperless-password";
       port = 28981; # Default: 28981
       # Configure local PostgreSQL DB server.
