@@ -35,6 +35,7 @@ in
         enable = true;
         xwayland.enable = true;
         settings = import ../../configs/niri { inherit theme; };
+        loginSettings = import ../../configs/niri/login.nix;
         regreet = {
           background = {
             path = theme.wallpaper;
