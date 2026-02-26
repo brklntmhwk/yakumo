@@ -50,5 +50,28 @@ in
       # For the detail, see: https://github.com/NixOS/nixpkgs/issues/240591
       openMPThreadingWorkaround = true; # Default: true
     };
+
+    yakumo.services.rustic.backups = {
+      paperless = {
+        environmentFile = config.sops.secrets.xxx.path;
+        timerConfig = {
+          OnCalendar = "*-*-* 02:30:00"; # Run daily at 2:30 a.m.
+          Persistent = true;
+        };
+        settings = {
+          repository = "";
+          backup = {
+            sources = [
+              "${config.services.paperless.dataDir}/export"
+            ];
+          };
+          forget = {
+            keep-daily = 7;
+            keep-weekly = 4;
+            prune = true;
+          };
+        };
+      };
+    };
   };
 }
