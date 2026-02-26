@@ -56,6 +56,7 @@ in
     modules = [
       "audio"
       "bluetooth/blueman"
+      "gpu/asahi"
       "monitor"
       "ssd"
     ];
