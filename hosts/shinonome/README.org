@@ -8,7 +8,6 @@ Towards the dawn.
 
 ** Machine Specs
 | Model | MacBook Pro M1 2021  |
-|-------+----------------------|
 | CPU   | Apple Silicon M1 Pro |
 | GPU   | Apple Silicon M1 Pro |
 | RAM   | 32GB                 |

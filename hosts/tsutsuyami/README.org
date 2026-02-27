@@ -8,7 +8,6 @@ Into the darkness.
 
 ** Machine Specs
 | CPU          | AMD Ryzen 5 7600X                                  |
-|--------------+----------------------------------------------------|
 | GPU          | 玄人志向 GALAKURO GAMING NVIDIA GeForce RTX 4060ti |
 | MOBO         | ASRock B650E PG-ITX WiFi                           |
 | RAM          | Crucial DDR5 Pro 16GB x 2                          |

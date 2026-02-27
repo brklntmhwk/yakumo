@@ -8,7 +8,6 @@ Within the current.
 
 ** Machine Specs
 | CPU          | AMD Ryzen 5 7600            |
-|--------------+-----------------------------|
 | GPU          | ASRock Radeon RX 550        |
 | MOBO         | ASRock B650I Lightning WiFi |
 | RAM          | Crucial DDR5 16GB           |
