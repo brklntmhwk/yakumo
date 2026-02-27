@@ -51,99 +51,110 @@ in
       '';
     };
     greeter = mkOption {
-      type = types.enum [
-        "regreet"
-        "tuigreet"
-      ];
-      default = "regreet";
-      description = "Which greetd greeter to use.";
-    };
-    # https://github.com/NixOS/nixpkgs/commit/ab65220a1af24cc46a67021e624fce3f4c87ebfa
-    regreet = {
-      background = {
-        path = mkOption {
-          type = types.nullOr (types.either types.path types.str);
-          default = null;
-          description = ''
-            Path to the background image that will be applied to the login screen.
-          '';
+      # https://github.com/NixOS/nixpkgs/commit/ab65220a1af24cc46a67021e624fce3f4c87ebfa
+      regreet = {
+        enable = mkEnableOption "regreet";
+        background = {
+          path = mkOption {
+            type = types.nullOr (types.either types.path types.str);
+            default = null;
+            description = ''
+              Path to the background image that will be applied to the login screen.
+            '';
+          };
+          # https://github.com/rharish101/ReGreet/commit/94aad06ef46be06765e6d9fd938df7edafcb5a04
+          fit = mkOption {
+            type = types.enum [
+              "Contain"
+              "Cover"
+              "Fill"
+              "ScaleDown"
+            ];
+            default = "Cover";
+            description = ''
+              How the background image should be made to fit inside an allocation.
+            '';
+          };
         };
-        # https://github.com/rharish101/ReGreet/commit/94aad06ef46be06765e6d9fd938df7edafcb5a04
-        fit = mkOption {
-          type = types.enum [
-            "Contain"
-            "Cover"
-            "Fill"
-            "ScaleDown"
-          ];
-          default = "Cover";
-          description = ''
-            How the background image should be made to fit inside an allocation.
-          '';
+        theme = {
+          name = mkOption {
+            type = types.str;
+            default = "Adwaita";
+            description = ''
+              Name of the theme to use for regreet.
+            '';
+          };
+          preferDark = mkEnableOption "GTK dark theme";
+          package = mkPackageOption pkgs "gnome-themes-extra" { } // {
+            description = ''
+              The package that provides the theme given in the name option.
+            '';
+          };
+        };
+        cursorTheme = {
+          name = mkOption {
+            type = types.str;
+            default = "Adwaita";
+            description = ''
+              Name of the cursor theme to use for regreet.
+            '';
+          };
+          package = mkPackageOption pkgs "adwaita-icon-theme" { } // {
+            description = ''
+              The package that provides the cursor theme given in the name option.
+            '';
+          };
+        };
+        font = {
+          name = mkOption {
+            type = types.str;
+            default = "Cantarell";
+            description = ''
+              Name of the font to use for regreet.
+            '';
+          };
+          size = mkOption {
+            type = types.ints.positive;
+            default = 16;
+            description = ''
+              Size of the font to use for regreet.
+            '';
+          };
+          package = mkPackageOption pkgs "cantarell-fonts" { } // {
+            description = ''
+              The package that provides the font given in the name option.
+            '';
+          };
+        };
+        iconTheme = {
+          name = lib.mkOption {
+            type = lib.types.str;
+            default = "Adwaita";
+            description = ''
+              Name of the icon theme to use for regreet.
+            '';
+          };
+          package = lib.mkPackageOption pkgs "adwaita-icon-theme" { } // {
+            description = ''
+              The package that provides the icon theme given in the name option.
+            '';
+          };
         };
       };
-      theme = {
-        name = mkOption {
-          type = types.str;
-          default = "Adwaita";
+      tuigreet = {
+        enable = mkEnableOption "tuigreet";
+        themeArgs = mkOption {
+          type = types.attr;
+          default = { };
           description = ''
-            Name of the theme to use for regreet.
+            Theme arguments passed to tuigreet in the Nix attribute set format.
           '';
         };
-        preferDark = mkEnableOption "GTK dark theme";
-        package = mkPackageOption pkgs "gnome-themes-extra" { } // {
-          description = ''
-            The package that provides the theme given in the name option.
-          '';
-        };
-      };
-      cursorTheme = {
-        name = mkOption {
-          type = types.str;
-          default = "Adwaita";
-          description = ''
-            Name of the cursor theme to use for regreet.
-          '';
-        };
-        package = mkPackageOption pkgs "adwaita-icon-theme" { } // {
-          description = ''
-            The package that provides the cursor theme given in the name option.
-          '';
-        };
-      };
-      font = {
-        name = mkOption {
-          type = types.str;
-          default = "Cantarell";
-          description = ''
-            Name of the font to use for regreet.
-          '';
-        };
-        size = mkOption {
-          type = types.ints.positive;
-          default = 16;
-          description = ''
-            Size of the font to use for regreet.
-          '';
-        };
-        package = mkPackageOption pkgs "cantarell-fonts" { } // {
-          description = ''
-            The package that provides the font given in the name option.
-          '';
-        };
-      };
-      iconTheme = {
-        name = lib.mkOption {
-          type = lib.types.str;
-          default = "Adwaita";
-          description = ''
-            Name of the icon theme to use for regreet.
-          '';
-        };
-        package = lib.mkPackageOption pkgs "adwaita-icon-theme" { } // {
-          description = ''
-            The package that provides the icon theme given in the name option.
-          '';
+        extraArgs = mkOption {
+          type = types.listOf types.str;
+          default = [ ];
+          example = [ "--width 70" ];
+          description = "Extra arguments passed to tuigreet.";
         };
       };
     };
@@ -173,9 +184,17 @@ in
       inherit (pkgs) writeText;
       inherit (murakumo.platforms) isAarch64;
       inherit (murakumo.generators) toKDL;
+      inherit (murakumo.utils) countAttrs;
     in
     mkMerge [
       {
+        assertions = [
+          {
+            assertion = countAttrs (_: v: v.enable or false) cfg.greeter == 1;
+            message = "Exactly one greeter must be enabled at a time (Zero or multiple are not allowed)";
+          }
+        ];
+
         environment.sessionVariables = {
           ELECTRON_OZONE_PLATFORM_HINT = "auto";
           NIXOS_OZONE_WL = "1";
@@ -376,7 +395,14 @@ in
 
         services.greetd =
           let
+            inherit (lib) optionalString;
+            inherit (murakumo.generators) toTuigreetTheme;
             loginCfg = writeText "login-config.kdl" (toKDL { } cfg.loginSettings);
+            tuigreetThemeStr = toTuigreetTheme cfg.greeter.tuigreet.themeArgs;
+            tuigreetThemeArg = optionalString (tuigreetThemeStr != "") " --theme '${tuigreetThemeStr}'";
+            tuigreetExtraArgs = optionalString (
+              cfg.greeter.tuigreet.extraArgs != [ ]
+            ) " ${concatStringsSep " " cfg.greeter.tuigreet.extraArgs}";
           in
           {
             enable = true;
@@ -389,7 +415,7 @@ in
                     # the app with an immediate DBus context.
                     "${pkgs.dbus}/bin/dbus-run-session ${getExe cfg.package} --config ${loginCfg}"
                   else
-                    "${pkgs.tuigreet}/bin/tuigreet --time --remember --cmd ${getExe cfg.packageWrapped}";
+                    "${pkgs.tuigreet}/bin/tuigreet --time --remember${tuigreetThemeArg}${tuigreetExtraArgs} --cmd ${getExe cfg.packageWrapped}";
                 user = "greeter";
               };
             };

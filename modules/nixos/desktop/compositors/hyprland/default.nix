@@ -102,6 +102,24 @@ in
         )
       );
     };
+    greeter = {
+      tuigreet = {
+        enable = mkEnableOption "tuigreet";
+        themeArgs = mkOption {
+          type = types.attr;
+          default = { };
+          description = ''
+            Theme arguments passed to tuigreet in the Nix attribute set format.
+          '';
+        };
+        extraArgs = mkOption {
+          type = types.listOf types.str;
+          default = [ ];
+          example = [ "--width 70" ];
+          description = "Extra arguments passed to tuigreet.";
+        };
+      };
+    };
     xwayland = {
       enable = mkEnableOption "XWayland" // {
         # Fcitx5 recommends enabling XWayland as a fallback for coordination reasons
@@ -135,6 +153,7 @@ in
   config = mkIf cfg.enable (
     let
       inherit (builtins) attrValues hasAttr;
+      inherit (murakumo.utils) countAttrs;
     in
     mkMerge [
       {
@@ -143,6 +162,10 @@ in
           {
             assertion = !hasAttr "reset" cfg.submaps;
             message = "Submaps can't be named 'reset'. The name 'reset' is reserved in order to have a way to switch to the default submap; as if 'reset' was its name.";
+          }
+          {
+            assertion = countAttrs (_: v: v.enable or false) cfg.greeter == 1;
+            message = "Exactly one greeter must be enabled at a time (Zero or multiple are not allowed)";
           }
         ];
 
@@ -181,18 +204,28 @@ in
           };
         };
 
-        services.greetd = {
-          enable = true;
-          settings = {
-            default_session = {
-              # Don't use Regreet with Hyprland. That combo seems buggy as in:
-              # https://www.reddit.com/r/NixOS/comments/14rhsnu/regreet_greeter_for_greetd_doesnt_show_a_session/
-              # Tuigreet would be more stable.
-              command = "${pkgs.tuigreet}/bin/tuigreet --time --remember --cmd Hyprland";
-              user = "greeter";
+        services.greetd =
+          let
+            inherit (lib) concatStringsSep optionalString;
+            inherit (murakumo.generators) toTuigreetTheme;
+            tuigreetThemeStr = toTuigreetTheme cfg.greeter.tuigreet.themeArgs;
+            tuigreetThemeArg = optionalString (tuigreetThemeStr != "") " --theme '${tuigreetThemeStr}'";
+            tuigreetExtraArgs = optionalString (
+              cfg.greeter.tuigreet.extraArgs != [ ]
+            ) " ${concatStringsSep " " cfg.greeter.tuigreet.extraArgs}";
+          in
+          {
+            enable = true;
+            settings = {
+              default_session = {
+                # Don't use Regreet with Hyprland. That combo seems buggy as in:
+                # https://www.reddit.com/r/NixOS/comments/14rhsnu/regreet_greeter_for_greetd_doesnt_show_a_session/
+                # Tuigreet would be more stable.
+                command = "${pkgs.tuigreet}/bin/tuigreet --time --remember${tuigreetThemeArg}${tuigreetExtraArgs} --cmd Hyprland";
+                user = "greeter";
+              };
             };
           };
-        };
       }
       (
         let

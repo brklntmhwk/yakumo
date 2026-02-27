@@ -307,4 +307,6 @@ in
           toString v;
     in
     toRon' indentLevel attrs;
+
+  toTuigreetTheme = attrs: concatStringsSep ";" (mapAttrsToList (k: v: "${k}=${v}") attrs);
 }
