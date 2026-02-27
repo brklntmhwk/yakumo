@@ -144,7 +144,7 @@ in
       tuigreet = {
         enable = mkEnableOption "tuigreet";
         themeArgs = mkOption {
-          type = types.attr;
+          type = types.attrs;
           default = { };
           description = ''
             Theme arguments passed to tuigreet in the Nix attribute set format.
