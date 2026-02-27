@@ -41,12 +41,10 @@ rec {
     let
       # Strip the leading '#' if it exists.
       cleanHex = if hasPrefix "#" hex then removePrefix "#" hex else hex;
-
       # Extract RR, GG, BB pairs using substring (offset, length, string).
       rHex = substring 0 2 cleanHex;
       gHex = substring 2 2 cleanHex;
       bHex = substring 4 2 cleanHex;
-
       # Map hex characters to integer values.
       hexToInt =
         hexStr:
@@ -78,8 +76,7 @@ rec {
           chars = stringToCharacters hexStr;
         in
         foldl' (acc: c: acc * 16 + hexMap.${c}) 0 chars;
-
-      # Convert each pair to a decimal integer
+      # Convert each pair to a decimal integer.
       r = hexToInt rHex;
       g = hexToInt gHex;
       b = hexToInt bHex;
