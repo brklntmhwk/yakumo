@@ -6,4 +6,9 @@
 Upon the spark.
 #+end_quote
 
-WIP.
+** Machine Specs
+| Model | Mac Studio M2 MAX    |
+| CPU   | Apple Silicon M2 MAX |
+| GPU   | Apple Silicon M2 MAX |
+| RAM   | 32GB                 |
+| SSD   | 512GB                |
