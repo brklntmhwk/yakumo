@@ -88,7 +88,7 @@ in
     ui = {
       waybar = {
         enable = true;
-        settings = import ../../configs/waybar;
+        settings = import ../../configs/waybar/niri-config.nix;
         style = import ../../configs/waybar/style.nix { inherit theme hexToRgba; };
       };
       wofi = {
