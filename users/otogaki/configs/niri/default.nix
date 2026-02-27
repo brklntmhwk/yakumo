@@ -93,22 +93,33 @@ in
   # https://yalter.github.io/niri/Configuration:-Layout
   layout = {
     gaps = {
-      _args = [ 8 ];
+      _args = [ 6 ];
     };
     center-focused-column = {
       _args = [ "never" ];
-    };
-    preset-column-widths = {
-      proportion = [
-        { _args = [ 0.33333 ]; }
-        { _args = [ 0.5 ]; }
-        { _args = [ 0.66667 ]; }
-      ];
     };
     default-column-width = {
       proportion = {
         _args = [ 0.5 ];
       };
+    };
+    preset-column-widths = {
+      proportion = [
+        { _args = [ 0.33333 ]; }
+        { _args = [ 0.50000 ]; }
+        { _args = [ 0.66667 ]; }
+        { _args = [ 0.75000 ]; }
+        { _args = [ 1.00000 ]; }
+      ];
+    };
+    preset-window-heights = {
+      proportion = [
+        { _args = [ 0.33333 ]; }
+        { _args = [ 0.50000 ]; }
+        { _args = [ 0.66667 ]; }
+        { _args = [ 0.75000 ]; }
+        { _args = [ 1.00000 ]; }
+      ];
     };
     focus-ring = {
       width = {
