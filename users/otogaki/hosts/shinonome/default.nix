@@ -35,7 +35,10 @@ in
         enable = true;
         xwayland.enable = true;
         settings = import ../../configs/niri { inherit theme; };
-        greeter = "tuigreet";
+        greeter.tuigreet = {
+          enable = true;
+          themeArgs = import ../../configs/tuigreet/theme.nix { inherit theme; };
+        };
         # loginSettings = import ../../configs/niri/login.nix;
         # regreet = {
         #   background = {
