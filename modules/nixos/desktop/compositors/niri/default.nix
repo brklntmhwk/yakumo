@@ -50,7 +50,7 @@ in
         https://yalter.github.io/niri/Configuration%3A-Introduction.html
       '';
     };
-    greeter = mkOption {
+    greeter = {
       # https://github.com/NixOS/nixpkgs/commit/ab65220a1af24cc46a67021e624fce3f4c87ebfa
       regreet = {
         enable = mkEnableOption "regreet";
