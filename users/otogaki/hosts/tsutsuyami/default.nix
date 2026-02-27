@@ -2,6 +2,7 @@
   config,
   lib,
   pkgs,
+  murakumo,
   ...
 }:
 
@@ -9,6 +10,7 @@ let
   inherit (builtins) attrValues;
   inherit (lib) catAttrs;
   inherit (theme) cursorThemes fonts loginThemes;
+  inherit (murakumo.configs) hexToRgba;
   theme = import ../../themes/modus-vivendi-tinted pkgs;
 in
 {
@@ -86,7 +88,7 @@ in
       waybar = {
         enable = true;
         settings = import ../../configs/waybar;
-        style = import ../../configs/waybar/style.nix { inherit theme; };
+        style = import ../../configs/waybar/style.nix { inherit theme hexToRgba; };
       };
       wofi = {
         enable = true;

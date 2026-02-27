@@ -1,7 +1,8 @@
-{ theme }:
+{ theme, hexToRgba }:
 
 let
   inherit (theme) colors fonts;
+  bgColor = hexToRgba colors.bg-dim "0.8";
 in
 ''
   /* Note that only a limited subset of CSS works properly in Waybar. */
@@ -15,7 +16,7 @@ in
 
   /* Status bar  */
   window#waybar {
-      background-color: ${colors.bg-dim};
+      background-color: ${bgColor};
       color: ${colors.fg-main};
   }
 
