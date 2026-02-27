@@ -406,7 +406,7 @@ in
             settings = {
               default_session = {
                 command =
-                  if cfg.greeter == "regreet" then
+                  if (cfg.greeter == "regreet") then
                     # We don't use the wrapped Niri here.
                     # Wrap the greeter session in a localized DBus session to provide
                     # the app with an immediate DBus context.
