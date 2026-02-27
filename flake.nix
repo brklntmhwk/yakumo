@@ -106,6 +106,16 @@
         }
       );
 
+      devShells = lib'.forAllSystems (
+        system:
+        let
+          pkgs = nixpkgs.legacyPackages.${system};
+        in
+        {
+          default = import ./shell.nix { inherit pkgs; };
+        }
+      );
+
       formatter = lib'.forAllSystems (
         system:
         let
