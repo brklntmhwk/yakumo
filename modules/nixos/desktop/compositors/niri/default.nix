@@ -50,6 +50,14 @@ in
         https://yalter.github.io/niri/Configuration%3A-Introduction.html
       '';
     };
+    greeter = mkOption {
+      type = types.enum [
+        "regreet"
+        "tuigreet"
+      ];
+      default = "regreet";
+      description = "Which greetd greeter to use.";
+    };
     # https://github.com/NixOS/nixpkgs/commit/ab65220a1af24cc46a67021e624fce3f4c87ebfa
     regreet = {
       background = {
@@ -329,7 +337,7 @@ in
         }
       )
       {
-        programs.regreet = mkMerge [
+        programs.regreet = mkIf (cfg.greeter == "regreet") (mkMerge [
           {
             enable = true;
             settings = {
@@ -364,7 +372,7 @@ in
               };
             };
           })
-        ];
+        ]);
 
         services.greetd =
           let
@@ -374,10 +382,14 @@ in
             enable = true;
             settings = {
               default_session = {
-                # We don't use the wrapped Niri here.
-                # Wrap the greeter session in a localized DBus session to provide
-                # the app with an immediate DBus context.
-                command = "${pkgs.dbus}/bin/dbus-run-session ${getExe cfg.package} --config ${loginCfg}";
+                command =
+                  if cfg.greeter == "regreet" then
+                    # We don't use the wrapped Niri here.
+                    # Wrap the greeter session in a localized DBus session to provide
+                    # the app with an immediate DBus context.
+                    "${pkgs.dbus}/bin/dbus-run-session ${getExe cfg.package} --config ${loginCfg}"
+                  else
+                    "${pkgs.greetd.tuigreet}/bin/tuigreet --time --remember --cmd ${getExe cfg.packageWrapped}";
                 user = "greeter";
               };
             };
