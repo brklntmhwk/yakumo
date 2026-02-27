@@ -39,26 +39,6 @@ in
           enable = true;
           themeArgs = import ../../configs/tuigreet/theme.nix { inherit theme; };
         };
-        # loginSettings = import ../../configs/niri/login.nix;
-        # regreet = {
-        #   background = {
-        #     path = theme.wallpaper;
-        #   };
-        #   theme = {
-        #     name = loginThemes.adwaita.name;
-        #     package = loginThemes.adwaita.package;
-        #     preferDark = true;
-        #   };
-        #   cursorTheme = {
-        #     name = cursorThemes.adwaita.name;
-        #     package = cursorThemes.adwaita.package;
-        #   };
-        #   font = {
-        #     name = fonts.moralerspaceHw.name;
-        #     package = fonts.moralerspaceHw.package;
-        #     size = 16;
-        #   };
-        # };
       };
     };
     daemons = {
