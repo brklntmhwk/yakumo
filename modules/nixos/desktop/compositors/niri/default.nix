@@ -230,7 +230,7 @@ in
               _args = [
                 "sh"
                 "-c"
-                "${getExe pkgs.greetd.regreet}; niri msg action quit --skip-confirmation"
+                "${getExe pkgs.regreet}; niri msg action quit --skip-confirmation"
               ];
             }
           ];
@@ -389,7 +389,7 @@ in
                     # the app with an immediate DBus context.
                     "${pkgs.dbus}/bin/dbus-run-session ${getExe cfg.package} --config ${loginCfg}"
                   else
-                    "${pkgs.greetd.tuigreet}/bin/tuigreet --time --remember --cmd ${getExe cfg.packageWrapped}";
+                    "${pkgs.tuigreet}/bin/tuigreet --time --remember --cmd ${getExe cfg.packageWrapped}";
                 user = "greeter";
               };
             };

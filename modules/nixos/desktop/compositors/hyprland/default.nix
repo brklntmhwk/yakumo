@@ -188,7 +188,7 @@ in
               # Don't use Regreet with Hyprland. That combo seems buggy as in:
               # https://www.reddit.com/r/NixOS/comments/14rhsnu/regreet_greeter_for_greetd_doesnt_show_a_session/
               # Tuigreet would be more stable.
-              command = "${pkgs.greetd.tuigreet}/bin/tuigreet --time --remember --cmd Hyprland";
+              command = "${pkgs.tuigreet}/bin/tuigreet --time --remember --cmd Hyprland";
               user = "greeter";
             };
           };
