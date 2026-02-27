@@ -1,7 +1,7 @@
 {
   "layer" = "bottom";
   "position" = "bottom";
-  "height" = 30;
+  "height" = 32;
   "spacing" = 3;
   "reload_style_on_change" = true;
 
@@ -98,7 +98,7 @@
   };
 
   "tray" = {
-    "icon-size" = 18;
+    "icon-size" = 20;
     "spacing" = 3;
     "show-passive-items" = true;
   };

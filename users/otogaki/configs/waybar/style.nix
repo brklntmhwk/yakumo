@@ -2,7 +2,7 @@
 
 let
   inherit (theme) colors fonts;
-  bgColor = hexToRgba colors.bg-dim "0.8";
+  bgColor = hexToRgba colors.bg-dim "0.85";
 in
 ''
   /* Note that only a limited subset of CSS works properly in Waybar. */
