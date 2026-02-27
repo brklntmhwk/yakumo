@@ -1,0 +1,42 @@
+* shinonome 卍 東雲
+:PROPERTIES:
+:CUSTOM_ID: shinonome-卍-東雲
+:END:
+#+begin_quote
+Towards the dawn.
+#+end_quote
+
+** Partitioning
+#+begin_src shell
+export DRIVE="/dev/nvme0n1"
+
+cryptsetup luksFormat --label SHI_CRYPT ${DRIVE}p5
+cryptsetup open /dev/disk/by-label/SHI_CRYPT crypted
+mkfs.btrfs -L SHI_ROOT /dev/mapper/crypted
+
+mount -t btrfs /dev/mapper/crypted /mnt
+
+btrfs subvolume create /mnt/root
+btrfs subvolume create /mnt/home
+btrfs subvolume create /mnt/nix
+btrfs subvolume create /mnt/yosuga
+btrfs subvolume create /mnt/log
+btrfs subvolume create /mnt/swap
+btrfs subvolume snapshot -r /mnt/root /mnt/root-blank
+
+umount /mnt
+
+mount -o compress=zstd,noatime,subvol=root /dev/mapper/crypted /mnt
+mkdir -p /mnt/{home,nix,yosuga,swap,boot}
+mkdir -p /mnt/var/log
+mount -o compress=zstd,noatime,subvol=home /dev/mapper/crypted /mnt/home
+mount -o compress=zstd,noatime,subvol=nix /dev/mapper/crypted /mnt/nix
+mount -o compress=zstd,noatime,subvol=yosuga /dev/mapper/crypted /mnt/yosuga
+mount -o compress=zstd,noatime,subvol=log /dev/mapper/crypted /mnt/var/log
+mount -o noatime,subvol=swap /dev/mapper/crypted /mnt/swap
+mount /dev/disk/by-partuuid/`cat /proc/device-tree/chosen/asahi,efi-system-partition` /mnt/boot
+
+btrfs filesystem mkswapfile --size 16g --uuid clear /mnt/swap/swapfile
+mkswap /mnt/swap/swapfile
+swapon /mnt/swap/swapfile
+#+end_src

@@ -1,0 +1,52 @@
+* tsutsuyami 卍 惣闇
+:PROPERTIES:
+:CUSTOM_ID: tsutsuyami-卍-惣闇
+:END:
+#+begin_quote
+Into the darkness.
+#+end_quote
+
+** Partitioning
+#+begin_src shell
+export DRIVE="/dev/nvme0n1"
+
+parted $DRIVE -- mklabel gpt
+parted $DRIVE -- mkpart ESP fat32 1MiB 1GiB
+parted $DRIVE -- set 1 esp on
+parted $DRIVE -- mkpart primary 1GiB 100%
+
+cryptsetup luksFormat --label TSU_CRYPT ${DRIVE}p2
+cryptsetup open /dev/disk/by-label/TSU_CRYPT crypted
+mkfs.fat -F 32 -n TSU_BOOT ${DRIVE}p1
+mkfs.btrfs -L TSU_ROOT /dev/mapper/crypted
+
+mount -t btrfs /dev/mapper/crypted /mnt
+
+btrfs subvolume create /mnt/root
+btrfs subvolume create /mnt/home
+btrfs subvolume create /mnt/nix
+btrfs subvolume create /mnt/yosuga
+btrfs subvolume create /mnt/log
+btrfs subvolume create /mnt/swap
+btrfs subvolume snapshot -r /mnt/root /mnt/root-blank
+
+umount /mnt
+
+mount -o compress=zstd,noatime,subvol=root /dev/mapper/crypted /mnt
+mkdir -p /mnt/{home,nix,yosuga,swap,boot}
+mkdir -p /mnt/var/log
+mount -o compress=zstd,noatime,subvol=home /dev/mapper/crypted /mnt/home
+mount -o compress=zstd,noatime,subvol=nix /dev/mapper/crypted /mnt/nix
+mount -o compress=zstd,noatime,subvol=yosuga /dev/mapper/crypted /mnt/yosuga
+mount -o compress=zstd,noatime,subvol=log /dev/mapper/crypted /mnt/var/log
+mount -o noatime,subvol=swap /dev/mapper/crypted /mnt/swap
+mount /dev/disk/by-label/TSU_BOOT /mnt/boot
+
+truncate -s 0 /mnt/swap/swapfile
+chattr +C /mnt/swap/swapfile
+btrfs property set /mnt/swap/swapfile compression none
+dd if=/dev/zero of=/mnt/swap/swapfile bs=1G count=16 status=progress
+chmod 600 /mnt/swap/swapfile
+mkswap /mnt/swap/swapfile
+swapon /mnt/swap/swapfile
+#+end_src
