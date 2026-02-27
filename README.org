@@ -76,6 +76,8 @@ Within my filter bubble, very few precedents implement this for their dotfiles.
 |---------------+----------------+----------------------------------------------------------------------------------|
 | Compositor    | Hyprland       | Dynamic tiling Wayland compositor.                                               |
 |               | Niri           | A scrollable-tiling Wayland compositor.                                          |
+| Greeter       | Regreet        | Clean and customizable greeter for greetd.                                       |
+|               | Tuigreet       | Graphical console greeter for greetd.                                            |
 | Screen Locker | Hyprlock       | A simple, yet fast, multi-threaded and GPU-accelerated screen lock for Hyprland. |
 |               | Swaylock       | Screen locker for Wayland.                                                       |
 | Idle Daemon   | Hypridle       | Hyprland's idle management daemon.                                               |
