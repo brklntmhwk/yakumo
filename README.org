@@ -62,81 +62,12 @@ Within my filter bubble, very few precedents implement this for their dotfiles.
 | Type    | Name       | Hardware                                               | OS                                               | Description                               | User         |
 |---------+------------+--------------------------------------------------------+--------------------------------------------------+-------------------------------------------+--------------|
 | Desktop | [[file:hosts/tsutsuyami/README.org][tsutsuyami]] | Self-built Mini-ITX PC (AMD Ryzen 5 7600X and more)    | NixOS                                            | Main development workstation.             | Ohma Togaki  |
-| Desktop | [[#momokagari-卍-百篝][momokagari]] | Mac Studio M2 Max                                      | macOS (Nix Darwin)                               | Main workstation for creative work.       | Reiji Kawata |
+| Desktop | [[file:hosts/momokagari/README.org][momokagari]] | Mac Studio M2 Max                                      | macOS (Nix Darwin)                               | Main workstation for creative work.       | Reiji Kawata |
 | Desktop | [[file:hosts/utsusemi/README.org][utsusemi]]   | N/A                                                    | Windows (NixOS WSL)                              | Temporary workstation(s).                 | Ohma Togaki  |
 | Laptop  | [[file:hosts/shinonome/README.org][shinonome]]  | MacBook Pro M1 2021                                    | macOS & NixOS (Asahi Linux, nixos-apple-silicon) | Main laptop, not limited to on-the-go use | Ohma Togaki  |
-| Server  | [[#niwatazumi-卍-潦][niwatazumi]] | Self-built Mini-ITX server (AMD Ryzen 5 7600 and more) | NixOS                                            | Main home server cum NAS.                 | Ohma Togaki  |
-| Server  | [[#sazanami-卍-漣][sazanami]]   | GMKtec NucBox G5 N97                                   | NixOS                                            | Smart home & geospatial data server       | Ohma Togaki  |
-| Server  | [[#tamazusa-卍-玉梓][tamazusa]]   | Hetzner Cloud VPS                                      | NixOS                                            | Mail server cum Headscale control plane   | Ohma Togaki  |
-**** tsutsuyami 卍 惣闇
-:PROPERTIES:
-:CUSTOM_ID: tsutsuyami-卍-惣闇
-:END:
-#+begin_quote
-Into the darkness.
-#+end_quote
-
-WIP.
-
-**** momokagari 卍 百篝
-:PROPERTIES:
-:CUSTOM_ID: momokagari-卍-百篝
-:END:
-#+begin_quote
-Upon the spark.
-#+end_quote
-
-WIP.
-
-**** utsusemi 卍 空蝉
-:PROPERTIES:
-:CUSTOM_ID: utsusemi-卍-空蝉
-:END:
-#+begin_quote
-Through the haze.
-#+end_quote
-
-WIP.
-
-**** shinonome 卍 東雲
-:PROPERTIES:
-:CUSTOM_ID: shinonome-卍-東雲
-:END:
-#+begin_quote
-Towards the dawn.
-#+end_quote
-
-WIP.
-
-**** niwatazumi 卍 潦
-:PROPERTIES:
-:CUSTOM_ID: niwatazumi-卍-潦
-:END:
-#+begin_quote
-Within the current.
-#+end_quote
-
-WIP.
-
-**** sazanami 卍 漣
-:PROPERTIES:
-:CUSTOM_ID: sazanami-卍-漣
-:END:
-#+begin_quote
-Across the ripples.
-#+end_quote
-
-WIP.
-
-**** tamazusa 卍 玉梓
-:PROPERTIES:
-:CUSTOM_ID: tamazusa-卍-玉梓
-:END:
-#+begin_quote
-With the tidings.
-#+end_quote
-
-WIP.
+| Server  | [[file:hosts/niwatazumi/README.org][niwatazumi]] | Self-built Mini-ITX server (AMD Ryzen 5 7600 and more) | NixOS                                            | Main home server cum NAS.                 | Ohma Togaki  |
+| Server  | [[file:hosts/sazanami/README.org][sazanami]]   | GMKtec NucBox G5 N97                                   | NixOS                                            | Smart home & geospatial data server       | Ohma Togaki  |
+| Server  | [[file:hosts/tamazusa/README.org][tamazusa]]   | Hetzner Cloud VPS                                      | NixOS                                            | Mail server cum Headscale control plane   | Ohma Togaki  |
 *** Tools
 :PROPERTIES:
 :CUSTOM_ID: tools

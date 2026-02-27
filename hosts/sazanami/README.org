@@ -1,0 +1,9 @@
+* sazanami 卍 漣
+:PROPERTIES:
+:CUSTOM_ID: sazanami-卍-漣
+:END:
+#+begin_quote
+Across the ripples.
+#+end_quote
+
+WIP.
