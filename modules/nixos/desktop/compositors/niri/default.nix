@@ -179,7 +179,7 @@ in
 
   config = mkIf cfg.enable (
     let
-      inherit (builtins) attrValues;
+      inherit (builtins) attrValues concatStringsSep;
       inherit (lib) getExe optionalAttrs;
       inherit (pkgs) writeText;
       inherit (murakumo.platforms) isAarch64;
@@ -258,7 +258,6 @@ in
       (
         let
           inherit (builtins)
-            concatStringsSep
             isAttrs
             map
             mapAttrs
