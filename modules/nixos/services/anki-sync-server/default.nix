@@ -9,12 +9,19 @@ let
   inherit (lib)
     mkEnableOption
     mkIf
+    mkOption
+    types
     ;
   cfg = config.yakumo.services.anki-sync-server;
 in
 {
   options.yakumo.services.anki-sync-server = {
     enable = mkEnableOption "anki-sync-server";
+    domain = mkOption {
+      type = types.str;
+      default = "localhost";
+      description = "Domain name.";
+    };
   };
 
   config = mkIf cfg.enable {
@@ -31,5 +38,19 @@ in
         }
       ];
     };
+
+    services.caddy.virtualHosts = (
+      let
+        inherit (ankiSyncSrvCfg) address port;
+        ankiSyncSrvCfg = config.services.anki-sync-server;
+      in
+      {
+        "${cfg.domain}" = {
+          extraConfig = ''
+            reverse_proxy [${address}]:${builtins.toString port}
+          '';
+        };
+      }
+    );
   };
 }

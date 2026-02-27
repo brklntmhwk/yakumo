@@ -10,12 +10,19 @@ let
   inherit (lib)
     mkEnableOption
     mkIf
+    mkOption
+    types
     ;
   cfg = config.yakumo.services.immich;
 in
 {
   options.yakumo.services.immich = {
     enable = mkEnableOption "immich";
+    domain = mkOption {
+      type = types.str;
+      default = "localhost";
+      description = "Domain name.";
+    };
   };
 
   config = mkIf cfg.enable (
@@ -71,7 +78,7 @@ in
         settings = {
           newVersionCheck.enabled = false; # Default: false
           # Domain for publicly shared links, including http(s)://.
-          server.externalDomain = ""; # Default: ''
+          server.externalDomain = "${cfg.domain}"; # Default: ''
         };
       };
 
@@ -110,7 +117,7 @@ in
       };
 
       services.caddy.virtualHosts = {
-        "media.example.com" = {
+        "${cfg.domain}" = {
           extraConfig = ''
             reverse_proxy ${immichCfg.host}:${builtins.toString immichCfg.port}
           '';

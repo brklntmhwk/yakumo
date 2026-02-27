@@ -9,6 +9,7 @@ let
   inherit (lib)
     mkEnableOption
     mkIf
+    mkOption
     types
     ;
   cfg = config.yakumo.services.forgejo;

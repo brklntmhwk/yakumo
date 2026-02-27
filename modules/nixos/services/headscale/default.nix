@@ -10,12 +10,19 @@ let
     mkEnableOption
     mkIf
     mkMerge
+    mkOption
+    types
     ;
   cfg = config.yakumo.services.headscale;
 in
 {
   options.yakumo.services.headscale = {
     enable = mkEnableOption "headscale";
+    domain = mkOption {
+      type = types.str;
+      default = "localhost";
+      description = "Domain name.";
+    };
   };
 
   config = mkIf cfg.enable (
@@ -31,7 +38,7 @@ in
           port = "8080"; # Default: '8080'
           user = "headscale"; # Default: 'headscale'
           settings = {
-            server_url = "https://headscale.yakumo.net";
+            server_url = "https://${cfg.domain}";
             database = {
               type = "postgres"; # Default: 'sqlite' (Options: 'postgres', 'sqlite3')
               postgres = {
@@ -108,7 +115,7 @@ in
 
         services.caddy.virtualHosts = {
           # https://headscale.net/stable/ref/integration/reverse-proxy/#caddy
-          "headscale.yakumo.net" = {
+          "${cfg.domain}" = {
             extraConfig = ''
               reverse_proxy ${headscaleCfg.address}:${headscaleCfg.port}
             '';
