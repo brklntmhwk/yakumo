@@ -164,7 +164,7 @@ in
             message = "Submaps can't be named 'reset'. The name 'reset' is reserved in order to have a way to switch to the default submap; as if 'reset' was its name.";
           }
           {
-            assertion = countAttrs (_: v: v.enable or false) cfg.greeter == 1;
+            assertion = (countAttrs (_: v: v.enable or false) cfg.greeter) == 1;
             message = "Exactly one greeter must be enabled at a time (Zero or multiple are not allowed)";
           }
         ];

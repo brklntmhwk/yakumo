@@ -190,7 +190,7 @@ in
       {
         assertions = [
           {
-            assertion = countAttrs (_: v: v.enable or false) cfg.greeter == 1;
+            assertion = (countAttrs (_: v: v.enable or false) cfg.greeter) == 1;
             message = "Exactly one greeter must be enabled at a time (Zero or multiple are not allowed)";
           }
         ];
