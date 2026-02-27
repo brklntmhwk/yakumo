@@ -53,6 +53,7 @@ in
   font_size = 16.0;
   default_cursor_style = "SteadyBar";
   use_ime = true;
+  use_fancy_tab_bar = true;
   # window_background_opacity = 0.85;
   # macos_window_background_blur = 10;
   window_padding = {
