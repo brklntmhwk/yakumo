@@ -352,10 +352,8 @@ in
               ''
             )
           ];
-        }
-      )
-      {
-        programs.regreet = mkIf (cfg.greeter == "regreet") (mkMerge [
+
+          programs.regreet = mkIf (cfg.greeter == "regreet") (mkMerge [
           {
             enable = true;
             settings = {
@@ -414,12 +412,13 @@ in
                     # the app with an immediate DBus context.
                     "${pkgs.dbus}/bin/dbus-run-session ${getExe cfg.package} --config ${loginCfg}"
                   else
-                    "${pkgs.tuigreet}/bin/tuigreet --time --remember${tuigreetThemeArg}${tuigreetExtraArgs} --cmd ${getExe cfg.packageWrapped}";
+                    "${pkgs.tuigreet}/bin/tuigreet --time --remember${tuigreetThemeArg}${tuigreetExtraArgs} --cmd ${getExe niriWrapped}";
                 user = "greeter";
               };
             };
           };
-      }
+        }
+      )
     ]
   );
 }
