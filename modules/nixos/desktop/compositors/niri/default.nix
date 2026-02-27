@@ -354,69 +354,83 @@ in
           ];
 
           programs.regreet = mkIf (cfg.greeter == "regreet") (mkMerge [
-          {
-            enable = true;
-            settings = {
-              GTK.application_prefer_dark_theme = cfg.regreet.theme.preferDark;
-              widget.clock = {
-                format = "%a, %d %b %Y %I:%M";
+            {
+              enable = true;
+              settings = {
+                GTK.application_prefer_dark_theme = cfg.greeter.regreet.theme.preferDark;
+                widget.clock = {
+                  format = "%a, %d %b %Y %I:%M";
+                };
               };
-            };
-            cursorTheme = {
-              name = cfg.regreet.cursorTheme.name;
-              package = cfg.regreet.cursorTheme.package;
-            };
-            font = {
-              name = cfg.regreet.font.name;
-              size = cfg.regreet.font.size;
-              package = cfg.regreet.font.package;
-            };
-            iconTheme = {
-              name = cfg.regreet.iconTheme.name;
-              package = cfg.regreet.iconTheme.package;
-            };
-            theme = {
-              name = cfg.regreet.theme.name;
-              package = cfg.regreet.theme.package;
-            };
-          }
-          (mkIf (cfg.regreet.background.path != null) {
-            settings = {
-              background = {
-                path = cfg.regreet.background.path;
-                fit = cfg.regreet.background.fit;
+              cursorTheme = {
+                name = cfg.greeter.regreet.cursorTheme.name;
+                package = cfg.greeter.regreet.cursorTheme.package;
               };
-            };
-          })
-        ]);
+              font = {
+                name = cfg.greeter.regreet.font.name;
+                size = cfg.greeter.regreet.font.size;
+                package = cfg.greeter.regreet.font.package;
+              };
+              iconTheme = {
+                name = cfg.greeter.regreet.iconTheme.name;
+                package = cfg.greeter.regreet.iconTheme.package;
+              };
+              theme = {
+                name = cfg.greeter.regreet.theme.name;
+                package = cfg.greeter.regreet.theme.package;
+              };
+            }
+            (mkIf (cfg.greeter.regreet.background.path != null) {
+              settings = {
+                background = {
+                  path = cfg.greeter.regreet.background.path;
+                  fit = cfg.greeter.regreet.background.fit;
+                };
+              };
+            })
+          ]);
 
-        services.greetd =
-          let
-            inherit (lib) optionalString;
-            inherit (murakumo.generators) toTuigreetTheme;
-            loginCfg = writeText "login-config.kdl" (toKDL { } cfg.loginSettings);
-            tuigreetThemeStr = toTuigreetTheme cfg.greeter.tuigreet.themeArgs;
-            tuigreetThemeArg = optionalString (tuigreetThemeStr != "") " --theme '${tuigreetThemeStr}'";
-            tuigreetExtraArgs = optionalString (
-              cfg.greeter.tuigreet.extraArgs != [ ]
-            ) " ${concatStringsSep " " cfg.greeter.tuigreet.extraArgs}";
-          in
-          {
-            enable = true;
-            settings = {
-              default_session = {
-                command =
-                  if (cfg.greeter == "regreet") then
-                    # We don't use the wrapped Niri here.
-                    # Wrap the greeter session in a localized DBus session to provide
-                    # the app with an immediate DBus context.
-                    "${pkgs.dbus}/bin/dbus-run-session ${getExe cfg.package} --config ${loginCfg}"
-                  else
-                    "${pkgs.tuigreet}/bin/tuigreet --time --remember${tuigreetThemeArg}${tuigreetExtraArgs} --cmd ${getExe niriWrapped}";
-                user = "greeter";
-              };
-            };
-          };
+          services.greetd = mkMerge [
+            {
+              enable = true;
+            }
+            (mkIf (cfg.greeter == "regreet") (
+              let
+                loginCfg = writeText "login-config.kdl" (toKDL { } cfg.loginSettings);
+              in
+              {
+                settings = {
+                  default_session = {
+                    command =
+                      # We don't use the wrapped Niri here.
+                      # Wrap the greeter session in a localized DBus session to provide
+                      # the app with an immediate DBus context.
+                      "${pkgs.dbus}/bin/dbus-run-session ${getExe cfg.package} --config ${loginCfg}";
+                    user = "greeter";
+                  };
+                };
+              }
+            ))
+            (mkIf (cfg.greeter == "tuigreet") (
+              let
+                inherit (lib) optionalString;
+                inherit (murakumo.generators) toTuigreetTheme;
+                tuigreetThemeStr = toTuigreetTheme cfg.greeter.tuigreet.themeArgs;
+                tuigreetThemeArg = optionalString (tuigreetThemeStr != "") " --theme '${tuigreetThemeStr}'";
+                tuigreetExtraArgs = optionalString (
+                  cfg.greeter.tuigreet.extraArgs != [ ]
+                ) " ${concatStringsSep " " cfg.greeter.tuigreet.extraArgs}";
+              in
+              {
+                settings = {
+                  default_session = {
+                    command = "${pkgs.tuigreet}/bin/tuigreet --time --remember${tuigreetThemeArg}${tuigreetExtraArgs} --cmd ${getExe niriWrapped}";
+                    user = "greeter";
+                  };
+                };
+              }
+            ))
+          ];
         }
       )
     ]
