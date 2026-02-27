@@ -6,4 +6,14 @@
 Across the ripples.
 #+end_quote
 
+** Machine Specs
+| Model | GMKtec NucBox G5   |
+|-------+--------------------|
+| CPU   | Intel N97          |
+| GPU   | Intel UHD Graphics |
+| RAM   | 12GB               |
+| SSD   | 256GB              |
+
+** Partitioning
+
 WIP.

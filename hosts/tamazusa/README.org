@@ -6,4 +6,10 @@
 With the tidings.
 #+end_quote
 
+** Machine Specs
+
+WIP.
+
+** Partitioning
+
 WIP.

@@ -6,7 +6,21 @@
 Into the darkness.
 #+end_quote
 
+** Machine Specs
+| CPU          | AMD Ryzen 5 7600X                                  |
+|--------------+----------------------------------------------------|
+| GPU          | 玄人志向 GALAKURO GAMING NVIDIA GeForce RTX 4060ti |
+| MOBO         | ASRock B650E PG-ITX WiFi                           |
+| RAM          | Crucial DDR5 Pro 16GB x 2                          |
+| SSD          | Crucial T500 500GB PCIe Gen4 NVMe M.2 SSD          |
+| CPU Cooler   | NZXT KRAKEN 240 RL-KN240-B1                        |
+| Power Supply | Corsair SF750                                      |
+| Case         | Lian Li A4-H2O                                     |
+
 ** Partitioning
+
+LUKS encrypted BTRFS.
+
 #+begin_src shell
 export DRIVE="/dev/nvme0n1"
 

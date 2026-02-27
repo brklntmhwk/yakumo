@@ -6,4 +6,18 @@
 Within the current.
 #+end_quote
 
+** Machine Specs
+| CPU          | AMD Ryzen 5 7600            |
+|--------------+-----------------------------|
+| GPU          | ASRock Radeon RX 550        |
+| MOBO         | ASRock B650I Lightning WiFi |
+| RAM          | Crucial DDR5 16GB           |
+| SSD          | WD Black SN7100             |
+| HDD          | WD Red Plus 8TB x 2         |
+| CPU Cooler   | Noctua NH-L9a-AM5           |
+| Power Supply | Corsair SF750               |
+| Case         | JONSBO N3                   |
+
+** Partitioning
+
 WIP.
