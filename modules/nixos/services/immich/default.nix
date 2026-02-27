@@ -21,6 +21,7 @@ in
   config = mkIf cfg.enable (
     let
       pgBackupDir = "/var/backup/postgresql/immich";
+      immichCfg = config.services.immich;
     in
     {
       services.immich = {
@@ -85,7 +86,7 @@ in
             repository = "";
             backup = {
               sources = [
-                config.services.immich.mediaLocation
+                immichCfg.mediaLocation
                 pgBackupDir
               ];
             };
@@ -106,6 +107,14 @@ in
           mkdir -p ${pgBackupDir}
           ${pkgs.sudo}/bin/sudo -u postgres ${pkgs.postgresql}/bin/pg_dump -Fc immich > ${pgBackupDir}/immich.dump
         '';
+      };
+
+      services.caddy.virtualHosts = {
+        "media.example.com" = {
+          extraConfig = ''
+            reverse_proxy ${immichCfg.host}:${builtins.toString immichCfg.port}
+          '';
+        };
       };
     }
   );

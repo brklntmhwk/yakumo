@@ -9,12 +9,18 @@ let
   inherit (lib)
     mkEnableOption
     mkIf
+    types
     ;
   cfg = config.yakumo.services.forgejo;
 in
 {
   options.yakumo.services.forgejo = {
     enable = mkEnableOption "forgejo";
+    domain = mkOption {
+      type = types.str;
+      default = "localhost";
+      description = "Domain name.";
+    };
   };
 
   config = mkIf cfg.enable {
@@ -67,12 +73,12 @@ in
           };
           server = {
             DISABLE_SSH = false; # Default: false
-            DOMAIN = "localhost"; # Default: 'localhost'
+            DOMAIN = cfg.domain; # Default: 'localhost'
             # Set this so it aligns with `PROTOCOL`.
             HTTP_ADDR = "0.0.0.0";
             HTTP_PORT = 3000; # Default: '3000'
-            PROTOCOL = "http"; # Default: 'http' (Options: 'https', 'fcgi', 'http+unix', 'fcgi+unix')
-            ROOT_URL = "http://${forgejoCfg.settings.server.DOMAIN}:${toString forgejoCfg.settings.server.HTTP_PORT}/";
+            PROTOCOL = "https"; # Default: 'http' (Options: 'https', 'fcgi', 'http+unix', 'fcgi+unix')
+            ROOT_URL = "https://${cfg.domain}:${toString forgejoCfg.settings.server.HTTP_PORT}/";
             SSH_PORT = 22; # Default: '2222'
             STATIC_ROOT_PATH = forgejoCfg.package.data;
           };
@@ -105,5 +111,19 @@ in
         };
       };
     };
+
+    services.caddy.virtualHosts = (
+      let
+        inherit (serverCfg) HTTP_ADDR HTTP_PORT;
+        serverCfg = config.services.forgejo.settings.server;
+      in
+      {
+        "${cfg.domain}" = {
+          extraConfig = ''
+            reverse_proxy ${HTTP_ADDR}:${builtins.toString HTTP_PORT}
+          '';
+        };
+      }
+    );
   };
 }
