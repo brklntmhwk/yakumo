@@ -325,7 +325,14 @@ in
           yakumo.desktop.compositors.niri.packageWrapped = niriWrapped;
           yakumo.user.packages =
             attrValues { inherit (pkgs) ; } ++ optional cfg.xwayland.enable pkgs.xwayland-satellite;
-          environment.systemPackages = [ niriWrapped ];
+          environment.systemPackages = [
+            # Install the unwrapped Niri to the system because the wrapped one
+            # expands to a command like `niri --config /nix/store/... msg`,
+            # causing the "unexpected argument 'msg' found" error when running
+            # Niri's subcommand.
+            # niriWrapped
+            cfg.package
+          ];
 
           # Expose the custom Niri wrapper to display managers so
           # we can see it on the login screen as a pickable session.
