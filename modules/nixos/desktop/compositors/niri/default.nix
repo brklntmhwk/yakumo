@@ -353,7 +353,7 @@ in
             )
           ];
 
-          programs.regreet = mkIf (cfg.greeter == "regreet") (mkMerge [
+          programs.regreet = mkIf cfg.greeter.regreet.enable (mkMerge [
             {
               enable = true;
               settings = {
@@ -393,8 +393,11 @@ in
           services.greetd = mkMerge [
             {
               enable = true;
+              settings.default_session = {
+                user = "greeter";
+              };
             }
-            (mkIf (cfg.greeter == "regreet") (
+            (mkIf cfg.greeter.regreet.enable (
               let
                 loginCfg = writeText "login-config.kdl" (toKDL { } cfg.loginSettings);
               in
@@ -406,12 +409,11 @@ in
                       # Wrap the greeter session in a localized DBus session to provide
                       # the app with an immediate DBus context.
                       "${pkgs.dbus}/bin/dbus-run-session ${getExe cfg.package} --config ${loginCfg}";
-                    user = "greeter";
                   };
                 };
               }
             ))
-            (mkIf (cfg.greeter == "tuigreet") (
+            (mkIf cfg.greeter.tuigreet.enable (
               let
                 inherit (lib) optionalString;
                 inherit (murakumo.generators) toTuigreetTheme;
@@ -425,7 +427,6 @@ in
                 settings = {
                   default_session = {
                     command = "${pkgs.tuigreet}/bin/tuigreet --time --remember${tuigreetThemeArg}${tuigreetExtraArgs} --cmd ${getExe niriWrapped}";
-                    user = "greeter";
                   };
                 };
               }
