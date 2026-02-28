@@ -57,7 +57,7 @@ in
 
   # Copied from the auto-generated 'hardware-configuration.nix' file.
   # Run `ip link show` or `ip a` to check your interface name(s).
-  networking.interfaces.wlp111s0.useDHCP = mkDefault true;
+  # networking.interfaces.wlp111s0.useDHCP = mkDefault true;
 
   boot.initrd.luks.devices."crypted" = {
     device = "/dev/disk/by-label/TSU_CRYPT";

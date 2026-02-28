@@ -22,7 +22,7 @@
 
   "custom/launcher" = {
     "format" = "";
-    "on-click" = "wofi --show drun";
+    "on-click" = "niri msg action spawn -- wofi --show drun";
     "tooltip" = false;
   };
 
