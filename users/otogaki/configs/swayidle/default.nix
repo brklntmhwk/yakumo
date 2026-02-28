@@ -1,5 +1,11 @@
+# This is supposed to be used with Niri.
 {
   events = [
+    # Execute the locker when a lock-session is requested.
+    {
+      event = "lock";
+      command = "hyprlock";
+    }
     {
       event = "before-sleep";
       command = "loginctl lock-session";
