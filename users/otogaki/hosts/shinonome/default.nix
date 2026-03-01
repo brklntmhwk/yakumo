@@ -40,6 +40,7 @@ in
         settings = recursiveUpdate (import ../../configs/niri { inherit theme; }) (
           import ../../configs/niri/config-shinonome.nix
         );
+        loginSettings = import ../../configs/niri/login-shinonome.nix;
         greeter.regreet = {
           enable = true;
         } // (import ../../configs/regreet { inherit theme; });
