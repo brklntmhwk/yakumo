@@ -9,7 +9,7 @@ in
   prompt = colors.green-warmer;
   time = colors.fg-main;
   action = colors.fg-alt;
-  button = colors.gold;
+  button = colors.maroon;
   container = colors.bg-main;
   input = colors.fg-alt;
 }
