@@ -10,11 +10,11 @@
     # }
     {
       event = "before-sleep";
-      command = "${systedWideBinPath}/pidof hyprlock || ${systedWideBinPath}/hyprlock";
+      command = "${systemWideBinPath}/pidof hyprlock || ${systemWideBinPath}/hyprlock";
     }
     {
       event = "lock";
-      command = "${systedWideBinPath}/pidof hyprlock || ${systedWideBinPath}/hyprlock";
+      command = "${systemWideBinPath}/pidof hyprlock || ${systemWideBinPath}/hyprlock";
     }
     {
       event = "after-resume";
@@ -34,7 +34,7 @@
     }
     {
       timeout = 300;
-      command = "${systedWideBinPath}/pidof hyprlock || ${systedWideBinPath}/hyprlock";
+      command = "${systemWideBinPath}/pidof hyprlock || ${systemWideBinPath}/hyprlock";
     }
     {
       timeout = 330;
