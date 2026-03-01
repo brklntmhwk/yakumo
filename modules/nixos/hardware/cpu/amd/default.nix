@@ -11,7 +11,7 @@ let
 in
 {
   config = mkIf (elem "cpu/amd" hardwareMods) {
-    hardware.cpu.amd.updateMicrocode = lib.mkDefault config.hardware.enableRedistributableFirmware;
+    hardware.cpu.amd.updateMicrocode = mkDefault config.hardware.enableRedistributableFirmware;
     boot.kernelModules = [ "kvm-amd" ];
   };
 }
