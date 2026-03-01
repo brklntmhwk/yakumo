@@ -8,8 +8,8 @@
 
 let
   inherit (builtins) attrValues;
-  inherit (lib) catAttrs;
-  inherit (theme) cursorThemes fonts loginThemes;
+  inherit (lib) catAttrs recursiveUpdate;
+  inherit (theme) fonts;
   inherit (murakumo.configs) hexToRgba;
   theme = import ../../themes/modus-vivendi-tinted pkgs;
   systemWideBinPath = "/run/current-system/sw/bin";
@@ -37,28 +37,13 @@ in
       niri = {
         enable = true;
         xwayland.enable = true;
-        settings = import ../../configs/niri { inherit theme; };
-        loginSettings = import ../../configs/niri/login.nix;
+        settings = recursiveUpdate (import ../../configs/niri { inherit theme; }) (
+          import ../../configs/niri/config-tsutsuyami.nix
+        );
+        loginSettings = import ../../configs/niri/login-tsutsuyami.nix;
         greeter.regreet = {
           enable = true;
-          background = {
-            path = theme.wallpaper;
-          };
-          theme = {
-            name = loginThemes.adwaita.name;
-            package = loginThemes.adwaita.package;
-            preferDark = true;
-          };
-          cursorTheme = {
-            name = cursorThemes.adwaita.name;
-            package = cursorThemes.adwaita.package;
-          };
-          font = {
-            name = fonts.moralerspaceHw.name;
-            package = fonts.moralerspaceHw.package;
-            size = 16;
-          };
-        };
+        } // (import ../../configs/regreet { inherit theme; });
       };
     };
     daemons = {
