@@ -43,7 +43,8 @@ in
         loginSettings = import ../../configs/niri/login-tsutsuyami.nix;
         greeter.regreet = {
           enable = true;
-        } // (import ../../configs/regreet { inherit theme; });
+        }
+        // (import ../../configs/regreet { inherit theme; });
       };
     };
     daemons = {
