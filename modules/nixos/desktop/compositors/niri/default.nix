@@ -182,7 +182,6 @@ in
       inherit (builtins) attrValues concatStringsSep;
       inherit (lib) getExe optionalAttrs;
       inherit (pkgs) writeText;
-      inherit (murakumo.platforms) isAarch64;
       inherit (murakumo.generators) toKDL;
       inherit (murakumo.utils) countAttrs;
     in
@@ -203,14 +202,6 @@ in
           XDG_SESSION_DESKTOP = "niri";
           XDG_SESSION_TYPE = "wayland";
         }
-        // optionalAttrs isAarch64 {
-          # Force GTK4 (Regreet) to use the stable "New GL" driver instead of Vulkan
-          # if the host's architecture is aarch64-linux. (e.g, nixos-apple-silicon)
-          # Asahi's Vulkan driver (Honeykrisp) is still experimental and under
-          # bleeding-edge development, causing some GTK4 apps to crash and triggering
-          # an unrecoverable GPU freeze.
-          # GSK_RENDERER = "ngl";
-        };
 
         xdg.portal = {
           extraPortals = attrValues {
