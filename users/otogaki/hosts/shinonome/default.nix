@@ -40,14 +40,14 @@ in
         settings = recursiveUpdate (import ../../configs/niri { inherit theme; }) (
           import ../../configs/niri/config-shinonome.nix
         );
-        loginSettings = import ../../configs/niri/login-shinonome.nix;
-        greeter.regreet = {
-          enable = true;
-        } // (import ../../configs/regreet { inherit theme; });
-        # greeter.tuigreet = {
+        # loginSettings = import ../../configs/niri/login-shinonome.nix;
+        # greeter.regreet = {
         #   enable = true;
-        #   themeArgs = import ../../configs/tuigreet/theme.nix { inherit theme; };
-        # };
+        # } // (import ../../configs/regreet { inherit theme; });
+        greeter.tuigreet = {
+          enable = true;
+          themeArgs = import ../../configs/tuigreet/theme.nix { inherit theme; };
+        };
       };
     };
     daemons = {
