@@ -1,8 +1,8 @@
 {
   "layer" = "bottom";
   "position" = "bottom";
-  "height" = 32;
-  "spacing" = 3;
+  "height" = 34;
+  "spacing" = 5;
   "reload_style_on_change" = true;
 
   "modules-left" = [
@@ -27,7 +27,7 @@
   };
 
   "clock" = {
-    "format" = "     { =%R\n %d %b %Y}";
+    "format" = "     {:%R\n %d %b %Y}";
     "tooltip-format" = "<tt><small>{calendar}</small></tt>";
     "calendar" = {
       "mode" = "year";
