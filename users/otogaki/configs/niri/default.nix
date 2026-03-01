@@ -46,44 +46,8 @@ in
 
   # https://yalter.github.io/niri/Configuration:-Outputs
   # To confirm your monitor name, run `niri msg outputs`.
-  output = [
-    {
-      _args = [ "DP-2" ];
-      mode = {
-        _args = [ "3840x2160" ];
-      };
-      scale = {
-        _args = [ 2 ];
-      };
-      transform = {
-        _args = [ "normal" ];
-      };
-      position = {
-        _props = {
-          x = 0;
-          y = 0;
-        };
-      };
-    }
-    {
-      _args = [ "HDMI-A-1" ];
-      mode = {
-        _args = [ "2560x1440" ];
-      };
-      scale = {
-        _args = [ 1 ];
-      };
-      transform = {
-        _args = [ "normal" ];
-      };
-      position = {
-        _props = {
-          x = 0;
-          y = 1080; # Use DP-2's logical height.
-        };
-      };
-    }
-  ];
+  # Since this differs among machines, configure it in each host-specific config files.
+  # output = [ ];
 
   cursor = {
     xcursor-theme = cursorThemes.rosePine.name;
@@ -311,23 +275,23 @@ in
     };
   };
 
-  # Workspaces
-  workspace = [
-    {
-      _args = [ "home" ];
-      open-on-output = {
-        _args = [ "HDMI-A-1" ];
-      };
-    }
-    {
-      _args = [ "dev" ];
-      open-on-output = {
-        _args = [ "DP-2" ];
-      };
-    }
-  ];
+  # https://niri-wm.github.io/niri/Workspaces.html
+  # workspace = [
+  #   {
+  #     _args = [ "home" ];
+  #     open-on-output = {
+  #       _args = [ "HDMI-A-1" ];
+  #     };
+  #   }
+  #   {
+  #     _args = [ "dev" ];
+  #     open-on-output = {
+  #       _args = [ "DP-2" ];
+  #     };
+  #   }
+  # ];
 
-  # https://yalter.github.io/niri/Configuration:-Window-Rules
+  # https://niri-wm.github.io/niri/Configuration%3A-Window-Rules.html
   window-rule = [
     {
       geometry-corner-radius = {
