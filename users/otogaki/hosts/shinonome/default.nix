@@ -48,7 +48,7 @@ in
             # actual hardware-accelerated Panfrost 3D GPU.
             # Without explicitly telling Niri which card to use, it blindly grabs
             # the first one it finds.
-            render-drm-device = { _args = [ "/dev/dri/card1" ]; };
+            render-drm-device = { _args = [ "/dev/dri/card2" ]; };
           };
         };
         greeter.tuigreet = {
