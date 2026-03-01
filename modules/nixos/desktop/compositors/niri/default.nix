@@ -201,7 +201,7 @@ in
           XDG_CURRENT_DESKTOP = "niri";
           XDG_SESSION_DESKTOP = "niri";
           XDG_SESSION_TYPE = "wayland";
-        }
+        };
 
         xdg.portal = {
           extraPortals = attrValues {
