@@ -93,10 +93,13 @@ in
   # https://yalter.github.io/niri/Configuration:-Layout
   layout = {
     gaps = {
-      _args = [ 6 ];
+      _args = [ 14 ];
     };
     center-focused-column = {
       _args = [ "never" ];
+    };
+    default-column-display = {
+      _args = [ "tabbed" ];
     };
     default-column-width = {
       proportion = {
@@ -126,10 +129,10 @@ in
         _args = [ 3 ];
       };
       active-color = {
-        _args = [ colors.indigo ];
+        _args = [ colors.slate ];
       };
       inactive-color = {
-        _args = [ colors.bg-dim ];
+        _args = [ colors.border ];
       };
     };
     border = {
@@ -141,13 +144,14 @@ in
         _args = [ colors.yellow-faint ];
       };
       inactive-color = {
-        _args = [ colors.bg-dim ];
+        _args = [ colors.border ];
       };
       urgent-color = {
         _args = [ colors.red ];
       };
     };
     shadow = {
+      off = { };
       softness = {
         _args = [ 30 ];
       };
@@ -165,6 +169,35 @@ in
       };
     };
     struts = { };
+    tab-indicator = {
+      width = {
+        _args = [ 5 ];
+      };
+      length = {
+        _props = {
+          total-proportion = 1.0;
+        };
+      };
+      corner-radius = {
+        _args = [ 8 ];
+      };
+      active-color = {
+        _args = [ colors.olive ];
+      };
+      inactive-color = {
+        _args = [ colors.border ];
+      };
+      # The gap between the tab indicator and the window in logical pixels.
+      gap = {
+        _args = [ 6 ];
+      };
+      # The gap between tabs in logical pixels.
+      gaps-between-tabs = {
+        _args = [ 5 ];
+      };
+      hide-when-single-tab = { };
+      # place-within-column = { };
+    };
   };
 
   # Start up apps.
@@ -296,26 +329,48 @@ in
 
   # https://yalter.github.io/niri/Configuration:-Window-Rules
   window-rule = [
-    # {
-    #   match = [
-    #     {
-    #       _props = {
-    #         at-startup = true;
-    #       };
-    #     }
-    #     {
-    #       _props = {
-    #         app-id = "firefox";
-    #       };
-    #     }
-    #   ];
-    #   open-on-workspace = {
-    #     _args = [ "dev" ];
-    #   };
-    #   default-column-width.proportion = {
-    #     _args = [ 0.5 ];
-    #   };
-    # }
+    {
+      geometry-corner-radius = {
+        _args = [ 8 ];
+      };
+      clip-to-geometry = {
+        _args = [ true ];
+      };
+    }
+    {
+      match = [
+        {
+          _props = {
+            at-startup = true;
+          };
+        }
+        {
+          _props = {
+            app-id = "emacs";
+          };
+        }
+      ];
+      open-on-workspace = {
+        _args = [ "dev" ];
+      };
+    }
+    {
+      match = [
+        {
+          _props = {
+            at-startup = true;
+          };
+        }
+        {
+          _props = {
+            app-id = "wezterm";
+          };
+        }
+      ];
+      open-on-workspace = {
+        _args = [ "dev" ];
+      };
+    }
   ];
 
   # Key Bindings
@@ -849,11 +904,20 @@ in
     "Print" = {
       screenshot = { };
     };
+    "Mod+Shift+S" = {
+      screenshot = { };
+    };
     "Ctrl+Print" = {
+      screenshot-screen = { };
+    };
+    "Mod+Ctrl+Shift+S" = {
       screenshot-screen = { };
     };
     "Alt+Print" = {
       screenshot-window = { };
+    };
+    "Mod+Alt+Shift+S" = {
+      screenshot-screen = { };
     };
 
     "Mod+Escape" = {

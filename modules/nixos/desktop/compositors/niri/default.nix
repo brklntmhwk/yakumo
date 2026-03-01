@@ -292,10 +292,14 @@ in
           envVariables = concatStringsSep " " [
             "WAYLAND_DISPLAY"
             "XDG_CURRENT_DESKTOP"
+            # Needed for desktop tools managed as Systemd services (e.g., Waybar).
+            "NIRI_SOCKET"
           ];
 
           systemdSessionCmds = concatStringsSep " " (
             map (f: "&& ${f}") [
+              # Explicitly inject env vars into Systemd.
+              "systemctl --user import-environment ${envVariables}"
               "systemctl --user start niri-session.target"
             ]
           );
