@@ -12,6 +12,7 @@ let
   inherit (theme) cursorThemes fonts loginThemes;
   inherit (murakumo.configs) hexToRgba;
   theme = import ../../themes/modus-vivendi-tinted pkgs;
+  systemWideBinPath = "/run/current-system/sw/bin";
 in
 {
   imports = [
@@ -70,7 +71,7 @@ in
       };
       swayidle = {
         enable = true;
-        settings = import ../../configs/swayidle;
+        settings = import ../../configs/swayidle { inherit systemWideBinPath; };
       };
     };
     lockers = {

@@ -1,14 +1,20 @@
 # This is supposed to be used with Niri.
+{ systemWideBinPath }:
+
 {
   events = [
-    # Execute the locker when a lock-session is requested.
-    {
-      event = "lock";
-      command = "hyprlock";
-    }
+    # `loginctl lock-session` doesn't do its job, guiding us straight to the screen.
+    # {
+    #   event = "before-sleep";
+    #   command = "loginctl lock-session";
+    # }
     {
       event = "before-sleep";
-      command = "loginctl lock-session";
+      command = "${systedWideBinPath}/pidof hyprlock || ${systedWideBinPath}/hyprlock";
+    }
+    {
+      event = "lock";
+      command = "${systedWideBinPath}/pidof hyprlock || ${systedWideBinPath}/hyprlock";
     }
     {
       event = "after-resume";
@@ -28,7 +34,7 @@
     }
     {
       timeout = 300;
-      command = "loginctl lock-session";
+      command = "${systedWideBinPath}/pidof hyprlock || ${systedWideBinPath}/hyprlock";
     }
     {
       timeout = 330;
