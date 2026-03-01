@@ -18,7 +18,7 @@
     }
     {
       event = "after-resume";
-      command = "niri msg action power-on-monitors";
+      command = "${systemWideBinPath}/niri msg action power-on-monitors";
     }
   ];
   timeouts = [
@@ -38,12 +38,12 @@
     }
     {
       timeout = 330;
-      command = "niri msg action power-off-monitors";
-      resumeCommand = "niri msg action power-on-monitors && brightnessctl -r";
+      command = "${systemWideBinPath}/niri msg action power-off-monitors";
+      resumeCommand = "${systemWideBinPath}/niri msg action power-on-monitors && brightnessctl -r";
     }
     {
       timeout = 1800;
-      command = "systemctl suspend";
+      command = "${systemWideBinPath}/systemctl suspend";
     }
   ];
 }
