@@ -51,6 +51,7 @@ in
       "printer/bambu-lab"
       "scanner/scansnap"
       "ssd"
+      "trackpad/magic-trackpad"
       # "ups/goldenmate"
     ];
   };

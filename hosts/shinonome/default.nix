@@ -56,6 +56,7 @@ in
       "gpu/asahi"
       "monitor"
       "ssd"
+      "trackpad/magic-trackpad"
     ];
   };
 
