@@ -93,7 +93,7 @@ in
   # https://yalter.github.io/niri/Configuration:-Layout
   layout = {
     gaps = {
-      _args = [ 14 ];
+      _args = [ 16 ];
     };
     center-focused-column = {
       _args = [ "never" ];
@@ -182,18 +182,18 @@ in
         _args = [ 8 ];
       };
       active-color = {
-        _args = [ colors.olive ];
+        _args = [ colors.gold ];
       };
       inactive-color = {
         _args = [ colors.border ];
       };
       # The gap between the tab indicator and the window in logical pixels.
       gap = {
-        _args = [ 6 ];
+        _args = [ 8 ];
       };
       # The gap between tabs in logical pixels.
       gaps-between-tabs = {
-        _args = [ 5 ];
+        _args = [ 8 ];
       };
       hide-when-single-tab = { };
       # place-within-column = { };
