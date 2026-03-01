@@ -1,3 +1,5 @@
+{ systemWideBinPath }:
+
 {
   "layer" = "bottom";
   "position" = "bottom";
@@ -22,7 +24,7 @@
 
   "custom/launcher" = {
     "format" = "";
-    "on-click" = "niri msg action spawn -- wofi --show drun";
+    "on-click" = "${systemWideBinPath}/niri msg action spawn -- wofi --show drun";
     "tooltip" = false;
   };
 

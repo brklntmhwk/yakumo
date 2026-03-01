@@ -74,7 +74,7 @@ in
     ui = {
       waybar = {
         enable = true;
-        settings = import ../../configs/waybar/niri-config.nix;
+        settings = import ../../configs/waybar/niri-config.nix { inherit systemWideBinPath; };
         style = import ../../configs/waybar/style.nix { inherit theme hexToRgba; };
       };
       wofi = {
