@@ -40,6 +40,8 @@ Keep dependencies to a minimum to reduce attack surface, gain more control over 
 
 Easy to maintain. You know where to tweak at a glance (Maybe). We stick to [[https://en.wikipedia.org/wiki/Dependency_inversion_principle][the Dependency Inversion Principle]] as much as possible to make updates a breeze.
 
+TODO: Add a diagram to help readers grasp the whole architecture.
+
 **** Predictability
 
 Easy to read. You know what comes next when you're drilling down the directories (Maybe). To achieve this, the directory structure has a few things in common (e.g., the ~common~ directories).
@@ -74,7 +76,7 @@ in
 }
 #+end_src
 
-***** Hosts & Users
+***** Hosts & Users Configuration
 #+begin_src nix
 {
   config,
