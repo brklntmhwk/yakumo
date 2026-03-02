@@ -152,6 +152,7 @@ in
       map (dir: {
         name = dir.path;
         value = {
+          inherit (dir) neededForBoot;
           device = "${cfg.persistentStoragePath}${dir.path}";
           fsType = "none";
           options = [
@@ -162,7 +163,6 @@ in
             "x-gvfs-hide" # Hide bind mounts from file managers.
           ]
           ++ (optional cfg.allowTrash "x-gvfs-trash");
-          neededForBoot = dir.neededForBoot;
           noCheck = true; # Skip fsck on this.
         };
       }) cfg.directories

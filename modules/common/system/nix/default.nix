@@ -25,7 +25,7 @@ in
   config = mkMerge [
     {
       nix = {
-        package = cfg.package;
+        inherit (cfg) package;
         settings = {
           # Allow these users to connect to the Nix daemon.
           allowed-users = [ "@wheel" ];

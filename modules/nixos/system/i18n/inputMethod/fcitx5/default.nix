@@ -50,13 +50,13 @@ in
       i18n.inputMethod = {
         type = "fcitx5";
         fcitx5 = {
+          inherit (cfg) quickPhrase;
           addons =
             attrValues {
               inherit (pkgs) fcitx5-mozc;
             }
             ++ optional emacsCfg.enable pkgs.mozc
             ++ cfg.extraAddons;
-          quickPhrase = cfg.quickPhrase;
           waylandFrontend = anyEnabled compositorsCfg;
         };
       };

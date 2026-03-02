@@ -39,7 +39,7 @@ in
       ];
     };
 
-    services.caddy.virtualHosts = (
+    services.caddy.virtualHosts =
       let
         inherit (ankiSyncSrvCfg) address port;
         ankiSyncSrvCfg = config.services.anki-sync-server;
@@ -50,7 +50,6 @@ in
             reverse_proxy [${address}]:${builtins.toString port}
           '';
         };
-      }
-    );
+      };
   };
 }

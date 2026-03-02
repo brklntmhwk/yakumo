@@ -49,7 +49,7 @@ in
       hardware.graphics.enable = true;
 
       xdg.portal = {
-        enable = cfg.enable;
+        inherit (cfg) enable;
         xdgOpenUsePortal = mkDefault true;
       };
 

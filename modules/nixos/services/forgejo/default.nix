@@ -25,7 +25,7 @@ in
   };
 
   config = mkIf cfg.enable {
-    services.forgejo = (
+    services.forgejo =
       let
         forgejoCfg = config.services.forgejo;
       in
@@ -87,8 +87,7 @@ in
             COOKIE_SECURE = false; # Default: false
           };
         };
-      }
-    );
+      };
 
     yakumo.services.rustic.backups = {
       forgejo = {
@@ -113,7 +112,7 @@ in
       };
     };
 
-    services.caddy.virtualHosts = (
+    services.caddy.virtualHosts =
       let
         inherit (serverCfg) HTTP_ADDR HTTP_PORT;
         serverCfg = config.services.forgejo.settings.server;
@@ -124,7 +123,6 @@ in
             reverse_proxy ${HTTP_ADDR}:${builtins.toString HTTP_PORT}
           '';
         };
-      }
-    );
+      };
   };
 }

@@ -8,7 +8,6 @@
 
 let
   inherit (lib)
-    literalExpression
     mkEnableOption
     mkIf
     mkMerge
@@ -24,7 +23,7 @@ in
     enable = mkEnableOption "niri";
     # https://github.com/nix-community/home-manager/commit/810e5f36131c6b6eb1bcc1e3cff23cc604e82887
     settings = mkOption {
-      type = yamlFormat.type;
+      inherit (yamlFormat) type;
       default = { };
       description = ''
         Niri configuration in Nix-representable KDL format.
@@ -42,7 +41,7 @@ in
       };
     };
     loginSettings = mkOption {
-      type = yamlFormat.type;
+      inherit (yamlFormat) type;
       default = { };
       description = ''
         Niri configuration for the greetd login session in Nix-representable KDL format.
@@ -365,28 +364,22 @@ in
                 };
               };
               cursorTheme = {
-                name = cfg.greeter.regreet.cursorTheme.name;
-                package = cfg.greeter.regreet.cursorTheme.package;
+                inherit (cfg.greeter.regreet.cursorTheme) name package;
               };
               font = {
-                name = cfg.greeter.regreet.font.name;
-                size = cfg.greeter.regreet.font.size;
-                package = cfg.greeter.regreet.font.package;
+                inherit (cfg.greeter.regreet.font) name size package;
               };
               iconTheme = {
-                name = cfg.greeter.regreet.iconTheme.name;
-                package = cfg.greeter.regreet.iconTheme.package;
+                inherit (cfg.greeter.regreet.iconTheme) name package;
               };
               theme = {
-                name = cfg.greeter.regreet.theme.name;
-                package = cfg.greeter.regreet.theme.package;
+                inherit (cfg.greeter.regreet.theme) name package;
               };
             }
             (mkIf (cfg.greeter.regreet.background.path != null) {
               settings = {
                 background = {
-                  path = cfg.greeter.regreet.background.path;
-                  fit = cfg.greeter.regreet.background.fit;
+                  inherit (cfg.greeter.regreet.background) path fit;
                 };
               };
             })

@@ -38,7 +38,7 @@ in
       extraOptions = [ ];
     };
 
-    services.caddy.virtualHosts = (
+    services.caddy.virtualHosts =
       let
         inherit (mealieCfg) listenAddress port;
         mealieCfg = config.services.mealie;
@@ -49,7 +49,6 @@ in
             reverse_proxy ${listenAddress}:${builtins.toString port}
           '';
         };
-      }
-    );
+      };
   };
 }

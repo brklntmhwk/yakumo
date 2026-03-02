@@ -3,9 +3,9 @@
 pkgs:
 
 let
+  inherit ((pkgs.callPackage ./_sources/generated.nix { })) yaegaki;
   wallpaperPath = "stone-stacking.jpg";
   avatorPath = "avators/rkawata.png";
-  yaegaki = (pkgs.callPackage ./_sources/generated.nix { }).yaegaki;
 in
 {
   wallpaper = "${yaegaki.src}/${wallpaperPath}";

@@ -36,7 +36,7 @@ in
       let
         inherit (builtins) attrValues map;
         inherit (lib) genAttrs;
-        interfaces = config.networking.wireless.interfaces;
+        inherit (config.networking.wireless) interfaces;
         configDir = "/etc/wpa_supplicant.d";
       in
       {

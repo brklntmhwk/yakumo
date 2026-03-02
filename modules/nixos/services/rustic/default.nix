@@ -21,40 +21,38 @@ let
   cfg = config.yakumo.services.rustic;
   tomlFormat = pkgs.formats.toml { };
 
-  backupsSubmodule =
-    { ... }:
-    {
-      options = {
-        settings = mkOption {
-          type = tomlFormat.type;
-          default = { };
-          description = "Rustic profile configuration mapping directly to a TOML file.";
-        };
-        environmentFile = mkOption {
-          type = types.nullOr types.str;
-          default = null;
-          description = "File containing environment variables.";
-        };
-        timerConfig = mkOption {
-          type = types.nullOr (types.attrsOf unitOption);
-          default = {
-            OnCalendar = "daily";
-            Persistent = true;
-          };
-          description = "Systemd timer configuration for scheduling.";
-        };
-        user = mkOption {
-          type = types.str;
-          default = "root";
-        };
-        initialize = mkOption {
-          type = types.bool;
-          default = false;
-          description = "Create the repository if it doesn't exist.";
-        };
-        package = mkPackageOption pkgs "rustic" { };
+  backupsSubmodule = _: {
+    options = {
+      settings = mkOption {
+        inherit (tomlFormat) type;
+        default = { };
+        description = "Rustic profile configuration mapping directly to a TOML file.";
       };
+      environmentFile = mkOption {
+        type = types.nullOr types.str;
+        default = null;
+        description = "File containing environment variables.";
+      };
+      timerConfig = mkOption {
+        type = types.nullOr (types.attrsOf unitOption);
+        default = {
+          OnCalendar = "daily";
+          Persistent = true;
+        };
+        description = "Systemd timer configuration for scheduling.";
+      };
+      user = mkOption {
+        type = types.str;
+        default = "root";
+      };
+      initialize = mkOption {
+        type = types.bool;
+        default = false;
+        description = "Create the repository if it doesn't exist.";
+      };
+      package = mkPackageOption pkgs "rustic" { };
     };
+  };
 in
 {
   options.yakumo.services.rustic = {
@@ -115,8 +113,8 @@ in
       systemd.timers = mapAttrs' (
         name: backup:
         nameValuePair "rustic-backups-${name}" {
+          inherit (backup) timerConfig;
           wantedBy = [ "timers.target" ];
-          timerConfig = backup.timerConfig;
         }
       ) (filterAttrs (_: backup: backup.timerConfig != null) cfg.backups);
     }
