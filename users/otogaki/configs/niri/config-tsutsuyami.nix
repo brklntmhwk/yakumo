@@ -37,21 +37,4 @@
       };
     }
   ];
-  window-rule = [
-    {
-      match = [
-        {
-          _props = {
-            app-id = "emacs";
-          };
-        }
-      ];
-      open-on-output = {
-        _args = [ "DP-2" ];
-      };
-      open-fullscreen = {
-        _args = [ true ];
-      };
-    }
-  ];
 }

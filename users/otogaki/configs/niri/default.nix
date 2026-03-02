@@ -90,11 +90,11 @@ in
     };
     focus-ring = {
       width = {
-        _args = [ 3 ];
+        _args = [ 4 ];
       };
       active-gradient = {
         _props = {
-          from = colors.maroon;
+          from = colors.yellow;
           to = colors.red;
           angle = 45;
         };
@@ -153,7 +153,7 @@ in
         _props = {
           from = colors.yellow-warmer;
           to = colors.red-warmer;
-          angle = 45;
+          angle = 90;
         };
       };
       inactive-color = {
