@@ -8,6 +8,7 @@
     }
   ];
   debug = {
+    # This is necessary.
     # Force Niri to use the Panfrost GPU node instead of a basic display node
     # to prevent it from mistakenly fetching a non-3D node and causing
     # the screen to freeze.
