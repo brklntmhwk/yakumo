@@ -128,11 +128,6 @@ in
     };
   };
 
-  programs.yazi = {
-    enable = true;
-    settings = import ../../configs/yazi { inherit theme; };
-  };
-
   fonts = {
     # 'fonts.packages' are configured in the common file.
     fontDir.enable = true;
