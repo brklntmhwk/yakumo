@@ -3,10 +3,9 @@
 :TOC:      :include descendants :depth 2
 :END:
 #+begin_quote
-Yakumo is the sanctuary — Rooted in the ancient song of building a dwelling for one's beloved, it stands as the home I weave from dotfiles, a shelter for my digital life.
+Yakumo is the sanctuary—Rooted in the ancient song of building a dwelling for one's beloved, it stands as the home I weave from dotfiles, a shelter for my digital life.
 #+end_quote
 
-Table of Contents:
 :CONTENTS:
 - [[#overview][Overview]]
   - [[#philosophies][Philosophies]]
@@ -17,6 +16,12 @@ Table of Contents:
 - [[#acknowledgments][Acknowledgments]]
 - [[#license][License]]
 :END:
+
+#+begin_quote
+[!IMPORTANT]
+*Disclaimer*: This repository is a lifelong alpha project—a perpetual proving ground for experimental features and architectural whims. While you are highly encouraged to draw inspiration from this codebase, please be aware that our test coverage is nowhere near production standards; things may behave in unexpected ways.
+Furthermore, these configurations are intimately tailored to our specific hardware and environments. Blindly copy-pasting this into your machine is a one-way ticket to a broken system. Proceed with curiosity, but apply with extreme caution.
+#+end_quote
 
 ** Overview
 :PROPERTIES:
@@ -32,11 +37,11 @@ Welcome to Yakumo! It's our home in the digital world weaved from dotfiles.
 
 These philosopies are not isolated tenets, but are deeply interwoven.
 
-**** Less is more
+**** Less Is More
 
 Keep dependencies to a minimum to reduce attack surface, gain more control over stuff. This also leads to better maintainability.
 
-**** Low-maintenance
+**** Low-Maintenance
 
 Easy to maintain. You know where to tweak at a glance (Maybe). We stick to [[https://en.wikipedia.org/wiki/Dependency_inversion_principle][the Dependency Inversion Principle]] as much as possible to make updates a breeze.
 
