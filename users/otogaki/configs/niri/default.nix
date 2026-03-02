@@ -178,18 +178,15 @@ in
     { _args = [ "fcitx5 -d -r" ]; }
     { _args = [ "wl-paste --type text --watch cliphist store" ]; }
     { _args = [ "wl-paste --type image --watch cliphist store" ]; }
-    { _args = [ "emacsclient -c -a ''" ]; }
   ];
-  spawn-at-startup = [
-    # Since 25.08, Niri integrates with xwayland-satellite out of the box;
-    # you don't have to manually launch it here anymore.
-    # Actually, you ought to remove it, or you might end up with the
-    # "exited with status 101" error at startup.
-    # See: https://niri-wm.github.io/niri/Xwayland.html#using-xwayland-satellite
-    # { _args = [ "xwayland-satellite" ]; }
-
-    { _args = [ "wezterm" ]; }
-  ];
+  # spawn-at-startup = [
+  #   # Since 25.08, Niri integrates with xwayland-satellite out of the box;
+  #   # you don't have to manually launch it here anymore.
+  #   # Actually, you ought to remove it, or you might end up with the
+  #   # "exited with status 101" error at startup.
+  #   # See: https://niri-wm.github.io/niri/Xwayland.html#using-xwayland-satellite
+  #   # { _args = [ "xwayland-satellite" ]; }
+  # ];
 
   hotkey-overlay = {
     # Skip the hotkey cheetsheet displayed at startup.
