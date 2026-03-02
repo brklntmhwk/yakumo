@@ -32,16 +32,76 @@ Welcome to Yakumo! It's our home in the digital world weaved from dotfiles.
 
 These philosopies are not isolated tenets, but are deeply interwoven.
 
-- *Less is more:* Keep dependencies to a minimum and reduce attack surface.
-  - Not using such popular tools as Home Manager, Flake-Parts, Impermanence, Stylix, etc.
-  - Leads to more control over stuff and actually better maintainability.
-- *Low-maintenance:* Easy to maintain. You know where to tweak at a glance (Maybe).
-  - Sticking to [[https://en.wikipedia.org/wiki/Dependency_inversion_principle][the Dependency Inversion Principle]] as much as possible to make updates a breeze.
-- *Predictability:* Easy to read. You know what comes next when you're drilling down the directories (Maybe).
-  - The directory structure has a few things in common (e.g., ~common~).
-  - Deliberate distinction between module and configuration Nix files (i.e., ~modules~ vs. ~hosts~ & ~users~).
-- *Reinvent The Wheel:* Preferring the deliberate labor of creation over the opacity of magic. We build it from scratch to fully understand it—turning potential debugging nightmares into simple tweaks.
-- *Cool:* After all, what drives us to tend our dotfiles is pure self-satisfaction, isn't it?
+**** Less is more
+
+Keep dependencies to a minimum to reduce attack surface, gain more control over stuff. This also leads to better maintainability.
+
+**** Low-maintenance
+
+Easy to maintain. You know where to tweak at a glance (Maybe). We stick to [[https://en.wikipedia.org/wiki/Dependency_inversion_principle][the Dependency Inversion Principle]] as much as possible to make updates a breeze.
+
+**** Predictability
+
+Easy to read. You know what comes next when you're drilling down the directories (Maybe). To achieve this, the directory structure has a few things in common (e.g., the ~common~ directories).
+
+Plus, we introduce the deliberate distinction between module and configuration Nix files (i.e., ~modules~ vs. ~hosts~ & ~users~); the former has the NixOS module's full structure such as ~options~ and ~config~, whereas those latters are a simpler attribute set or a function.
+
+***** Modules
+#+begin_src nix
+{
+  config,
+  lib,
+  ...
+}:
+
+let
+  inherit (lib) mkEnableOption mkIf mkOption types;
+  cfg = config.yakumo.foo;
+in
+{
+  options.yakumo.foo = {
+    enable = mkEnableOption "foo";
+    username = mkOption {
+      type = types.str;
+      default = "yakumo";
+      description = "Yakumo username.";
+    };
+  };
+
+  config = mkIf cfg.enable {
+    # ...
+  };
+}
+#+end_src
+
+***** Hosts & Users
+#+begin_src nix
+{
+  config,
+  lib,
+  ...
+}:
+
+let
+  inherit (lib) mkForce;
+in
+{
+  yakumo.foo = {
+    enable = true;
+    username = mkForce config.yakumo.user.name;
+  };
+
+  # ...
+}
+#+end_src
+**** Reinvent The Wheel
+
+Preferring the deliberate labor of creation over the opacity of magic, we build it from scratch to fully understand it—turning potential debugging nightmares into simple tweaks.
+
+**** Cool
+
+After all, what drives us to tend our dotfiles is pure self-satisfaction, isn't it?
+
 *** Distinguishing Features
 :PROPERTIES:
 :CUSTOM_ID: distinguishing-features
