@@ -23,41 +23,42 @@ in
     setupAsahiSound = true;
   };
 
-  yakumo.system = {
-    role = "workstation";
-    nix = {
-      enableFlake = true;
+  yakumo = {
+    system = {
+      role = "workstation";
+      nix = {
+        enableFlake = true;
+      };
+      networking = {
+        manager = "networkmanager";
+        wifi.enable = true;
+      };
+      # persistence.yosuga = {
+      #   enable = true;
+      #   directories = [
+      #     "/etc/nixos"
+      #     "/etc/NetworkManager/system-connections"
+      #     "/var/lib/bluetooth"
+      #   ];
+      #   files = [
+      #     "/etc/machine-id"
+      #     "/etc/ssh/ssh_host_ed25519_key"
+      #     "/etc/ssh/ssh_host_ed25519_key.pub"
+      #     "/etc/ssh/ssh_host_rsa_key"
+      #     "/etc/ssh/ssh_host_rsa_key.pub"
+      #   ];
+      # };
     };
-    networking = {
-      manager = "networkmanager";
-      wifi.enable = true;
+    hardware = {
+      modules = [
+        "audio"
+        "bluetooth/blueman"
+        "gpu/asahi"
+        "monitor"
+        "ssd"
+        "trackpad/magic-trackpad"
+      ];
     };
-    # persistence.yosuga = {
-    #   enable = true;
-    #   directories = [
-    #     "/etc/nixos"
-    #     "/etc/NetworkManager/system-connections"
-    #     "/var/lib/bluetooth"
-    #   ];
-    #   files = [
-    #     "/etc/machine-id"
-    #     "/etc/ssh/ssh_host_ed25519_key"
-    #     "/etc/ssh/ssh_host_ed25519_key.pub"
-    #     "/etc/ssh/ssh_host_rsa_key"
-    #     "/etc/ssh/ssh_host_rsa_key.pub"
-    #   ];
-    # };
-  };
-
-  yakumo.hardware = {
-    modules = [
-      "audio"
-      "bluetooth/blueman"
-      "gpu/asahi"
-      "monitor"
-      "ssd"
-      "trackpad/magic-trackpad"
-    ];
   };
 
   # Copied from the auto-generated 'hardware-configuration.nix' file.
@@ -69,74 +70,70 @@ in
     allowDiscards = true;
   };
 
-  fileSystems."/" = {
-    device = "/dev/disk/by-label/SHI_ROOT";
-    fsType = "btrfs";
-    options = [
-      "subvol=root"
-      "compress=zstd"
-      "noatime"
-    ];
-  };
-
-  fileSystems."/home" = {
-    device = "/dev/disk/by-label/SHI_ROOT";
-    fsType = "btrfs";
-    options = [
-      "subvol=home"
-      "compress=zstd"
-      "noatime"
-    ];
-  };
-
-  fileSystems."/nix" = {
-    device = "/dev/disk/by-label/SHI_ROOT";
-    fsType = "btrfs";
-    options = [
-      "subvol=nix"
-      "compress=zstd"
-      "noatime"
-    ];
-  };
-
-  fileSystems."/yosuga" = {
-    device = "/dev/disk/by-label/SHI_ROOT";
-    fsType = "btrfs";
-    options = [
-      "subvol=yosuga"
-      "compress=zstd"
-      "noatime"
-    ];
-    neededForBoot = true;
-  };
-
-  fileSystems."/var/log" = {
-    device = "/dev/disk/by-label/SHI_ROOT";
-    fsType = "btrfs";
-    options = [
-      "subvol=log"
-      "compress=zstd"
-      "noatime"
-    ];
-    neededForBoot = true;
-  };
-
-  fileSystems."/swap" = {
-    device = "/dev/disk/by-label/SHI_ROOT";
-    fsType = "btrfs";
-    options = [
-      "subvol=swap"
-      "noatime"
-    ];
-  };
-
-  fileSystems."/boot" = {
-    device = "/dev/disk/by-uuid/2DBD-07F0";
-    fsType = "vfat";
-    options = [
-      "fmask=0022"
-      "dmask=0022"
-    ];
+  fileSystems = {
+    "/" = {
+      device = "/dev/disk/by-label/SHI_ROOT";
+      fsType = "btrfs";
+      options = [
+        "subvol=root"
+        "compress=zstd"
+        "noatime"
+      ];
+    };
+    "/home" = {
+      device = "/dev/disk/by-label/SHI_ROOT";
+      fsType = "btrfs";
+      options = [
+        "subvol=home"
+        "compress=zstd"
+        "noatime"
+      ];
+    };
+    "/nix" = {
+      device = "/dev/disk/by-label/SHI_ROOT";
+      fsType = "btrfs";
+      options = [
+        "subvol=nix"
+        "compress=zstd"
+        "noatime"
+      ];
+    };
+    "/yosuga" = {
+      device = "/dev/disk/by-label/SHI_ROOT";
+      fsType = "btrfs";
+      options = [
+        "subvol=yosuga"
+        "compress=zstd"
+        "noatime"
+      ];
+      neededForBoot = true;
+    };
+    "/var/log" = {
+      device = "/dev/disk/by-label/SHI_ROOT";
+      fsType = "btrfs";
+      options = [
+        "subvol=log"
+        "compress=zstd"
+        "noatime"
+      ];
+      neededForBoot = true;
+    };
+    "/swap" = {
+      device = "/dev/disk/by-label/SHI_ROOT";
+      fsType = "btrfs";
+      options = [
+        "subvol=swap"
+        "noatime"
+      ];
+    };
+    "/boot" = {
+      device = "/dev/disk/by-uuid/2DBD-07F0";
+      fsType = "vfat";
+      options = [
+        "fmask=0022"
+        "dmask=0022"
+      ];
+    };
   };
 
   swapDevices = [ { device = "/swap/swapfile"; } ];

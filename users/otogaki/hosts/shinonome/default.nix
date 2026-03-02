@@ -19,117 +19,115 @@ in
     ../common # Common configs among user's hosts.
   ];
 
-  yakumo.system = {
-    i18n = {
-      inputMethod = {
-        fcitx5 = {
-          enable = true;
-          extraAddons = [ ];
-          quickPhrase = { };
+  yakumo = {
+    system = {
+      i18n = {
+        inputMethod = {
+          fcitx5 = {
+            enable = true;
+            extraAddons = [ ];
+            quickPhrase = { };
+          };
         };
       };
     };
-  };
-
-  yakumo.desktop = {
-    enable = true;
-    compositors = {
-      niri = {
-        enable = true;
-        xwayland.enable = true;
-        settings = recursiveUpdate (import ../../configs/niri { inherit theme; }) (
-          import ../../configs/niri/config-shinonome.nix
-        );
-        # loginSettings = import ../../configs/niri/login-shinonome.nix;
-        # greeter.regreet = {
-        #   enable = true;
-        # } // (import ../../configs/regreet { inherit theme; });
-        greeter.tuigreet = {
-          enable = true;
-          themeArgs = import ../../configs/tuigreet/theme.nix { inherit theme; };
-        };
-      };
-    };
-    daemons = {
-      awww = {
-        enable = true;
-      };
-      mako = {
-        enable = true;
-        settings = import ../../configs/mako { inherit theme; };
-      };
-      swayidle = {
-        enable = true;
-        settings = import ../../configs/swayidle { inherit systemWideBinPath; };
-      };
-    };
-    lockers = {
-      hyprlock = {
-        enable = true;
-        settings = import ../../configs/hyprlock { inherit theme; };
-      };
-    };
-    terminal = {
-      wezterm = {
-        enable = true;
-        settings = import ../../configs/wezterm { inherit lib theme; };
-      };
-    };
-    ui = {
-      waybar = {
-        enable = true;
-        settings = import ../../configs/waybar/niri-config.nix { inherit systemWideBinPath; };
-        style = import ../../configs/waybar/style.nix { inherit theme hexToRgba; };
-      };
-      wofi = {
-        enable = true;
-        settings = import ../../configs/wofi;
-        style = import ../../configs/wofi/style.nix { inherit theme; };
-      };
-    };
-    apps = {
-      browsers = {
-        brave = {
-          enable = true;
-        };
-        nyxt = {
-          enable = true;
-          config = ../../configs/nyxt/init.lisp;
-        };
-      };
-      media = {
-        modules = [
-          "music"
-          "video"
-        ];
-      };
-      misc = {
-        thunar = {
-          enable = true;
-        };
-      };
-    };
-  };
-
-  yakumo.editors = {
-    emacs = {
+    desktop = {
       enable = true;
-      ametsuchi.enable = true;
+      compositors = {
+        niri = {
+          enable = true;
+          xwayland.enable = true;
+          settings = recursiveUpdate (import ../../configs/niri { inherit theme; }) (
+            import ../../configs/niri/config-shinonome.nix
+          );
+          # loginSettings = import ../../configs/niri/login-shinonome.nix;
+          # greeter.regreet = {
+          #   enable = true;
+          # } // (import ../../configs/regreet { inherit theme; });
+          greeter.tuigreet = {
+            enable = true;
+            themeArgs = import ../../configs/tuigreet/theme.nix { inherit theme; };
+          };
+        };
+      };
+      daemons = {
+        awww = {
+          enable = true;
+        };
+        mako = {
+          enable = true;
+          settings = import ../../configs/mako { inherit theme; };
+        };
+        swayidle = {
+          enable = true;
+          settings = import ../../configs/swayidle { inherit systemWideBinPath; };
+        };
+      };
+      lockers = {
+        hyprlock = {
+          enable = true;
+          settings = import ../../configs/hyprlock { inherit theme; };
+        };
+      };
+      terminal = {
+        wezterm = {
+          enable = true;
+          settings = import ../../configs/wezterm { inherit lib theme; };
+        };
+      };
+      ui = {
+        waybar = {
+          enable = true;
+          settings = import ../../configs/waybar/niri-config.nix { inherit systemWideBinPath; };
+          style = import ../../configs/waybar/style.nix { inherit theme hexToRgba; };
+        };
+        wofi = {
+          enable = true;
+          settings = import ../../configs/wofi;
+          style = import ../../configs/wofi/style.nix { inherit theme; };
+        };
+      };
+      apps = {
+        browsers = {
+          brave = {
+            enable = true;
+          };
+          nyxt = {
+            enable = true;
+            config = ../../configs/nyxt/init.lisp;
+          };
+        };
+        media = {
+          modules = [
+            "music"
+            "video"
+          ];
+        };
+        misc = {
+          thunar = {
+            enable = true;
+          };
+        };
+      };
     };
-  };
-
-  yakumo.programs = {
-    wthrr = {
-      enable = true;
-      settings = import ../../configs/wthrr;
+    editors = {
+      emacs = {
+        enable = true;
+        ametsuchi.enable = true;
+      };
     };
-  };
-
-  yakumo.services = {
-    xremap = {
-      enable = true;
-      userName = config.yakumo.user.name;
-      settings = import ../../configs/xremap;
+    programs = {
+      wthrr = {
+        enable = true;
+        settings = import ../../configs/wthrr;
+      };
+    };
+    services = {
+      xremap = {
+        enable = true;
+        userName = config.yakumo.user.name;
+        settings = import ../../configs/xremap;
+      };
     };
   };
 

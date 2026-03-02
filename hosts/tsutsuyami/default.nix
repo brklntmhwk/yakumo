@@ -15,45 +15,46 @@ in
     # ./hardware-configuration.nix
   ];
 
-  yakumo.system = {
-    role = "workstation";
-    nix = {
-      enableFlake = true;
+  yakumo = {
+    system = {
+      role = "workstation";
+      nix = {
+        enableFlake = true;
+      };
+      networking = {
+        manager = "networkmanager";
+        wifi.enable = true;
+      };
+      # persistence.yosuga = {
+      #   enable = true;
+      #   directories = [
+      #     "/etc/nixos"
+      #     "/etc/NetworkManager/system-connections"
+      #     "/var/lib/bluetooth"
+      #   ];
+      #   files = [
+      #     "/etc/machine-id"
+      #     "/etc/ssh/ssh_host_ed25519_key"
+      #     "/etc/ssh/ssh_host_ed25519_key.pub"
+      #     "/etc/ssh/ssh_host_rsa_key"
+      #     "/etc/ssh/ssh_host_rsa_key.pub"
+      #   ];
+      # };
     };
-    networking = {
-      manager = "networkmanager";
-      wifi.enable = true;
+    hardware = {
+      modules = [
+        "audio"
+        "bluetooth/blueman"
+        "cpu/amd"
+        "gpu/nvidia"
+        "monitor"
+        "printer/bambu-lab"
+        "scanner/scansnap"
+        "ssd"
+        "trackpad/magic-trackpad"
+        # "ups/goldenmate"
+      ];
     };
-    # persistence.yosuga = {
-    #   enable = true;
-    #   directories = [
-    #     "/etc/nixos"
-    #     "/etc/NetworkManager/system-connections"
-    #     "/var/lib/bluetooth"
-    #   ];
-    #   files = [
-    #     "/etc/machine-id"
-    #     "/etc/ssh/ssh_host_ed25519_key"
-    #     "/etc/ssh/ssh_host_ed25519_key.pub"
-    #     "/etc/ssh/ssh_host_rsa_key"
-    #     "/etc/ssh/ssh_host_rsa_key.pub"
-    #   ];
-    # };
-  };
-
-  yakumo.hardware = {
-    modules = [
-      "audio"
-      "bluetooth/blueman"
-      "cpu/amd"
-      "gpu/nvidia"
-      "monitor"
-      "printer/bambu-lab"
-      "scanner/scansnap"
-      "ssd"
-      "trackpad/magic-trackpad"
-      # "ups/goldenmate"
-    ];
   };
 
   # Copied from the auto-generated 'hardware-configuration.nix' file.
@@ -65,74 +66,70 @@ in
     allowDiscards = true;
   };
 
-  fileSystems."/" = {
-    device = "/dev/disk/by-label/TSU_ROOT";
-    fsType = "btrfs";
-    options = [
-      "subvol=root"
-      "compress=zstd"
-      "noatime"
-    ];
-  };
-
-  fileSystems."/nix" = {
-    device = "/dev/disk/by-label/TSU_ROOT";
-    fsType = "btrfs";
-    options = [
-      "subvol=nix"
-      "compress=zstd"
-      "noatime"
-    ];
-  };
-
-  fileSystems."/home" = {
-    device = "/dev/disk/by-label/TSU_ROOT";
-    fsType = "btrfs";
-    options = [
-      "subvol=home"
-      "compress=zstd"
-      "noatime"
-    ];
-  };
-
-  fileSystems."/yosuga" = {
-    device = "/dev/disk/by-label/TSU_ROOT";
-    fsType = "btrfs";
-    options = [
-      "subvol=yosuga"
-      "compress=zstd"
-      "noatime"
-    ];
-    neededForBoot = true;
-  };
-
-  fileSystems."/var/log" = {
-    device = "/dev/disk/by-label/TSU_ROOT";
-    fsType = "btrfs";
-    options = [
-      "subvol=log"
-      "compress=zstd"
-      "noatime"
-    ];
-    neededForBoot = true;
-  };
-
-  fileSystems."/swap" = {
-    device = "/dev/disk/by-label/TSU_ROOT";
-    fsType = "btrfs";
-    options = [
-      "subvol=swap"
-      "noatime"
-    ];
-  };
-
-  fileSystems."/boot" = {
-    device = "/dev/disk/by-label/TSU_BOOT";
-    fsType = "vfat";
-    options = [
-      "fmask=0022"
-      "dmask=0022"
-    ];
+  fileSystems = {
+    "/" = {
+      device = "/dev/disk/by-label/TSU_ROOT";
+      fsType = "btrfs";
+      options = [
+        "subvol=root"
+        "compress=zstd"
+        "noatime"
+      ];
+    };
+    "/nix" = {
+      device = "/dev/disk/by-label/TSU_ROOT";
+      fsType = "btrfs";
+      options = [
+        "subvol=nix"
+        "compress=zstd"
+        "noatime"
+      ];
+    };
+    "/home" = {
+      device = "/dev/disk/by-label/TSU_ROOT";
+      fsType = "btrfs";
+      options = [
+        "subvol=home"
+        "compress=zstd"
+        "noatime"
+      ];
+    };
+    "/yosuga" = {
+      device = "/dev/disk/by-label/TSU_ROOT";
+      fsType = "btrfs";
+      options = [
+        "subvol=yosuga"
+        "compress=zstd"
+        "noatime"
+      ];
+      neededForBoot = true;
+    };
+    "/var/log" = {
+      device = "/dev/disk/by-label/TSU_ROOT";
+      fsType = "btrfs";
+      options = [
+        "subvol=log"
+        "compress=zstd"
+        "noatime"
+      ];
+      neededForBoot = true;
+    };
+    "/swap" = {
+      device = "/dev/disk/by-label/TSU_ROOT";
+      fsType = "btrfs";
+      options = [
+        "subvol=swap"
+        "noatime"
+      ];
+    };
+    "/boot" = {
+      device = "/dev/disk/by-label/TSU_BOOT";
+      fsType = "vfat";
+      options = [
+        "fmask=0022"
+        "dmask=0022"
+      ];
+    };
   };
 
   swapDevices = [ { device = "/swap/swapfile"; } ];

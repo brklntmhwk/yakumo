@@ -14,38 +14,37 @@ in
     ../common # Common configs among user's hosts.
   ];
 
-  yakumo.system = {
-    i18n = {
-      inputMethod = {
-        fcitx5 = {
-          enable = true;
-          extraAddons = [ ];
-          quickPhrase = { };
+  yakumo = {
+    system = {
+      i18n = {
+        inputMethod = {
+          fcitx5 = {
+            enable = true;
+            extraAddons = [ ];
+            quickPhrase = { };
+          };
         };
       };
     };
-  };
-
-  yakumo.desktop = {
-    terminal = {
-      wezterm = {
-        enable = true;
-        settings = import ../../configs/wezterm { inherit lib theme; };
+    desktop = {
+      terminal = {
+        wezterm = {
+          enable = true;
+          settings = import ../../configs/wezterm { inherit lib theme; };
+        };
       };
     };
-  };
-
-  yakumo.editors = {
-    emacs = {
-      enable = true;
-      ametsuchi.enable = true;
+    editors = {
+      emacs = {
+        enable = true;
+        ametsuchi.enable = true;
+      };
     };
-  };
-
-  yakumo.programs = {
-    wthrr = {
-      enable = true;
-      settings = import ../../configs/wthrr;
+    programs = {
+      wthrr = {
+        enable = true;
+        settings = import ../../configs/wthrr;
+      };
     };
   };
 
