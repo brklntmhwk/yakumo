@@ -92,8 +92,12 @@ in
       width = {
         _args = [ 3 ];
       };
-      active-color = {
-        _args = [ colors.slate ];
+      active-gradient = {
+        _props = {
+          from = colors.maroon;
+          to = colors.red;
+          angle = 45;
+        };
       };
       inactive-color = {
         _args = [ colors.border ];
@@ -145,8 +149,12 @@ in
       corner-radius = {
         _args = [ 8 ];
       };
-      active-color = {
-        _args = [ colors.gold ];
+      active-gradient = {
+        _props = {
+          from = colors.yellow-warmer;
+          to = colors.red-warmer;
+          angle = 45;
+        };
       };
       inactive-color = {
         _args = [ colors.border ];
@@ -208,7 +216,7 @@ in
     };
     window-open = {
       duration-ms = {
-        _args = [ 150 ];
+        _args = [ 200 ];
       };
       curve = {
         _args = [ "ease-out-expo" ];
@@ -237,7 +245,7 @@ in
         epsilon = 1.0e-4;
       };
     };
-    horizontal-view-movement.spring = {
+    horizontal-view-mvoement.spring = {
       _props = {
         damping-ratio = 1.0;
         stiffness = 800;
@@ -275,64 +283,16 @@ in
     };
   };
 
-  # https://niri-wm.github.io/niri/Workspaces.html
-  # workspace = [
-  #   {
-  #     _args = [ "home" ];
-  #     open-on-output = {
-  #       _args = [ "HDMI-A-1" ];
-  #     };
-  #   }
-  #   {
-  #     _args = [ "dev" ];
-  #     open-on-output = {
-  #       _args = [ "DP-2" ];
-  #     };
-  #   }
-  # ];
-
   # https://niri-wm.github.io/niri/Configuration%3A-Window-Rules.html
   window-rule = [
+    # Enable rounded corners for all windows.
+    # https://niri-wm.github.io/niri/FAQ.html#how-to-enable-rounded-corners-for-all-windows
     {
       geometry-corner-radius = {
         _args = [ 8 ];
       };
       clip-to-geometry = {
         _args = [ true ];
-      };
-    }
-    {
-      match = [
-        {
-          _props = {
-            at-startup = true;
-          };
-        }
-        {
-          _props = {
-            app-id = "emacs";
-          };
-        }
-      ];
-      open-on-workspace = {
-        _args = [ "dev" ];
-      };
-    }
-    {
-      match = [
-        {
-          _props = {
-            at-startup = true;
-          };
-        }
-        {
-          _props = {
-            app-id = "wezterm";
-          };
-        }
-      ];
-      open-on-workspace = {
-        _args = [ "dev" ];
       };
     }
   ];
