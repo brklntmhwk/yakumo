@@ -106,24 +106,17 @@ in
         };
       in
       {
-        yakumo.user.packages = [ starshipWrapped ];
-        yakumo.shell.starship.packageWrapped = starshipWrapped;
-        yakumo.shell.zsh = mkIf zshCfg.enable {
-          initExtraLast = ''
-            eval "$(${getExe starshipWrapped} init zsh)"
-          '';
+        yakumo = {
+          user.packages = [ starshipWrapped ];
+          shell = {
+            starship.packageWrapped = starshipWrapped;
+            zsh = mkIf zshCfg.enable {
+              initExtraLast = ''
+                eval "$(${getExe starshipWrapped} init zsh)"
+              '';
+            };
+          };
         };
-
-        # This writes things as follows to every shell's `promptInit` or `shellInit` for you:
-        # - The `eval "$(starship init bash)"` thingy
-        # - The `export STARSHIP_CONFIG=${settingsFile}` thingy if the config file
-        # doesn't exist under the XDG config dir.
-        # https://github.com/NixOS/nixpkgs/commit/928c8115ba60d54ec36b3f11a364ff81b0ad066c
-        # programs.starship = {
-        #   enable = true;
-        #   settings = cfg.settings;
-        #   package = cfg.package;
-        # };
       }
     )
   ]);
