@@ -242,7 +242,7 @@ in
         epsilon = 1.0e-4;
       };
     };
-    horizontal-view-mvoement.spring = {
+    horizontal-view-movement.spring = {
       _props = {
         damping-ratio = 1.0;
         stiffness = 800;
