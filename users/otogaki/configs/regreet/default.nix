@@ -8,17 +8,14 @@ in
     path = theme.wallpaper;
   };
   theme = {
-    inherit (loginThemes.adwaita) name;
-    inherit (loginThemes.adwaita) package;
+    inherit (loginThemes.adwaita) name package;
     preferDark = true;
   };
   cursorTheme = {
-    inherit (cursorThemes.adwaita) name;
-    inherit (cursorThemes.adwaita) package;
+    inherit (cursorThemes.adwaita) name package;
   };
   font = {
-    inherit (fonts.moralerspaceHw) name;
-    inherit (fonts.moralerspaceHw) package;
+    inherit (fonts.moralerspaceHw) name package;
     size = 16;
   };
 }
