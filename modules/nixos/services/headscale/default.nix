@@ -52,7 +52,10 @@ in
             # DERP (Designated Encrypted Relay for Packets):
             derp = {
               auto_update_enabled = true;
-              paths = [ ];
+              paths = [
+                # The public Tailscale servers
+                "https://controlplane.tailscale.com/derpmap/default"
+              ];
               update_frequency = "24h"; # Default: '24h'
               urls = [ ];
               server.private_key_path = "/path/to/derp-server-private.key";

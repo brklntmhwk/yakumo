@@ -10,6 +10,16 @@
   ];
 
   yakumo = {
-    services = { };
+    services = {
+      # headscale = {
+      #   enable = true;
+      # };
+      # tailscale = {
+      #   enable = true;
+      # };
+      # stalwart-mail = {
+      #   enable = true;
+      # };
+    };
   };
 }

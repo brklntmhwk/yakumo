@@ -120,6 +120,9 @@ in
       };
     };
     services = {
+      # tailscale = {
+      #   enable = true;
+      # };
       xremap = {
         enable = true;
         userName = config.yakumo.user.name;
