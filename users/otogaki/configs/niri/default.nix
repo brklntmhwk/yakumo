@@ -157,14 +157,14 @@ in
       };
       # The gap between the tab indicator and the window in logical pixels.
       gap = {
-        _args = [ 10 ];
+        _args = [ 8 ];
       };
       # The gap between tabs in logical pixels.
       gaps-between-tabs = {
         _args = [ 8 ];
       };
       hide-when-single-tab = { };
-      # place-within-column = { };
+      place-within-column = { };
     };
   };
 
