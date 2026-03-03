@@ -94,8 +94,8 @@ in
       };
       active-gradient = {
         _props = {
-          from = colors.yellow-faint;
-          to = colors.red-intense;
+          from = colors.red;
+          to = colors.gold;
           angle = 180;
         };
       };
@@ -149,12 +149,8 @@ in
       corner-radius = {
         _args = [ 8 ];
       };
-      active-gradient = {
-        _props = {
-          from = colors.magenta-cooler;
-          to = colors.blue-intense;
-          angle = 180;
-        };
+      active-color = {
+        _args = [ colors.pink ];
       };
       inactive-color = {
         _args = [ colors.border ];
