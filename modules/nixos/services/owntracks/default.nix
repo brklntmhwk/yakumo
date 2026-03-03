@@ -213,7 +213,9 @@ in
       };
 
       services.caddy.virtualHosts."${cfg.frontend.domain}" = {
-        # useACMEHost = "yakumo.com";
+        # Specify a host of an existing Let's Encrypt certificate.
+        # Useful if we use DNS challenges but Caddy doesn't support our DNS provider.
+        useACMEHost = "yakumo.com";
 
         # Have Caddy handling the config file instead of relying on the package
         # override (i.e., `pkgs.foo.override`), as it will trigger a full rebuild of
