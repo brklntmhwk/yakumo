@@ -79,6 +79,7 @@ in
 
       services.caddy.virtualHosts = {
         "${cfg.domain}" = {
+          useACMEHost = "yakumo.net";
           extraConfig = ''
             reverse_proxy ${kanidmCfg.bindaddress}
           '';

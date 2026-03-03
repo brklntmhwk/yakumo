@@ -45,6 +45,7 @@ in
       in
       {
         "${cfg.domain}" = {
+          useACMEHost = "yakumo.net";
           extraConfig = ''
             reverse_proxy ${listenAddress}:${builtins.toString port}
           '';

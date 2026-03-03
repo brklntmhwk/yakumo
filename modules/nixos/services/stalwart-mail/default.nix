@@ -118,6 +118,7 @@ in
 
       services.caddy.virtualHosts = {
         "${cfg.domain}" = {
+          useACMEHost = "yakumo.net";
           extraConfig = ''
             reverse_proxy ${stalwartCfg.settings.server.management.bind}
           '';

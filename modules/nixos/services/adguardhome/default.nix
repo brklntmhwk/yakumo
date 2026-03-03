@@ -47,6 +47,7 @@ in
 
       services.caddy.virtualHosts = {
         "${cfg.domain}" = {
+          useACMEHost = "yakumo.net";
           extraConfig = ''
             reverse_proxy ${adguardCfg.host}:${builtins.toString adguardCfg.port}
           '';

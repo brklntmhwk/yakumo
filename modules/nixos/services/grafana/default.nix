@@ -241,6 +241,7 @@ in
 
         services.caddy.virtualHosts = {
           "${cfg.domain}" = {
+            useACMEHost = "yakumo.net";
             extraConfig = ''
               reverse_proxy ${grafanaCfg.http_addr}:${builtins.toString grafanaCfg.http_port}
             '';

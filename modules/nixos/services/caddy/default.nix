@@ -53,5 +53,8 @@ in
       # configFile = {};
       extraConfig = "";
     };
+
+    # Ensure the Caddy user has permission to read the ACME certificates.
+    users.users.caddy.extraGroups = [ "acme" ];
   };
 }

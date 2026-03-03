@@ -80,6 +80,7 @@ in
 
       services.caddy.virtualHosts = {
         "${cfg.domain}" = {
+          useACMEHost = "yakumo.net";
           extraConfig = ''
             reverse_proxy ${vwCfg.config.ROCKET_ADDRESS}:${builtins.toString vwCfg.config.ROCKET_PORT}
           '';

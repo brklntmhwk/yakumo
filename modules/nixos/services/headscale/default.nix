@@ -119,6 +119,7 @@ in
         services.caddy.virtualHosts = {
           # https://headscale.net/stable/ref/integration/reverse-proxy/#caddy
           "${cfg.domain}" = {
+            useACMEHost = "yakumo.net";
             extraConfig = ''
               reverse_proxy ${headscaleCfg.address}:${headscaleCfg.port}
             '';
