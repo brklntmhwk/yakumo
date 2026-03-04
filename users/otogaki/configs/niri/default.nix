@@ -143,14 +143,14 @@ in
       };
       length = {
         _props = {
-          total-proportion = 0.75;
+          total-proportion = 0.85;
         };
       };
       corner-radius = {
         _args = [ 8 ];
       };
       active-color = {
-        _args = [ colors.blue-intense ];
+        _args = [ colors.yellow-warmer ];
       };
       inactive-color = {
         _args = [ colors.border ];
