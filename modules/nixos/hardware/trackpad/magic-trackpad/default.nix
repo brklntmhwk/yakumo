@@ -16,6 +16,11 @@ in
       inherit (pkgs) bluez usbutils;
     };
 
+    # NOTE: This doesn't work out the cursor-freeze bug.
+    # Some users report the exact same bug in Reddit, but no clear solution or workaround
+    # seems to be established yet.
+    # https://www.reddit.com/r/AsahiLinux/comments/1g2inh6/after_waking_up_from_suspend_apple_magic_trackpad/
+    #
     # Simulate unplugging/plugging the USB cable or toggling the power
     # upon waking from sleep to fix the cursor-freeze bug.
     powerManagement.resumeCommands = ''
