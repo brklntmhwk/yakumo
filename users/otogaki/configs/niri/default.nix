@@ -143,7 +143,7 @@ in
       };
       length = {
         _props = {
-          total-proportion = 1.0;
+          total-proportion = 0.75;
         };
       };
       corner-radius = {
@@ -157,7 +157,7 @@ in
       };
       # The gap between the tab indicator and the window in logical pixels.
       gap = {
-        _args = [ 8 ];
+        _args = [ 7 ];
       };
       # The gap between tabs in logical pixels.
       gaps-between-tabs = {
