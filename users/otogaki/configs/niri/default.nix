@@ -94,8 +94,8 @@ in
       };
       active-gradient = {
         _props = {
-          from = colors.yellow-faint;
-          to = colors.red-intense;
+          from = colors.red;
+          to = colors.gold;
           angle = 180;
         };
       };
@@ -149,26 +149,22 @@ in
       corner-radius = {
         _args = [ 8 ];
       };
-      active-gradient = {
-        _props = {
-          from = colors.magenta-cooler;
-          to = colors.blue-intense;
-          angle = 180;
-        };
+      active-color = {
+        _args = [ colors.pink ];
       };
       inactive-color = {
         _args = [ colors.border ];
       };
       # The gap between the tab indicator and the window in logical pixels.
       gap = {
-        _args = [ 10 ];
+        _args = [ 8 ];
       };
       # The gap between tabs in logical pixels.
       gaps-between-tabs = {
         _args = [ 8 ];
       };
       hide-when-single-tab = { };
-      # place-within-column = { };
+      place-within-column = { };
     };
   };
 
