@@ -36,15 +36,20 @@ in
         loader = mkIf (!isWsl) {
           efi.canTouchEfiVariables = mkDefault true;
           systemd-boot = {
-            enable = mkDefault true;
+            enable = true;
             # Maximum number of latest generations in the boot menu.
             configurationLimit = mkDefault 10;
             # Add Memtest86+ (Memory testing tool) to the boot menu.
             memtest86.enable = mkIf isx86_64 (mkDefault true);
+            # Disable this to disallow gaining root access by passing init=/bin/sh
+            # as a kernel param.
+            # https://github.com/NixOS/nixpkgs/blob/0e251557fc7608b1660896dc993d733beace113c/nixos/modules/system/boot/loader/systemd-boot/systemd-boot.nix
+            editor = mkDefault false;
           };
           timeout = mkDefault 3;
         };
-        # initrd.systemd.enable = true;
+        # Enable systemd in initrd (e.g., `boot.initrd.systemd.services.*`).
+        initrd.systemd.enable = true;
       };
     }
     (mkIf isAsahi {
