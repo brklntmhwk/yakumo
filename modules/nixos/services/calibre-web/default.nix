@@ -9,13 +9,19 @@ let
   inherit (lib)
     mkEnableOption
     mkIf
+    mkOption
+    types
     ;
-  cfg = config.yakumo.services.calibre;
-  systemCfg = config.yakumo.system;
+  cfg = config.yakumo.services.calibre-web;
 in
 {
   options.yakumo.services.calibre-web = {
     enable = mkEnableOption "calibre-web";
+    domain = mkOption {
+      type = types.str;
+      default = "localhost";
+      description = "Domain name.";
+    };
   };
 
   config = mkIf cfg.enable {
@@ -34,8 +40,8 @@ in
       options = {
         # Path to Calibre library.
         calibreLibrary = null; # Default: null
-        enableBookConversion = false; # Default: false
-        enableBookUploading = false; # Default: false
+        enableBookConversion = true; # Default: false
+        enableBookUploading = true; # Default: false
         enableKepubify = false; # Default: false
         reverseProxyAuth = {
           enable = true; # Default: false
@@ -43,5 +49,19 @@ in
         };
       };
     };
+
+    services.caddy.virtualHosts = (
+      let
+        calibWebCfg = config.services.calibre-web;
+      in
+      {
+        "${cfg.domain}" = {
+          useACMEHost = "yakumo.net";
+          extraConfig = ''
+            reverse_proxy ${calibWebCfg.listen.ip}:${builtins.toString calibWebCfg.listen.port}
+          '';
+        };
+      }
+    );
   };
 }

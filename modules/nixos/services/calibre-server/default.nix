@@ -9,12 +9,19 @@ let
   inherit (lib)
     mkEnableOption
     mkIf
+    mkOption
+    types
     ;
-  cfg = config.yakumo.services.calibre;
+  cfg = config.yakumo.services.calibre-server;
 in
 {
   options.yakumo.services.calibre-server = {
     enable = mkEnableOption "calibre-server";
+    domain = mkOption {
+      type = types.str;
+      default = "localhost";
+      description = "Domain name.";
+    };
   };
 
   config = mkIf cfg.enable {
@@ -35,5 +42,19 @@ in
         userDb = null; # Default: null
       };
     };
+
+    services.caddy.virtualHosts = (
+      let
+        calibSrvCfg = config.services.calibre-server;
+      in
+      {
+        "${cfg.domain}" = {
+          useACMEHost = "yakumo.net";
+          extraConfig = ''
+            reverse_proxy ${calibSrvCfg.host}:${builtins.toString calibSrvCfg.port}
+          '';
+        };
+      }
+    );
   };
 }
