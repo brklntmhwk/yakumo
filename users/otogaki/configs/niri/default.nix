@@ -57,7 +57,7 @@ in
   # https://yalter.github.io/niri/Configuration:-Layout
   layout = {
     gaps = {
-      _args = [ 16 ];
+      _args = [ 14 ];
     };
     center-focused-column = {
       _args = [ "never" ];
@@ -94,9 +94,9 @@ in
       };
       active-gradient = {
         _props = {
-          from = colors.red;
-          to = colors.gold;
-          angle = 180;
+          from = colors.maroon;
+          to = colors.magenta-cooler;
+          angle = 45;
         };
       };
       inactive-color = {
@@ -150,7 +150,7 @@ in
         _args = [ 8 ];
       };
       active-color = {
-        _args = [ colors.pink ];
+        _args = [ colors.blue-intense ];
       };
       inactive-color = {
         _args = [ colors.border ];
