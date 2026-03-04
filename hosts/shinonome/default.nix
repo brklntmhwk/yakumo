@@ -61,13 +61,14 @@ in
     };
   };
 
-  # Copied from the auto-generated 'hardware-configuration.nix' file.
   # Run `ip link show` or `ip a` to check your interface name(s).
-  networking.interfaces.wlan0.useDHCP = mkDefault true;
+  # networking.interfaces.wlan0.useDHCP = mkDefault true;
 
   boot.initrd.luks.devices."crypted" = {
     device = "/dev/disk/by-label/SHI_CRYPT";
     allowDiscards = true;
+    # Instruct systemd-cryptsetup to wait for and use your FIDO2 token.
+    crypttabExtraOpts = [ "fido2-device=auto" ];
   };
 
   fileSystems = {
