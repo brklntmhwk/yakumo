@@ -29,6 +29,8 @@ in
       flags ? [ ],
       env ? { },
       deps ? [ ],
+      preWrapProgram ? null,
+      postWrapProgram ? null,
     }:
     let
       binName =
@@ -63,9 +65,17 @@ in
           exit 1
         fi
 
+        ${optionalString (preWrapProgram != null) ''
+          ${preWrapProgram}
+        ''}
+
         wrapProgram $out/bin/${binName} \
           ${envStr} \
           --add-flags "${flagsStr}"
+
+        ${optionalString (postWrapProgram != null) ''
+          ${postWrapProgram}
+        ''}
 
         ${optionalString hasMan ''
           mkdir -p ''${!outputMan}
