@@ -70,7 +70,11 @@ in
     device = "/dev/disk/by-label/SHI_CRYPT";
     allowDiscards = true;
     # Instruct systemd-cryptsetup to wait for and use your FIDO2 token.
-    crypttabExtraOpts = [ "fido2-device=auto" ];
+    crypttabExtraOpts = [
+      "fido2-device=auto"
+      "fido2-with-client-pin=yes"
+      "token-timeout=15"
+    ];
   };
 
   fileSystems = {
