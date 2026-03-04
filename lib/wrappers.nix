@@ -12,25 +12,27 @@ let
     concatMapStringsSep
     escapeShellArg
     escapeShellArgs
+    flatten
     getExe
     getName
     makeBinPath
     mapAttrsToList
     optional
+    optionals
     optionalString
     ;
 in
 {
-  mkAppWrapper =
+  mkWrapper =
     {
       pkg,
       name ? null,
       bin ? null,
-      flags ? [ ],
-      env ? { },
+      prependFlags ? [ ],
+      appendFlags ? [ ],
+      setEnv ? { },
+      preCommands ? [ ],
       deps ? [ ],
-      preWrapProgram ? null,
-      postWrapProgram ? null,
     }:
     let
       binName =
@@ -41,8 +43,6 @@ in
         else
           (getName pkg);
       finalName = if name != null then name else "${getName pkg}-wrapped";
-      flagsStr = escapeShellArgs flags;
-      envStr = concatStringsSep " " (mapAttrsToList (k: v: "--set ${k} ${escapeShellArg v}") env);
       # This check is necessary to avoid the "attribute 'man' missing" error.
       # As `symlinkJoin` only produces a single default output (`out`), it crashes
       # when Nix tries to access `.man` on it.
@@ -57,37 +57,57 @@ in
         unwrapped = pkg;
       };
       outputs = [ "out" ] ++ (optional hasMan "man");
-      postBuild = ''
-        # Verify whether the above-mentioned heuristic works
-        if [ ! -x "$out/bin/${binName}" ]; then
-          echo "Error: Binary '${binName}' not found in package ${getName pkg}."
-          echo "       Available binaries: $(ls $out/bin)"
-          exit 1
-        fi
+      postBuild =
+        let
+          args =
+            optionals (setEnv != { }) (
+              flatten (
+                mapAttrsToList (k: v: [
+                  "--set"
+                  k
+                  v
+                ]) setEnv
+              )
+            )
+            ++ optionals (preCommands != [ ]) (
+              flatten (
+                map (x: [
+                  "--run"
+                  x
+                ]) preCommands
+              )
+            )
+            ++ optionals (prependFlags != [ ]) [
+              "--add-flags"
+              (escapeShellArgs prependFlags)
+            ]
+            ++ optionals (appendFlags != [ ]) [
+              "--append-flags"
+              (escapeShellArgs appendFlags)
+            ];
+        in
+        ''
+          # Verify whether the above-mentioned heuristic works.
+          if [ ! -x "$out/bin/${binName}" ]; then
+            echo "Error: Binary '${binName}' not found in package ${getName pkg}."
+            echo "       Available binaries: $(ls $out/bin)"
+            exit 1
+          fi
 
-        ${optionalString (preWrapProgram != null) ''
-          ${preWrapProgram}
-        ''}
+          wrapProgram $out/bin/${binName} \
+            ${escapeShellArgs args}
 
-        wrapProgram $out/bin/${binName} \
-          ${envStr} \
-          --add-flags "${flagsStr}"
-
-        ${optionalString (postWrapProgram != null) ''
-          ${postWrapProgram}
-        ''}
-
-        ${optionalString hasMan ''
-          mkdir -p ''${!outputMan}
-          ${concatMapStringsSep "\n" (
-            p:
-            if p ? "man" then
-              "${getExe xorg.lndir} -silent ${p.man} \${!outputMan}"
-            else
-              ''echo "No man output for ${getName p}"''
-          ) ([ pkg ] ++ deps)}
-        ''}
-      '';
+          ${optionalString hasMan ''
+            mkdir -p ''${!outputMan}
+            ${concatMapStringsSep "\n" (
+              p:
+              if p ? "man" then
+                "${getExe xorg.lndir} -silent ${p.man} \${!outputMan}"
+              else
+                ''echo "No man output for ${getName p}"''
+            ) ([ pkg ] ++ deps)}
+          ''}
+        '';
       meta = (pkg.meta or { }) // {
         outputsToInstall = [ "out" ] ++ (optional hasMan "man");
       };

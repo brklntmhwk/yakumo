@@ -254,7 +254,7 @@ in
             ;
           inherit (lib) elem getName optional;
           inherit (pkgs) runCommand;
-          inherit (murakumo.wrappers) mkAppWrapper;
+          inherit (murakumo.wrappers) mkWrapper;
 
           addBindSemicolons =
             binds:
@@ -306,10 +306,10 @@ in
           };
 
           configKdl = writeText "config.kdl" (toKDL { } finalSettings);
-          niriWrapped = mkAppWrapper {
+          niriWrapped = mkWrapper {
             pkg = cfg.package;
             name = "${getName cfg.package}-${config.yakumo.user.name}";
-            flags = [
+            prependFlags = [
               "--config"
               configKdl
             ];

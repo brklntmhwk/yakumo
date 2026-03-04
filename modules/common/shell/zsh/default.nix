@@ -232,7 +232,7 @@ in
           optionalString
           ;
         inherit (pkgs) writeTextDir;
-        inherit (murakumo.wrappers) mkAppWrapper;
+        inherit (murakumo.wrappers) mkWrapper;
 
         optsStr = concatStringsSep "\n" (map (opt: "setopt ${opt}") cfg.setOptions);
         keymapStr = optionalString (cfg.defaultKeymap != null) bindkeyCommands.${cfg.defaultKeymap};
@@ -349,10 +349,10 @@ in
             ${cfg.initExtraLast}
           ''}
         '';
-        zshWrapped = mkAppWrapper {
+        zshWrapped = mkWrapper {
           pkg = cfg.package;
           name = "${getName cfg.package}-${config.yakumo.user.name}";
-          env = {
+          setEnv = {
             ZDOTDIR = zshConfigDir;
           };
         };

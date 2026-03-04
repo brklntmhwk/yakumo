@@ -88,7 +88,7 @@ in
   config = mkIf cfg.enable (mkMerge [
     (
       let
-        inherit (murakumo.wrappers) mkAppWrapper;
+        inherit (murakumo.wrappers) mkWrapper;
         inherit (lib)
           concatMapStringsSep
           generators
@@ -98,14 +98,14 @@ in
         inherit (pkgs) writeText;
 
         gitConfig = writeText "config" (concatMapStringsSep "\n" generators.toGitINI cfg.config);
-        gitWrapped = mkAppWrapper {
+        gitWrapped = mkWrapper {
           pkg = cfg.package;
           name = "${getName cfg.package}-${config.yakumo.user.name}";
-          env = {
+          setEnv = {
             GIT_CONFIG_GLOBAL = gitConfig;
           };
           # This takes precedence over any other configurations, which is undesirable.
-          # flags = [
+          # prependFlags = [
           #   "-c"
           #   "include.path=${gitConfig}"
           # ];

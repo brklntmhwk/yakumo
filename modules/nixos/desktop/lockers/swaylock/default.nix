@@ -67,7 +67,7 @@ in
         removePrefix
         ;
       inherit (pkgs) writeText;
-      inherit (murakumo.wrappers) mkAppWrapper;
+      inherit (murakumo.wrappers) mkWrapper;
 
       formatValue =
         val:
@@ -85,10 +85,10 @@ in
           ) cfg.settings
         )
       );
-      swaylockWrapped = mkAppWrapper {
+      swaylockWrapped = mkWrapper {
         pkg = cfg.package;
         name = "${getName cfg.package}-${config.yakumo.user.name}";
-        flags = [
+        prependFlags = [
           "--config"
           swaylockConf
         ];

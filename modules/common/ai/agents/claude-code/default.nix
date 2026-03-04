@@ -39,7 +39,7 @@ in
   config = mkIf cfg.enable (
     let
       inherit (lib) getName;
-      inherit (murakumo.wrappers) mkAppWrapper;
+      inherit (murakumo.wrappers) mkWrapper;
 
       mcpCfg = config.yakumo.ai.mcp;
       mcpServersAttr = {
@@ -52,10 +52,10 @@ in
           "$schema" = "https://json.schemastore.org/claude-code-settings.json";
         }
       );
-      claudeCodeWrapped = mkAppWrapper {
+      claudeCodeWrapped = mkWrapper {
         pkg = cfg.package;
         name = "${getName pkgs.claude-code}-${config.yakumo.user.name}";
-        flags = [
+        prependFlags = [
           "--settings"
           settingsJson
         ];

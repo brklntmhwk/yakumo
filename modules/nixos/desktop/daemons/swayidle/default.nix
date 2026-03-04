@@ -93,16 +93,16 @@ in
     let
       inherit (lib) getExe getName;
       inherit (pkgs) writeText;
-      inherit (murakumo.wrappers) mkAppWrapper;
+      inherit (murakumo.wrappers) mkWrapper;
       inherit (murakumo.generators) toSwayidleConf;
 
       swayidleConf = writeText "config" (toSwayidleConf {
         attrs = cfg.settings;
       });
-      swayidleWrapped = mkAppWrapper {
+      swayidleWrapped = mkWrapper {
         pkg = cfg.package;
         name = "${getName cfg.package}-${config.yakumo.user.name}";
-        flags = [
+        prependFlags = [
           "-w" # Wait for command to finish executing before continuing
           "-C"
           swayidleConf

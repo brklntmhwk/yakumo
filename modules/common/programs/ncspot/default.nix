@@ -50,13 +50,13 @@ in
   config = mkIf cfg.enable (
     let
       inherit (lib) getName;
-      inherit (murakumo.wrappers) mkAppWrapper;
+      inherit (murakumo.wrappers) mkWrapper;
 
       configToml = tomlFormat.generate "config.toml" cfg.settings;
-      ncspotWrapped = mkAppWrapper {
+      ncspotWrapped = mkWrapper {
         pkg = cfg.package;
         name = "${getName cfg.package}-${config.yakumo.user.name}";
-        flags = [
+        prependFlags = [
           "--config"
           configToml
         ];

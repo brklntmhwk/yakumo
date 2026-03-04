@@ -58,7 +58,7 @@ in
         isStorePath
         ;
       inherit (pkgs) writeText;
-      inherit (murakumo.wrappers) mkAppWrapper;
+      inherit (murakumo.wrappers) mkWrapper;
 
       # https://github.com/nix-community/home-manager/commit/5160039edca28a7e66bad0cfc72a07c91d6768ad
       wofiConf = writeText "config" (
@@ -66,10 +66,10 @@ in
       );
       wofiStyle =
         if isPath cfg.style || isStorePath cfg.style then cfg.style else writeText "style.css" cfg.style;
-      wofiWrapped = mkAppWrapper {
+      wofiWrapped = mkWrapper {
         pkg = cfg.package;
         name = "${getName cfg.package}-${config.yakumo.user.name}";
-        flags = [
+        prependFlags = [
           "--conf"
           wofiConf
           "--style"

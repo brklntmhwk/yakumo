@@ -60,16 +60,16 @@ in
     let
       inherit (lib) getName;
       inherit (pkgs) writeText;
-      inherit (murakumo.wrappers) mkAppWrapper;
+      inherit (murakumo.wrappers) mkWrapper;
       inherit (murakumo.generators) toHyprconf;
 
       hyprlockConf = writeText "hyprlock.conf" (toHyprconf {
         attrs = cfg.settings;
       });
-      hyprlockWrapped = mkAppWrapper {
+      hyprlockWrapped = mkWrapper {
         pkg = cfg.package;
         name = "${getName cfg.package}-${config.yakumo.user.name}";
-        flags = [
+        prependFlags = [
           "--config"
           hyprlockConf
         ];

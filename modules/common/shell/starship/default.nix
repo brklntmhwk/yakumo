@@ -94,13 +94,13 @@ in
     (
       let
         inherit (lib) getExe getName;
-        inherit (murakumo.wrappers) mkAppWrapper;
+        inherit (murakumo.wrappers) mkWrapper;
 
         starshipToml = tomlFormat.generate "starship.toml" cfg.settings;
-        starshipWrapped = mkAppWrapper {
+        starshipWrapped = mkWrapper {
           pkg = cfg.package;
           name = "${getName cfg.package}-${config.yakumo.user.name}";
-          env = {
+          setEnv = {
             STARSHIP_CONFIG = starshipToml;
           };
         };

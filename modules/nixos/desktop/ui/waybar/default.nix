@@ -54,15 +54,15 @@ in
       inherit (builtins) isPath;
       inherit (lib) isStorePath getExe getName;
       inherit (pkgs) writeText;
-      inherit (murakumo.wrappers) mkAppWrapper;
+      inherit (murakumo.wrappers) mkWrapper;
 
       waybarConfig = jsonFormat.generate "config.json" cfg.settings;
       waybarStyle =
         if isPath cfg.style || isStorePath cfg.style then cfg.style else writeText "style.css" cfg.style;
-      waybarWrapped = mkAppWrapper {
+      waybarWrapped = mkWrapper {
         pkg = cfg.package;
         name = "${getName cfg.package}-${config.yakumo.user.name}";
-        flags = [
+        prependFlags = [
           "--config"
           waybarConfig
           "--style"

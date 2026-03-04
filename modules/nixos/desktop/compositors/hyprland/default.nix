@@ -236,7 +236,7 @@ in
             optionalString
             ;
           inherit (pkgs) writeText;
-          inherit (murakumo.wrappers) mkAppWrapper;
+          inherit (murakumo.wrappers) mkWrapper;
           inherit (murakumo.generators) toHyprconf;
 
           mkSubMap = name: attrs: ''
@@ -256,10 +256,10 @@ in
             + (optionalString (cfg.submaps != { }) (submapsToHyprConf cfg.submaps))
           );
 
-          hyprlandWrapped = mkAppWrapper {
+          hyprlandWrapped = mkWrapper {
             pkg = cfg.package;
             name = "${getName cfg.package}-${config.yakumo.user.name}";
-            flags = [
+            prependFlags = [
               "--config"
               hyprlandConf
             ];

@@ -57,13 +57,13 @@ in
   config = mkIf cfg.enable (
     let
       inherit (lib) getName;
-      inherit (murakumo.wrappers) mkAppWrapper;
+      inherit (murakumo.wrappers) mkWrapper;
 
       bottomToml = tomlFormat.generate "bottom.toml" cfg.settings;
-      bottomWrapped = mkAppWrapper {
+      bottomWrapped = mkWrapper {
         pkg = cfg.package;
         name = "${getName cfg.package}-${config.yakumo.user.name}";
-        flags = [
+        prependFlags = [
           "--config_location"
           bottomToml
         ];

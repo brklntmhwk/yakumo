@@ -50,17 +50,17 @@ in
     let
       inherit (lib) generators getName;
       inherit (pkgs) writeText;
-      inherit (murakumo.wrappers) mkAppWrapper;
+      inherit (murakumo.wrappers) mkWrapper;
 
       configAsLua = generators.toLua { } cfg.settings;
       weztermLua = writeText "wezterm.lua" ''
         local wezterm = require "wezterm"
         return ${configAsLua}
       '';
-      weztermWrapped = mkAppWrapper {
+      weztermWrapped = mkWrapper {
         pkg = cfg.package;
         name = "${getName cfg.package}-${config.yakumo.user.name}";
-        flags = [
+        prependFlags = [
           "--config-file"
           weztermLua
         ];

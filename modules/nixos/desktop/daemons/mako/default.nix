@@ -59,16 +59,16 @@ in
     let
       inherit (lib) getExe getName;
       inherit (pkgs) writeText;
-      inherit (murakumo.wrappers) mkAppWrapper;
+      inherit (murakumo.wrappers) mkWrapper;
       inherit (murakumo.generators) toMakoConf;
 
       makoConf = writeText "config" (toMakoConf {
         attrs = cfg.settings;
       });
-      makoWrapped = mkAppWrapper {
+      makoWrapped = mkWrapper {
         pkg = cfg.package;
         name = "${getName cfg.package}-${config.yakumo.user.name}";
-        flags = [
+        prependFlags = [
           "--config"
           makoConf
         ];

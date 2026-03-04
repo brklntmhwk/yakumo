@@ -135,7 +135,7 @@ in
           source.command = "${fdPath} -t f";
           preview = {
             command = ''${batPath} -n --color=always "{}"'';
-            env = {
+            setEnv = {
               BAT_THEME = "ansi";
             };
           };
@@ -155,7 +155,7 @@ in
           optionals
           ;
         inherit (pkgs) runCommand;
-        inherit (murakumo.wrappers) mkAppWrapper;
+        inherit (murakumo.wrappers) mkWrapper;
 
         configToml = tomlFormat.generate "config.toml" cfg.settings;
         # Mimic the directory structure Television expects.
@@ -172,10 +172,10 @@ in
             '') cfg.channelSettings
           )}
         '';
-        televisionWrapped = mkAppWrapper {
+        televisionWrapped = mkWrapper {
           pkg = cfg.package;
           name = "${getName cfg.package}-${config.yakumo.user.name}";
-          env = {
+          setEnv = {
             TELEVISION_CONFIG = "${configDir}";
           };
         };

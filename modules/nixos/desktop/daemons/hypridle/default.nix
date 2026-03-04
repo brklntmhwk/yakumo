@@ -70,16 +70,16 @@ in
       let
         inherit (lib) getExe getName;
         inherit (pkgs) writeText;
-        inherit (murakumo.wrappers) mkAppWrapper;
+        inherit (murakumo.wrappers) mkWrapper;
         inherit (murakumo.generators) toHyprconf;
 
         hypridleConf = writeText "hypridle.conf" (toHyprconf {
           attrs = cfg.settings;
         });
-        hypridleWrapped = mkAppWrapper {
+        hypridleWrapped = mkWrapper {
           pkg = cfg.package;
           name = "${getName cfg.package}-${config.yakumo.user.name}";
-          flags = [
+          prependFlags = [
             "--config"
             hypridleConf
           ];

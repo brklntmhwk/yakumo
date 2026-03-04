@@ -39,17 +39,17 @@ in
   config = mkIf cfg.enable (
     let
       inherit (lib) getName;
-      inherit (murakumo.wrappers) mkAppWrapper;
+      inherit (murakumo.wrappers) mkWrapper;
 
       mcpCfg = config.yakumo.ai.mcp;
       mcpServersAttr = {
         mcpServers = mcpCfg.servers;
       };
       settingsJson = jsonFormat.generate "settings.json" (cfg.settings // mcpServersAttr);
-      geminiCliWrapped = mkAppWrapper {
+      geminiCliWrapped = mkWrapper {
         pkg = cfg.package;
         name = "${getName pkgs.gemini-cli}-${config.yakumo.user.name}";
-        env = {
+        setEnv = {
           # https://geminicli.com/docs/cli/configuration/#settings-files
           GEMINI_CLI_SYSTEM_SETTINGS_PATH = settingsJson;
         };
