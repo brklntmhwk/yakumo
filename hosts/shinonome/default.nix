@@ -56,6 +56,8 @@ in
         "gpu/asahi"
         "monitor"
         "ssd"
+        "token/yubikey/fido-u2f"
+        "token/yubikey/piv"
         "trackpad/magic-trackpad"
       ];
     };

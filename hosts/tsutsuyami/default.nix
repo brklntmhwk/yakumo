@@ -51,6 +51,8 @@ in
         "printer/bambu-lab"
         "scanner/scansnap"
         "ssd"
+        "token/yubikey/fido-u2f"
+        "token/yubikey/piv"
         "trackpad/magic-trackpad"
         # "ups/goldenmate"
       ];
