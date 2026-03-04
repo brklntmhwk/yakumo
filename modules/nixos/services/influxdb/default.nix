@@ -63,7 +63,7 @@ in
       };
     };
 
-    services.caddy.virtualHosts = (
+    services.caddy.virtualHosts =
       let
         influxCfg = config.services.influxdb2;
       in
@@ -74,7 +74,6 @@ in
             reverse_proxy ${influxCfg.settings.http-bind-address}
           '';
         };
-      }
-    );
+      };
   };
 }

@@ -43,7 +43,7 @@ in
       };
     };
 
-    services.caddy.virtualHosts = (
+    services.caddy.virtualHosts =
       let
         calibSrvCfg = config.services.calibre-server;
       in
@@ -54,7 +54,6 @@ in
             reverse_proxy ${calibSrvCfg.host}:${builtins.toString calibSrvCfg.port}
           '';
         };
-      }
-    );
+      };
   };
 }
