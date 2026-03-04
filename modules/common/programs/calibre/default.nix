@@ -37,24 +37,27 @@ in
 
   config = mkIf cfg.enable (
     let
-      inherit (builtins) length;
+      inherit (builtins) length map;
       inherit (lib) concatMapStringsSep getName;
-      inherit (murakumo.wrappers) mkAppWrapper;
+      inherit (murakumo.wrappers) mkWrapper;
 
-      pluginAddCmds = mkIf (length cfg.plugins > 0) (concatMapStringsSep "\n" (p: ''
-        # Add Calibre plugins while suppressing output and allowing failure
-        # so that it won't crash the launch even if a plugin is already installed.
+      # Add Calibre plugins while suppressing output and allowing failure
+      # so that it won't crash the launch even if a plugin is already installed.
+      pluginAddCmds = map (p: ''
         ${cfg.package}/bin/calibre-customize -a "${p}" >/dev/null 2>&1 || true
-      '') cfg.plugins);
-      calibreWrapped = mkAppWrapper {
+      '') cfg.plugins;
+
+      calibreWrapped = mkWrapper {
         pkg = cfg.package;
         name = "${getName cfg.package}-${config.yakumo.user.name}";
-        preWrapProgram = pluginAddCmds;
+        preCommands = pluginAddCmds;
       };
+
+      finalPackage = if (length cfg.plugins > 0) then calibreWrapped else cfg.package;
     in
     {
-      yakumo.programs.calibre.packageWrapped = calibreWrapped;
-      yakumo.user.packages = [ calibreWrapped ];
+      yakumo.programs.calibre.packageWrapped = finalPackage;
+      yakumo.user.packages = [ finalPackage ];
     }
   );
 }
