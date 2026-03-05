@@ -6,7 +6,12 @@
 }:
 
 let
-  inherit (lib) any hasPrefix mkDefault mkIf;
+  inherit (lib)
+    any
+    hasPrefix
+    mkDefault
+    mkIf
+    ;
   hardwareMods = config.yakumo.hardware.modules;
 in
 {
