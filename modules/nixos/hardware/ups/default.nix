@@ -6,7 +6,7 @@
 }:
 
 let
-  inherit (lib) any hasPrefix mkIf;
+  inherit (lib) any hasPrefix mkDefault mkIf;
   hardwareMods = config.yakumo.hardware.modules;
 in
 {
@@ -20,7 +20,7 @@ in
       # - "netserver": same as the standalone config, but also needs some more ACLs
       # and possibly a specific LISTEN directive in `upsd.conf`.
       # - "netclient": only requires upsmon.
-      mode = "standalone";
+      mode = mkDefault "standalone";
       # TODO: revisit this user params and settings.
       users = {
         admin = {
@@ -47,8 +47,8 @@ in
       };
     };
 
-    yakumo.user = {
-      name = "upsmon"; # Make this align with `power.ups.users.<name>`.
+    # Make this align with `power.ups.users.<name>`.
+    users.users.upsmon = {
       isSystemUser = true;
       group = "nut";
     };
