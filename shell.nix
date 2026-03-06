@@ -11,6 +11,7 @@ pkgs.mkShell {
       statix
       age
       sops
+      ssh-to-age
       ;
   };
   shellHook = ''
