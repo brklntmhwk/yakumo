@@ -14,7 +14,10 @@
 
   config =
     let
+      inherit (builtins) map;
+      inherit (lib) mkIf;
       opensshCfg = config.services.openssh;
+      xdgCfg = config.yakumo.xdg;
     in
     {
       sops = {
@@ -25,10 +28,14 @@
         age = {
           sshKeyPaths =
             if opensshCfg.enable then
-              builtins.map (k: k.path) opensshCfg.hostKeys
+              map (k: k.path) opensshCfg.hostKeys
             else
               [ "/etc/ssh/ssh_host_ed25519_key" ];
         };
+      };
+
+      environment.variables = mkIf xdgCfg.enable {
+        SOPS_AGE_KEY_FILE = "$HOME/.config/sops/age/keys.txt";
       };
     };
 }
