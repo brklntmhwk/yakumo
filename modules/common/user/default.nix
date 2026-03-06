@@ -41,12 +41,6 @@ in
 
     users = {
       mutableUsers = false;
-      users = {
-        # TODO: migrate to hashedPasswordFile. Add login_password_root to the
-        # root sops file.
-        root.initialPassword = "password";
-        # root.hashedPasswordFile = config.sops.secrets.login_password_root.path;
-      };
     };
 
     yakumo.user = {
