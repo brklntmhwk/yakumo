@@ -14,9 +14,7 @@ let
 in
 {
   options.yakumo.xdg = {
-    enable = mkEnableOption "XDG Base Directory" // {
-      default = true;
-    };
+    enable = mkEnableOption "XDG Base Directory";
   };
 
   config = mkIf cfg.enable (mkMerge [
