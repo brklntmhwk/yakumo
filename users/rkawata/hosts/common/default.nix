@@ -2,6 +2,7 @@
   config,
   lib,
   pkgs,
+  flakeRoot,
   ...
 }:
 
@@ -17,11 +18,17 @@ in
   ];
 
   sops.secrets = {
-    # TODO: Move this to under rkawata's secrets file.
-    login_password_rkawata.sopsFile = ../../../../secrets/default.yaml;
-    gh_token_for_mcp.sopsFile = ../../secrets/default.yaml;
+    login_password_rkawata = {
+      sopsFile = flakeRoot + "/secrets/default.yaml";
+      neededForUsers = true;
+    };
+    gh_token_for_mcp = {
+      sopsFile = flakeRoot + "/users/otogaki/secrets/default.yaml";
+      owner = config.yakumo.user.name;
+    };
     git_signing_key = {
-      sopsFile = ../../secrets/default.yaml;
+      sopsFile = flakeRoot + "/users/otogaki/secrets/default.yaml";
+      owner = config.yakumo.user.name;
       mode = "0400";
     };
   };
