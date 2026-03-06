@@ -22,8 +22,8 @@
     {
       sops = {
         # Only set global options here.
-        # Local options like `sops.secrets.*` should be set in each host & user
-        # configurations.
+        # Local (i.e., user or host-scoped) options like `sops.secrets.*`
+        # should be set in each host & user configurations.
         defaultSopsFile = flakeRoot + "/secrets/default.yaml";
         age = {
           sshKeyPaths =

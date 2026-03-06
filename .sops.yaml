@@ -19,9 +19,8 @@ keys:
 creation_rules:
   - path_regex: secrets/[^/]+\.yaml$
     key_groups:
-      # - gpg:
-      #     - *admin
       - age:
+          - *admin
           - *tsutsuyami
           - *utsusemi
           # - *shinonome
@@ -31,9 +30,8 @@ creation_rules:
           # - *momokagari
   - path_regex: users/otogaki/secrets/[^/]+\.yaml$
     key_groups:
-      # - gpg:
-      #     - *admin
       - age:
+          - *admin
           - *otogaki_tsutsuyami
           - *otogaki_utsusemi
           # - *otogaki_shinonome
@@ -42,49 +40,41 @@ creation_rules:
           # - *otogaki_tamazusa
 # - path_regex: users/rkawata/secrets/[^/]+\.yaml$
 #   key_groups:
-#     - gpg:
-#         - *admin
 #     - age:
+#         - *admin
 #         - *rkawata_momokagari
 # - path_regex: hosts/tsutsuyami/secrets/[^/]+\.yaml$
 #   key_groups:
-#     - gpg:
-#         - *admin
 #     - age:
+#         - *admin
 #         - *tsutsuyami
 # - path_regex: hosts/utsusemi/secrets/[^/]+\.yaml$
 #   key_groups:
-#     - gpg:
-#         - *admin
 #     - age:
+#         - *admin
 #         - *utsusemi
 # - path_regex: hosts/shinonome/secrets/[^/]+\.yaml$
 #   key_groups:
-#     - gpg:
-#         - *admin
 #     - age:
+#         - *admin
 #         - *shinonome
 # - path_regex: hosts/niwatazumi/secrets/[^/]+\.yaml$
 #   key_groups:
-#     - gpg:
-#         - *admin
 #     - age:
+#         - *admin
 #         - *niwatazumi
 # - path_regex: hosts/sazanami/secrets/[^/]+\.yaml$
 #   key_groups:
-#     - gpg:
-#         - *admin
 #     - age:
+#         - *admin
 #         - *sazanami
 # - path_regex: hosts/tamazusa/secrets/[^/]+\.yaml$
 #   key_groups:
-#     - gpg:
-#         - *admin
 #     - age:
+#         - *admin
 #         - *tamazusa
 # - path_regex: hosts/momokagari/secrets/[^/]+\.yaml$
 #   key_groups:
-#     - gpg:
-#         - *admin
 #     - age:
+#         - *admin
 #         - *momokagari
