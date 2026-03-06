@@ -23,9 +23,12 @@ in
       neededForUsers = true;
     };
     gh_token_for_mcp = {
-      sopsFile = flakeRoot + "/users/otogaki/secrets/default.yaml";
-      owner = config.yakumo.user.name;
+      sopsFile = flakeRoot + "/secrets/default.yaml";
     };
+    # gh_token_for_mcp = {
+    #   sopsFile = flakeRoot + "/users/otogaki/secrets/default.yaml";
+    #   owner = config.yakumo.user.name;
+    # };
     git_signing_key = {
       sopsFile = flakeRoot + "/users/otogaki/secrets/default.yaml";
       owner = config.yakumo.user.name;
