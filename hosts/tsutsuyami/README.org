@@ -6,6 +6,8 @@
 Into the darkness.
 #+end_quote
 
+Tsutsuyami is not an absence of light, but the dense, silent canvas where every line of code begins. Serving as my main workstation, it provides the heavy-duty compute required to shape the Yakumo infrastructure from the ground up. It is the deep end of the universe—dive into the darkness, and emerge with the architecture of tomorrow.
+
 ** Machine Specs
 | CPU          | AMD Ryzen 5 7600X                                  |
 | GPU          | 玄人志向 GALAKURO GAMING NVIDIA GeForce RTX 4060ti |

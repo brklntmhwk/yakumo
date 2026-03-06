@@ -6,4 +6,4 @@
 Through the haze.
 #+end_quote
 
-WIP.
+Utsusemi is my generic NixOS-on-WSL configuration. It is not bound to any specific piece of bare metal. Instead, it serves as a portable lifeline—a universal fallback deployed whenever circumstances force my hand to endure a Windows environment, such as at the workplace.

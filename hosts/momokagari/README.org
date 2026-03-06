@@ -6,6 +6,8 @@
 Upon the spark.
 #+end_quote
 
+Momokagari is my primary workstation for creative endeavors. Fueled by the sheer power of Apple Silicon and managed deterministically via Nix Darwin, it bridges the gap between raw compute and artistic intuition. It is the vibrant hearth of the Yakumo ecosystem, where sparks of inspiration are fanned into roaring flames of creation.
+
 ** Machine Specs
 | Model | Mac Studio M2 MAX    |
 | CPU   | Apple Silicon M2 MAX |

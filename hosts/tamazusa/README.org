@@ -6,6 +6,8 @@
 With the tidings.
 #+end_quote
 
+Tamazusa is a cloud-native VPS standing vigil beyond the local network. As the primary mail server and the Headscale control plane, it acts as the sovereign courier of the Yakumo domain. It routes the encrypted whispers of the mesh network and delivers external communications, standing as a reliable outpost that bridges the home sanctuary with the vastness of the public internet.
+
 ** Machine Specs
 
 WIP.

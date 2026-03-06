@@ -6,6 +6,8 @@
 Across the ripples.
 #+end_quote
 
+Sazanami is a compact server dedicated to smart home automation and geospatial data processing. Like small waves radiating across a pond, it silently orchestrates the countless IoT events and spatial queries that bridge the digital Yakumo infrastructure with the tangible, physical world.
+
 ** Machine Specs
 | Model | GMKtec NucBox G5   |
 | CPU   | Intel N97          |

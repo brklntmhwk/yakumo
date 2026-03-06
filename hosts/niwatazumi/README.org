@@ -6,6 +6,8 @@
 Within the current.
 #+end_quote
 
+Niwatazumi is the steadfast home server and central NAS of the Yakumo architecture. It is the deep, enduring pool that catches and preserves the ever-flowing streams of my digital life. Running silently within the current, it provides the persistent storage and foundational gravity that keeps the ephemeral parts of the network grounded.
+
 ** Machine Specs
 | CPU          | AMD Ryzen 5 7600            |
 | GPU          | ASRock Radeon RX 550        |

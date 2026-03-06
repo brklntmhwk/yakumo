@@ -6,6 +6,8 @@
 Towards the dawn.
 #+end_quote
 
+Shinonome is my primary laptop, an untethered vessel that carries the Yakumo environment into the world. Navigating the bleeding edge of Asahi Linux on Apple Silicon alongside macOS, it represents the horizon where untamed hardware meets declarative discipline. Whether on the go or docked at the desk, it is the constant companion journeying towards the dawn.
+
 ** Machine Specs
 | Model | MacBook Pro M1 2021  |
 | CPU   | Apple Silicon M1 Pro |
