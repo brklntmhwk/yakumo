@@ -20,7 +20,10 @@ in
     # TODO: Move this to under rkawata's secrets file.
     login_password_rkawata.sopsFile = ../../../../secrets/default.yaml;
     gh_token_for_mcp.sopsFile = ../../secrets/default.yaml;
-    git_signing_key = ../../secrets/default.yaml;
+    git_signing_key = {
+      sopsFile = ../../secrets/default.yaml;
+      mode = "0400";
+    };
   };
 
   yakumo = {
