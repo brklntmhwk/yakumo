@@ -1,7 +1,7 @@
 keys:
-  - &admin age1yubikey1qwvm87vgert4gjhh8sngxz4fvjge5tts34fhl6n22dyytuc04htpwqmnprt
+  - &admin age1yubikey1qwja8k752hpjtt9w0l847fdpm7m0ury560qnd6alq7t537jvhcznqxww4h8
   # Users per machine
-  - &otogaki_tsutsuyami age1tdat96efnae3g6x5p5aw70kak804ar7jj94dx72vumn76rvf5qcsq82pp8
+  - &otogaki_tsutsuyami age1lhxarync6hasuzwrs99ef6np8de2a2rfs0qrv7rekv8d57q8e47spcy539
   - &otogaki_utsusemi age143wa96cj9xywqhdm6kv77uqngg0tumdhvfyqh7pz89jsrujpev0slsz43x
   # - &otogaki_shinonome xxxxx
   # - &otogaki_niwatazumi xxxxx
@@ -9,7 +9,7 @@ keys:
   # - &otogaki_tamazusa xxxxx
   # - &rkawata_momokagari xxxxx
   # Machines
-  - &tsutsuyami age13eqkelhxncfe00s9zuwzparcg0xzl44h9an9syvs5wcnztlthpes84tqqj
+  - &tsutsuyami age1er88d8zrfatkvtsyrdunppqz2kagy48p6zd8jaqhh260lkfp6peq4wl6kq
   - &utsusemi age1245wq459mrmqvaywx6flatke2m557j8azsvs4kf2alnvxu5063sqzsjj8v
   # - &shinonome xxxxx
   # - &niwatazumi xxxxx
