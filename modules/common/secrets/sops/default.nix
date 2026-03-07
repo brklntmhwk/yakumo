@@ -40,8 +40,11 @@
         };
       };
 
-      environment.variables = mkIf xdgCfg.enable {
-        SOPS_AGE_KEY_FILE = "$HOME/.config/sops/age/keys.txt";
+      environment = {
+        variables = mkIf xdgCfg.enable {
+          SOPS_AGE_KEY_FILE = "$HOME/.config/sops/age/keys.txt";
+        };
+        systemPackages = mkIf (elem "token/yubikey/piv" hardwareMods) [ pkgs.age-plugin-yubikey ];
       };
     };
 }
