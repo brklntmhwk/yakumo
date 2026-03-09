@@ -13,7 +13,7 @@ let
     types
     ;
   cfg = config.yakumo.services.anki-sync-server;
-  srvMetadata = config.yakumo.services.metadata.anki-sync-server;
+  meta = config.yakumo.services.metadata.anki-sync-server;
 in
 {
   options.yakumo.services.anki-sync-server = {
@@ -22,7 +22,7 @@ in
 
   config = mkIf cfg.enable {
     services.anki-sync-server = {
-      inherit (srvMetadata)
+      inherit (meta)
         address # Default: '::1'
         port # Default: 27701
         ;
@@ -38,10 +38,10 @@ in
     };
 
     services.caddy.virtualHosts = {
-      "${srvMetadata.domain}" = {
+      "${meta.domain}" = {
         useACMEHost = "yakumo.net";
         extraConfig = ''
-          reverse_proxy ${srvMetadata.bindAddress}
+          reverse_proxy ${meta.bindAddress}
         '';
       };
     };

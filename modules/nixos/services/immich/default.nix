@@ -12,7 +12,7 @@ let
     mkIf
     ;
   cfg = config.yakumo.services.immich;
-  srvMetadata = config.yakumo.services.metadata.immich;
+  meta = config.yakumo.services.metadata.immich;
 in
 {
   options.yakumo.services.immich = {
@@ -26,11 +26,11 @@ in
     in
     {
       services.immich = {
-        inherit (srvMetadata) port; # Default: 2283
+        inherit (meta) port; # Default: 2283
         enable = true;
         group = "immich"; # Default: 'immich'
         user = "immich"; # Default: 'immich'
-        host = srvMetadata.address; # Default: 'localhost'
+        host = meta.address; # Default: 'localhost'
         openFirewall = false; # Default: false
         # Specify device paths to hardware acceleration devices that
         # immich should have access to.
@@ -76,7 +76,7 @@ in
         settings = {
           newVersionCheck.enabled = false; # Default: false
           # Domain for publicly shared links, including http(s)://.
-          server.externalDomain = "${srvMetadata.domain}"; # Default: ''
+          server.externalDomain = meta.domain; # Default: ''
         };
       };
 
@@ -115,10 +115,10 @@ in
       };
 
       services.caddy.virtualHosts = {
-        "${srvMetadata.domain}" = {
+        "${meta.domain}" = {
           useACMEHost = "yakumo.net";
           extraConfig = ''
-            reverse_proxy ${srvMetadata.bindAddress}
+            reverse_proxy ${meta.bindAddress}
           '';
         };
       };

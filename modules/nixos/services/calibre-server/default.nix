@@ -11,7 +11,7 @@ let
     mkIf
     ;
   cfg = config.yakumo.services.calibre-server;
-  srvMetadata = config.yakumo.services.metadata.calibre-server;
+  meta = config.yakumo.services.metadata.calibre-server;
 in
 {
   options.yakumo.services.calibre-server = {
@@ -20,7 +20,7 @@ in
 
   config = mkIf cfg.enable {
     services.calibre-server = {
-      inherit (srvMetadata)
+      inherit (meta)
         address # Default: '0.0.0.0'
         port # Default: 8080
         ;
@@ -40,10 +40,10 @@ in
     };
 
     services.caddy.virtualHosts = {
-      "${srvMetadata.domain}" = {
+      "${meta.domain}" = {
         useACMEHost = "yakumo.net";
         extraConfig = ''
-          reverse_proxy ${srvMetadata.bindAddress}
+          reverse_proxy ${meta.bindAddress}
         '';
       };
     };

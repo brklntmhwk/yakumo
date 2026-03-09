@@ -11,7 +11,7 @@ let
     mkIf
     ;
   cfg = config.yakumo.services.home-assistant;
-  srvMetadata = config.yakumo.services.metadata.home-assistant;
+  meta = config.yakumo.services.metadata.home-assistant;
 in
 {
   options.yakumo.services.home-assistant = {
@@ -31,8 +31,8 @@ in
         default_config = { };
         homeassistant = {
           name = "Home";
-          external_url = "https://${srvMetadata.domain}";
-          internal_url = "https://${srvMetadata.domain}";
+          external_url = "https://${meta.domain}";
+          internal_url = "https://${meta.domain}";
           latitude = "!secret latitude";
           longitude = "!secret longitude";
           elevation = "!secret elevation";
@@ -41,7 +41,7 @@ in
           packages.manual = "!include manual.yaml";
         };
         http = {
-          server_port = srvMetadata.port;
+          server_port = meta.port;
           trusted_proxies = [ ];
           # use_x_forwarded_for = true;
         };
@@ -88,10 +88,10 @@ in
     };
 
     services.caddy.virtualHosts = {
-      "${srvMetadata.domain}" = {
+      "${meta.domain}" = {
         useACMEHost = "yakumo.net";
         extraConfig = ''
-          reverse_proxy ${srvMetadata.bindAddress}
+          reverse_proxy ${meta.bindAddress}
         '';
       };
     };

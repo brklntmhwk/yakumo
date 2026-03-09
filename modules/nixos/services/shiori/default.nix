@@ -11,7 +11,7 @@ let
     mkIf
     ;
   cfg = config.yakumo.services.shiori;
-  srvMetadata = config.yakumo.services.metadata.shiori;
+  meta = config.yakumo.services.metadata.shiori;
 in
 {
   options.yakumo.services.shiori = {
@@ -20,7 +20,7 @@ in
 
   config = mkIf cfg.enable {
     services.shiori = {
-      inherit (srvMetadata)
+      inherit (meta)
         # If empty, Shiori listens on all interfaces.
         address # Default: ''
         port # Default: 8080
@@ -33,10 +33,10 @@ in
     };
 
     services.caddy.virtualHosts = {
-      "${srvMetadata.domain}" = {
+      "${meta.domain}" = {
         useACMEHost = "yakumo.net";
         extraConfig = ''
-          reverse_proxy ${srvMetadata.bindAddress}
+          reverse_proxy ${meta.bindAddress}
         '';
       };
     };

@@ -12,7 +12,7 @@ let
     mkIf
     ;
   cfg = config.yakumo.services.vaultwarden;
-  srvMetadata = config.yakumo.services.metadata.vaultwarden;
+  meta = config.yakumo.services.metadata.vaultwarden;
 in
 {
   options.yakumo.services.vaultwarden = {
@@ -25,7 +25,7 @@ in
     in
     {
       services.vaultwarden = {
-        inherit (srvMetadata) domain;
+        inherit (meta) domain;
         enable = true;
         backupDir = "/var/backup/vaultwarden-pg"; # Default: null
         # Use Caddy instead.
@@ -34,8 +34,8 @@ in
         dbBackend = "postgresql"; # Default: 'sqlite' (Options: 'mysql', 'postgresql')
         environmentFile = config.sops.secrets.xxx.path; # Default: [ ]
         config = {
-          ROCKET_ADDRESS = srvMetadata.address;
-          ROCKET_PORT = srvMetadata.port;
+          ROCKET_ADDRESS = meta.address;
+          ROCKET_PORT = meta.port;
         };
       };
 
@@ -73,10 +73,10 @@ in
       };
 
       services.caddy.virtualHosts = {
-        "${srvMetadata.domain}" = {
+        "${meta.domain}" = {
           useACMEHost = "yakumo.net";
           extraConfig = ''
-            reverse_proxy ${srvMetadata.bindAddress}
+            reverse_proxy ${meta.bindAddress}
           '';
         };
       };

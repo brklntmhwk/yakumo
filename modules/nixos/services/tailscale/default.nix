@@ -11,7 +11,7 @@ let
     mkIf
     ;
   cfg = config.yakumo.services.tailscale;
-  srvMetadata = config.yakumo.services.metadata.tailscale;
+  meta = config.yakumo.services.metadata.tailscale;
 in
 {
   options.yakumo.services.tailscale = {
@@ -27,7 +27,7 @@ in
     in
     {
       services.tailscale = {
-        inherit (srvMetadata) port; # Default: 41641
+        inherit (meta) port; # Default: 41641
         enable = true;
         openFirewall = false; # Default: false
         authKeyFile = config.sops.secrets.xxx.path; # Default: null

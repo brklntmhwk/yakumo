@@ -11,7 +11,7 @@ let
     mkIf
     ;
   cfg = config.yakumo.services.syncthing;
-  srvMetadata = config.yakumo.services.metadata.syncthing;
+  meta = config.yakumo.services.metadata.syncthing;
 in
 {
   options.yakumo.services.syncthing = {
@@ -35,7 +35,7 @@ in
       dataDir = "/var/lib/syncthing";
       databaseDir = "";
       extraFlags = [ ];
-      guiAddress = srvMetadata.bindAddress;
+      guiAddress = meta.bindAddress;
       guiPasswordFile = config.sops.secrets.xxx.path; # Default: null
       # Delete the devices that are not configured via the devices option.
       # If set to false, devices added via the web UI will persist and

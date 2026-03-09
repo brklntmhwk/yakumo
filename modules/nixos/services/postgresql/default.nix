@@ -11,7 +11,7 @@ let
     mkIf
     ;
   cfg = config.yakumo.services.postgresql;
-  srvMetadata = config.yakumo.services.metadata.postgresql;
+  meta = config.yakumo.services.metadata.postgresql;
 in
 {
   options.yakumo.services.postgresql = {
@@ -64,7 +64,7 @@ in
         # };
       };
       settings = {
-        inherit (srvMetadata) port; # Default: 5432
+        inherit (meta) port; # Default: 5432
         log_line_prefix = "[%p] "; # Default: '[%p] '
         shared_preload_libraries = null; # Default: null
       };

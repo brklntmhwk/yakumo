@@ -12,7 +12,7 @@ let
     mkMerge
     ;
   cfg = config.yakumo.services.headscale;
-  srvMetadata = config.yakumo.services.metadata.headscale;
+  meta = config.yakumo.services.metadata.headscale;
 in
 {
   options.yakumo.services.headscale = {
@@ -22,7 +22,7 @@ in
   config = mkIf cfg.enable mkMerge [
     {
       services.headscale = {
-        inherit (srvMetadata)
+        inherit (meta)
           address # Default: '127.0.0.1'
           port # Default: 8080
           ;
@@ -30,7 +30,7 @@ in
         group = "headscale"; # Default: 'headscale'
         user = "headscale"; # Default: 'headscale'
         settings = {
-          server_url = "https://${srvMetadata.domain}";
+          server_url = "https://${meta.domain}";
           database =
             let
               pgSrvMetadata = config.yakumo.services.metadata.postgresql;
@@ -58,7 +58,7 @@ in
           };
           # DNS (Domain Name System):
           dns = {
-            base_domain = "yakumo.internal";
+            base_domain = meta.domain;
             magic_dns = true; # Default: 'true'
             nameservers.global = config.networking.nameservers;
             # Inject these search domains to Tailscale clients.
@@ -114,10 +114,10 @@ in
 
       services.caddy.virtualHosts = {
         # https://headscale.net/stable/ref/integration/reverse-proxy/#caddy
-        "${srvMetadata.domain}" = {
+        "${meta.domain}" = {
           useACMEHost = "yakumo.net";
           extraConfig = ''
-            reverse_proxy ${srvMetadata.bindAddress}
+            reverse_proxy ${meta.bindAddress}
           '';
         };
       };

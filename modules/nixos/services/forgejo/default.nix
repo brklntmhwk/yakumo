@@ -11,7 +11,7 @@ let
     mkIf
     ;
   cfg = config.yakumo.services.forgejo;
-  srvMetadata = config.yakumo.services.metadata.forgejo;
+  meta = config.yakumo.services.metadata.forgejo;
 in
 {
   options.yakumo.services.forgejo = {
@@ -71,12 +71,12 @@ in
           };
           server = {
             DISABLE_SSH = false; # Default: false
-            DOMAIN = srvMetadata.domain; # Default: 'localhost'
+            DOMAIN = meta.domain; # Default: 'localhost'
             # Set this so it aligns with `PROTOCOL`.
-            HTTP_ADDR = srvMetadata.address;
-            HTTP_PORT = srvMetadata.port; # Default: '3000'
+            HTTP_ADDR = meta.address;
+            HTTP_PORT = meta.port; # Default: '3000'
             PROTOCOL = "https"; # Default: 'http' (Options: 'https', 'fcgi', 'http+unix', 'fcgi+unix')
-            ROOT_URL = "https://${srvMetadata.domain}/";
+            ROOT_URL = "https://${meta.domain}/";
             SSH_PORT = 22; # Default: '2222'
             STATIC_ROOT_PATH = forgejoCfg.package.data;
           };
@@ -110,10 +110,10 @@ in
     };
 
     services.caddy.virtualHosts = {
-      "${srvMetadata.domain}" = {
+      "${meta.domain}" = {
         useACMEHost = "yakumo.net";
         extraConfig = ''
-          reverse_proxy ${srvMetadata.bindAddress}
+          reverse_proxy ${meta.bindAddress}
         '';
       };
     };

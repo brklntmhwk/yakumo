@@ -11,7 +11,7 @@ let
     mkIf
     ;
   cfg = config.yakumo.services.adguardhome;
-  srvMetadata = config.yakumo.services.metadata.adguardhome;
+  meta = config.yakumo.services.metadata.adguardhome;
 in
 {
   options.yakumo.services.adguardhome = {
@@ -20,11 +20,11 @@ in
 
   config = mkIf cfg.enable {
     services.adguardhome = {
-      inherit (srvMetadata) port; # Default: 3000
+      inherit (meta) port; # Default: 3000
       enable = true;
       # Specify this in `settings.dhcp.enabled` instead.
       # allowDHCP = settings.dhcp.enabled or false;
-      host = srvMetadata.address; # Default: '0.0.0.0'
+      host = meta.address; # Default: '0.0.0.0'
       # Allow changes made on the AdGuard Home web UI to persist
       # between service restarts.
       mutableSettings = true; # Default: true
@@ -36,10 +36,10 @@ in
     };
 
     services.caddy.virtualHosts = {
-      "${srvMetadata.domain}" = {
+      "${meta.domain}" = {
         useACMEHost = "yakumo.net";
         extraConfig = ''
-          reverse_proxy ${srvMetadata.bindAddress}
+          reverse_proxy ${meta.bindAddress}
         '';
       };
     };

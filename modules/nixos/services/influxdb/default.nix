@@ -11,7 +11,7 @@ let
     mkIf
     ;
   cfg = config.yakumo.services.influxdb;
-  srvMetadata = config.yakumo.services.metadata.influxdb;
+  meta = config.yakumo.services.metadata.influxdb;
 in
 {
   options.yakumo.services.influxdb = {
@@ -53,15 +53,15 @@ in
       };
       settings = {
         reporting-disabled = true;
-        http-bind-address = srvMetadata.bindAddress;
+        http-bind-address = meta.bindAddress;
       };
     };
 
     services.caddy.virtualHosts = {
-      "${srvMetadata.domain}" = {
+      "${meta.domain}" = {
         useACMEHost = "yakumo.net";
         extraConfig = ''
-          reverse_proxy ${srvMetadata.bindAddress}
+          reverse_proxy ${meta.bindAddress}
         '';
       };
     };

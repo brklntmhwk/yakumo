@@ -11,7 +11,7 @@ let
     mkIf
     ;
   cfg = config.yakumo.services.calibre-web;
-  srvMetadata = config.yakumo.services.metadata.calibre-web;
+  meta = config.yakumo.services.metadata.calibre-web;
 in
 {
   options.yakumo.services.calibre-web = {
@@ -28,8 +28,8 @@ in
       dataDir = "calibre-web";
       openFirewall = false; # Default: false
       listen = {
-        inherit (srvMetadata) port; # Default: 8083
-        ip = srvMetadata.address; # Default: '::1'
+        inherit (meta) port; # Default: 8083
+        ip = meta.address; # Default: '::1'
       };
       options = {
         # Path to Calibre library.
@@ -45,10 +45,10 @@ in
     };
 
     services.caddy.virtualHosts = {
-      "${srvMetadata.domain}" = {
+      "${meta.domain}" = {
         useACMEHost = "yakumo.net";
         extraConfig = ''
-          reverse_proxy ${srvMetadata.bindAddress}
+          reverse_proxy ${meta.bindAddress}
         '';
       };
     };

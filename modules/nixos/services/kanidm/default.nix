@@ -11,7 +11,7 @@ let
     mkIf
     ;
   cfg = config.yakumo.services.kanidm;
-  srvMetadata = config.yakumo.services.metadata.kanidm;
+  meta = config.yakumo.services.metadata.kanidm;
 in
 {
   options.yakumo.services.kanidm = {
@@ -26,7 +26,7 @@ in
       clientSettings.uri = "http://127.0.0.1:8080";
       serverSettings = {
         inherit (cfg) domain;
-        bindaddress = srvMetadata.bindAddress;
+        bindaddress = meta.bindAddress;
         ldapbindaddress = null; # Default: null
         db_path = "/var/lib/kanidm/kanidm.db";
         log_level = "info"; # Default: 'info' (Options: 'debug', 'trace')
@@ -68,10 +68,10 @@ in
     };
 
     services.caddy.virtualHosts = {
-      "${srvMetadata.domain}" = {
+      "${meta.domain}" = {
         useACMEHost = "yakumo.net";
         extraConfig = ''
-          reverse_proxy ${srvMetadata.bindaddress}
+          reverse_proxy ${meta.bindaddress}
         '';
       };
     };

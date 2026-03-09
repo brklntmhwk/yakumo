@@ -11,7 +11,7 @@ let
     mkIf
     ;
   cfg = config.yakumo.services.paperless-ngx;
-  srvMetadata = config.yakumo.services.metadata.paperless-ngx;
+  meta = config.yakumo.services.metadata.paperless-ngx;
 in
 {
   options.yakumo.services.paperless-ngx = {
@@ -24,7 +24,7 @@ in
     in
     {
       services.paperless = {
-        inherit (srvMetadata)
+        inherit (meta)
           address # Default: '127.0.0.1'
           domain # Default: null
           port # Default: 28981
@@ -82,10 +82,10 @@ in
       };
 
       services.caddy.virtualHosts = {
-        "${srvMetadata.domain}" = {
+        "${meta.domain}" = {
           useACMEHost = "yakumo.net";
           extraConfig = ''
-            reverse_proxy ${srvMetadata.bindAddress}
+            reverse_proxy ${meta.bindAddress}
           '';
         };
       };

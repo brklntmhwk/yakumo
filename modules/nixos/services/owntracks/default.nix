@@ -17,7 +17,7 @@ let
     types
     ;
   cfg = config.yakumo.services.owntracks;
-  srvMetadata = config.yakumo.services.metadata.owntracks;
+  meta = config.yakumo.services.metadata.owntracks;
   mqttBrokers = [
     "mosquitto"
     "rmqtt"
@@ -139,8 +139,8 @@ in
           {
             OTR_STORAGEDIR = cfg.stateDir;
             OTR_HTTPLOGDIR = cfg.stateDir;
-            OTR_HTTPHOST = srvMetadata.address;
-            OTR_HTTPPORT = toString srvMetadata.port;
+            OTR_HTTPHOST = meta.address;
+            OTR_HTTPPORT = toString meta.port;
             # The higher the number, the more frequently lookups are performed.
             # e.g., If set to 1, points within an area of approximately 5000 km^2
             # would resolve to a single address compared to 150 m^2 with precision 7.
@@ -191,7 +191,7 @@ in
         wantedBy = [ "multi-user.target" ];
       };
 
-      services.caddy.virtualHosts."${srvMetadata.domain}" = {
+      services.caddy.virtualHosts."${meta.domain}" = {
         # Specify a host of an existing Let's Encrypt certificate.
         # Useful if we use DNS challenges but Caddy doesn't support our DNS provider.
         useACMEHost = "yakumo.com";
@@ -207,16 +207,16 @@ in
                 file_server
               }
               handle /pub* {
-                reverse_proxy ${srvMetadata.bindAddress}
+                reverse_proxy ${meta.bindAddress}
               }
               handle /api* {
-                reverse_proxy ${srvMetadata.bindAddress}
+                reverse_proxy ${meta.bindAddress}
               }
               handle /ws* {
-                reverse_proxy ${srvMetadata.bindAddress}
+                reverse_proxy ${meta.bindAddress}
               }
               handle /recorder* {
-                reverse_proxy ${srvMetadata.bindAddress}
+                reverse_proxy ${meta.bindAddress}
               }
               handle {
                 root * ${cfg.frontend.package}/share
@@ -225,7 +225,7 @@ in
             ''
           else
             ''
-              reverse_proxy ${srvMetadata.bindAddress}
+              reverse_proxy ${meta.bindAddress}
             '';
       };
     }

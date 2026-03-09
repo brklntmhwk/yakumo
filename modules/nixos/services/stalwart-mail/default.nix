@@ -11,7 +11,7 @@ let
     mkIf
     ;
   cfg = config.yakumo.services.stalwart-mail;
-  srvMetadata = config.yakumo.services.metadata.stalwart-mail;
+  meta = config.yakumo.services.metadata.stalwart-mail;
 in
 {
   options.yakumo.services.stalwart-mail = {
@@ -75,7 +75,7 @@ in
                 use-x-forwarded = true;
               };
               management = {
-                bind = [ srvMetadata.bindAddress ];
+                bind = [ meta.bindAddress ];
                 protocol = "http";
               };
             };
@@ -111,10 +111,10 @@ in
       };
 
       services.caddy.virtualHosts = {
-        "${srvMetadata.domain}" = {
+        "${meta.domain}" = {
           useACMEHost = "yakumo.net";
           extraConfig = ''
-            reverse_proxy ${srvMetadata.bindAddress}
+            reverse_proxy ${meta.bindAddress}
           '';
         };
       };
