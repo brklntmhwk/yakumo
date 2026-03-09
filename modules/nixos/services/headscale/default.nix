@@ -46,6 +46,9 @@ in
               };
             };
           # DERP (Designated Encrypted Relay for Packets):
+          # Tailscale fallback protocol used when direct peer-to-peer connection
+          # fails due to strict firewalls, NATs, or missing IPv6.
+          # It acts as an encrypted relay for WireGuard packets over HTTPS.
           derp = {
             auto_update_enabled = true;
             paths = [
@@ -56,7 +59,7 @@ in
             urls = [ ];
             server.private_key_path = "/path/to/derp-server-private.key";
           };
-          # DNS (Domain Name System):
+          # DNS (Domain Name System)
           dns = {
             base_domain = meta.domain;
             magic_dns = true; # Default: 'true'
@@ -71,14 +74,14 @@ in
             level = "info"; # Default: 'info' (Options: 'debug')
           };
           noise.private_key_path = "/var/lib/headscale/noise_private.key";
-          # OIDC (OpenID Connect):
+          # OIDC (OpenID Connect)
           oidc = {
             allowed_domains = [ ];
             allowed_users = [ ];
             client_secret_path = config.sops.secrets.headscale.path;
-            client_id = "Headscale";
+            client_id = "Headscale"; # Default: ''
             extra_params = { };
-            issuer = "https://";
+            issuer = "https://"; # Default: ''
             # PKCE (Proof Key for Code Exchange): Prevents
             pkce = {
               enabled = true;
@@ -91,7 +94,7 @@ in
               "email"
             ];
           };
-          # ACLs (Access Control Lists):
+          # ACLs (Access Control Lists)
           policy = {
             mode = "file"; # Default: 'file' (Options: 'database')
             # The path to a HuJSON file that contains ACL policies.
@@ -99,14 +102,17 @@ in
             path = "/path/to/acls-file";
           };
           prefixes = {
+            # Specify the strategy applied for allocation of IPs to nodes.
+            # 'sequential': assigns the next free IP from the previous given IP.
+            # 'random': assigns the next free IP from a pseudo-random IP generator (crypto/rand).
             allocation = "sequential"; # Default: 'sequential' (Options: 'random')
-            v4 = "100.64.0.0/10";
-            v6 = "fd7a:115c:a1e0::/48";
+            v4 = "100.64.0.0/10"; # Default: '100.64.0.0/10'
+            v6 = "fd7a:115c:a1e0::/48"; # Default: 'fd7a:115c:a1e0::/48'
           };
-          tls_cert_path = "path/to/tls_cert_path";
-          tls_key_path = "path/to/tls_key_path";
+          tls_cert_path = "path/to/tls_cert_path"; # Default: null
+          tls_key_path = "path/to/tls_key_path"; # Default: null
           # Domain name to request a TLS certificate for.
-          tls_letsencrypt_hostname = "headscale";
+          tls_letsencrypt_hostname = "headscale"; # Default: ''
           tls_letsencrypt_challenge_type = "HTTP-01"; # Default: 'HTTP-01' (Options: 'TLS-ALPN-01')
           tls_letsencrypt_listen = ":http"; # Default: ':http'
         };
