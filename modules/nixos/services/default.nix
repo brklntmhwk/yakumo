@@ -193,11 +193,11 @@ in
     services.caddy.virtualHosts =
       let
         proxiedServices = filterAttrs (
-          name: meta: meta.reverseProxy.enable
+          _: meta: meta.reverseProxy.enable
         ) config.yakumo.services.metadata;
       in
       mapAttrs' (
-        name: meta:
+        _: meta:
         nameValuePair meta.domain {
           # Specify a host of an existing Let's Encrypt certificate.
           # Useful when we use DNS challenges but Caddy doesn't support our DNS provider.
