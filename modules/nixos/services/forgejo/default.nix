@@ -27,15 +27,15 @@ in
         enable = true;
         database =
           let
-            pgSrvMetadata = config.yakumo.services.metadata.postgresql;
+            pgMeta = config.yakumo.services.metadata.postgresql;
           in
           {
-            inherit (pgSrvMetadata) port; # Use port 5432 for PostgreSQL DB.
+            inherit (pgMeta) port; # Use port 5432 for PostgreSQL DB.
             createDatabase = true; # Default: true
             type = "postgres"; # Default: 'sqlite3' (Options: 'mysql', 'postgres')
             name = "forgejo"; # Default: 'forgejo'
             user = "forgejo"; # Default: 'forgejo'
-            host = pgSrvMetadata.address; # Default: '127.0.0.1'
+            host = pgMeta.address; # Default: '127.0.0.1'
             path = "${forgejoCfg.stateDir}/data/forgejo.db";
             passwordFile = config.sops.secrets.xxx.path;
             socket = "/run/mysqld/mysqld.sock";

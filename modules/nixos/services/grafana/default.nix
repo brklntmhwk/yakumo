@@ -111,12 +111,12 @@ in
           };
           database =
             let
-              pgSrvMetadata = config.yakumo.services.metadata.postgresql;
+              pgMeta = config.yakumo.services.metadata.postgresql;
             in
             {
               type = "postgres"; # Default: 'sqlite3' (Options: 'postgres', 'mysql')
               name = "grafana"; # Default: 'grafana'
-              host = pgSrvMetadata.bindAddress; # Default: '127.0.0.1:3306'
+              host = pgMeta.bindAddress; # Default: '127.0.0.1:3306'
               path = "${config.services.grafana.dataDir}/data/grafana.db";
               # Not applicable for 'sqlite3'.
               user = "grafana"; # Default: 'grafana'

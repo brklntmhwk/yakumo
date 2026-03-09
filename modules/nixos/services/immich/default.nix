@@ -48,10 +48,10 @@ in
         secretsFile = config.sops.secrets.xxx.path;
         database =
           let
-            pgSrvMetadata = config.yakumo.services.metadata.postgresql;
+            pgMeta = config.yakumo.services.metadata.postgresql;
           in
           {
-            inherit (pgSrvMetadata) port; # Default: 5432
+            inherit (pgMeta) port; # Default: 5432
             enable = true;
             createDB = true; # Default: true
             name = "immich"; # Default: 'immich'

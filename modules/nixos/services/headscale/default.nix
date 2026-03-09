@@ -33,15 +33,15 @@ in
           server_url = "https://${meta.domain}";
           database =
             let
-              pgSrvMetadata = config.yakumo.services.metadata.postgresql;
+              pgMeta = config.yakumo.services.metadata.postgresql;
             in
             {
               type = "postgres"; # Default: 'sqlite' (Options: 'postgres', 'sqlite3')
               postgres = {
-                inherit (pgSrvMetadata) port;
+                inherit (pgMeta) port;
                 name = "headscale";
                 user = "headscale";
-                host = pgSrvMetadata.address;
+                host = pgMeta.address;
                 password_file = config.sops.secrets.xxx.path;
               };
             };
