@@ -37,7 +37,7 @@ let
         };
         reverseProxy = {
           caddyIntegration = {
-            enable = mkEnableOption "reverse proxy integaration featured by Caddy";
+            enable = mkEnableOption "reverse proxy integaration feat. Caddy";
             config = mkOption {
               type = types.lines;
               default = ''
@@ -164,7 +164,7 @@ in
         port = 8384;
       };
       kanidm = {
-        domain = "adguard.yakumo.local";
+        domain = "idm.yakumo.local";
         address = "127.0.0.1";
         port = 8443;
       };
