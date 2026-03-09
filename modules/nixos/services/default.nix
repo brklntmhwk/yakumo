@@ -192,9 +192,7 @@ in
 
     services.caddy.virtualHosts =
       let
-        proxiedServices = filterAttrs (
-          _: meta: meta.reverseProxy.enable
-        ) config.yakumo.services.metadata;
+        proxiedServices = filterAttrs (_: meta: meta.reverseProxy.enable) config.yakumo.services.metadata;
       in
       mapAttrs' (
         _: meta:
