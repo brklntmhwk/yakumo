@@ -11,6 +11,7 @@ let
     mkIf
     ;
   cfg = config.yakumo.services.mosquitto;
+  meta = config.yakumo.services.metadata.mosquitto;
 in
 {
   options.yakumo.services.mosquitto = {
@@ -36,8 +37,33 @@ in
       # Enable persistent storage of subscriptions and messages.
       persistence = true; # Default: true
       bridges = { };
-      listeners = [ ];
+      listeners = [
+        {
+          inherit (meta) address port;
+          users = {
+            # Home Assistant
+            # Make it align with the upstream home-assistant module.
+            hass = {
+              acl = [ "readwrite #" ];
+              hashedPasswordFile = config.sops.secrets.xxx.path; # Default: null
+            };
+          };
+          omitPasswordAuth = false; # Default: false
+          settings = {
+            allow_anonymous = true;
+          };
+        }
+      ];
       settings = { };
+    };
+
+    services.caddy.virtualHosts = {
+      "${meta.domain}" = {
+        useACMEHost = "yakumo.net";
+        extraConfig = ''
+          reverse_proxy ${meta.bindAddress}
+        '';
+      };
     };
   };
 }
