@@ -32,13 +32,8 @@ in
       webRoot = "/"; # Default: '/'
     };
 
-    services.caddy.virtualHosts = {
-      "${meta.domain}" = {
-        useACMEHost = "yakumo.net";
-        extraConfig = ''
-          reverse_proxy ${meta.bindAddress}
-        '';
-      };
+    yakumo.services.metadata.shiori.reverseProxy = {
+      caddyIntegration.enable = true;
     };
   };
 }

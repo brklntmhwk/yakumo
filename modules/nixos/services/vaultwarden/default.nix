@@ -72,13 +72,8 @@ in
         '';
       };
 
-      services.caddy.virtualHosts = {
-        "${meta.domain}" = {
-          useACMEHost = "yakumo.net";
-          extraConfig = ''
-            reverse_proxy ${meta.bindAddress}
-          '';
-        };
+      yakumo.services.metadata.vaultwarden.reverseProxy = {
+        caddyIntegration.enable = true;
       };
     }
   );

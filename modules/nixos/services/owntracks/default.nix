@@ -191,42 +191,36 @@ in
         wantedBy = [ "multi-user.target" ];
       };
 
-      services.caddy.virtualHosts."${meta.domain}" = {
-        # Specify a host of an existing Let's Encrypt certificate.
-        # Useful if we use DNS challenges but Caddy doesn't support our DNS provider.
-        useACMEHost = "yakumo.com";
-
-        # Have Caddy handling the config file instead of relying on the package
-        # override (i.e., `pkgs.foo.override`), as it will trigger a full rebuild of
-        # the Node.js package every time the user changes a single setting in `config.js`.
-        extraConfig =
-          if cfg.frontend.enable then
-            ''
-              handle /config/config.js {
+      yakumo.services.metadata.owntracks.reverseProxy = {
+        caddyIntegration = {
+          enable = true;
+          # Have Caddy handling the config file instead of relying on the package
+          # override (i.e., `pkgs.foo.override`), as it will trigger a full rebuild of
+          # the Node.js package every time the user makes any changes to the setting
+          # in `config.js` at all.
+          config = mkIf cfg.frontend.enable ''
+            handle /config/config.js {
                 root * ${configDir}
                 file_server
-              }
-              handle /pub* {
+            }
+            handle /pub* {
                 reverse_proxy ${meta.bindAddress}
-              }
-              handle /api* {
+            }
+            handle /api* {
                 reverse_proxy ${meta.bindAddress}
-              }
-              handle /ws* {
+            }
+            handle /ws* {
                 reverse_proxy ${meta.bindAddress}
-              }
-              handle /recorder* {
+            }
+            handle /recorder* {
                 reverse_proxy ${meta.bindAddress}
-              }
-              handle {
+            }
+            handle {
                 root * ${cfg.frontend.package}/share
                 file_server
-              }
-            ''
-          else
-            ''
-              reverse_proxy ${meta.bindAddress}
-            '';
+            }
+          '';
+        };
       };
     }
   );

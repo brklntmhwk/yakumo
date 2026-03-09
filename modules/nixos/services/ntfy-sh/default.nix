@@ -44,13 +44,11 @@ in
       };
     };
 
-    services.caddy.virtualHosts = {
-      # https://docs.ntfy.sh/config/#nginxapache2caddy
-      "${meta.domain}" = {
-        useACMEHost = "yakumo.net";
+    yakumo.services.metadata.ntfy-sh.reverseProxy = {
+      caddyIntegration = {
+        enable = true;
+        # https://docs.ntfy.sh/config/#nginxapache2caddy
         extraConfig = ''
-          reverse_proxy ${meta.bindAddress}
-
           # Redirect HTTP to HTTPS, but only for GET topic addresses, since we want
           # it to work with curl without the annoying https:// prefix
           @httpget {

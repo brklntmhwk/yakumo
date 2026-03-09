@@ -35,13 +35,8 @@ in
       extraArgs = [ ];
     };
 
-    services.caddy.virtualHosts = {
-      "${meta.domain}" = {
-        useACMEHost = "yakumo.net";
-        extraConfig = ''
-          reverse_proxy ${meta.bindAddress}
-        '';
-      };
+    yakumo.services.metadata.adguardhome.reverseProxy = {
+      caddyIntegration.enable = true;
     };
   };
 }

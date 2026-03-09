@@ -57,13 +57,8 @@ in
       settings = { };
     };
 
-    services.caddy.virtualHosts = {
-      "${meta.domain}" = {
-        useACMEHost = "yakumo.net";
-        extraConfig = ''
-          reverse_proxy ${meta.bindAddress}
-        '';
-      };
+    yakumo.services.metadata.mosquitto.reverseProxy = {
+      caddyIntegration.enable = true;
     };
   };
 }

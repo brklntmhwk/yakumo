@@ -87,13 +87,8 @@ in
       lovelaceConfigWritable = false; # Default: false
     };
 
-    services.caddy.virtualHosts = {
-      "${meta.domain}" = {
-        useACMEHost = "yakumo.net";
-        extraConfig = ''
-          reverse_proxy ${meta.bindAddress}
-        '';
-      };
+    yakumo.services.metadata.home-assistant.reverseProxy = {
+      caddyIntegration.enable = true;
     };
   };
 }

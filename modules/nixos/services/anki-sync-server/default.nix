@@ -37,13 +37,8 @@ in
       ];
     };
 
-    services.caddy.virtualHosts = {
-      "${meta.domain}" = {
-        useACMEHost = "yakumo.net";
-        extraConfig = ''
-          reverse_proxy ${meta.bindAddress}
-        '';
-      };
+    yakumo.services.metadata.anki-sync-server.reverseProxy = {
+      caddyIntegration.enable = true;
     };
   };
 }
