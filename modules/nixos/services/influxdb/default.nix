@@ -9,19 +9,13 @@ let
   inherit (lib)
     mkEnableOption
     mkIf
-    mkOption
-    types
     ;
   cfg = config.yakumo.services.influxdb;
+  srvMetadata = config.yakumo.services.metadata.influxdb;
 in
 {
   options.yakumo.services.influxdb = {
     enable = mkEnableOption "influxdb";
-    domain = mkOption {
-      type = types.str;
-      default = "localhost";
-      description = "Domain name.";
-    };
   };
 
   config = mkIf cfg.enable {
@@ -59,21 +53,17 @@ in
       };
       settings = {
         reporting-disabled = true;
-        http-bind-address = "0.0.0.0:${toString 8086}";
+        http-bind-address = srvMetadata.bindAddress;
       };
     };
 
-    services.caddy.virtualHosts =
-      let
-        influxCfg = config.services.influxdb2;
-      in
-      {
-        "${cfg.domain}" = {
-          useACMEHost = "yakumo.net";
-          extraConfig = ''
-            reverse_proxy ${influxCfg.settings.http-bind-address}
-          '';
-        };
+    services.caddy.virtualHosts = {
+      "${srvMetadata.domain}" = {
+        useACMEHost = "yakumo.net";
+        extraConfig = ''
+          reverse_proxy ${srvMetadata.bindAddress}
+        '';
       };
+    };
   };
 }

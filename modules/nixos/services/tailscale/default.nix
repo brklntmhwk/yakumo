@@ -11,6 +11,7 @@ let
     mkIf
     ;
   cfg = config.yakumo.services.tailscale;
+  srvMetadata = config.yakumo.services.metadata.tailscale;
 in
 {
   options.yakumo.services.tailscale = {
@@ -26,9 +27,9 @@ in
     in
     {
       services.tailscale = {
+        inherit (srvMetadata) port; # Default: 41641
         enable = true;
         openFirewall = false; # Default: false
-        port = 41641; # Default: 41641
         authKeyFile = config.sops.secrets.xxx.path; # Default: null
         # Pass extra params to `--auth-key` after the auth key.
         # See: https://tailscale.com/docs/features/oauth-clients#register-new-nodes-using-oauth-credentials

@@ -9,19 +9,13 @@ let
   inherit (lib)
     mkEnableOption
     mkIf
-    mkOption
-    types
     ;
   cfg = config.yakumo.services.paperless-ngx;
+  srvMetadata = config.yakumo.services.metadata.paperless-ngx;
 in
 {
   options.yakumo.services.paperless-ngx = {
     enable = mkEnableOption "paperless-ngx";
-    domain = mkOption {
-      type = types.str;
-      default = "localhost";
-      description = "Domain name.";
-    };
   };
 
   config = mkIf cfg.enable (
@@ -30,18 +24,20 @@ in
     in
     {
       services.paperless = {
+        inherit (srvMetadata)
+          address # Default: '127.0.0.1'
+          domain # Default: null
+          port # Default: 28981
+          ;
         enable = true;
-        address = "127.0.0.1";
         user = "paperless"; # Default: 'paperless'
         consumptionDir = "${paperlessCfg.dataDir}/consume";
         # Allow all users can write to the consumption directory if set to true.
         consumptionDirIsPublic = false; # Default: false
         dataDir = "/var/db/paperless";
         mediaDir = "${paperlessCfg.dataDir}/media";
-        domain = cfg.domain; # Default: null
         environmentFile = config.sops.secrets.xxx.path; # Default: null
         passwordFile = "/run/keys/paperless-password";
-        port = 28981; # Default: 28981
         # Configure local PostgreSQL DB server.
         database.createLocally = true; # Default: false
         exporter = {
@@ -86,10 +82,10 @@ in
       };
 
       services.caddy.virtualHosts = {
-        "${cfg.domain}" = {
+        "${srvMetadata.domain}" = {
           useACMEHost = "yakumo.net";
           extraConfig = ''
-            reverse_proxy ${paperlessCfg.address}:${paperlessCfg.port}
+            reverse_proxy ${srvMetadata.bindAddress}
           '';
         };
       };

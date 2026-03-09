@@ -17,6 +17,7 @@ let
     types
     ;
   cfg = config.yakumo.services.owntracks;
+  srvMetadata = config.yakumo.services.metadata.owntracks;
   mqttBrokers = [
     "mosquitto"
     "rmqtt"
@@ -29,17 +30,6 @@ in
       type = types.path;
       description = "Directory containing the persistent state data to back up.";
       default = "/var/lib/owntracks-recorder";
-    };
-    listenAddress = mkOption {
-      type = lib.types.str;
-      default = "127.0.0.1";
-      example = "0.0.0.0";
-      description = "Address on which the service should listen.";
-    };
-    port = mkOption {
-      type = types.port;
-      default = 8083;
-      description = "Port on which to serve the OwnTracks Recorder service.";
     };
     environmentFile = mkOption {
       type = types.nullOr types.path;
@@ -54,17 +44,6 @@ in
         description = "MQTT broker to use.";
         example = "rmqtt";
       };
-      host = mkOption {
-        type = types.str;
-        default = "127.0.0.1";
-        example = "localhost";
-        description = "MQTT host.";
-      };
-      port = mkOption {
-        type = types.port;
-        default = 1883;
-        description = "MQTT port.";
-      };
       topic = mkOption {
         type = types.str;
         default = "owntracks/#";
@@ -73,12 +52,6 @@ in
     };
     frontend = {
       enable = mkEnableOption "owntracks-frontend";
-      domain = mkOption {
-        type = types.str;
-        default = "owntracks.example.com";
-        example = "owntracks.yakumo.com";
-        description = "Domain name used for the Caddy virtual host.";
-      };
       config = mkOption {
         type = types.either types.lines types.path;
         default = "";
@@ -166,8 +139,8 @@ in
           {
             OTR_STORAGEDIR = cfg.stateDir;
             OTR_HTTPLOGDIR = cfg.stateDir;
-            OTR_HTTPHOST = cfg.listenAddress;
-            OTR_HTTPPORT = toString cfg.port;
+            OTR_HTTPHOST = srvMetadata.address;
+            OTR_HTTPPORT = toString srvMetadata.port;
             # The higher the number, the more frequently lookups are performed.
             # e.g., If set to 1, points within an area of approximately 5000 km^2
             # would resolve to a single address compared to 150 m^2 with precision 7.
@@ -177,10 +150,16 @@ in
             # Set this to 0 to disable MQTT.
             OTR_PORT = mkIf (!mqttCfg.enable) "0";
           }
-          (mkIf mqttCfg.enable {
-            OTR_HOST = mqttCfg.host;
-            OTR_PORT = toString mqttCfg.port;
-          })
+          (mkIf mqttCfg.enable (
+            let
+              # TODO: Make this conditional after adding Rmqtt.
+              mqttSrvMetadata = config.yakumo.services.metadata.mosquitto;
+            in
+            {
+              OTR_HOST = mqttSrvMetadata.host;
+              OTR_PORT = toString mqttSrvMetadata.port;
+            }
+          ))
         ];
         serviceConfig = {
           User = "owntracks";
@@ -212,7 +191,7 @@ in
         wantedBy = [ "multi-user.target" ];
       };
 
-      services.caddy.virtualHosts."${cfg.frontend.domain}" = {
+      services.caddy.virtualHosts."${srvMetadata.domain}" = {
         # Specify a host of an existing Let's Encrypt certificate.
         # Useful if we use DNS challenges but Caddy doesn't support our DNS provider.
         useACMEHost = "yakumo.com";
@@ -228,16 +207,16 @@ in
                 file_server
               }
               handle /pub* {
-                reverse_proxy ${cfg.listenAddress}:${toString cfg.port}
+                reverse_proxy ${srvMetadata.bindAddress}
               }
               handle /api* {
-                reverse_proxy ${cfg.listenAddress}:${toString cfg.port}
+                reverse_proxy ${srvMetadata.bindAddress}
               }
               handle /ws* {
-                reverse_proxy ${cfg.listenAddress}:${toString cfg.port}
+                reverse_proxy ${srvMetadata.bindAddress}
               }
               handle /recorder* {
-                reverse_proxy ${cfg.listenAddress}:${toString cfg.port}
+                reverse_proxy ${srvMetadata.bindAddress}
               }
               handle {
                 root * ${cfg.frontend.package}/share
@@ -246,7 +225,7 @@ in
             ''
           else
             ''
-              reverse_proxy ${cfg.listenAddress}:${toString cfg.port}
+              reverse_proxy ${srvMetadata.bindAddress}
             '';
       };
     }

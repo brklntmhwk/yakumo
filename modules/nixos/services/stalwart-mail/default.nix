@@ -9,19 +9,13 @@ let
   inherit (lib)
     mkEnableOption
     mkIf
-    mkOption
-    types
     ;
   cfg = config.yakumo.services.stalwart-mail;
+  srvMetadata = config.yakumo.services.metadata.stalwart-mail;
 in
 {
   options.yakumo.services.stalwart-mail = {
     enable = mkEnableOption "satlwart-mail";
-    domain = mkOption {
-      type = types.str;
-      default = "localhost";
-      description = "Domain name.";
-    };
   };
 
   config = mkIf cfg.enable (
@@ -81,7 +75,7 @@ in
                 use-x-forwarded = true;
               };
               management = {
-                bind = [ "127.0.0.1:8080" ];
+                bind = [ srvMetadata.bindAddress ];
                 protocol = "http";
               };
             };
@@ -117,10 +111,10 @@ in
       };
 
       services.caddy.virtualHosts = {
-        "${cfg.domain}" = {
+        "${srvMetadata.domain}" = {
           useACMEHost = "yakumo.net";
           extraConfig = ''
-            reverse_proxy ${stalwartCfg.settings.server.management.bind}
+            reverse_proxy ${srvMetadata.bindAddress}
           '';
         };
       };

@@ -9,19 +9,13 @@ let
   inherit (lib)
     mkEnableOption
     mkIf
-    mkOption
-    types
     ;
   cfg = config.yakumo.services.forgejo;
+  srvMetadata = config.yakumo.services.metadata.forgejo;
 in
 {
   options.yakumo.services.forgejo = {
     enable = mkEnableOption "forgejo";
-    domain = mkOption {
-      type = types.str;
-      default = "localhost";
-      description = "Domain name.";
-    };
   };
 
   config = mkIf cfg.enable {
@@ -31,18 +25,21 @@ in
       in
       {
         enable = true;
-        database = {
-          createDatabase = true; # Default: true
-          type = "postgres"; # Default: 'sqlite3' (Options: 'mysql', 'postgres')
-          name = "forgejo"; # Default: 'forgejo'
-          host = "127.0.0.1"; # Default: '127.0.0.1'
-          user = "forgejo"; # Default: 'forgejo'
-          # Use port 5432 for PostgreSQL DB.
-          port = 5432;
-          path = "${forgejoCfg.stateDir}/data/forgejo.db";
-          passwordFile = config.sops.secrets.xxx.path;
-          socket = "/run/mysqld/mysqld.sock";
-        };
+        database =
+          let
+            pgSrvMetadata = config.yakumo.services.metadata.postgresql;
+          in
+          {
+            inherit (pgSrvMetadata) port; # Use port 5432 for PostgreSQL DB.
+            createDatabase = true; # Default: true
+            type = "postgres"; # Default: 'sqlite3' (Options: 'mysql', 'postgres')
+            name = "forgejo"; # Default: 'forgejo'
+            user = "forgejo"; # Default: 'forgejo'
+            host = pgSrvMetadata.address; # Default: '127.0.0.1'
+            path = "${forgejoCfg.stateDir}/data/forgejo.db";
+            passwordFile = config.sops.secrets.xxx.path;
+            socket = "/run/mysqld/mysqld.sock";
+          };
         dump = {
           enable = true; # Default: false
           # (Options: 'tar', 'tar.sz', 'tar.gz', 'tar.xz', 'tar.bz2', 'tar.br', 'tar.lz4', 'tar.zst')
@@ -74,12 +71,12 @@ in
           };
           server = {
             DISABLE_SSH = false; # Default: false
-            DOMAIN = cfg.domain; # Default: 'localhost'
+            DOMAIN = srvMetadata.domain; # Default: 'localhost'
             # Set this so it aligns with `PROTOCOL`.
-            HTTP_ADDR = "0.0.0.0";
-            HTTP_PORT = 3000; # Default: '3000'
+            HTTP_ADDR = srvMetadata.address;
+            HTTP_PORT = srvMetadata.port; # Default: '3000'
             PROTOCOL = "https"; # Default: 'http' (Options: 'https', 'fcgi', 'http+unix', 'fcgi+unix')
-            ROOT_URL = "https://${cfg.domain}:${toString forgejoCfg.settings.server.HTTP_PORT}/";
+            ROOT_URL = "https://${srvMetadata.domain}/";
             SSH_PORT = 22; # Default: '2222'
             STATIC_ROOT_PATH = forgejoCfg.package.data;
           };
@@ -112,18 +109,13 @@ in
       };
     };
 
-    services.caddy.virtualHosts =
-      let
-        inherit (serverCfg) HTTP_ADDR HTTP_PORT;
-        serverCfg = config.services.forgejo.settings.server;
-      in
-      {
-        "${cfg.domain}" = {
-          useACMEHost = "yakumo.net";
-          extraConfig = ''
-            reverse_proxy ${HTTP_ADDR}:${builtins.toString HTTP_PORT}
-          '';
-        };
+    services.caddy.virtualHosts = {
+      "${srvMetadata.domain}" = {
+        useACMEHost = "yakumo.net";
+        extraConfig = ''
+          reverse_proxy ${srvMetadata.bindAddress}
+        '';
       };
+    };
   };
 }

@@ -10,19 +10,13 @@ let
   inherit (lib)
     mkEnableOption
     mkIf
-    mkOption
-    types
     ;
   cfg = config.yakumo.services.immich;
+  srvMetadata = config.yakumo.services.metadata.immich;
 in
 {
   options.yakumo.services.immich = {
     enable = mkEnableOption "immich";
-    domain = mkOption {
-      type = types.str;
-      default = "localhost";
-      description = "Domain name.";
-    };
   };
 
   config = mkIf cfg.enable (
@@ -32,11 +26,11 @@ in
     in
     {
       services.immich = {
+        inherit (srvMetadata) port; # Default: 2283
         enable = true;
         group = "immich"; # Default: 'immich'
         user = "immich"; # Default: 'immich'
-        host = "localhost"; # Default: 'localhost'
-        port = 2283; # Default: 2283
+        host = srvMetadata.address; # Default: 'localhost'
         openFirewall = false; # Default: false
         # Specify device paths to hardware acceleration devices that
         # immich should have access to.
@@ -52,18 +46,22 @@ in
         # if not using the default one.
         mediaLocation = "/var/lib/immich";
         secretsFile = config.sops.secrets.xxx.path;
-        database = {
-          enable = true;
-          createDB = true; # Default: true
-          name = "immich"; # Default: 'immich'
-          user = "immich"; # Default: 'immich'
-          # Specify the hostname or address of the PostgreSQL server.
-          host = "/run/postgresql"; # Default: '/run/postgresql'
-          port = 5432; # Default: 5432
-          # Set this to false if you use VectorChord instead.
-          enableVectors = false;
-          enableVectorChord = true; # Default: true
-        };
+        database =
+          let
+            pgSrvMetadata = config.yakumo.services.metadata.postgresql;
+          in
+          {
+            inherit (pgSrvMetadata) port; # Default: 5432
+            enable = true;
+            createDB = true; # Default: true
+            name = "immich"; # Default: 'immich'
+            user = "immich"; # Default: 'immich'
+            # Specify the hostname or address of the PostgreSQL server.
+            host = "/run/postgresql"; # Default: '/run/postgresql'
+            # Set this to false if you use VectorChord instead.
+            enableVectors = false;
+            enableVectorChord = true; # Default: true
+          };
         machine-learning = {
           enable = true; # Default: true
           # For the valid env variables, see:
@@ -78,7 +76,7 @@ in
         settings = {
           newVersionCheck.enabled = false; # Default: false
           # Domain for publicly shared links, including http(s)://.
-          server.externalDomain = "${cfg.domain}"; # Default: ''
+          server.externalDomain = "${srvMetadata.domain}"; # Default: ''
         };
       };
 
@@ -117,10 +115,10 @@ in
       };
 
       services.caddy.virtualHosts = {
-        "${cfg.domain}" = {
+        "${srvMetadata.domain}" = {
           useACMEHost = "yakumo.net";
           extraConfig = ''
-            reverse_proxy ${immichCfg.host}:${builtins.toString immichCfg.port}
+            reverse_proxy ${srvMetadata.bindAddress}
           '';
         };
       };

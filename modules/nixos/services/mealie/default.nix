@@ -9,47 +9,36 @@ let
   inherit (lib)
     mkEnableOption
     mkIf
-    mkOption
-    types
     ;
   cfg = config.yakumo.services.mealie;
+  srvMetadata = config.yakumo.services.metadata.mealie;
 in
 {
   options.yakumo.services.mealie = {
     enable = mkEnableOption "mealie";
-    domain = mkOption {
-      type = types.str;
-      default = "localhost";
-      description = "Domain name.";
-    };
   };
 
   config = mkIf cfg.enable {
     services.mealie = {
+      inherit (srvMetadata) port; # Default: 9000
       enable = true;
       credentialsFile = "/run/secrets/mealie-credentials.env";
       # Setup local PostgreSQL DB server for Mealie.
       database.createLocally = true; # Default: false
-      listenAddress = "0.0.0.0"; # Default: '0.0.0.0'
-      port = 9000; # Default: 9000
+      listenAddress = srvMetadata.address; # Default: '0.0.0.0'
       settings = {
         ALLOW_SIGNUP = "false";
       };
       extraOptions = [ ];
     };
 
-    services.caddy.virtualHosts =
-      let
-        inherit (mealieCfg) listenAddress port;
-        mealieCfg = config.services.mealie;
-      in
-      {
-        "${cfg.domain}" = {
-          useACMEHost = "yakumo.net";
-          extraConfig = ''
-            reverse_proxy ${listenAddress}:${builtins.toString port}
-          '';
-        };
+    services.caddy.virtualHosts = {
+      "${srvMetadata.domain}" = {
+        useACMEHost = "yakumo.net";
+        extraConfig = ''
+          reverse_proxy ${srvMetadata.bindAddress}
+        '';
       };
+    };
   };
 }

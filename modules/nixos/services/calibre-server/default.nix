@@ -9,28 +9,24 @@ let
   inherit (lib)
     mkEnableOption
     mkIf
-    mkOption
-    types
     ;
   cfg = config.yakumo.services.calibre-server;
+  srvMetadata = config.yakumo.services.metadata.calibre-server;
 in
 {
   options.yakumo.services.calibre-server = {
     enable = mkEnableOption "calibre-server";
-    domain = mkOption {
-      type = types.str;
-      default = "localhost";
-      description = "Domain name.";
-    };
   };
 
   config = mkIf cfg.enable {
     services.calibre-server = {
+      inherit (srvMetadata)
+        address # Default: '0.0.0.0'
+        port # Default: 8080
+        ;
       enable = true;
       group = "calibre-server"; # Default: 'calibre-server'
       user = "calibre-server"; # Default: 'calibre-server'
-      host = "0.0.0.0"; # Default: '0.0.0.0'
-      port = 8080; # Default: 8080
       openFirewall = false; # Default: false
       extraFlags = [ ];
       libraries = [ ];
@@ -43,17 +39,13 @@ in
       };
     };
 
-    services.caddy.virtualHosts =
-      let
-        calibSrvCfg = config.services.calibre-server;
-      in
-      {
-        "${cfg.domain}" = {
-          useACMEHost = "yakumo.net";
-          extraConfig = ''
-            reverse_proxy ${calibSrvCfg.host}:${builtins.toString calibSrvCfg.port}
-          '';
-        };
+    services.caddy.virtualHosts = {
+      "${srvMetadata.domain}" = {
+        useACMEHost = "yakumo.net";
+        extraConfig = ''
+          reverse_proxy ${srvMetadata.bindAddress}
+        '';
       };
+    };
   };
 }

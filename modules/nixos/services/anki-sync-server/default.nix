@@ -13,24 +13,22 @@ let
     types
     ;
   cfg = config.yakumo.services.anki-sync-server;
+  srvMetadata = config.yakumo.services.metadata.anki-sync-server;
 in
 {
   options.yakumo.services.anki-sync-server = {
     enable = mkEnableOption "anki-sync-server";
-    domain = mkOption {
-      type = types.str;
-      default = "localhost";
-      description = "Domain name.";
-    };
   };
 
   config = mkIf cfg.enable {
     services.anki-sync-server = {
+      inherit (srvMetadata)
+        address # Default: '::1'
+        port # Default: 27701
+        ;
       enable = true;
-      address = "::1"; # Default: '::1'
       baseDirectory = "%S/%N"; # Default: '%S/%N'
       openFirewall = true; # Default: false
-      port = 27701; # Default: 27701
       users = [
         {
           username = config.yakumo.user.name;
@@ -39,18 +37,13 @@ in
       ];
     };
 
-    services.caddy.virtualHosts =
-      let
-        inherit (ankiSyncSrvCfg) address port;
-        ankiSyncSrvCfg = config.services.anki-sync-server;
-      in
-      {
-        "${cfg.domain}" = {
-          useACMEHost = "yakumo.net";
-          extraConfig = ''
-            reverse_proxy [${address}]:${builtins.toString port}
-          '';
-        };
+    services.caddy.virtualHosts = {
+      "${srvMetadata.domain}" = {
+        useACMEHost = "yakumo.net";
+        extraConfig = ''
+          reverse_proxy ${srvMetadata.bindAddress}
+        '';
       };
+    };
   };
 }
