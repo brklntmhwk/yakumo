@@ -79,7 +79,7 @@ in
           oidc = {
             allowed_domains = [ ];
             allowed_users = [ ];
-            client_secret_path = config.sops.secrets.headscale.path;
+            client_secret_path = config.sops.secrets.headscale_client_secret.path;
             client_id = "Headscale"; # Default: ''
             extra_params = { };
             issuer = "https://"; # Default: ''

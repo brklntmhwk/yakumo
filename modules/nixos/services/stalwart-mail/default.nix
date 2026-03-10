@@ -90,7 +90,7 @@ in
 
       yakumo.services.rustic.backups = {
         stalwart = {
-          environmentFile = config.sops.secrets.xxx.path;
+          environmentFile = config.sops.secrets.stalwart_env.path;
           timerConfig = {
             OnCalendar = "*-*-* 03:00:00"; # Run daily at 3 a.m.
             Persistent = true;

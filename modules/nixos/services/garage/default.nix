@@ -20,7 +20,7 @@ in
   config = mkIf cfg.enable {
     services.garage = {
       enable = true;
-      environmentFile = config.sops.secrets.xxx.path; # Default: null
+      environmentFile = config.sops.secrets.garage_env.path; # Default: null
       extraEnvironment = { };
       logLevel = "info"; # Default: 'info' (Options: 'debug', 'error', 'trace', 'warn')
       settings = { };

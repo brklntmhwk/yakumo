@@ -55,8 +55,8 @@ in
         # By default, this is only allowed when the instanceUrl is localhost.
         # Dangerous if used with an external URL.
         acceptInvalidCerts = false;
-        adminPasswordFile = config.sops.secrets.xxx.path;
-        idmAdminPasswordFile = config.sops.secrets.xxx.path;
+        adminPasswordFile = config.sops.secrets.kanidm_admin_passwd.path;
+        idmAdminPasswordFile = config.sops.secrets.kanidm_idm_admin_passwd.path;
         # Auto-remove an entity from Kanidm when deleting them in this provisioning config.
         autoRemove = true; # Default: true
         instanceUrl = "https://localhost:8443";

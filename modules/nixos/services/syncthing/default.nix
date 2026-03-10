@@ -36,7 +36,7 @@ in
       databaseDir = "";
       extraFlags = [ ];
       guiAddress = meta.bindAddress;
-      guiPasswordFile = config.sops.secrets.xxx.path; # Default: null
+      guiPasswordFile = config.sops.secrets.syncthing_gui_passwd.path; # Default: null
       # Delete the devices that are not configured via the devices option.
       # If set to false, devices added via the web UI will persist and
       # have to be deleted manually.

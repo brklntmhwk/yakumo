@@ -45,7 +45,7 @@ in
             # Make it align with the upstream home-assistant module.
             hass = {
               acl = [ "readwrite #" ];
-              hashedPasswordFile = config.sops.secrets.xxx.path; # Default: null
+              hashedPasswordFile = config.sops.secrets.mosquitto_hass_passwd.path; # Default: null
             };
           };
           omitPasswordAuth = false; # Default: false

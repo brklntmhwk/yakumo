@@ -36,7 +36,7 @@ in
         consumptionDirIsPublic = false; # Default: false
         dataDir = "/var/db/paperless";
         mediaDir = "${paperlessCfg.dataDir}/media";
-        environmentFile = config.sops.secrets.xxx.path; # Default: null
+        environmentFile = config.sops.secrets.paperless_env.path; # Default: null
         passwordFile = "/run/keys/paperless-password";
         # Configure local PostgreSQL DB server.
         database.createLocally = true; # Default: false
@@ -60,7 +60,7 @@ in
 
       yakumo.services.rustic.backups = {
         paperless = {
-          environmentFile = config.sops.secrets.xxx.path;
+          environmentFile = config.sops.secrets.paperless_env.path;
           timerConfig = {
             OnCalendar = "*-*-* 02:30:00"; # Run daily at 2:30 a.m.
             Persistent = true;

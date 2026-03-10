@@ -28,7 +28,7 @@ in
       enable = true;
       # Shiori can use MySQL or PostgreSQL.
       databaseUrl = "postgres:///shiori?host=/run/postgresql";
-      environmentFile = config.sops.secrets.xxx.path; # Default: null
+      environmentFile = config.sops.secrets.shiori_env.path; # Default: null
       webRoot = "/"; # Default: '/'
     };
 

@@ -121,7 +121,7 @@ in
               # Not applicable for 'sqlite3'.
               user = "grafana"; # Default: 'grafana'
               # Not applicable for 'sqlite3'.
-              password = config.sops.secrets.xxx.path; # Default: ''
+              password = config.sops.secrets.grafana_db_passwd.path; # Default: ''
               ca_cert_path = null; # Default: null
               client_cert_path = null; # Default: null
               client_key_path = null; # Default: null
@@ -140,7 +140,7 @@ in
             };
           security = {
             admin_email = "";
-            admin_password = config.sops.secrets.xxx.path;
+            admin_password = config.sops.secrets.grafana_admin_passwd.path;
             admin_user = "admin"; # Default: 'admin'
             allow_embedding = false; # Default: false
             content_security_policy = false; # Default: false
@@ -153,7 +153,7 @@ in
             disable_brute_force_login_protection = false; # Default: false
             disable_gravatar = false; # Default: false
             disable_initial_admin_creation = false; # Default: false
-            secret_key = config.sops.secrets.xxx.path; # Default: 'SW2YcwTIb9zpOOhoPsMm'
+            secret_key = config.sops.secrets.grafana_secret_key.path; # Default: 'SW2YcwTIb9zpOOhoPsMm'
             strict_transport_security = false; # Default: false
             strict_transport_security_max_age_seconds = 86400; # Default: 86400
             strict_transport_security_preload = false; # Default: false
@@ -201,7 +201,7 @@ in
             enabled = false; # Default: false
             host = "localhost:25"; # Default: 'localhost:25'
             user = null; # Default: null
-            password = config.sops.secrets.xxx.path; # Default: ''
+            password = config.sops.secrets.grafana_smtp_passwd.path; # Default: ''
             cert_file = null; # Default: null
             ehlo_identity = null; # Default: null
             from_name = "Grafana"; # Default: 'Grafana'

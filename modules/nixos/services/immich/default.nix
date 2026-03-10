@@ -45,7 +45,7 @@ in
         # Ensure to create it manually and give the immich user the R&W permissions
         # if not using the default one.
         mediaLocation = "/var/lib/immich";
-        secretsFile = config.sops.secrets.xxx.path;
+        secretsFile = config.sops.secrets.immich_secrets.path;
         database =
           let
             pgMeta = config.yakumo.services.metadata.postgresql;
@@ -82,7 +82,7 @@ in
 
       yakumo.services.rustic.backups = {
         immich = {
-          environmentFile = config.sops.secrets.xxx.path;
+          environmentFile = config.sops.secrets.immich_env.path;
           timerConfig = {
             OnCalendar = "*-*-* 04:00:00"; # Run daily at 4 a.m.
             Persistent = true;

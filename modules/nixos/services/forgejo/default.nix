@@ -37,7 +37,7 @@ in
             user = "forgejo"; # Default: 'forgejo'
             host = pgMeta.address; # Default: '127.0.0.1'
             path = "${forgejoCfg.stateDir}/data/forgejo.db";
-            passwordFile = config.sops.secrets.xxx.path;
+            passwordFile = config.sops.secrets.postgres_passwd.path;
             socket = "/run/mysqld/mysqld.sock";
           };
         dump = {
@@ -88,7 +88,7 @@ in
 
     yakumo.services.rustic.backups = {
       forgejo = {
-        environmentFile = config.sops.secrets.xxx.path;
+        environmentFile = config.sops.secrets.postgres_env.path;
         timerConfig = {
           OnCalendar = "*-*-* 05:30:00"; # Run daily at 5:30 a.m.
           Persistent = true;

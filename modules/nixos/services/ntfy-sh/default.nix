@@ -23,7 +23,7 @@ in
       enable = true;
       group = "ntfy-sh"; # Default: 'ntfy-sh'
       user = "ntfy-sh"; # Default: 'ntfy-sh'
-      environmentFile = config.sops.secrets.xxx.path; # Default: null
+      environmentFile = config.sops.secrets.ntfy_env.path; # Default: null
       # For the available settings, see:
       # https://docs.ntfy.sh/config/#config-options
       settings = {

@@ -30,7 +30,7 @@ in
         inherit (meta) port; # Default: 41641
         enable = true;
         openFirewall = false; # Default: false
-        authKeyFile = config.sops.secrets.xxx.path; # Default: null
+        authKeyFile = config.sops.secrets.tailscale_authkey.path; # Default: null
         # Pass extra params to `--auth-key` after the auth key.
         # See: https://tailscale.com/docs/features/oauth-clients#register-new-nodes-using-oauth-credentials
         authKeyParameters = { }; # Default: { }

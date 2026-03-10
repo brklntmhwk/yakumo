@@ -32,7 +32,7 @@ in
       users = [
         {
           username = config.yakumo.user.name;
-          passwordFile = config.sops.secrets.xxx.path;
+          passwordFile = config.sops.secrets.anki_sync_server_passwd.path;
         }
       ];
     };

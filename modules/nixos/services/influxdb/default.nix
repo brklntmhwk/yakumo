@@ -27,8 +27,8 @@ in
           username = "admin"; # Default: 'admin'
           bucket = "default";
           organization = "default";
-          passwordFile = config.sops.secrets.xxx.path;
-          tokenFile = config.sops.secrets.xxx.path;
+          passwordFile = config.sops.secrets.influxdb_passwd.path;
+          tokenFile = config.sops.secrets.influxdb_token.path;
           # Set how long the bucket retains data (0 means infinite).
           retention = 0; # Default: 0
         };
@@ -45,8 +45,9 @@ in
           };
         };
         users = {
+          # TODO: Refactor this so this module doesn't know about the users.
           otogaki = {
-            passwordFile = config.sops.secrets.xxx.path;
+            passwordFile = config.sops.secrets.login_password_otogaki.path;
             present = true; # Default: true
           };
         };
