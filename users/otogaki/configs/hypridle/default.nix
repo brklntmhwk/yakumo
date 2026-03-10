@@ -1,4 +1,5 @@
-{ theme }:
+# This is supposed to be used with Hyprland.
+{ systemWideBinPath }:
 
 {
   events = [
@@ -17,27 +18,26 @@
   ];
   timeouts = [
     {
-      timeout = 150;
+      timeout = 180; # seconds (3 min)
       command = "brightnessctl -s set 10";
       resumeCommand = "brightnessctl -r";
     }
     {
-      timeout = 150;
+      timeout = 300; # seconds (5 min)
       command = "brightnessctl -sd rgb:kbd_backlight set 0";
       resumeCommand = "brightnessctl -rd rgb:kbd_backlight";
     }
     {
-      timeout = 300;
+      timeout = 480; # seconds (8 min)
       command = "loginctl lock-session";
     }
     {
-      timeout = 330;
+      timeout = 600; # seconds (10 min)
       command = "niri msg action power-off-monitors";
-      # Combine waking monitors and restoring brightness from Hypridle config.
       resumeCommand = "niri msg action power-on-monitors && brightnessctl b-r";
     }
     {
-      timeout = 1800;
+      timeout = 1500; # seconds (25 min)
       command = "systemctl suspend";
     }
   ];
