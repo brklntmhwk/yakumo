@@ -9,6 +9,7 @@ let
   inherit (lib)
     mkEnableOption
     mkIf
+    mkMerge
     ;
   cfg = config.yakumo.services.kanidm;
   meta = config.yakumo.services.metadata.kanidm;
@@ -67,8 +68,24 @@ in
       };
     };
 
-    yakumo.services.metadata.kanidm.reverseProxy = {
-      caddyIntegration.enable = true;
-    };
+    yakumo = mkMerge [
+      {
+        services.metadata.kanidm.reverseProxy = {
+          caddyIntegration.enable = true;
+        };
+      }
+      (mkIf config.yakumo.system.persistence.yosuga.enable {
+        system.persistence.yosuga = {
+          directories = [
+            {
+              path = "/var/lib/kanidm";
+              user = "kanidm";
+              group = "kanidm";
+              mode = "0700";
+            }
+          ];
+        };
+      })
+    ];
   };
 }

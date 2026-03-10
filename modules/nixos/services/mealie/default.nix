@@ -9,6 +9,7 @@ let
   inherit (lib)
     mkEnableOption
     mkIf
+    mkMerge
     ;
   cfg = config.yakumo.services.mealie;
   meta = config.yakumo.services.metadata.mealie;
@@ -32,8 +33,24 @@ in
       extraOptions = [ ];
     };
 
-    yakumo.services.metadata.mealie.reverseProxy = {
-      caddyIntegration.enable = true;
-    };
+    yakumo = mkMerge [
+      {
+        services.metadata.mealie.reverseProxy = {
+          caddyIntegration.enable = true;
+        };
+      }
+      (mkIf config.yakumo.system.persistence.yosuga.enable {
+        system.persistence.yosuga = {
+          directories = [
+            {
+              directory = "/var/lib/mealie";
+              user = "mealie";
+              group = "mealie";
+              mode = "0750";
+            }
+          ];
+        };
+      })
+    ];
   };
 }

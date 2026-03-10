@@ -21,7 +21,7 @@ in
 
   config = mkIf cfg.enable (
     let
-      pgBackupDir = "/var/backup/postgresql/immich";
+      backupDir = "/var/backup/immich";
       immichCfg = config.services.immich;
     in
     {
@@ -80,43 +80,61 @@ in
         };
       };
 
-      yakumo.services.rustic.backups = {
-        immich = {
-          environmentFile = config.sops.secrets.immich_env.path;
-          timerConfig = {
-            OnCalendar = "*-*-* 04:00:00"; # Run daily at 4 a.m.
-            Persistent = true;
-          };
-          settings = {
-            repository = "";
-            backup = {
-              sources = [
-                immichCfg.mediaLocation
-                pgBackupDir
-              ];
+      yakumo = mkMerge [
+        {
+          services = {
+            metadata.immich.reverseProxy = {
+              caddyIntegration.enable = true;
             };
-            forget = {
-              keep-daily = 14;
-              keep-weekly = 4;
-              keep-monthly = 12;
-              keep-yearly = 2;
-              prune = true;
+            rustic.backups = {
+              immich = {
+                environmentFile = config.sops.secrets.immich_env.path;
+                timerConfig = {
+                  OnCalendar = "*-*-* 04:00:00"; # Run daily at 4 a.m.
+                  Persistent = true;
+                };
+                settings = {
+                  repository = "";
+                  backup = {
+                    sources = [
+                      immichCfg.mediaLocation
+                      backupDir
+                    ];
+                  };
+                  forget = {
+                    keep-daily = 14;
+                    keep-weekly = 4;
+                    keep-monthly = 12;
+                    keep-yearly = 2;
+                    prune = true;
+                  };
+                };
+              };
             };
           };
-        };
-      };
+        }
+        (mkIf config.yakumo.system.persistence.yosuga.enable {
+          system.persistence.yosuga = {
+            directories = [
+              {
+                directory = immichCfg.mediaLocation;
+                user = "immich";
+                group = "immich";
+                mode = "0750";
+              }
+            ];
+          };
+        })
+      ];
 
       # Handle the Immich PostgreSQL DB dump before Rustic runs.
-      systemd.services."rustic-backups-immich" = {
-        preStart = ''
-          mkdir -p ${pgBackupDir}
-          ${pkgs.sudo}/bin/sudo -u postgres ${pkgs.postgresql}/bin/pg_dump -Fc immich > ${pgBackupDir}/immich.dump
-        '';
-      };
-
-      yakumo.services.metadata.immich.reverseProxy = {
-        caddyIntegration.enable = true;
-      };
+      systemd.services."rustic-backups-immich" =
+        {
+          preStart = ''
+            mkdir -p ${backupDir}
+            ${pkgs.sudo}/bin/sudo -u postgres ${pkgs.postgresql}/bin/pg_dump -Fc immich > ${backupDir}/immich.dump
+          '';
+        };
     }
   );
 }
