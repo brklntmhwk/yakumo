@@ -65,6 +65,23 @@ in
   config = {
     yakumo.services.metadata = {
       # Sorted by port number.
+      rustic = {
+        domain = "backup.yakumo.local";
+        address = "127.0.0.1";
+        # Use 0 as a placeholder if it doesn't bind to a port.
+        # Rustic is typically a CLI tool, but if using rest-server it defaults to 8000.
+        port = 0;
+      };
+      caddy = {
+        domain = "proxy.yakumo.local";
+        address = "127.0.0.1";
+        port = 443;
+      };
+      samba = {
+        domain = "smb.yakumo.local";
+        address = "127.0.0.1";
+        port = 445;
+      };
       mosquitto = {
         domain = "mqtt.yakumo.local";
         address = "127.0.0.1";
@@ -75,7 +92,7 @@ in
         address = "127.0.0.1";
         port = 2283;
       };
-      nfty-sh = {
+      ntfy-sh = {
         domain = "ntfy.yakumo.local";
         address = "127.0.0.1";
         port = 2586;
@@ -164,6 +181,11 @@ in
         domain = "recipes.yakumo.local";
         address = "127.0.0.1";
         port = 9000;
+      };
+      telegraf = {
+        domain = "telegraf.yakumo.local";
+        address = "127.0.0.1";
+        port = 9273; # Default Prometheus metric listener port.
       };
       syncthing = {
         domain = "sync.yakumo.local";

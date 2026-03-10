@@ -56,9 +56,5 @@ in
       ];
       settings = { };
     };
-
-    yakumo.services.metadata.mosquitto.reverseProxy = {
-      caddyIntegration.enable = true;
-    };
   };
 }
