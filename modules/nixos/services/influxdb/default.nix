@@ -9,6 +9,7 @@ let
   inherit (lib)
     mkEnableOption
     mkIf
+    mkMerge
     ;
   cfg = config.yakumo.services.influxdb;
   meta = config.yakumo.services.metadata.influxdb;
@@ -58,8 +59,24 @@ in
       };
     };
 
-    yakumo.services.metadata.influxdb.reverseProxy = {
-      caddyIntegration.enable = true;
-    };
+    yakumo = mkMerge [
+      {
+        services.metadata.influxdb.reverseProxy = {
+          caddyIntegration.enable = true;
+        };
+      }
+      (mkIf config.yakumo.system.persistence.yosuga.enable {
+        system.persistence.yosuga = {
+          directories = [
+            {
+              directory = "/var/lib/influxdb2";
+              user = "influxdb2";
+              group = "influxdb2";
+              mode = "0700";
+            }
+          ];
+        };
+      })
+    ];
   };
 }

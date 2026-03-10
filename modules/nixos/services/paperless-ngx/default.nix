@@ -9,6 +9,7 @@ let
   inherit (lib)
     mkEnableOption
     mkIf
+    mkMerge
     ;
   cfg = config.yakumo.services.paperless-ngx;
   meta = config.yakumo.services.metadata.paperless-ngx;
@@ -34,17 +35,22 @@ in
         consumptionDir = "${paperlessCfg.dataDir}/consume";
         # Allow all users can write to the consumption directory if set to true.
         consumptionDirIsPublic = false; # Default: false
-        dataDir = "/var/db/paperless";
+        dataDir = "/var/lib/paperless"; # Default: '/var/lib/paperless'
+        # This is where actual PDF files are stored.
         mediaDir = "${paperlessCfg.dataDir}/media";
         environmentFile = config.sops.secrets.paperless_env.path; # Default: null
-        passwordFile = "/run/keys/paperless-password";
+        passwordFile = config.sops.secrets.paperless_passwd.path;
         # Configure local PostgreSQL DB server.
         database.createLocally = true; # Default: false
+        # TODO: Consider implementing and using a systemd backup service & Rustic for backups instead.
+        # Configure the document exporter.
+        # For more details, see:
+        # https://docs.paperless-ngx.com/administration/#exporter
         exporter = {
           enable = true; # Default: false
           directory = "${paperlessCfg.dataDir}/export";
           # Schedule when to run the exporter.
-          onCalendar = "01:30:00";
+          onCalendar = "02:00:00";
           settings = {
             compare-checksums = true;
             delete = true;
@@ -58,32 +64,55 @@ in
         openMPThreadingWorkaround = true; # Default: true
       };
 
-      yakumo.services.rustic.backups = {
-        paperless = {
-          environmentFile = config.sops.secrets.paperless_env.path;
-          timerConfig = {
-            OnCalendar = "*-*-* 02:30:00"; # Run daily at 2:30 a.m.
-            Persistent = true;
-          };
-          settings = {
-            repository = "";
-            backup = {
-              sources = [
-                paperlessCfg.exporter.directory
-              ];
+      yakumo = mkMerge [
+        {
+          services = {
+            metadata.paperless-ngx.reverseProxy = {
+              caddyIntegration.enable = true;
             };
-            forget = {
-              keep-daily = 7;
-              keep-weekly = 4;
-              prune = true;
+            rustic.backups = {
+              paperless = {
+                environmentFile = config.sops.secrets.paperless_env.path;
+                timerConfig = {
+                  OnCalendar = "*-*-* 02:30:00"; # Run daily at 2:30 a.m.
+                  Persistent = true;
+                };
+                settings = {
+                  repository = "s3:https://your-s3-endpoint/bucket/paperless";
+                  backup = {
+                    sources = [
+                      paperlessCfg.exporter.directory
+                    ];
+                  };
+                  forget = {
+                    keep-daily = 7;
+                    keep-weekly = 4;
+                    prune = true;
+                  };
+                };
+              };
             };
           };
-        };
-      };
-
-      yakumo.services.metadata.paperless-ngx.reverseProxy = {
-        caddyIntegration.enable = true;
-      };
+        }
+        (mkIf config.yakumo.system.persistence.yosuga.enable {
+          system.persistence.yosuga = {
+            directories = [
+              {
+                directory = paperlessCfg.dataDir;
+                user = "paperless";
+                group = "paperless";
+                mode = "0750";
+              }
+              {
+                directory = paperlessCfg.exporter.directory;
+                user = "paperless";
+                group = "paperless";
+                mode = "0750";
+              }
+            ];
+          };
+        })
+      ];
     }
   );
 }

@@ -128,13 +128,12 @@ in
       ];
 
       # Handle the Immich PostgreSQL DB dump before Rustic runs.
-      systemd.services."rustic-backups-immich" =
-        {
-          preStart = ''
-            mkdir -p ${backupDir}
-            ${pkgs.sudo}/bin/sudo -u postgres ${pkgs.postgresql}/bin/pg_dump -Fc immich > ${backupDir}/immich.dump
-          '';
-        };
+      systemd.services."rustic-backups-immich" = {
+        preStart = ''
+          mkdir -p ${backupDir}
+          ${pkgs.sudo}/bin/sudo -u postgres ${pkgs.postgresql}/bin/pg_dump -Fc immich > ${backupDir}/immich.dump
+        '';
+      };
     }
   );
 }
