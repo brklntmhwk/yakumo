@@ -41,7 +41,7 @@ in
       name = "rkawata";
       description = "Reiji Kawata";
       uid = 1001;
-      hashedPasswordFile = config.sops.secrets.login_password_rkawata.path;
+      hashedPasswordFile = config.sops.secrets.login_passwd_rkawata.path;
       # packages = catAttrs "package" (attrValues cursorThemes);
     };
     shell = {
