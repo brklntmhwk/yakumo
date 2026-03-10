@@ -38,22 +38,14 @@ let
         reverseProxy = {
           caddyIntegration = {
             enable = mkEnableOption "reverse proxy integaration feat. Caddy";
-            config = mkOption {
+            extraConfig = mkOption {
               type = types.lines;
               default = ''
                 reverse_proxy ${config.bindAddress}
               '';
               description = ''
-                Lines of Caddyfile configuration.
+                Additional lines of Caddyfile configuration appended to the file.
                 The default value is the common bare minimum configuration.
-              '';
-            };
-            extraConfig = mkOption {
-              type = types.lines;
-              default = "";
-              description = ''
-                Additional lines of Caddyfile configuration appended to the file
-                after `''${config.reverseProxy.caddyIntegration.config}`.
               '';
             };
           };
@@ -201,7 +193,6 @@ in
           # Useful when we use DNS challenges but Caddy doesn't support our DNS provider.
           useACMEHost = "yakumo.net";
           extraConfig = ''
-            ${meta.reverseProxy.config}
             ${meta.reverseProxy.extraConfig}
           '';
         }

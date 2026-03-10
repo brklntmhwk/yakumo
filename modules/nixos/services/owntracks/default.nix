@@ -198,28 +198,34 @@ in
           # override (i.e., `pkgs.foo.override`), as it will trigger a full rebuild of
           # the Node.js package every time the user makes any changes to the setting
           # in `config.js` at all.
-          config = mkIf cfg.frontend.enable ''
-            handle /config/config.js {
-                root * ${configDir}
-                file_server
-            }
-            handle /pub* {
+          extraConfig =
+            if cfg.frontend.enable then
+              ''
+                handle /config/config.js {
+                    root * ${configDir}
+                    file_server
+                }
+                handle /pub* {
+                    reverse_proxy ${meta.bindAddress}
+                }
+                handle /api* {
+                    reverse_proxy ${meta.bindAddress}
+                }
+                handle /ws* {
+                    reverse_proxy ${meta.bindAddress}
+                }
+                handle /recorder* {
+                    reverse_proxy ${meta.bindAddress}
+                }
+                handle {
+                    root * ${cfg.frontend.package}/share
+                    file_server
+                }
+              ''
+            else
+              ''
                 reverse_proxy ${meta.bindAddress}
-            }
-            handle /api* {
-                reverse_proxy ${meta.bindAddress}
-            }
-            handle /ws* {
-                reverse_proxy ${meta.bindAddress}
-            }
-            handle /recorder* {
-                reverse_proxy ${meta.bindAddress}
-            }
-            handle {
-                root * ${cfg.frontend.package}/share
-                file_server
-            }
-          '';
+              '';
         };
       };
     }
