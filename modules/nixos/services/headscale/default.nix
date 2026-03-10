@@ -31,20 +31,21 @@ in
         user = "headscale"; # Default: 'headscale'
         settings = {
           server_url = "https://${meta.domain}";
-          database =
-            let
-              pgMeta = config.yakumo.services.metadata.postgresql;
-            in
-            {
-              type = "postgres"; # Default: 'sqlite' (Options: 'postgres', 'sqlite3')
-              postgres = {
-                inherit (pgMeta) port;
-                name = "headscale";
-                user = "headscale";
-                host = pgMeta.address;
-                password_file = config.sops.secrets.xxx.path;
-              };
+          database = {
+            # Use SQLite for Headscale in order to avoid this chicken and egg deadlock:
+            # - Headscale is expected to be hosted on a cloud VPS, and it needs the
+            # connection to a home server that hosts PostgreSQL.
+            # - To reach the home server securely, the VPS routes traffic through
+            # the Headscale VPN.
+            # - The VPN can't start because Headscale hasn't loaded its DB yet!
+            type = "sqlite"; # Default: 'sqlite' (Options: 'postgres', 'sqlite3')
+            sqlite = {
+              path = "/var/lib/headscale/db.sqlite";
+              # Enable WAL (Write Ahead Log) mode for SQLite.
+              # See: https://www.sqlite.org/wal.html
+              write_ahead_log = true; # Default: true
             };
+          };
           # DERP (Designated Encrypted Relay for Packets):
           # Tailscale fallback protocol used when direct peer-to-peer connection
           # fails due to strict firewalls, NATs, or missing IPv6.
