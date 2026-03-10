@@ -18,7 +18,7 @@ in
   ];
 
   sops.secrets = {
-    login_password_rkawata = {
+    login_passwd_rkawata = {
       sopsFile = flakeRoot + "/secrets/default.yaml";
       neededForUsers = true;
     };

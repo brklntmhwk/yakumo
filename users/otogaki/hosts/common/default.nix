@@ -19,7 +19,7 @@ in
   ];
 
   sops.secrets = {
-    login_password_otogaki = {
+    login_passwd_otogaki = {
       sopsFile = flakeRoot + "/secrets/default.yaml";
       neededForUsers = true;
     };
@@ -42,7 +42,7 @@ in
       user = {
         name = "otogaki";
         description = "Ohma Togaki";
-        # hashedPasswordFile = config.sops.secrets.login_password_otogaki.path;
+        hashedPasswordFile = config.sops.secrets.login_passwd_otogaki.path;
         # The value of 'config.users.defaultUserShell' will be set here for normal users.
         # For the detailed implementation, see:
         # https://github.com/NixOS/nixpkgs/commit/a323d146b7be3bc066b4ec74db72888ea32792fb

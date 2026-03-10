@@ -48,7 +48,7 @@ in
         users = {
           # TODO: Refactor this so this module doesn't know about the users.
           otogaki = {
-            passwordFile = config.sops.secrets.login_password_otogaki.path;
+            passwordFile = config.sops.secrets.login_passwd_otogaki.path;
             present = true; # Default: true
           };
         };
