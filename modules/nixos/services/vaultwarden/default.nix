@@ -9,6 +9,7 @@
 let
   inherit (lib)
     mkEnableOption
+    mkForce
     mkIf
     ;
   cfg = config.yakumo.services.vaultwarden;
@@ -19,62 +20,120 @@ in
     enable = mkEnableOption "vaultwarden";
   };
 
-  config = mkIf cfg.enable (
-    let
-      vwCfg = config.services.vaultwarden;
-    in
-    {
-      services.vaultwarden = {
-        inherit (meta) domain;
+  config = mkIf cfg.enable {
+    services.vaultwarden = {
+      inherit (meta) domain;
+      enable = true;
+      backupDir = "/var/backup/vaultwarden"; # Default: null
+      # Use Caddy instead.
+      configureNginx = false; # Default: false
+      configurePostgres = false; # Default: false
+      dbBackend = "sqlite"; # Default: 'sqlite' (Options: 'mysql', 'postgresql')
+      environmentFile = config.sops.secrets.vaultwarden_env.path; # Default: [ ]
+      # For the valid env variables, see:
+      # https://github.com/dani-garcia/vaultwarden/blob/1.35.2/.env.template
+      config = {
+        # The value of DOMAIN will be "https://${services.vaultwarden.domain}".
+        ROCKET_ADDRESS = meta.address;
+        ROCKET_PORT = meta.port;
+        SIGNUPS_ALLOWED = false;
+        USE_SYSLOG = true;
+        WEB_VAULT_ENABLED = true;
+      };
+    };
+
+    yakumo.services.rustic.backups = {
+      vaultwarden = {
+        environmentFile = config.sops.secrets.rustic_vaultwarden_env.path;
+        timerConfig = {
+          OnCalendar = "*-*-* 03:30:00"; # Run daily at 3:30 a.m.
+          Persistent = true;
+        };
+        settings = {
+          repository = "s3:https://your-s3-endpoint/bucket/vaultwarden";
+          backup = {
+            sources = [
+              config.services.vaultwarden.backupDir
+            ];
+          };
+          forget = {
+            keep-daily = 14;
+            keep-weekly = 4;
+            keep-monthly = 12;
+            keep-yearly = 2;
+            prune = true;
+          };
+        };
+      };
+    };
+
+    # Forcibly replace the upstream backup script with this custom one as it
+    # doesn't remove files in the backup even when they are deleted in the
+    # original location, which leads to accumulating ghost files.
+    # For the full implemention of the upstream script, see:
+    # https://github.com/NixOS/nixpkgs/blob/ed142ab1b3a092c4d149245d0c4126a5d7ea00b0/nixos/modules/services/security/vaultwarden/backup.sh
+    systemd.services.backup-vaultwarden.serviceConfig.ExecStart = mkForce (
+      pkgs.writeShellScript "vaultwarden-rsync-backup" ''
+        if [[ -f "$DATA_FOLDER/db.sqlite3" ]]; then
+          ${pkgs.sqlite}/bin/sqlite3 "$DATA_FOLDER/db.sqlite3" ".backup '$BACKUP_FOLDER/db.sqlite3'"
+        fi
+
+        # Sync all other files and delete missing ones in the destination
+        ${pkgs.rsync}/bin/rsync -a --delete --exclude 'db.*' "$DATA_FOLDER/" "$BACKUP_FOLDER/"
+      ''
+    );
+
+    yakumo.services.metadata.vaultwarden.reverseProxy = {
+      # https://github.com/dani-garcia/vaultwarden/wiki/Proxy-examples
+      caddyIntegration = {
         enable = true;
-        backupDir = "/var/backup/vaultwarden-pg"; # Default: null
-        # Use Caddy instead.
-        configureNginx = false; # Default: false
-        configurePostgres = true; # Default: false
-        dbBackend = "postgresql"; # Default: 'sqlite' (Options: 'mysql', 'postgresql')
-        environmentFile = config.sops.secrets.xxx.path; # Default: [ ]
-        config = {
-          ROCKET_ADDRESS = meta.address;
-          ROCKET_PORT = meta.port;
-        };
-      };
+        extraConfig = ''
+          # This setting may have compatibility issues with some browsers
+          # (e.g., attachment downloading on Firefox). Try disabling this
+          # if you encounter issues.
+          encode zstd gzip
 
-      yakumo.services.rustic.backups = {
-        vaultwarden = {
-          environmentFile = config.sops.secrets.xxx.path;
-          timerConfig = {
-            OnCalendar = "*-*-* 03:30:00"; # Run daily at 3:30 a.m.
-            Persistent = true;
-          };
-          settings = {
-            repository = "";
-            backup = {
-              sources = [
-                vwCfg.backupDir
-              ];
-            };
-            forget = {
-              keep-daily = 14;
-              keep-weekly = 4;
-              keep-monthly = 12;
-              keep-yearly = 2;
-              prune = true;
-            };
-          };
-        };
-      };
+          # Security headers
+          header / {
+            # Enable HTTP Strict Transport Security (HSTS).
+            Strict-Transport-Security "max-age=31536000;"
+            # Disable cross-site filter (XSS).
+            X-XSS-Protection "0"
+            # Set this to "SAMEORIGIN", otherwise the browser will block those
+            # requests if using FIDO2 WebAuthn.
+            X-Frame-Options "SAMEORIGIN"
+            # Prevent search engines from indexing.
+            X-Robots-Tag "noindex, nofollow"
+            # Disallow sniffing of X-Content-Type-Options.
+            X-Content-Type-Options "nosniff"
+            # Server name removing.
+            -Server
+            # Remove X-Powered-By though this shouldn't be an issue,
+            # better opsec to remove.
+            -X-Powered-By
+            # Remove Last-Modified because etag is the same and is as effective.
+            -Last-Modified
+          }
 
-      # Handle the Vaultwarden PostgreSQL DB dump before Rustic runs.
-      systemd.services."rustic-backups-vaultwarden" = {
-        preStart = ''
-          mkdir -p /var/backup/vaultwarden-pg
-          ${pkgs.sudo}/bin/sudo -u postgres ${pkgs.postgresql}/bin/pg_dump -Fc vaultwarden > ${vwCfg.backupDir}/vaultwarden.dump
+          # Restrict the /admin panel to trusted networks.
+          @admin {
+            path /admin*
+            # Explicitly include 100.64.0.0/10 alongside standard RFC1918 private IPs.
+            not remote_ip private_ranges 100.64.0.0/10
+          }
+          # Simply throw a 403 error instead of redirecting unauthorized `/admin`
+          # attempts back to the homepage, which makes monitoring logs for malicious
+          # access attempts much easier.
+          respond @admin "403 Forbidden" 403
+
+          # Proxy traffic to the local Rocket server.
+          reverse_proxy ${meta.bindAddress} {
+            # Send the true remote IP to Rocket, so that Vaultwarden can put this
+            # in the log, so that fail2ban can ban the correct IP.
+            header_up X-Real-IP {remote_host}
+          }
         '';
       };
-
-      yakumo.services.metadata.vaultwarden.reverseProxy = {
-        caddyIntegration.enable = true;
-      };
-    }
-  );
+    };
+  };
 }
