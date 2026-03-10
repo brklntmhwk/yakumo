@@ -19,7 +19,7 @@ in
     enable = mkEnableOption "headscale";
   };
 
-  config = mkIf cfg.enable mkMerge [
+  config = mkIf cfg.enable (mkMerge [
     {
       services.headscale = {
         inherit (meta)
@@ -123,5 +123,5 @@ in
         caddyIntegration.enable = true;
       };
     }
-  ];
+  ]);
 }

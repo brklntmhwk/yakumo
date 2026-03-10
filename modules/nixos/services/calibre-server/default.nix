@@ -21,12 +21,12 @@ in
   config = mkIf cfg.enable {
     services.calibre-server = {
       inherit (meta)
-        address # Default: '0.0.0.0'
         port # Default: 8080
         ;
       enable = true;
       group = "calibre-server"; # Default: 'calibre-server'
       user = "calibre-server"; # Default: 'calibre-server'
+      host = meta.address; # Default: '0.0.0.0'
       openFirewall = false; # Default: false
       extraFlags = [ ];
       libraries = [ ];

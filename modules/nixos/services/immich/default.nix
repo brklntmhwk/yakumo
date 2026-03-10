@@ -10,6 +10,7 @@ let
   inherit (lib)
     mkEnableOption
     mkIf
+    mkMerge
     ;
   cfg = config.yakumo.services.immich;
   meta = config.yakumo.services.metadata.immich;

@@ -36,7 +36,7 @@ in
     };
   };
 
-  config = mkIf cfg.enable mkMerge [
+  config = mkIf cfg.enable (mkMerge [
     {
       services.grafana = {
         enable = true;
@@ -258,5 +258,5 @@ in
         settings = { };
       };
     })
-  ];
+  ]);
 }
