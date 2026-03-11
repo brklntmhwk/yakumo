@@ -30,7 +30,10 @@ in
   config = mkIf cfg.enable {
     # Enable the MicroVM host daemon.
     # This provides the CLI tools and Systemd management for the hypervisors.
-    microvm.host.enable = true;
+    microvm = {
+      # We don't have to do this, but enable it explicitly.
+      host.enable = true; # Default: true
+    };
 
     networking = {
       # Establish the Network Bridge.
@@ -45,7 +48,7 @@ in
         "br0" = {
           useDHCP = true;
         };
-        # Ensure DHCP isn't trying to grab IPs on the raw physical interface anymore
+        # Ensure DHCP isn't trying to grab IPs on the raw physical interface anymore.
         "${cfg.wanInterface}" = {
           useDHCP = false;
         };
