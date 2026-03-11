@@ -13,15 +13,15 @@
   init = {
     defaultBranch = "main";
   };
-  gpg = {
-    format = "ssh";
-  };
-  commit = {
-    gpgSign = true;
-  };
-  tag = {
-    forceSignAnnotated = true;
-  };
+  # gpg = {
+  #   format = "ssh";
+  # };
+  # commit = {
+  #   gpgSign = true;
+  # };
+  # tag = {
+  #   forceSignAnnotated = true;
+  # };
   push = {
     # Automatically set upstream on push if it doesn't exist. (Git 2.37+)
     autoSetupRemote = true;
