@@ -1,3 +1,4 @@
+# WIP.
 {
   config,
   lib,
@@ -22,6 +23,12 @@
         manager = "networkmanager";
         wifi.enable = true;
       };
+      # virt = {
+      #   microvm.host = {
+      #     enable = true;
+      #     wanInterface = "enp1s0";
+      #   };
+      # };
       # persistence.yosuga = {
       #   enable = true;
       #   directories = [
