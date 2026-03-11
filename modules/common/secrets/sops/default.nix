@@ -32,6 +32,8 @@
           # and the PIV feature to register it in a YubiKey.
           # We use it as the admin key to Sops.
           plugins = mkIf (elem "token/yubikey/piv" hardwareMods) [ pkgs.age-plugin-yubikey ];
+          # This results in:
+          # "sops-install-secrets: Imported /etc/ssh/ssh_host_ed25519_key as age key with fingerprint age1..."
           sshKeyPaths =
             if opensshCfg.enable then
               map (k: k.path) opensshCfg.hostKeys
