@@ -32,7 +32,7 @@ in
     # };
     git_signing_key = {
       sopsFile = flakeRoot + "/users/otogaki/secrets/default.yaml";
-      owner = config.yakumo.user.name;
+      owner = "otogaki";
       mode = "0400";
     };
   };
