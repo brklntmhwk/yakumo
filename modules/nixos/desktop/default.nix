@@ -54,7 +54,6 @@ in
 
       yakumo.user.packages = attrValues {
         inherit (pkgs)
-          cliphist # Wayland clipboard manager for both text and images
           slurp # Screen capture tool
           swappy # Screenshot editing tool
           wev # Wayland Key event viewer

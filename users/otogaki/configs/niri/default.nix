@@ -172,8 +172,6 @@ in
   spawn-sh-at-startup = [
     { _args = [ "awww img ${theme.wallpaper}" ]; }
     { _args = [ "fcitx5 -d -r" ]; }
-    { _args = [ "wl-paste --type text --watch cliphist store" ]; }
-    { _args = [ "wl-paste --type image --watch cliphist store" ]; }
   ];
   # spawn-at-startup = [
   #   # Since 25.08, Niri integrates with xwayland-satellite out of the box;

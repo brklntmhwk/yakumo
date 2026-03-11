@@ -17,7 +17,7 @@ let
 in
 {
   imports = [
-    inputs.microvm.nixosModules.host
+    # inputs.microvm.nixosModules.host
   ];
 
   options.yakumo.system.virt.microvm.host = {
@@ -31,10 +31,10 @@ in
   config = mkIf cfg.enable {
     # Enable the MicroVM host daemon.
     # This provides the CLI tools and Systemd management for the hypervisors.
-    microvm = {
-      # We don't have to do this, but enable it explicitly.
-      host.enable = true; # Default: true
-    };
+    # microvm = {
+    #   # We don't have to do this, but enable it explicitly.
+    #   host.enable = true; # Default: true
+    # };
 
     networking = {
       # Establish the Network Bridge.

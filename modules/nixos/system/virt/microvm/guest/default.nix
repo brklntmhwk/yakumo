@@ -20,7 +20,7 @@ let
 in
 {
   imports = [
-    inputs.microvm.nixosModules.microvm
+    # inputs.microvm.nixosModules.microvm
   ];
 
   options.yakumo.system.virt.microvm.guest = {
@@ -61,31 +61,31 @@ in
   };
 
   config = mkIf cfg.enable {
-    microvm = {
-      inherit (cfg)
-        hypervisor # Default: 'qemu'
-        vcpu # Default: 1
-        ;
-      mem = cfg.memorySize; # Default: 512
-      # The network connection to the host.
-      interfaces = [
-        {
-          type = "tap"; # Options: 'user', 'macvtap', 'bridge'
-          id = cfg.tapInterface;
-          mac = cfg.macAddress;
-        }
-      ];
-      shares = [
-        {
-          proto = "virtiofs"; # Default: '9p' (Options: 'virtiofs')
-          tag = "ro-store";
-          source = "/nix/store";
-          mountPoint = "/nix/store";
-        }
-      ];
-      # Path to the writable /nix/store overlay.
-      # This allows you to build Nix derivations inside the VM.
-      writableStoreOverlay = "/nix/.rw-store"; # Default: null
-    };
+    # microvm = {
+    #   inherit (cfg)
+    #     hypervisor # Default: 'qemu'
+    #     vcpu # Default: 1
+    #     ;
+    #   mem = cfg.memorySize; # Default: 512
+    #   # The network connection to the host.
+    #   interfaces = [
+    #     {
+    #       type = "tap"; # Options: 'user', 'macvtap', 'bridge'
+    #       id = cfg.tapInterface;
+    #       mac = cfg.macAddress;
+    #     }
+    #   ];
+    #   shares = [
+    #     {
+    #       proto = "virtiofs"; # Default: '9p' (Options: 'virtiofs')
+    #       tag = "ro-store";
+    #       source = "/nix/store";
+    #       mountPoint = "/nix/store";
+    #     }
+    #   ];
+    #   # Path to the writable /nix/store overlay.
+    #   # This allows you to build Nix derivations inside the VM.
+    #   writableStoreOverlay = "/nix/.rw-store"; # Default: null
+    # };
   };
 }

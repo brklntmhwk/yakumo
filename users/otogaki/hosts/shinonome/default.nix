@@ -54,6 +54,15 @@ in
         awww = {
           enable = true;
         };
+        cliphist = {
+          enable = true;
+          extraArgs = [
+            "-max-dedupe-search"
+            "20"
+            "-max-items"
+            "120"
+          ];
+        };
         mako = {
           enable = true;
           settings = import ../../configs/mako { inherit theme; };

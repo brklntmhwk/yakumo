@@ -36,8 +36,6 @@ in
     "$terminal"
     "fcitx5 -d -r"
     "emacsclient -c -a ''"
-    "wl-paste --type text --watch cliphist store"
-    "wl-paste --type image --watch cliphist store"
     "[workspace name:Dev silent] $browser"
     "[workspace name:Writing silent] firefox"
     "[workspace special:Scratchpad silent] $terminal"
