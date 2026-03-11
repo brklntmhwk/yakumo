@@ -56,10 +56,6 @@ in
       # Explicitly define this so it can be read by other modules.
       home = if isDarwin then "/Users/${cfg.name}" else "/home/${cfg.name}";
       uid = mkDefault 1000;
-      # TODO: remove this after figuring out how to manage passwords.
-      # Set a placeholder password to satisfy the NixOS anti-lockout assertion.
-      # This enables you to use 'sudo'. You can change it with the `passwd` command later.
-      initialPassword = "password";
     };
   };
 }
