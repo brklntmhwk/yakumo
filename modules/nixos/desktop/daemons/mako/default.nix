@@ -45,50 +45,32 @@ in
       };
     };
     package = mkPackageOption pkgs "mako" { };
-    packageWrapped = mkOption {
-      type = types.package;
-      readOnly = true;
-      description = ''
-        The final wrapped Mako package, including all configurations.
-        Use this if you need to reference it in other modules.
-      '';
-    };
   };
 
   config = mkIf cfg.enable (
     let
-      inherit (lib) getExe getName;
+      inherit (lib) getExe;
       inherit (pkgs) writeText;
-      inherit (murakumo.wrappers) mkWrapper;
       inherit (murakumo.generators) toMakoConf;
 
       makoConf = writeText "config" (toMakoConf {
         attrs = cfg.settings;
       });
-      makoWrapped = mkWrapper {
-        pkg = cfg.package;
-        name = "${getName cfg.package}-${config.yakumo.user.name}";
-        prependFlags = [
-          "--config"
-          makoConf
-        ];
-      };
     in
     {
-      yakumo.desktop.daemons.mako.packageWrapped = makoWrapped;
-      yakumo.user.packages = [ makoWrapped ];
+      yakumo.user.packages = [ cfg.package ];
 
       systemd.user.services.mako = {
         unitConfig = {
           After = [ "graphical-session.target" ];
-          Description = "Mako: Notification daemon";
+          Description = "Mako: Notification daemon.";
           Documentation = "man:mako(1)";
           PartOf = [ "graphical-session.target" ];
         };
         serviceConfig = {
           BusName = "org.freedesktop.Notifications";
-          ExecReload = "${makoWrapped}/bin/makoctl reload";
-          ExecStart = "${getExe makoWrapped}";
+          ExecReload = "${cfg.package}/bin/makoctl reload";
+          ExecStart = "${getExe cfg.package} --config ${makoConf}";
           Restart = "on-failure";
           RestartSec = 1;
           Type = "dbus";

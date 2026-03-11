@@ -79,50 +79,32 @@ in
       '';
     };
     package = mkPackageOption pkgs "swayidle" { };
-    packageWrapped = mkOption {
-      type = types.package;
-      readOnly = true;
-      description = ''
-        The final wrapped Swayidle package, including all configurations.
-        Use this if you need to reference it in other modules.
-      '';
-    };
   };
 
   config = mkIf cfg.enable (
     let
-      inherit (lib) getExe getName;
+      inherit (lib) getExe;
       inherit (pkgs) writeText;
-      inherit (murakumo.wrappers) mkWrapper;
       inherit (murakumo.generators) toSwayidleConf;
 
       swayidleConf = writeText "config" (toSwayidleConf {
         attrs = cfg.settings;
       });
-      swayidleWrapped = mkWrapper {
-        pkg = cfg.package;
-        name = "${getName cfg.package}-${config.yakumo.user.name}";
-        prependFlags = [
-          "-w" # Wait for command to finish executing before continuing
-          "-C"
-          swayidleConf
-        ];
-      };
     in
     {
-      yakumo.desktop.daemons.swayidle.packageWrapped = swayidleWrapped;
-      yakumo.user.packages = [ swayidleWrapped ];
+      yakumo.user.packages = [ cfg.package ];
 
       systemd.user.services.swayidle = {
         unitConfig = {
           After = [ "graphical-session.target" ];
           ConditionEnvironment = "WAYLAND_DISPLAY";
-          Description = "Swayidle: Idle daemon for Wayland desktop";
+          Description = "Swayidle: Idle daemon for Wayland desktop.";
           Documentation = "man:swayidle(1)";
           PartOf = [ "graphical-session.target" ];
         };
         serviceConfig = {
-          ExecStart = "${getExe swayidleWrapped}";
+          # '-w': Wait for the command to finish executing before continuing.
+          ExecStart = "${getExe cfg.package} -w -C ${swayidleConf}";
           Restart = "on-failure";
           RestartSec = 1;
         };

@@ -47,14 +47,6 @@ in
       '';
     };
     package = mkPackageOption pkgs "hypridle" { };
-    packageWrapped = mkOption {
-      type = types.package;
-      readOnly = true;
-      description = ''
-        The final wrapped Hypridle package, including all configurations.
-        Use this if you need to reference it in other modules.
-      '';
-    };
   };
 
   config = mkIf cfg.enable (mkMerge [
@@ -68,36 +60,26 @@ in
     }
     (
       let
-        inherit (lib) getExe getName;
+        inherit (lib) getExe;
         inherit (pkgs) writeText;
-        inherit (murakumo.wrappers) mkWrapper;
         inherit (murakumo.generators) toHyprconf;
 
         hypridleConf = writeText "hypridle.conf" (toHyprconf {
           attrs = cfg.settings;
         });
-        hypridleWrapped = mkWrapper {
-          pkg = cfg.package;
-          name = "${getName cfg.package}-${config.yakumo.user.name}";
-          prependFlags = [
-            "--config"
-            hypridleConf
-          ];
-        };
       in
       {
-        yakumo.desktop.daemons.hypridle.packageWrapped = hypridleWrapped;
-        yakumo.user.packages = [ hypridleWrapped ];
+        yakumo.user.packages = [ cfg.package ];
 
         systemd.user.services.hypridle = {
           unitConfig = {
             After = [ "hyprland-session.target" ];
             ConditionEnvironment = "WAYLAND_DISPLAY";
-            Description = "Hypridle: Idle daemon for Hyprland";
+            Description = "Hypridle: Idle daemon for Hyprland.";
             PartOf = [ "hyprland-session.target" ];
           };
           serviceConfig = {
-            ExecStart = "${getExe hypridleWrapped}";
+            ExecStart = "${getExe cfg.package} --config ${hypridleConf}";
             Restart = "on-failure";
             RestartSec = 1;
           };
