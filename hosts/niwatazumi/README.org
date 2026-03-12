@@ -22,3 +22,11 @@ Niwatazumi is the steadfast home server and central NAS of the Yakumo architectu
 ** Partitioning
 
 WIP.
+
+** Guests
+| Name    | Description  | Services                                                              |
+|---------+--------------+-----------------------------------------------------------------------|
+| [[file:hosts/niwatazumi/guests/app/README.org][app]]     | App.         | anki-sync-server, calibre-web, forgejo, mealie, paperless-ngx, shiori |
+| [[file:hosts/niwatazumi/guests/data/README.org][data]]    | Data.        | influxdb, postgresql                                                  |
+| [[file:hosts/niwatazumi/guests/observe/README.org][observe]] | Observation. | grafana                                                               |
+| [[file:hosts/niwatazumi/guests/storage/README.org][storage]] | Storage.     | garage, immich, samba                                                 |

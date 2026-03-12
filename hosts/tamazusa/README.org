@@ -15,3 +15,10 @@ WIP.
 ** Partitioning
 
 WIP.
+
+** Guests
+| Name   | Description   | Services      |
+|--------+---------------+---------------|
+| [[file:hosts/tamazusa/guests/mail/README.org][mail]]   | Mail.         | stalwart-mail |
+| [[file:hosts/tamazusa/guests/mesh/README.org][mesh]]   | Mesh.         | headscale     |
+| [[file:hosts/tamazusa/guests/notify/README.org][notify]] | Notification. | ntfy-sh       |
