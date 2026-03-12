@@ -45,12 +45,6 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    # --- Nix utils ---
-    nix-index-database = {
-      url = "github:nix-community/nix-index-database";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-
     # --- Secrets ---
     sops-nix = {
       url = "github:Mic92/sops-nix";
