@@ -3,7 +3,7 @@ keys:
   # Users per machine
   - &otogaki_tsutsuyami age1lhxarync6hasuzwrs99ef6np8de2a2rfs0qrv7rekv8d57q8e47spcy539
   - &otogaki_utsusemi age143wa96cj9xywqhdm6kv77uqngg0tumdhvfyqh7pz89jsrujpev0slsz43x
-  # - &otogaki_shinonome xxxxx
+  - &otogaki_shinonome age15ysudqqw44dcfgye8dl5kfqza0vr67vdvvuzwv7hkdner0lp8q7qstn07x
   # - &otogaki_niwatazumi xxxxx
   # - &otogaki_sazanami xxxxx
   # - &otogaki_tamazusa xxxxx
@@ -11,7 +11,7 @@ keys:
   # Machines
   - &tsutsuyami age1er88d8zrfatkvtsyrdunppqz2kagy48p6zd8jaqhh260lkfp6peq4wl6kq
   - &utsusemi age1245wq459mrmqvaywx6flatke2m557j8azsvs4kf2alnvxu5063sqzsjj8v
-  # - &shinonome xxxxx
+  - &shinonome age1ms65f94a5e56zugqxwjlmgx9k8f5at5cmexywznv0gtwrn44sutqvlxscx
   # - &niwatazumi xxxxx
   # - &sazanami xxxxx
   # - &tamazusa xxxxx
@@ -23,7 +23,7 @@ creation_rules:
           - *admin
           - *tsutsuyami
           - *utsusemi
-          # - *shinonome
+          - *shinonome
           # - *niwatazumi
           # - *sazanami
           # - *tamazusa
@@ -34,7 +34,7 @@ creation_rules:
           - *admin
           - *otogaki_tsutsuyami
           - *otogaki_utsusemi
-          # - *otogaki_shinonome
+          - *otogaki_shinonome
           # - *otogaki_niwatazumi
           # - *otogaki_sazanami
           # - *otogaki_tamazusa
