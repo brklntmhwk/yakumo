@@ -33,39 +33,42 @@ let
       Ensure you have created `${configPathStr}/default.nix`.
     '';
 
-  mkHost =
-    { builder, platformType }:
+  mkSystem =
+    {
+      builder,
+      platformType,
+      isGuest ? false,
+    }:
     name:
     {
       username,
       system,
       overlays ? defaultOverlays,
       extraModules ? [ ],
+      hostName ? name,
+      hostConfigPath ? ../hosts/${name},
+      # Guests are typically headless server nodes, so we default to skipping the user profile.
+      userConfigPath ? if isGuest then null else ../users/${username}/hosts/${name},
     }:
-    let
-      hostConfigs = ../hosts/${name};
-      userConfigs = ../users/${username}/hosts/${name};
-    in
-    if !pathExists hostConfigs then
+    if hostConfigPath != null && !pathExists hostConfigPath then
       throwNotFoundErr {
         inherit name;
         target = "host";
-        configPath = hostConfigs;
+        configPath = hostConfigPath;
       }
-    else if !pathExists userConfigs then
+    else if userConfigPath != null && !pathExists userConfigPath then
       throwNotFoundErr {
         name = username;
         target = "user";
-        configPath = userConfigs;
+        configPath = userConfigPath;
       }
     else
       builder {
         modules = [
-          hostConfigs
-          userConfigs
+          hostConfigPath
           {
             # The name of this machine on the network.
-            networking.hostName = mkDefault name;
+            networking.hostName = mkDefault hostName;
             nixpkgs = {
               inherit overlays;
               config.allowUnfreePredicate = pkg: warn "Allowing unfree package: ${getName pkg}" true;
@@ -83,8 +86,10 @@ let
         ]
         # Use `lib.optionals` instead of `lib.optional` here;
         # the former returns the given list as is if the condition is true.
+        ++ optionals (userConfigPath != null) [ userConfigPath ]
         ++ optionals (platformType == "nixos") [ self.nixosModules.default ]
         ++ optionals (platformType == "darwin") [ self.darwinModules.default ]
+        ++ optionals isGuest [ inputs.microvm.nixosModules.microvm ]
         ++ extraModules;
 
         # Put these into the modules' scope and make them accesible.
@@ -107,12 +112,18 @@ in
     "aarch64-darwin"
   ];
 
-  mkNixOsHosts = mapAttrs (mkHost {
+  mkNixOsHosts = mapAttrs (mkSystem {
     builder = inputs.nixpkgs.lib.nixosSystem;
     platformType = "nixos";
   });
 
-  mkDarwinHosts = mapAttrs (mkHost {
+  mkNixOsGuests = mapAttrs (mkSystem {
+    builder = inputs.nixpkgs.lib.nixosSystem;
+    platformType = "nixos";
+    isGuest = true;
+  });
+
+  mkDarwinHosts = mapAttrs (mkSystem {
     builder = inputs.darwin.lib.darwinSystem;
     platformType = "darwin";
   });

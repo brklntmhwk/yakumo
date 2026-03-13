@@ -12,7 +12,7 @@ let
       # Inject 'self' into this scope so the lib modules below can refer to it.
       inherit self;
 
-      # Don't include 'hosts' and 'overlays' here. Treat them specially.
+      # Don't include 'systems' and 'overlays' here. Treat them specially.
       assertions = final.callPackage ./assertions.nix { };
       configs = final.callPackage ./configs.nix { };
       generators = final.callPackage ./generators.nix { };
@@ -22,13 +22,19 @@ let
       wrappers = final.callPackage ./wrappers.nix { };
     });
 
-  hosts = import ./hosts.nix { inherit self lib mkMurakumo; };
+  # These are here outside the Murakumo scope to be used in flake.nix.
+  systems = import ./systems.nix { inherit self lib mkMurakumo; };
   modules = import ./modules.nix { inherit lib; };
   overlays = import ./overlays.nix { inherit lib; };
 in
 {
   inherit mkMurakumo;
-  inherit (hosts) forAllSystems mkNixOsHosts mkDarwinHosts;
+  inherit (systems)
+    forAllSystems
+    mkNixOsHosts
+    mkNixOsGuests
+    mkDarwinHosts
+    ;
   inherit (modules) mapFilterModulesRecursively mkPackages;
   inherit (overlays) mkOverlays;
 }
