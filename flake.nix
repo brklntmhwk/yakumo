@@ -39,12 +39,6 @@
     # --- Home directory management (Limited to NixOS) ---
     nix-maid.url = "github:viperML/nix-maid";
 
-    # --- Declarative disk partitioning ---
-    disko = {
-      url = "github:nix-community/disko";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-
     # --- Secrets ---
     sops-nix = {
       url = "github:Mic92/sops-nix";
