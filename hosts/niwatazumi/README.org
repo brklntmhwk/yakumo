@@ -24,9 +24,9 @@ Niwatazumi is the steadfast home server and central NAS of the Yakumo architectu
 WIP.
 
 ** Guests
-| Name    | Description  | Services                                                              |
-|---------+--------------+-----------------------------------------------------------------------|
-| [[file:hosts/niwatazumi/guests/app/README.org][app]]     | App.         | anki-sync-server, calibre-web, forgejo, mealie, paperless-ngx, shiori |
-| [[file:hosts/niwatazumi/guests/data/README.org][data]]    | Data.        | influxdb, postgresql                                                  |
-| [[file:hosts/niwatazumi/guests/observe/README.org][observe]] | Observation. | grafana                                                               |
-| [[file:hosts/niwatazumi/guests/storage/README.org][storage]] | Storage.     | garage, immich, samba                                                 |
+| Name      | Description                                                                                     | Services                                                              |
+|-----------+-------------------------------------------------------------------------------------------------+-----------------------------------------------------------------------|
+| [[file:hosts/niwatazumi/guests/hayase/README.org][hayase]]    | The application compute node hosting active web services.                                       | anki-sync-server, calibre-web, forgejo, mealie, paperless-ngx, shiori |
+| [[file:hosts/niwatazumi/guests/minamoto/README.org][minamoto]]  | The centralized DB engine.                                                                      | influxdb, postgresql                                                  |
+| [[file:hosts/niwatazumi/guests/minamo/README.org][minamo]]    | The observability node dedicated to central logging, metrics, and dashboards.                   | Grafana stack                                                         |
+| [[file:hosts/niwatazumi/guests/wadatsumi/README.org][wadatsumi]] | The centralized storage server for managing heavy file systems, bulk object storage, and media. | garage, immich, samba                                                 |

@@ -20,8 +20,8 @@ Sazanami is a compact server dedicated to smart home automation and geospatial d
 WIP.
 
 ** Guests
-| Name     | Description | Services                                      |
-|----------+-------------+-----------------------------------------------|
-| [[file:hosts/sazanami/guests/gateway/README.org][gateway]]  | Gateway.    | adguardhome, caddy                            |
-| [[file:hosts/sazanami/guests/identity/README.org][identity]] | Identity.   | kanidm, vaultwarden                           |
-| [[file:hosts/sazanami/guests/iot/README.org][iot]]      | IoT.        | home-assistant, mosquitto, owntracks-recorder |
+| Name       | Description                                                                     | Services                                      |
+|------------+---------------------------------------------------------------------------------+-----------------------------------------------|
+| [[file:hosts/sazanami/guests/migiwa/README.org][migiwa]]     | The network edge handling reverse proxying, SSL termination, and DNS filtering. | adguardhome, caddy                            |
+| [[file:hosts/sazanami/guests/mizukagami/README.org][mizukagami]] | The authentication provider and secrets manager.                                | kanidm, vaultwarden                           |
+| [[file:hosts/sazanami/guests/shibuki/README.org][shibuki]]    | A lightweight telemetry node for home automation and location tracking.         | home-assistant, mosquitto, owntracks-recorder |
