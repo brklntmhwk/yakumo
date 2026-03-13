@@ -1,6 +1,6 @@
 {
   description = ''
-    Yakumo is the sanctuary ー Rooted in the ancient song of building a dwelling
+    Yakumo is the sanctuaryーRooted in the ancient song of building a dwelling
     for one's beloved, it stands as the home I weave from dotfiles, a shelter
     for my digital life.
   '';
@@ -118,36 +118,79 @@
         imports = lib'.mapFilterModulesRecursively ./modules import [ "darwin" ];
       };
 
-      nixosConfigurations = lib'.mkNixOsHosts {
-        tsutsuyami = {
-          system = "x86_64-linux";
-          username = "otogaki";
+      nixosConfigurations =
+        lib'.mkNixOsHosts {
+          tsutsuyami = {
+            system = "x86_64-linux";
+            username = "otogaki";
+          };
+          utsusemi = {
+            system = "x86_64-linux";
+            username = "otogaki";
+            extraModules = [ inputs.nixos-wsl.nixosModules.default ];
+          };
+          shinonome = {
+            system = "aarch64-linux";
+            username = "otogaki";
+            extraModules = [
+              inputs.nixos-apple-silicon.nixosModules.default
+            ];
+          };
+          # niwatazumi = {
+          #   system = "x86_64-linux";
+          #   username = "otogaki";
+          # };
+          # sazanami = {
+          #   system = "x86_64-linux";
+          #   username = "otogaki";
+          # };
+          # tamazusa = {
+          #   system = "x86_64-linux";
+          #   username = "otogaki";
+          # };
+        }
+        // lib'.mkNixOsGuests {
+          # hayase = {
+          #   system = "x86_64-linux";
+          #   username = "otogaki";
+          # };
+          # minamo = {
+          #   system = "x86_64-linux";
+          #   username = "otogaki";
+          # };
+          # minamoto = {
+          #   system = "x86_64-linux";
+          #   username = "otogaki";
+          # };
+          # wadatsumi = {
+          #   system = "x86_64-linux";
+          #   username = "otogaki";
+          # };
+          # migiwa = {
+          #   system = "x86_64-linux";
+          #   username = "otogaki";
+          # };
+          # mizukagami = {
+          #   system = "x86_64-linux";
+          #   username = "otogaki";
+          # };
+          # shibuki = {
+          #   system = "x86_64-linux";
+          #   username = "otogaki";
+          # };
+          # fumi = {
+          #   system = "x86_64-linux";
+          #   username = "otogaki";
+          # };
+          # hibiki = {
+          #   system = "x86_64-linux";
+          #   username = "otogaki";
+          # };
+          # musubi = {
+          #   system = "x86_64-linux";
+          #   username = "otogaki";
+          # };
         };
-        utsusemi = {
-          system = "x86_64-linux";
-          username = "otogaki";
-          extraModules = [ inputs.nixos-wsl.nixosModules.default ];
-        };
-        shinonome = {
-          system = "aarch64-linux";
-          username = "otogaki";
-          extraModules = [
-            inputs.nixos-apple-silicon.nixosModules.default
-          ];
-        };
-        # niwatazumi = {
-        #   system = "x86_64-linux";
-        #   username = "otogaki";
-        # };
-        # sazanami = {
-        #   system = "x86_64-linux";
-        #   username = "otogaki";
-        # };
-        # tamazusa = {
-        #   system = "x86_64-linux";
-        #   username = "otogaki";
-        # };
-      };
 
       # These are not for external use.
       # darwinModules.default = {
