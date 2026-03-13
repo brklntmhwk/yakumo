@@ -26,7 +26,7 @@ WIP.
 ** Guests
 | Name      | Description                                                                                     | Services                                                              |
 |-----------+-------------------------------------------------------------------------------------------------+-----------------------------------------------------------------------|
-| [[file:hosts/niwatazumi/guests/hayase/README.org][hayase]]    | The application compute node hosting active web services.                                       | anki-sync-server, calibre-web, forgejo, mealie, paperless-ngx, shiori |
-| [[file:hosts/niwatazumi/guests/minamoto/README.org][minamoto]]  | The centralized DB engine.                                                                      | influxdb, postgresql                                                  |
-| [[file:hosts/niwatazumi/guests/minamo/README.org][minamo]]    | The observability node dedicated to central logging, metrics, and dashboards.                   | Grafana stack                                                         |
-| [[file:hosts/niwatazumi/guests/wadatsumi/README.org][wadatsumi]] | The centralized storage server for managing heavy file systems, bulk object storage, and media. | garage, immich, samba                                                 |
+| [[file:guests/hayase/README.org][hayase]]    | The application compute node hosting active web services.                                       | anki-sync-server, calibre-web, forgejo, mealie, paperless-ngx, shiori |
+| [[file:guests/minamoto/README.org][minamoto]]  | The centralized DB engine.                                                                      | influxdb, postgresql                                                  |
+| [[file:guests/minamo/README.org][minamo]]    | The observability node dedicated to central logging, metrics, and dashboards.                   | Grafana stack                                                         |
+| [[file:guests/wadatsumi/README.org][wadatsumi]] | The centralized storage server for managing heavy file systems, bulk object storage, and media. | garage, immich, samba                                                 |

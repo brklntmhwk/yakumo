@@ -22,6 +22,6 @@ WIP.
 ** Guests
 | Name       | Description                                                                     | Services                                      |
 |------------+---------------------------------------------------------------------------------+-----------------------------------------------|
-| [[file:hosts/sazanami/guests/migiwa/README.org][migiwa]]     | The network edge handling reverse proxying, SSL termination, and DNS filtering. | adguardhome, caddy                            |
-| [[file:hosts/sazanami/guests/mizukagami/README.org][mizukagami]] | The authentication provider and secrets manager.                                | kanidm, vaultwarden                           |
-| [[file:hosts/sazanami/guests/shibuki/README.org][shibuki]]    | A lightweight telemetry node for home automation and location tracking.         | home-assistant, mosquitto, owntracks-recorder |
+| [[file:guests/migiwa/README.org][migiwa]]     | The network edge handling reverse proxying, SSL termination, and DNS filtering. | adguardhome, caddy                            |
+| [[file:guests/mizukagami/README.org][mizukagami]] | The authentication provider and secrets manager.                                | kanidm, vaultwarden                           |
+| [[file:guests/shibuki/README.org][shibuki]]    | A lightweight telemetry node for home automation and location tracking.         | home-assistant, mosquitto, owntracks-recorder |

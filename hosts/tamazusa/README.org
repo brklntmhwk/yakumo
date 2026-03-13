@@ -19,6 +19,6 @@ WIP.
 ** Guests
 | Name   | Description                                                              | Services      |
 |--------+--------------------------------------------------------------------------+---------------|
-| [[file:hosts/tamazusa/guests/fumi/README.org][fumi]]   | The dedicated, public-facing email server stack.                         | stalwart-mail |
-| [[file:hosts/tamazusa/guests/musubi/README.org][musubi]] | The central coordinator for the WireGuard overlay network.               | headscale     |
-| [[file:hosts/tamazusa/guests/hibiki/README.org][hibiki]] | The dispatch server for delivering push notifications and system alerts. | ntfy-sh       |
+| [[file:guests/fumi/README.org][fumi]]   | The dedicated, public-facing email server stack.                         | stalwart-mail |
+| [[file:guests/musubi/README.org][musubi]] | The central coordinator for the WireGuard overlay network.               | headscale     |
+| [[file:guests/hibiki/README.org][hibiki]] | The dispatch server for delivering push notifications and system alerts. | ntfy-sh       |
