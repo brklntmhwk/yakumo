@@ -166,10 +166,6 @@
           #   system = "x86_64-linux";
           #   username = "otogaki";
           # };
-          # fumi = {
-          #   system = "x86_64-linux";
-          #   username = "otogaki";
-          # };
         }
         // lib'.mkNixOsGuests "sazanami" {
           # migiwa = {
@@ -186,6 +182,10 @@
           # };
         }
         // lib'.mkNixOsGuests "tamazusa" {
+          # fumi = {
+          #   system = "x86_64-linux";
+          #   username = "otogaki";
+          # };
           # hibiki = {
           #   system = "x86_64-linux";
           #   username = "otogaki";
