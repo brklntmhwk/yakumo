@@ -149,7 +149,7 @@
           #   username = "otogaki";
           # };
         }
-        // lib'.mkNixOsGuests {
+        // lib'.mkNixOsGuests "niwatazumi" {
           # hayase = {
           #   system = "x86_64-linux";
           #   username = "otogaki";
@@ -166,6 +166,12 @@
           #   system = "x86_64-linux";
           #   username = "otogaki";
           # };
+          # fumi = {
+          #   system = "x86_64-linux";
+          #   username = "otogaki";
+          # };
+        }
+        // lib'.mkNixOsGuests "sazanami" {
           # migiwa = {
           #   system = "x86_64-linux";
           #   username = "otogaki";
@@ -178,10 +184,8 @@
           #   system = "x86_64-linux";
           #   username = "otogaki";
           # };
-          # fumi = {
-          #   system = "x86_64-linux";
-          #   username = "otogaki";
-          # };
+        }
+        // lib'.mkNixOsGuests "tamazusa" {
           # hibiki = {
           #   system = "x86_64-linux";
           #   username = "otogaki";

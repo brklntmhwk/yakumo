@@ -117,11 +117,24 @@ in
     platformType = "nixos";
   });
 
-  mkNixOsGuests = mapAttrs (mkSystem {
-    builder = inputs.nixpkgs.lib.nixosSystem;
-    platformType = "nixos";
-    isGuest = true;
-  });
+  mkNixOsGuests =
+    parentHostName:
+    mapAttrs (
+      guestName: args:
+      mkSystem
+        {
+          builder = inputs.nixpkgs.lib.nixosSystem;
+          platformType = "nixos";
+          isGuest = true;
+        }
+        guestName
+        (
+          args
+          // {
+            hostConfigPath = args.hostConfigPath or ../hosts/${parentHostName}/guests/${guestName};
+          }
+        )
+    );
 
   mkDarwinHosts = mapAttrs (mkSystem {
     builder = inputs.darwin.lib.darwinSystem;
