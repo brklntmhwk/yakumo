@@ -2,6 +2,7 @@
 {
   config,
   lib,
+  pkgs,
   ...
 }:
 
@@ -13,6 +14,7 @@ let
     ;
   cfg = config.yakumo.services.headscale;
   meta = config.yakumo.services.metadata.headscale;
+  kanidmMeta = config.yakumo.services.metadata.kanidm;
 in
 {
   options.yakumo.services.headscale = {
@@ -33,7 +35,7 @@ in
           server_url = "https://${meta.domain}";
           database = {
             # Use SQLite for Headscale in order to avoid this chicken and egg deadlock:
-            # - Headscale is expected to be hosted on a cloud VPS, and it needs the
+            # - We expect Headscale to be hosted on a cloud VPS, and it needs the
             # connection to a home server that hosts PostgreSQL.
             # - To reach the home server securely, the VPS routes traffic through
             # the Headscale VPN.
@@ -58,7 +60,8 @@ in
             ];
             update_frequency = "24h"; # Default: '24h'
             urls = [ ];
-            server.private_key_path = "/path/to/derp-server-private.key";
+            # Use the public Tailscale DERP server instead of spinning up a custom
+            # embedded DERP server. No need to specify `server.private_key_path`.
           };
           # DNS (Domain Name System)
           dns = {
@@ -80,9 +83,11 @@ in
             allowed_domains = [ ];
             allowed_users = [ ];
             client_secret_path = config.sops.secrets.headscale_client_secret.path;
-            client_id = "Headscale"; # Default: ''
+            # Set this in lower case because Kanidm standardizes on lowercase client IDs.
+            client_id = "headscale"; # Default: ''
             extra_params = { };
-            issuer = "https://"; # Default: ''
+            # Kanidm's specific OIDC issuer URL format requires appending the client ID.
+            issuer = "https://${kanidmMeta.domain}/oauth2/openid/headscale"; # Default: ''
             # PKCE (Proof Key for Code Exchange): Prevents
             pkce = {
               enabled = true;
@@ -96,12 +101,34 @@ in
             ];
           };
           # ACLs (Access Control Lists)
-          policy = {
-            mode = "file"; # Default: 'file' (Options: 'database')
-            # The path to a HuJSON file that contains ACL policies.
-            # Needed only when the mode option is set to 'file'.
-            path = "/path/to/acls-file";
-          };
+          policy =
+            let
+              aclsHuJson = pkgs.writeText "headscale-acls.hujson" ''
+                {
+                  "acls": [
+                    {
+                      "action": "accept",
+                      "src": [ "*" ],
+                      "dst": [ "*:*" ]
+                    }
+                  ],
+                  "ssh": [
+                    {
+                      "action": "check",
+                      "src": [ "autogroup:members" ],
+                      "dst": [ "autogroup:self" ],
+                      "users": [ "autogroup:nonroot", "root" ],
+                    }
+                  ]
+                }
+              '';
+            in
+            {
+              mode = "file"; # Default: 'file' (Options: 'database')
+              # The path to a HuJSON file that contains ACL policies.
+              # Needed only when the mode option is set to 'file'.
+              path = aclsHuJson;
+            };
           prefixes = {
             # Specify the strategy applied for allocation of IPs to nodes.
             # 'sequential': assigns the next free IP from the previous given IP.
@@ -110,12 +137,9 @@ in
             v4 = "100.64.0.0/10"; # Default: '100.64.0.0/10'
             v6 = "fd7a:115c:a1e0::/48"; # Default: 'fd7a:115c:a1e0::/48'
           };
-          tls_cert_path = "path/to/tls_cert_path"; # Default: null
-          tls_key_path = "path/to/tls_key_path"; # Default: null
-          # Domain name to request a TLS certificate for.
-          tls_letsencrypt_hostname = "headscale"; # Default: ''
-          tls_letsencrypt_challenge_type = "HTTP-01"; # Default: 'HTTP-01' (Options: 'TLS-ALPN-01')
-          tls_letsencrypt_listen = ":http"; # Default: ':http'
+          # Since Caddy will handle the HTTPS frontend, we don't need Headscale's
+          # native TLS and Let's Encrypt configurations.
+          # e.g., `tls_cert_path`, `tls_key_path`, `tls_letsencrypt_hostname`, etc.
         };
       };
 
