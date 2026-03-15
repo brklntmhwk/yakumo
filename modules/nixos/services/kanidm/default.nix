@@ -13,6 +13,7 @@ let
     ;
   cfg = config.yakumo.services.kanidm;
   meta = config.yakumo.services.metadata.kanidm;
+  headscaleMeta = config.yakumo.services.metadata.headscale;
 in
 {
   options.yakumo.services.kanidm = {
@@ -24,14 +25,15 @@ in
       enableClient = true;
       enablePam = true;
       enableServer = true;
-      clientSettings.uri = "http://127.0.0.1:8080";
+      # Specify the Kanidm server address.
+      clientSettings.uri = cfg.serverSettings.origin;
       serverSettings = {
-        inherit (cfg) domain;
+        inherit (meta) domain;
         bindaddress = meta.bindAddress;
         ldapbindaddress = null; # Default: null
         db_path = "/var/lib/kanidm/kanidm.db";
         log_level = "info"; # Default: 'info' (Options: 'debug', 'trace')
-        origin = "https://idm.example.org";
+        origin = "https://${meta.domain}";
         role = "WriteReplica"; # Default: 'WriteReplica' (Options: 'WriteReplicaNoUI', 'ReadOnlyReplica')
         tls_chain = "path/to/tls_chain";
         tls_key = "path/to/tls_key";
@@ -40,10 +42,11 @@ in
           # Schedule backups in cron format.
           schedule = "00 22 * * *";
           # Specify the number of backups to keep. 0 results in no backup.
-          versions = 0; # Default: 0
+          versions = 7; # Default: 0
         };
       };
       unixSettings = {
+        # Set a path to HSM (Hardware Security Module) pin.
         hsm_pin_path = "/var/cache/kanidm-unixd/hsm-pin";
         # Add Kanidm groups that are allowed to login using PAM.
         kanidm.pam_allowed_login_groups = [
@@ -60,11 +63,47 @@ in
         idmAdminPasswordFile = config.sops.secrets.kanidm_idm_admin_passwd.path;
         # Auto-remove an entity from Kanidm when deleting them in this provisioning config.
         autoRemove = true; # Default: true
-        instanceUrl = "https://localhost:8443";
-        extraJsonFile = "path/to/provision.json";
-        groups = { };
-        persons = { };
-        systems.oauth2 = { };
+        instanceUrl = "https://${meta.bindAddress}";
+        groups = {
+          vpn_users = { };
+        };
+        persons = {
+          # TODO: Make this an option.
+          otogaki = {
+            displayName = "Ohma Togaki";
+            legalName = "Ohma Togaki";
+            mailAddresses = [
+              "contact@younagi.dev"
+            ];
+            groups = [
+              "vpn_users"
+            ];
+          };
+        };
+        systems.oauth2 = {
+          headscale = {
+            displayName = "Headscale VPN";
+            originLanding = "https://${headscaleMeta.domain}";
+            originUrl = [
+              "https://${headscaleMeta.domain}/oidc/callback"
+            ];
+            basicSecretFile = config.sops.secrets.headscale_oidc_secret.path;
+            # Map Kanidm groups to returned oauth scopes.
+            # https://kanidm.github.io/kanidm/stable/integrations/oauth2.html#scope-relationships
+            scopeMaps = {
+              "vpn_users" = [
+                "openid"
+                "profile"
+                "email"
+                "groups"
+              ];
+            };
+            # Add additional claims based on which Kanidm groups
+            # an authenticating party belongs to.
+            # https://kanidm.github.io/kanidm/master/integrations/oauth2/custom_claims.html#custom-claim-maps
+            claimMaps = { };
+          };
+        };
       };
     };
 
