@@ -52,6 +52,7 @@ in
         yakumo =
           let
             rusticCfg = config.yakumo.services.rustic;
+            yosugaCfg = config.yakumo.system.persistence.yosuga;
           in
           mkMerge [
             {
@@ -136,7 +137,7 @@ in
                 };
               };
             })
-            (mkIf config.yakumo.system.persistence.yosuga.enable {
+            (mkIf yosugaCfg.enable {
               system.persistence.yosuga = {
                 directories = [
                   {

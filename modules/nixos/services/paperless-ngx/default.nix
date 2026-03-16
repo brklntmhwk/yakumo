@@ -80,7 +80,7 @@ in
             (mkIf rusticCfg.enable {
               services.rustic.backups = {
                 paperless = {
-                  environmentFile = mkIf sopsCfg.enable config.sops.secrets.paperless_env.path;
+                  environmentFile = mkIf sopsCfg.enable config.sops.secrets.rustic_paperless_env.path;
                   timerConfig = {
                     OnCalendar = "*-*-* 02:30:00"; # Run daily at 2:30 a.m.
                     Persistent = true;
@@ -124,6 +124,10 @@ in
       (mkIf sopsCfg.enable {
         sops.secrets = {
           paperless_env = {
+            sopsFile = flakeRoot + "/secrets/default.yaml";
+            owner = "paperless";
+          };
+          rustic_paperless_env = {
             sopsFile = flakeRoot + "/secrets/default.yaml";
             owner = "paperless";
           };

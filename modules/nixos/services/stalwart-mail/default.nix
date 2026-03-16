@@ -23,7 +23,6 @@ in
   config = mkIf cfg.enable (
     let
       stalwartCfg = config.services.stalwart-mail;
-      rusticCfg = config.yakumo.services.rustic;
       sopsCfg = config.yakumo.secrets.sops;
     in
     mkMerge [
@@ -93,38 +92,46 @@ in
           };
         };
 
-        yakumo.services = {
-          metadata.stalwart-mail.reverseProxy = {
-            caddyIntegration.enable = true;
-          };
-        };
+        yakumo =
+          let
+            rusticCfg = config.yakumo.services.rustic;
+          in
+          mkMerge [
+            {
+              services.metadata = {
+                stalwart-mail.reverseProxy = {
+                  caddyIntegration.enable = true;
+                };
+              };
+            }
+            (mkIf rusticCfg.enable {
+              services.rustic.backups = {
+                stalwart = {
+                  environmentFile = mkIf sopsCfg config.sops.secrets.rustic_stalwart_env.path;
+                  timerConfig = {
+                    OnCalendar = "*-*-* 03:00:00"; # Run daily at 3 a.m.
+                    Persistent = true;
+                  };
+                  settings = {
+                    repository = "s3:https://your-s3-endpoint/bucket/stalwart-mail";
+                    backup = {
+                      sources = [ "/var/lib/stalwart-mail" ];
+                    };
+                    forget = {
+                      keep-daily = 7;
+                      keep-weekly = 4;
+                      keep-monthly = 6;
+                      prune = true;
+                    };
+                  };
+                };
+              };
+            })
+          ];
       }
-      (mkIf rusticCfg.enable {
-        yakumo.services.rustic.backups = {
-          stalwart = {
-            environmentFile = mkIf sopsCfg config.sops.secrets.stalwart_env.path;
-            timerConfig = {
-              OnCalendar = "*-*-* 03:00:00"; # Run daily at 3 a.m.
-              Persistent = true;
-            };
-            settings = {
-              repository = "s3:https://your-s3-endpoint/bucket/stalwart-mail";
-              backup = {
-                sources = [ "/var/lib/stalwart-mail" ];
-              };
-              forget = {
-                keep-daily = 7;
-                keep-weekly = 4;
-                keep-monthly = 6;
-                prune = true;
-              };
-            };
-          };
-        };
-      })
       (mkIf sopsCfg.enable {
         sops.secrets = {
-          stalwart_env = {
+          rustic_stalwart_env = {
             sopsFile = flakeRoot + "/secrets/default.yaml";
           };
         };
