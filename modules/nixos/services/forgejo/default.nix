@@ -94,7 +94,7 @@ in
           Persistent = true;
         };
         settings = {
-          repository = "";
+          repository = "s3:https://your-s3-endpoint/bucket/forgejo";
           backup = {
             sources = [
               config.services.forgejo.dump.backupDir
