@@ -70,23 +70,29 @@ in
       };
     };
 
-    yakumo.system.persistence.yosuga = mkIf config.yakumo.system.persistence.yosuga.enable {
-      directories = [
-        {
-          # Default data directory for NixOS Postgres.
-          path = config.services.postgresql.dataDir;
-          user = "postgres";
-          group = "postgres";
-          mode = "0700";
-        }
-        # If setting up local pg_dump staging for Rustic, persist that too.
-        {
-          path = "/var/backup/postgresql";
-          user = "postgres";
-          group = "postgres";
-          mode = "0700";
-        }
-      ];
-    };
+    yakumo =
+      let
+        yosugaCfg = config.yakumo.system.persistence.yosuga;
+      in
+      {
+        system.persistence.yosuga = mkIf yosugaCfg.enable {
+          directories = [
+            {
+              # Default data directory for NixOS Postgres.
+              path = config.services.postgresql.dataDir;
+              user = "postgres";
+              group = "postgres";
+              mode = "0700";
+            }
+            # If setting up local pg_dump staging for Rustic, persist that too.
+            {
+              path = "/var/backup/postgresql";
+              user = "postgres";
+              group = "postgres";
+              mode = "0700";
+            }
+          ];
+        };
+      };
   };
 }

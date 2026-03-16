@@ -2,6 +2,7 @@
 {
   config,
   lib,
+  flakeRoot,
   ...
 }:
 
@@ -19,38 +20,59 @@ in
     enable = mkEnableOption "mealie";
   };
 
-  config = mkIf cfg.enable {
-    services.mealie = {
-      inherit (meta) port; # Default: 9000
-      enable = true;
-      credentialsFile = "/run/secrets/mealie-credentials.env";
-      # Setup local PostgreSQL DB server for Mealie.
-      database.createLocally = true; # Default: false
-      listenAddress = meta.address; # Default: '0.0.0.0'
-      settings = {
-        ALLOW_SIGNUP = "false";
-      };
-      extraOptions = [ ];
-    };
-
-    yakumo = mkMerge [
+  config = mkIf cfg.enable (
+    let
+      sopsCfg = config.yakumo.secrets.sops;
+    in
+    mkMerge [
       {
-        services.metadata.mealie.reverseProxy = {
-          caddyIntegration.enable = true;
+        services.mealie = {
+          inherit (meta) port; # Default: 9000
+          enable = true;
+          # Setup local PostgreSQL DB server for Mealie.
+          database.createLocally = true; # Default: false
+          listenAddress = meta.address; # Default: '0.0.0.0'
+          settings = {
+            ALLOW_SIGNUP = "false";
+          };
+          extraOptions = [ ];
         };
-      }
-      (mkIf config.yakumo.system.persistence.yosuga.enable {
-        system.persistence.yosuga = {
-          directories = [
+
+        yakumo =
+          let
+            yosugaCfg = config.yakumo.system.persistence.yosuga;
+          in
+          mkMerge [
             {
-              directory = "/var/lib/mealie";
-              user = "mealie";
-              group = "mealie";
-              mode = "0750";
+              services.metadata.mealie.reverseProxy = {
+                caddyIntegration.enable = true;
+              };
             }
+            (mkIf yosugaCfg.enable {
+              system.persistence.yosuga = {
+                directories = [
+                  {
+                    directory = "/var/lib/mealie";
+                    user = "mealie";
+                    group = "mealie";
+                    mode = "0750";
+                  }
+                ];
+              };
+            })
           ];
+      }
+      (mkIf sopsCfg.enable {
+        sops.secrets = {
+          mealie_credentials = {
+            sopsFile = flakeRoot + "/secrets/default.yaml";
+          };
+        };
+
+        services.mealie = {
+          credentialsFile = config.sops.secrets.mealie_credentials.path;
         };
       })
-    ];
-  };
+    ]
+  );
 }
