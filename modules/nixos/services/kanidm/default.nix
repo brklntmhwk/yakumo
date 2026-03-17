@@ -22,42 +22,51 @@ in
 
   config = mkIf cfg.enable (
     let
+      kaniCfg = config.services.kanidm;
       sopsCfg = config.yakumo.secrets.sops;
       headscaleCfg = config.yakumo.services.headscale;
     in
     mkMerge [
       {
         services.kanidm = {
-          enableClient = true;
-          enablePam = true;
-          enableServer = true;
-          # Specify the Kanidm server address.
-          clientSettings.uri = cfg.serverSettings.origin;
-          serverSettings = {
-            inherit (meta) domain;
-            bindaddress = meta.bindAddress;
-            ldapbindaddress = null; # Default: null
-            db_path = "/var/lib/kanidm/kanidm.db";
-            log_level = "info"; # Default: 'info' (Options: 'debug', 'trace')
-            origin = "https://${meta.domain}";
-            role = "WriteReplica"; # Default: 'WriteReplica' (Options: 'WriteReplicaNoUI', 'ReadOnlyReplica')
-            tls_chain = "path/to/tls_chain";
-            tls_key = "path/to/tls_key";
-            online_backup = {
-              path = "/var/lib/kanidm/backups";
-              # Schedule backups in cron format.
-              schedule = "00 22 * * *";
-              # Specify the number of backups to keep. 0 results in no backup.
-              versions = 7; # Default: 0
+          client = {
+            enable = true; # Formerly `services.kanidm.enableClient`.
+            # Specify the Kanidm server address.
+            settings.uri = kaniCfg.server.settings.origin; # Formerly `services.kanidm.clientSettings.uri`.
+          };
+          server = {
+            enable = true; # Formerly `services.kanidm.enableServer`.
+            # Formerly `services.kanidm.serverSettings`.
+            settings = {
+              inherit (meta) domain;
+              bindaddress = meta.bindAddress;
+              ldapbindaddress = null; # Default: null
+              db_path = "/var/lib/kanidm/kanidm.db";
+              log_level = "info"; # Default: 'info' (Options: 'debug', 'trace')
+              origin = "https://${meta.domain}";
+              role = "WriteReplica"; # Default: 'WriteReplica' (Options: 'WriteReplicaNoUI', 'ReadOnlyReplica')
+              tls_chain = "path/to/tls_chain";
+              tls_key = "path/to/tls_key";
+              online_backup = {
+                path = "/var/lib/kanidm/backups";
+                # Schedule backups in cron format.
+                schedule = "00 22 * * *";
+                # Specify \the number of backups to keep. 0 results in no backup.
+                versions = 7; # Default: 0
+              };
             };
           };
-          unixSettings = {
-            # Set a path to HSM (Hardware Security Module) pin.
-            hsm_pin_path = "/var/cache/kanidm-unixd/hsm-pin";
-            # Add Kanidm groups that are allowed to login using PAM.
-            kanidm.pam_allowed_login_groups = [
-              "my_pam_group"
-            ];
+          unix = {
+            enable = true; # Formerly `services.kanidm.enablePam`.
+            # Formerly `services.kanidm.unixSettings`.
+            settings = {
+              # Set a path to HSM (Hardware Security Module) pin.
+              hsm_pin_path = "/var/cache/kanidm-unixd/hsm-pin";
+              # Add Kanidm groups that are allowed to login using PAM.
+              kanidm.pam_allowed_login_groups = [
+                "my_pam_group"
+              ];
+            };
           };
           provision = {
             enable = true;
@@ -116,25 +125,29 @@ in
           };
         };
 
-        yakumo = mkMerge [
-          {
-            services.metadata.kanidm.reverseProxy = {
-              caddyIntegration.enable = true;
-            };
-          }
-          (mkIf config.yakumo.system.persistence.yosuga.enable {
-            system.persistence.yosuga = {
-              directories = [
-                {
-                  path = "/var/lib/kanidm";
-                  user = "kanidm";
-                  group = "kanidm";
-                  mode = "0700";
-                }
-              ];
-            };
-          })
-        ];
+        yakumo =
+          let
+            yosugaCfg = config.yakumo.system.persistence.yosuga;
+          in
+          mkMerge [
+            {
+              services.metadata.kanidm.reverseProxy = {
+                caddyIntegration.enable = true;
+              };
+            }
+            (mkIf yosugaCfg.enable {
+              system.persistence.yosuga = {
+                directories = [
+                  {
+                    path = "/var/lib/kanidm";
+                    user = "kanidm";
+                    group = "kanidm";
+                    mode = "0700";
+                  }
+                ];
+              };
+            })
+          ];
       }
       (mkIf sopsCfg.enable {
         sops.secrets = {

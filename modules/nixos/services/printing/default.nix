@@ -34,5 +34,18 @@ in
       allowedUDPPorts = [ 631 ];
       allowedTCPPorts = [ 631 ];
     };
+
+    yakumo.system.persistence.yosuga =
+      let
+        yosugaCfg = config.yakumo.system.persistence.yosuga;
+      in
+      mkIf yosugaCfg.enable {
+        directories = [
+          {
+            path = "/var/lib/cups";
+            mode = "0755";
+          }
+        ];
+      };
   };
 }
