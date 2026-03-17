@@ -1,44 +1,35 @@
-# This is supposed to be used with Hyprland.
 { systemWideBinPath }:
 
 {
-  events = [
+  general = {
+    lock_cmd = "${systemWideBinPath}/pidof hyprlock || ${systemWideBinPath}/hyprlock";
+    before_sleep_cmd = "loginctl lock-session";
+    after_sleep_cmd = "${systemWideBinPath}/niri msg action power-on-monitors";
+  };
+
+  listener = [
     {
-      event = "lock";
-      command = "pidof hyprlock || hyprlock";
+      timeout = 180; # 3 min
+      on-timeout = "brightnessctl -s set 10";
+      on-resume = "brightnessctl -r";
     }
     {
-      event = "before-sleep";
-      command = "loginctl lock-session";
+      timeout = 300; # 5 min
+      on-timeout = "brightnessctl -sd rgb:kbd_backlight set 0";
+      on-resume = "brightnessctl -rd rgb:kbd_backlight";
     }
     {
-      event = "after-resume";
-      command = "niri msg action power-on-monitors";
-    }
-  ];
-  timeouts = [
-    {
-      timeout = 180; # seconds (3 min)
-      command = "brightnessctl -s set 10";
-      resumeCommand = "brightnessctl -r";
+      timeout = 480; # 8 min
+      on-timeout = "loginctl lock-session";
     }
     {
-      timeout = 300; # seconds (5 min)
-      command = "brightnessctl -sd rgb:kbd_backlight set 0";
-      resumeCommand = "brightnessctl -rd rgb:kbd_backlight";
+      timeout = 600; # 10 min
+      on-timeout = "${systemWideBinPath}/niri msg action power-off-monitors";
+      on-resume = "${systemWideBinPath}/niri msg action power-on-monitors && brightnessctl -r";
     }
     {
-      timeout = 480; # seconds (8 min)
-      command = "loginctl lock-session";
-    }
-    {
-      timeout = 600; # seconds (10 min)
-      command = "niri msg action power-off-monitors";
-      resumeCommand = "niri msg action power-on-monitors && brightnessctl b-r";
-    }
-    {
-      timeout = 1500; # seconds (25 min)
-      command = "systemctl suspend";
+      timeout = 1500; # 25 min
+      on-timeout = "systemctl suspend";
     }
   ];
 }
