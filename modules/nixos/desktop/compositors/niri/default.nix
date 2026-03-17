@@ -288,8 +288,6 @@ in
 
           systemdSessionCmds = concatStringsSep " " (
             map (f: "&& ${f}") [
-              # Explicitly inject env vars into Systemd.
-              "systemctl --user import-environment ${envVariables}"
               "systemctl --user start niri-session.target"
             ]
           );
