@@ -22,6 +22,7 @@ in
 
   config = mkIf cfg.enable (
     let
+      sopsCfg = config.yakumo.secrets.sops;
     in
     mkMerge [
       {

@@ -2,6 +2,7 @@
 {
   config,
   lib,
+  flakeRoot,
   ...
 }:
 
@@ -9,6 +10,7 @@ let
   inherit (lib)
     mkEnableOption
     mkIf
+    mkMerge
     ;
   cfg = config.yakumo.services.shiori;
   meta = config.yakumo.services.metadata.shiori;

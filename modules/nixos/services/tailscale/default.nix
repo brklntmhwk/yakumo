@@ -26,6 +26,7 @@ in
   config = mkIf cfg.enable (
     let
       tailscaleCfg = config.services.tailscale;
+      sopsCfg = config.yakumo.secrets.sops;
     in
     mkMerge [
       {
