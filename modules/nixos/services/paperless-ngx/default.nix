@@ -105,13 +105,13 @@ in
               system.persistence.yosuga = {
                 directories = [
                   {
-                    directory = paperlessCfg.dataDir;
+                    path = paperlessCfg.dataDir;
                     user = "paperless";
                     group = "paperless";
                     mode = "0750";
                   }
                   {
-                    directory = paperlessCfg.exporter.directory;
+                    path = paperlessCfg.exporter.directory;
                     user = "paperless";
                     group = "paperless";
                     mode = "0750";

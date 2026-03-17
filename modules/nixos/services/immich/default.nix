@@ -100,7 +100,7 @@ in
               system.persistence.yosuga = {
                 directories = [
                   {
-                    directory = immichCfg.mediaLocation;
+                    path = immichCfg.mediaLocation;
                     user = "immich";
                     group = "immich";
                     mode = "0750";

@@ -46,12 +46,57 @@ in
               user = "admin";
               secret = "%{file:/etc/stalwart/admin-pw}%";
             };
+            # DKIM (DomainKeys Identified Mail)
+            # https://stalw.art/docs/mta/authentication/dkim/sign
+            auth.dkim.sign = [
+              {
+                "if" = "is_local_domain('*', sender_domain)";
+                "then" = "['ed25519-' + sender_domain]";
+              }
+              { "else" = false; }
+            ];
+            # https://stalw.art/docs/server/tls/certificates/
+            certificate.default =
+              let
+                acmeCerts = config.security.acme.certs;
+              in
+              {
+                # Specify this certificate as the default for the situation where
+                # the client doesn't provide an SNI server name.
+                default = true;
+                cert = "%{file:${acmeCerts.${meta.domain}.directory}/fullchain.pem}%";
+                private-key = "%{file:${acmeCerts.${meta.domain}.directory}/key.pem}%";
+              };
+            # https://stalw.art/docs/mta/authentication/dkim/sign#signatures
+            signature =
+              let
+                inherit (meta) domain;
+              in
+              {
+                "ed25519-${domain}" = {
+                  inherit domain;
+                  private-key = "%{file:/var/lib/stalwart-mail/dkim/ed25519-${domain}.key}%";
+                  algorithm = "ed25519-sha256";
+                  canonicalization = "relaxed/relaxed";
+                  headers = [
+                    "From"
+                    "To"
+                    "Date"
+                    "Subject"
+                    "Message-ID"
+                  ];
+                  selector = "ed-default";
+                  set-body-length = false;
+                  report = true;
+                };
+              };
             # https://stalw.art/docs/category/server-settings
             server = {
               hostname = cfg.domain;
               tls = {
                 enable = true;
-                # Set this per lister.
+                certificate = "default";
+                # Set this per listener.
                 # implicit = true;
               };
               listener = {
@@ -60,14 +105,15 @@ in
                   bind = "[::]:25";
                   protocol = "smtp";
                 };
-                # SMTPS: Handles email submission with implicit TLS encryption (Essential).
+                # SMTPS (SMTP over TLS/SSL): Handles email submission with implicit
+                # TLS encryption (Essential).
                 # Used for securely sending outgoing mail from user clients.
                 submissions = {
                   bind = "[::]:465";
                   protocol = "smtp";
                   tls.implicit = true;
                 };
-                # IMAPS: Handles IMAP over implicit TLS (Essential).
+                # IMAPS (IMAP over SSL/TLS): Handles IMAP over implicit TLS (Essential).
                 # Required for secure email access via IMAP clients.
                 imaps = {
                   bind = "[::]:993";
@@ -119,8 +165,15 @@ in
               type = "sqlite";
               path = "${stalwartCfg.dataDir}/database.sqlite3";
             };
+            # https://stalw.art/docs/mta/outbound/dns/
+            resolver = {
+              # Options: 'cloudflare', 'cloudflare-tls', 'quad9', 'quad9-tls', 'google', 'custom'
+              type = "system";
+            };
           };
         };
+
+        users.groups.acme.members = [ "stalwart-mail" ];
 
         networking.firewall.allowedTCPPorts = [
           25 # SMTP
@@ -137,6 +190,8 @@ in
           mkMerge [
             {
               services.metadata = {
+                # TODO: Revisit this Caddy configuration.
+                # https://stalw.art/docs/server/reverse-proxy/caddy
                 stalwart-mail.reverseProxy = {
                   caddyIntegration.enable = true;
                 };
@@ -169,7 +224,7 @@ in
               system.persistence.yosuga = {
                 directories = [
                   {
-                    directory = stalwartCfg.dataDir;
+                    path = stalwartCfg.dataDir;
                     user = "stalwart-mail";
                     group = "stalwart-mail";
                     mode = "0700";

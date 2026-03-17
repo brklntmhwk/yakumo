@@ -77,7 +77,7 @@ in
               system.persistence.yosuga = {
                 directories = [
                   {
-                    directory = "/var/lib/influxdb2";
+                    path = "/var/lib/influxdb2";
                     user = "influxdb2";
                     group = "influxdb2";
                     mode = "0700";

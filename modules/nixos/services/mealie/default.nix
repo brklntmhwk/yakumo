@@ -52,7 +52,7 @@ in
               system.persistence.yosuga = {
                 directories = [
                   {
-                    directory = "/var/lib/mealie";
+                    path = "/var/lib/mealie";
                     user = "mealie";
                     group = "mealie";
                     mode = "0750";

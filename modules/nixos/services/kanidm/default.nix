@@ -112,7 +112,6 @@ in
                         "openid"
                         "profile"
                         "email"
-                        "groups"
                       ];
                     };
                     # Add additional claims based on which Kanidm groups an authenticating
