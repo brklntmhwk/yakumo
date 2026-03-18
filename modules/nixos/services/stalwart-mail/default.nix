@@ -98,66 +98,70 @@ in
                 # Set this per listener.
                 # implicit = true;
               };
-              listener = {
-                # SMTP: Used for receiving email from other mail servers (Essential).
-                smtp = {
-                  bind = "[::]:25";
-                  protocol = "smtp";
+              listener =
+                let
+                  inherit (meta) port extraPorts;
+                in
+                {
+                  # SMTP: Used for receiving email from other mail servers (Essential).
+                  smtp = {
+                    bind = "[::]:${extraPorts.smtp}";
+                    protocol = "smtp";
+                  };
+                  # SMTPS (SMTP over TLS/SSL): Handles email submission with implicit
+                  # TLS encryption (Essential).
+                  # Used for securely sending outgoing mail from user clients.
+                  submissions = {
+                    bind = "[::]:${extraPorts.submissions}";
+                    protocol = "smtp";
+                    tls.implicit = true;
+                  };
+                  # IMAPS (IMAP over SSL/TLS): Handles IMAP over implicit TLS (Essential).
+                  # Required for secure email access via IMAP clients.
+                  imaps = {
+                    bind = "[::]:${extraPorts.imaps}";
+                    protocol = "imap";
+                    tls.implicit = true;
+                  };
+                  # JMAP (JSON Meta Application Protocol): A modern, efficient, and
+                  # stateful protocol for synchronizing mail, calendars, and contacts
+                  # between a client and a server.
+                  # It operates over HTTP and uses JSON as its data format.
+                  # As an http listener is automatically created in the installation
+                  # process and Stalwart enables JMAP by default with the http listener
+                  # configured, we don't have to manually add this.
+                  # https://stalw.art/docs/http/jmap/overview
+                  # jmap = {
+                  #   bind = "[::]:8080";
+                  #   protocol = "http";
+                  #   tls.implicit = true;
+                  # };
+                  # HTTP: Handles JMAP access, WebDAV access, API management, ACME
+                  # certificate issuance, autoconfig/autodiscover protocols,
+                  # well-known resources, metrics collection, and OAuth authentication.
+                  # We leave the external HTTPS traffic handling job to a reverse proxy
+                  # here instead of having Stalwart-Mail handle it directly on Port 443.
+                  http = {
+                    bind = "[::]:${port}";
+                    protocol = "http";
+                    url = "https://${cfg.domain}";
+                    # Set this to true only when Stalwart is behind a trusted proxy;
+                    # it obtains the client's IP address from the `Forwarded` or
+                    # `X-Forwarded-For` HTTP header rather than from the socket source
+                    # address. That is, untrusted sources can easily forge these headers,
+                    # potentially leading to security vulnerabilities or incorrect login
+                    # information.
+                    use-x-forwarded = true;
+                  };
+                  # ManageSieve: A protocol designed for remotely managing Sieve scripts
+                  # on a mail server.
+                  # https://stalw.art/docs/sieve/managesieve/
+                  sieve = {
+                    bind = "[::]:${extraPorts.sieve}";
+                    protocol = "managesieve";
+                    tls.implicit = true;
+                  };
                 };
-                # SMTPS (SMTP over TLS/SSL): Handles email submission with implicit
-                # TLS encryption (Essential).
-                # Used for securely sending outgoing mail from user clients.
-                submissions = {
-                  bind = "[::]:465";
-                  protocol = "smtp";
-                  tls.implicit = true;
-                };
-                # IMAPS (IMAP over SSL/TLS): Handles IMAP over implicit TLS (Essential).
-                # Required for secure email access via IMAP clients.
-                imaps = {
-                  bind = "[::]:993";
-                  protocol = "imap";
-                  tls.implicit = true;
-                };
-                # JMAP (JSON Meta Application Protocol): A modern, efficient, and
-                # stateful protocol for synchronizing mail, calendars, and contacts
-                # between a client and a server.
-                # It operates over HTTP and uses JSON as its data format.
-                # As an http listener is automatically created in the installation
-                # process and Stalwart enables JMAP by default with the http listener
-                # configured, we don't have to manually add this.
-                # https://stalw.art/docs/http/jmap/overview
-                # jmap = {
-                #   bind = "[::]:8080";
-                #   protocol = "http";
-                #   tls.implicit = true;
-                # };
-                # HTTP: Handles JMAP access, WebDAV access, API management, ACME
-                # certificate issuance, autoconfig/autodiscover protocols,
-                # well-known resources, metrics collection, and OAuth authentication.
-                # We leave the external HTTPS traffic handling job to a reverse proxy
-                # here instead of having Stalwart-Mail handle it directly on Port 443.
-                http = {
-                  bind = "[::]:8080";
-                  protocol = "http";
-                  url = "https://${cfg.domain}";
-                  # Set this to true only when Stalwart is behind a trusted proxy;
-                  # it obtains the client's IP address from the `Forwarded` or
-                  # `X-Forwarded-For` HTTP header rather than from the socket source
-                  # address. That is, untrusted sources can easily forge these headers,
-                  # potentially leading to security vulnerabilities or incorrect login
-                  # information.
-                  use-x-forwarded = true;
-                };
-                # ManageSieve: A protocol designed for remotely managing Sieve scripts
-                # on a mail server.
-                # https://stalw.art/docs/sieve/managesieve/
-                sieve = {
-                  protocol = "managesieve";
-                  bind = "[::]:4190";
-                  tls.implicit = true;
-                };
-              };
             };
             # https://stalw.art/docs/storage/backends/sqlite
             store.db = {
