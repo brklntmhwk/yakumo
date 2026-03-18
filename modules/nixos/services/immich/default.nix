@@ -45,18 +45,22 @@ in
           accelerationDevices = [ ];
           # For the valid env variables, see:
           # https://docs.immich.app/install/environment-variables/
-          environment = { };
+          environment = {
+            IMMICH_LOG_LEVEL = "verbose";
+          };
           # Specify the directory used to store media files.
           # Ensure to create it manually and give the immich user the R&W permissions
-          # if not using the default one.
+          # if not using the default directory.
           mediaLocation = "/var/lib/immich";
+          # Enabling this adds "postgresql.target" to some options of
+          # every Systemd service configured behind the scenes.
           database =
             let
               pgMeta = config.yakumo.services.metadata.postgresql;
             in
             {
               inherit (pgMeta) port; # Default: 5432
-              enable = true;
+              enable = true; # Default: true
               createDB = true; # Default: true
               name = "immich"; # Default: 'immich'
               user = "immich"; # Default: 'immich'
@@ -66,6 +70,8 @@ in
               enableVectors = false;
               enableVectorChord = true; # Default: true
             };
+          # Enabling this creates a Systemd service for the Immich's
+          # machine learning features.
           machine-learning = {
             enable = true; # Default: true
             # For the valid env variables, see:
@@ -78,9 +84,45 @@ in
             port = 0; # Default: 0
           };
           settings = {
+            backup.database = {
+              # Disable the built-in backup feature in favor of our Rustic backup
+              # support.
+              enabled = false;
+            };
+            job = {
+              backgroundTask.concurrency = 5;
+              faceDetection.concurrency = 2;
+              library.concurrency = 5;
+              metadataExtraction.concurrency = 5;
+              migration.concurrency = 5;
+              notifications.concurrency = 5;
+              search.concurrency = 5;
+              sidecar.concurrency = 5;
+              smartSearch.concurrency = 2;
+              thumbnailGeneration.concurrency = 3;
+              videoConversion.concurrency = 1;
+            };
+            logging = {
+              enabled = true;
+              level = "log";
+            };
+            machineLearning = {
+              enabled = true;
+              clip = {
+                enabled = true;
+                modelName = "ViT-B-32__openai";
+              };
+              duplicateDetection = {
+                enabled = true;
+                maxDistance = 0.01;
+              };
+            };
             newVersionCheck.enabled = false; # Default: false
             # Domain for publicly shared links, including http(s)://.
-            server.externalDomain = meta.domain; # Default: ''
+            server = {
+              externalDomain = "https://${meta.domain}"; # Default: ''
+              loginPageMessage = "A trip down memory lane.";
+            };
           };
         };
 
