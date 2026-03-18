@@ -28,45 +28,66 @@ in
     mkMerge [
       {
         services.kanidm = {
-          client = {
-            enable = true; # Formerly `services.kanidm.enableClient`.
-            # Specify the Kanidm server address.
-            settings.uri = kaniCfg.server.settings.origin; # Formerly `services.kanidm.clientSettings.uri`.
-          };
-          server = {
-            enable = true; # Formerly `services.kanidm.enableServer`.
-            # Formerly `services.kanidm.serverSettings`.
-            settings = {
-              inherit (meta) domain;
-              bindaddress = meta.bindAddress;
-              ldapbindaddress = null; # Default: null
-              db_path = "/var/lib/kanidm/kanidm.db";
-              log_level = "info"; # Default: 'info' (Options: 'debug', 'trace')
-              origin = "https://${meta.domain}";
-              role = "WriteReplica"; # Default: 'WriteReplica' (Options: 'WriteReplicaNoUI', 'ReadOnlyReplica')
-              tls_chain = "path/to/tls_chain";
-              tls_key = "path/to/tls_key";
-              online_backup = {
-                path = "/var/lib/kanidm/backups";
-                # Schedule backups in cron format.
-                schedule = "00 22 * * *";
-                # Specify \the number of backups to keep. 0 results in no backup.
-                versions = 7; # Default: 0
-              };
+          enableClient = true;
+          clientSettings.uri = kaniCfg.serverSettings.origin;
+          enableServer = true;
+          serverSettings = {
+            inherit (meta) domain;
+            bindaddress = meta.bindAddress;
+            ldapbindaddress = null; # Default: null
+            db_path = "/var/lib/kanidm/kanidm.db";
+            log_level = "info"; # Default: 'info' (Options: 'debug', 'trace')
+            origin = "https://${meta.domain}";
+            role = "WriteReplica"; # Default: 'WriteReplica' (Options: 'WriteReplicaNoUI', 'ReadOnlyReplica')
+            tls_chain = "path/to/tls_chain";
+            tls_key = "path/to/tls_key";
+            online_backup = {
+              path = "/var/lib/kanidm/backups";
+              # Schedule backups in cron format.
+              schedule = "00 22 * * *";
+              # Specify \the number of backups to keep. 0 results in no backup.
+              versions = 7; # Default: 0
             };
           };
-          unix = {
-            enable = true; # Formerly `services.kanidm.enablePam`.
-            # Formerly `services.kanidm.unixSettings`.
-            settings = {
-              # Set a path to HSM (Hardware Security Module) pin.
-              hsm_pin_path = "/var/cache/kanidm-unixd/hsm-pin";
-              # Add Kanidm groups that are allowed to login using PAM.
-              kanidm.pam_allowed_login_groups = [
-                "my_pam_group"
-              ];
-            };
-          };
+          # client = {
+          #   enable = true; # Formerly `services.kanidm.enableClient`.
+          #   # Specify the Kanidm server address.
+          #   settings.uri = kaniCfg.server.settings.origin; # Formerly `services.kanidm.clientSettings.uri`.
+          # };
+          # server = {
+          #   enable = true; # Formerly `services.kanidm.enableServer`.
+          #   # Formerly `services.kanidm.serverSettings`.
+          #   settings = {
+          #     inherit (meta) domain;
+          #     bindaddress = meta.bindAddress;
+          #     ldapbindaddress = null; # Default: null
+          #     db_path = "/var/lib/kanidm/kanidm.db";
+          #     log_level = "info"; # Default: 'info' (Options: 'debug', 'trace')
+          #     origin = "https://${meta.domain}";
+          #     role = "WriteReplica"; # Default: 'WriteReplica' (Options: 'WriteReplicaNoUI', 'ReadOnlyReplica')
+          #     tls_chain = "path/to/tls_chain";
+          #     tls_key = "path/to/tls_key";
+          #     online_backup = {
+          #       path = "/var/lib/kanidm/backups";
+          #       # Schedule backups in cron format.
+          #       schedule = "00 22 * * *";
+          #       # Specify \the number of backups to keep. 0 results in no backup.
+          #       versions = 7; # Default: 0
+          #     };
+          #   };
+          # };
+          # unix = {
+          #   enable = true; # Formerly `services.kanidm.enablePam`.
+          #   # Formerly `services.kanidm.unixSettings`.
+          #   settings = {
+          #     # Set a path to HSM (Hardware Security Module) pin.
+          #     hsm_pin_path = "/var/cache/kanidm-unixd/hsm-pin";
+          #     # Add Kanidm groups that are allowed to login using PAM.
+          #     kanidm.pam_allowed_login_groups = [
+          #       "my_pam_group"
+          #     ];
+          #   };
+          # };
           provision = {
             enable = true;
             # Allow invalid certificates when provisioning the target instance if true.
