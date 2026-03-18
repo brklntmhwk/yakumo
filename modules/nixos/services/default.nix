@@ -27,7 +27,12 @@ let
         };
         port = mkOption {
           type = types.port;
-          description = "Port number.";
+          description = "Primary port number (usually for the web UI or HTTP API).";
+        };
+        extraPorts = mkOption {
+          type = types.attrsOf types.port;
+          default = { };
+          description = "Additional ports for services with multiple listeners.";
         };
         bindAddress = mkOption {
           type = types.str;
@@ -122,10 +127,16 @@ in
         address = "127.0.0.1";
         port = 5432;
       };
-      calibre-server = {
-        domain = "calibre.yakumo.local";
+      stalwart-mail = {
+        domain = "mail.yakumo.local";
         address = "127.0.0.1";
         port = 8080;
+        extraPorts = {
+          smtp = 25;
+          submissions = 465;
+          imaps = 993;
+          sieve = 4190;
+        };
       };
       headscale = {
         domain = "headscale.yakumo.local";
@@ -142,8 +153,8 @@ in
         address = "127.0.0.1";
         port = 8083;
       };
-      stalwart-mail = {
-        domain = "mail.yakumo.local";
+      calibre-server = {
+        domain = "calibre.yakumo.local";
         address = "127.0.0.1";
         port = 8084;
       };
