@@ -23,7 +23,6 @@ in
   config = mkIf cfg.enable (
     let
       stalwartCfg = config.services.stalwart-mail;
-      sopsCfg = config.yakumo.secrets.sops;
     in
     mkMerge [
       {
@@ -200,7 +199,7 @@ in
             (mkIf rusticCfg.enable {
               services.rustic.backups = {
                 stalwart = {
-                  environmentFile = mkIf sopsCfg config.sops.secrets.rustic_stalwart_env.path;
+                  environmentFile = config.sops.secrets.rustic_stalwart_env.path;
                   timerConfig = {
                     OnCalendar = "*-*-* 03:00:00"; # Run daily at 3 a.m.
                     Persistent = true;
@@ -233,14 +232,13 @@ in
               };
             })
           ];
-      }
-      (mkIf sopsCfg.enable {
+
         sops.secrets = {
           rustic_stalwart_env = {
             sopsFile = flakeRoot + "/secrets/default.yaml";
           };
         };
-      })
+      }
     ]
   );
 }

@@ -26,7 +26,6 @@ in
   config = mkIf cfg.enable (
     let
       tailscaleCfg = config.services.tailscale;
-      sopsCfg = config.yakumo.secrets.sops;
     in
     mkMerge [
       {
@@ -37,6 +36,7 @@ in
           # Pass extra params to `--auth-key` after the auth key.
           # See: https://tailscale.com/docs/features/oauth-clients#register-new-nodes-using-oauth-credentials
           authKeyParameters = { }; # Default: { }
+          authKeyFile = config.sops.secrets.tailscale_authkey.path; # Default: null
           disableTaildrop = !cfg.taildrop.enable; # Default: false
           disableUpstreamLogging = false; # Default: false
           extraDaemonFlags = [ ]; # Default: [ ]
@@ -62,18 +62,13 @@ in
 
         # TODO: Consider introducing nftables.
         # See: https://wiki.nixos.org/wiki/Tailscale#Native_nftables_Support_(Modern_Setup)
-      }
-      (mkIf sopsCfg.enable {
+
         sops.secrets = {
           tailscale_authkey = {
             sopsFile = flakeRoot + "/secrets/default.yaml";
           };
         };
-
-        services.tailscale = {
-          authKeyFile = config.sops.secrets.tailscale_authkey.path; # Default: null
-        };
-      })
+      }
     ]
   );
 }

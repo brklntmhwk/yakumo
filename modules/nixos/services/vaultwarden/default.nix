@@ -24,7 +24,6 @@ in
 
   config = mkIf cfg.enable (
     let
-      sopsCfg = config.yakumo.secrets.sops;
       vaultCfg = config.services.vaultwarden;
     in
     mkMerge [
@@ -33,6 +32,7 @@ in
           inherit (meta) domain;
           enable = true;
           backupDir = "/var/backup/vaultwarden"; # Default: null
+          environmentFile = config.sops.secrets.vaultwarden_env.path; # Default: [ ]
           # Use Caddy instead.
           configureNginx = false; # Default: false
           configurePostgres = false; # Default: false
@@ -114,7 +114,7 @@ in
             (mkIf rusticCfg.enable {
               services.rustic.backups = {
                 vaultwarden = {
-                  environmentFile = mkIf sopsCfg.enable config.sops.secrets.rustic_vaultwarden_env.path;
+                  environmentFile = config.sops.secrets.rustic_vaultwarden_env.path;
                   timerConfig = {
                     OnCalendar = "*-*-* 03:30:00"; # Run daily at 3:30 a.m.
                     Persistent = true;
@@ -173,8 +173,7 @@ in
             ${pkgs.rsync}/bin/rsync -a --delete --exclude 'db.*' "$DATA_FOLDER/" "$BACKUP_FOLDER/"
           ''
         );
-      }
-      (mkIf sopsCfg.enable {
+
         sops.secrets = {
           vaultwarden_env = {
             sopsFile = flakeRoot + "/secrets/default.yaml";
@@ -185,11 +184,7 @@ in
             owner = "vaultwarden";
           };
         };
-
-        services.vaultwarden = {
-          environmentFile = config.sops.secrets.vaultwarden_env.path; # Default: [ ]
-        };
-      })
+      }
     ]
   );
 }

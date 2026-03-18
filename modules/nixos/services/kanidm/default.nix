@@ -23,7 +23,6 @@ in
   config = mkIf cfg.enable (
     let
       kaniCfg = config.services.kanidm;
-      sopsCfg = config.yakumo.secrets.sops;
       headscaleCfg = config.yakumo.services.headscale;
     in
     mkMerge [
@@ -77,6 +76,8 @@ in
             # Auto-remove an entity from Kanidm when deleting them in this provisioning config.
             autoRemove = true; # Default: true
             instanceUrl = "https://${meta.bindAddress}";
+            adminPasswordFile = config.sops.secrets.kanidm_admin_passwd.path;
+            idmAdminPasswordFile = config.sops.secrets.kanidm_idm_admin_passwd.path;
             groups = {
               vpn_users = { };
             };
@@ -105,6 +106,7 @@ in
                     originUrl = [
                       "https://${headscaleMeta.domain}/oidc/callback"
                     ];
+                    basicSecretFile = config.sops.secrets.headscale_oidc_secret.path;
                     # Map Kanidm groups to returned oauth scopes.
                     # https://kanidm.github.io/kanidm/stable/integrations/oauth2.html#scope-relationships
                     scopeMaps = {
@@ -147,8 +149,7 @@ in
               };
             })
           ];
-      }
-      (mkIf sopsCfg.enable {
+
         sops.secrets = {
           kanidm_admin_passwd = {
             sopsFile = flakeRoot + "/secrets/default.yaml";
@@ -159,21 +160,7 @@ in
             owner = "kanidm";
           };
         };
-
-        services.kanidm = {
-          provision = {
-            adminPasswordFile = config.sops.secrets.kanidm_admin_passwd.path;
-            idmAdminPasswordFile = config.sops.secrets.kanidm_idm_admin_passwd.path;
-            systems.oauth2 = mkMerge [
-              (mkIf headscaleCfg.enable {
-                headscale = {
-                  basicSecretFile = config.sops.secrets.headscale_oidc_secret.path;
-                };
-              })
-            ];
-          };
-        };
-      })
+      }
     ]
   );
 }

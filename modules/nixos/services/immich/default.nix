@@ -26,7 +26,6 @@ in
       backupDir = "/var/backup/immich";
       immichCfg = config.services.immich;
       rusticCfg = config.yakumo.services.rustic;
-      sopsCfg = config.yakumo.secrets.sops;
     in
     mkMerge [
       {
@@ -36,6 +35,7 @@ in
           group = "immich"; # Default: 'immich'
           user = "immich"; # Default: 'immich'
           host = meta.address; # Default: 'localhost'
+          secretsFile = config.sops.secrets.immich_secrets.path;
           openFirewall = false; # Default: false
           # Specify device paths to hardware acceleration devices that
           # immich should have access to.
@@ -109,11 +109,22 @@ in
               };
             })
           ];
+
+        sops.secrets = {
+          immich_secrets = {
+            sopsFile = flakeRoot + "/secrets/default.yaml";
+            owner = "immich";
+          };
+          rustic_immich_env = {
+            sopsFile = flakeRoot + "/secrets/default.yaml";
+            owner = "immich";
+          };
+        };
       }
       (mkIf rusticCfg.enable {
         yakumo.services.rustic.backups = {
           immich = {
-            environmentFile = mkIf sopsCfg.enable config.sops.secrets.rustic_immich_env.path;
+            environmentFile = config.sops.secrets.rustic_immich_env.path;
             timerConfig = {
               OnCalendar = "*-*-* 04:00:00"; # Run daily at 4 a.m.
               Persistent = true;
@@ -144,20 +155,6 @@ in
             ${pkgs.sudo}/bin/sudo -u postgres ${pkgs.postgresql}/bin/pg_dump -Fc immich > ${backupDir}/immich.dump
           '';
         };
-      })
-      (mkIf sopsCfg.enable {
-        sops.secrets = {
-          immich_secrets = {
-            sopsFile = flakeRoot + "/secrets/default.yaml";
-            owner = "immich";
-          };
-          rustic_immich_env = {
-            sopsFile = flakeRoot + "/secrets/default.yaml";
-            owner = "immich";
-          };
-        };
-
-        services.immich.secretsFile = config.sops.secrets.immich_secrets.path;
       })
     ]
   );

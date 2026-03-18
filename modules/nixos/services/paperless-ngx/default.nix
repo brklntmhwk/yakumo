@@ -22,7 +22,6 @@ in
 
   config = mkIf cfg.enable (
     let
-      sopsCfg = config.yakumo.secrets.sops;
       paperlessCfg = config.services.paperless;
     in
     mkMerge [
@@ -35,6 +34,8 @@ in
             ;
           enable = true;
           user = "paperless"; # Default: 'paperless'
+          environmentFile = config.sops.secrets.paperless_env.path; # Default: null
+          passwordFile = config.sops.secrets.paperless_passwd.path;
           consumptionDir = "${paperlessCfg.dataDir}/consume";
           # Allow all users can write to the consumption directory if set to true.
           consumptionDirIsPublic = false; # Default: false
@@ -80,7 +81,7 @@ in
             (mkIf rusticCfg.enable {
               services.rustic.backups = {
                 paperless = {
-                  environmentFile = mkIf sopsCfg.enable config.sops.secrets.rustic_paperless_env.path;
+                  environmentFile = config.sops.secrets.rustic_paperless_env.path;
                   timerConfig = {
                     OnCalendar = "*-*-* 02:30:00"; # Run daily at 2:30 a.m.
                     Persistent = true;
@@ -120,8 +121,7 @@ in
               };
             })
           ];
-      }
-      (mkIf sopsCfg.enable {
+
         sops.secrets = {
           paperless_env = {
             sopsFile = flakeRoot + "/secrets/default.yaml";
@@ -136,12 +136,7 @@ in
             owner = "paperless";
           };
         };
-
-        services.paperless = {
-          environmentFile = config.sops.secrets.paperless_env.path; # Default: null
-          passwordFile = config.sops.secrets.paperless_passwd.path;
-        };
-      })
+      }
     ]
   );
 }
