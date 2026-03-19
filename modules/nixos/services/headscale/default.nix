@@ -3,7 +3,7 @@
   config,
   lib,
   pkgs,
-  flakeRoot,
+  rootPath,
   ...
 }:
 
@@ -184,7 +184,7 @@ in
 
       sops.secrets = {
         headscale_oidc_secret = {
-          sopsFile = flakeRoot + "/secrets/default.yaml";
+          sopsFile = rootPath + "/secrets/default.yaml";
           owner = "headscale";
         };
       };

@@ -2,7 +2,7 @@
 {
   config,
   lib,
-  flakeRoot,
+  rootPath,
   ...
 }:
 
@@ -123,8 +123,8 @@ in
       ];
 
       sops.secrets = {
-        rustic_forgejo_env = {
-          sopsFile = flakeRoot + "/secrets/default.yaml";
+        "forgejo/rustic_env_file" = {
+          sopsFile = rootPath + "/secrets/default.yaml";
           owner = "forgejo";
         };
       };

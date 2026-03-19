@@ -2,7 +2,7 @@
   config,
   lib,
   pkgs,
-  flakeRoot,
+  rootPath,
   ...
 }:
 
@@ -20,18 +20,18 @@ in
 
   sops.secrets = {
     login_passwd_otogaki = {
-      sopsFile = flakeRoot + "/secrets/default.yaml";
+      sopsFile = rootPath + "/secrets/default.yaml";
       neededForUsers = true;
     };
     gh_token_for_mcp = {
-      sopsFile = flakeRoot + "/secrets/default.yaml";
+      sopsFile = rootPath + "/secrets/default.yaml";
     };
     # gh_token_for_mcp = {
-    #   sopsFile = flakeRoot + "/users/otogaki/secrets/default.yaml";
+    #   sopsFile = rootPath + "/users/otogaki/secrets/default.yaml";
     #   owner = config.yakumo.user.name;
     # };
     git_signing_key = {
-      sopsFile = flakeRoot + "/users/otogaki/secrets/default.yaml";
+      sopsFile = rootPath + "/users/otogaki/secrets/default.yaml";
       owner = "otogaki";
       mode = "0400";
     };

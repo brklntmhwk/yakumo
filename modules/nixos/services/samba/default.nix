@@ -2,7 +2,7 @@
 {
   config,
   lib,
-  flakeRoot,
+  rootPath,
   ...
 }:
 
@@ -100,8 +100,8 @@ in
     };
 
     sops.secrets = {
-      samba_passdb = {
-        sopsFile = flakeRoot + "/secrets/default.yaml";
+      "samba/passdb" = {
+        sopsFile = rootPath + "/secrets/default.yaml";
       };
     };
   };

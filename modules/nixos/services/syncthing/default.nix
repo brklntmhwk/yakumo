@@ -2,7 +2,7 @@
 {
   config,
   lib,
-  flakeRoot,
+  rootPath,
   ...
 }:
 
@@ -104,8 +104,8 @@ in
       };
 
       sops.secrets = {
-        syncthing_gui_passwd = {
-          sopsFile = flakeRoot + "/secrets/default.yaml";
+        "syncthing/gui_passwd_file" = {
+          sopsFile = rootPath + "/secrets/default.yaml";
           owner = "syncthing";
         };
       };

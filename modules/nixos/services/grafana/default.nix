@@ -3,7 +3,7 @@
   config,
   lib,
   pkgs,
-  flakeRoot,
+  rootPath,
   ...
 }:
 
@@ -241,20 +241,20 @@ in
       };
 
       sops.secrets = {
-        grafana_admin_passwd = {
-          sopsFile = flakeRoot + "/secrets/default.yaml";
+        "grafana/admin_passwd" = {
+          sopsFile = rootPath + "/secrets/default.yaml";
           owner = "grafana";
         };
-        grafana_secret_key = {
-          sopsFile = flakeRoot + "/secrets/default.yaml";
+        "grafana/secret_key" = {
+          sopsFile = rootPath + "/secrets/default.yaml";
           owner = "grafana";
         };
-        grafana_db_passwd = {
-          sopsFile = flakeRoot + "/secrets/default.yaml";
+        "grafana/db_passwd" = {
+          sopsFile = rootPath + "/secrets/default.yaml";
           owner = "grafana";
         };
-        grafana_smtp_passwd = {
-          sopsFile = flakeRoot + "/secrets/default.yaml";
+        "grafana/smtp_passwd" = {
+          sopsFile = rootPath + "/secrets/default.yaml";
           owner = "grafana";
         };
       };

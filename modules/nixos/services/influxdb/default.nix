@@ -2,7 +2,7 @@
 {
   config,
   lib,
-  flakeRoot,
+  rootPath,
   ...
 }:
 
@@ -86,11 +86,11 @@ in
         ];
 
       sops.secrets = {
-        influxdb_passwd = {
-          sopsFile = flakeRoot + "/secrets/default.yaml";
+        "influxdb/passwd_file" = {
+          sopsFile = rootPath + "/secrets/default.yaml";
         };
-        influxdb_token = {
-          sopsFile = flakeRoot + "/secrets/default.yaml";
+        "influxdb/token_file" = {
+          sopsFile = rootPath + "/secrets/default.yaml";
         };
       };
     }

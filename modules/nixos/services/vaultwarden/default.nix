@@ -3,7 +3,7 @@
   config,
   lib,
   pkgs,
-  flakeRoot,
+  rootPath,
   ...
 }:
 
@@ -175,12 +175,12 @@ in
         );
 
         sops.secrets = {
-          vaultwarden_env = {
-            sopsFile = flakeRoot + "/secrets/default.yaml";
+          "vault/env_file" = {
+            sopsFile = rootPath + "/secrets/default.yaml";
             owner = "vaultwarden";
           };
-          rustic_vaultwarden_env = {
-            sopsFile = flakeRoot + "/secrets/default.yaml";
+          "vault/rustic_env_file" = {
+            sopsFile = rootPath + "/secrets/default.yaml";
             owner = "vaultwarden";
           };
         };

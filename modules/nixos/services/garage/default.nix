@@ -2,7 +2,7 @@
 {
   config,
   lib,
-  flakeRoot,
+  rootPath,
   ...
 }:
 
@@ -23,15 +23,15 @@ in
     {
       services.garage = {
         enable = true;
-        environmentFile = config.sops.secrets.garage_env.path; # Default: null
+        environmentFile = config.sops.secrets."garage/env_file".path; # Default: null
         extraEnvironment = { };
         logLevel = "info"; # Default: 'info' (Options: 'debug', 'error', 'trace', 'warn')
         settings = { };
       };
 
       sops.secrets = {
-        garage_env = {
-          sopsFile = flakeRoot + "/secrets/default.yaml";
+        "garage/env_file" = {
+          sopsFile = rootPath + "/secrets/default.yaml";
         };
       };
     }

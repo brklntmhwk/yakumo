@@ -2,7 +2,7 @@
 {
   config,
   lib,
-  flakeRoot,
+  rootPath,
   ...
 }:
 
@@ -123,16 +123,16 @@ in
           ];
 
         sops.secrets = {
-          paperless_env = {
-            sopsFile = flakeRoot + "/secrets/default.yaml";
+          "paperless/env_file" = {
+            sopsFile = rootPath + "/secrets/default.yaml";
             owner = "paperless";
           };
-          rustic_paperless_env = {
-            sopsFile = flakeRoot + "/secrets/default.yaml";
+          "paperless/rustic_env_file" = {
+            sopsFile = rootPath + "/secrets/default.yaml";
             owner = "paperless";
           };
-          paperless_passwd = {
-            sopsFile = flakeRoot + "/secrets/default.yaml";
+          "paperless/passwd_file" = {
+            sopsFile = rootPath + "/secrets/default.yaml";
             owner = "paperless";
           };
         };

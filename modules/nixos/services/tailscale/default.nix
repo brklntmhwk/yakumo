@@ -2,7 +2,7 @@
 {
   config,
   lib,
-  flakeRoot,
+  rootPath,
   ...
 }:
 
@@ -64,8 +64,8 @@ in
         # See: https://wiki.nixos.org/wiki/Tailscale#Native_nftables_Support_(Modern_Setup)
 
         sops.secrets = {
-          tailscale_authkey = {
-            sopsFile = flakeRoot + "/secrets/default.yaml";
+          "tailscale/auth_key_file" = {
+            sopsFile = rootPath + "/secrets/default.yaml";
           };
         };
       }

@@ -5,7 +5,7 @@
   config,
   lib,
   pkgs,
-  flakeRoot,
+  rootPath,
   ...
 }:
 
@@ -326,11 +326,11 @@ in
           ];
 
         sops.secrets = {
-          stalwart_admin_password = {
-            sopsFile = flakeRoot + "/secrets/default.yaml";
+          "stalwart/admin_passwd" = {
+            sopsFile = rootPath + "/secrets/default.yaml";
           };
-          rustic_stalwart_env = {
-            sopsFile = flakeRoot + "/secrets/default.yaml";
+          "stalwart/rustic_env_file" = {
+            sopsFile = rootPath + "/secrets/default.yaml";
           };
         };
       }

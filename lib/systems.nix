@@ -100,7 +100,7 @@ let
             username
             system
             ;
-          flakeRoot = self;
+          rootPath = self;
         };
       };
 in

@@ -3,7 +3,7 @@
   config,
   lib,
   pkgs,
-  flakeRoot,
+  rootPath,
   ...
 }:
 
@@ -153,12 +153,12 @@ in
           ];
 
         sops.secrets = {
-          immich_secrets = {
-            sopsFile = flakeRoot + "/secrets/default.yaml";
+          "immich/secrets_file" = {
+            sopsFile = rootPath + "/secrets/default.yaml";
             owner = "immich";
           };
-          rustic_immich_env = {
-            sopsFile = flakeRoot + "/secrets/default.yaml";
+          "immich/rustic_env_file" = {
+            sopsFile = rootPath + "/secrets/default.yaml";
             owner = "immich";
           };
         };

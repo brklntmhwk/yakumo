@@ -2,7 +2,7 @@
 {
   config,
   lib,
-  flakeRoot,
+  rootPath,
   ...
 }:
 
@@ -172,13 +172,23 @@ in
           ];
 
         sops.secrets = {
-          kanidm_admin_passwd = {
-            sopsFile = flakeRoot + "/secrets/default.yaml";
+          "kanidm/admin_passwd" = {
+            sopsFile = rootPath + "/secrets/default.yaml";
             owner = "kanidm";
           };
-          kanidm_idm_admin_passwd = {
-            sopsFile = flakeRoot + "/secrets/default.yaml";
+          "kanidm/idm_admin_passwd" = {
+            sopsFile = rootPath + "/secrets/default.yaml";
             owner = "kanidm";
+          };
+          "kanidm/headscale_oidc_client_secret" = {
+            sopsFile = rootPath + "/secrets/default.yaml";
+            owner = "kanidm";
+            restartUnits = [ "headscale.service" ];
+          };
+          "kanidm/mealie_oidc_client_secret" = {
+            sopsFile = rootPath + "/secrets/default.yaml";
+            owner = "kanidm";
+            restartUnits = [ "mealie.service" ];
           };
         };
       }

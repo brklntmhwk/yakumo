@@ -2,7 +2,7 @@
 {
   config,
   lib,
-  flakeRoot,
+  rootPath,
   ...
 }:
 
@@ -67,8 +67,8 @@ in
       };
 
       sops.secrets = {
-        ntfy_env = {
-          sopsFile = flakeRoot + "/secrets/default.yaml";
+        "ntfy/env_file" = {
+          sopsFile = rootPath + "/secrets/default.yaml";
           owner = "ntfy-sh";
         };
       };

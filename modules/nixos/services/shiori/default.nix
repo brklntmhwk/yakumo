@@ -2,7 +2,7 @@
 {
   config,
   lib,
-  flakeRoot,
+  rootPath,
   ...
 }:
 
@@ -40,8 +40,8 @@ in
       };
 
       sops.secrets = {
-        shiori_env = {
-          sopsFile = flakeRoot + "/secrets/default.yaml";
+        "shiori/env_file" = {
+          sopsFile = rootPath + "/secrets/default.yaml";
         };
       };
     }

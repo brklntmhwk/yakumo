@@ -2,7 +2,7 @@
   config,
   lib,
   pkgs,
-  flakeRoot,
+  rootPath,
   ...
 }:
 
@@ -26,7 +26,7 @@
         # Only set global options here.
         # Local (i.e., user or host-scoped) options like `sops.secrets.*`
         # should be set in each host & user configurations.
-        defaultSopsFile = flakeRoot + "/secrets/default.yaml";
+        defaultSopsFile = rootPath + "/secrets/default.yaml";
         age = {
           # YubiKey doesn't officially support Age, so we use age-plugin-yubikey
           # and the PIV feature to register it in a YubiKey.
