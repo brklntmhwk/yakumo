@@ -98,7 +98,7 @@ in
 
             rustic.backups = {
               forgejo = {
-                environmentFile = config.sops.secrets.rustic_forgejo_env.path;
+                environmentFile = config.sops.secrets."forgejo/rustic_env_file".path;
                 timerConfig = {
                   OnCalendar = "*-*-* 05:30:00"; # Run daily at 5:30 a.m.
                   Persistent = true;

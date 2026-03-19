@@ -25,12 +25,41 @@ in
       services.mealie = {
         inherit (meta) port; # Default: 9000
         enable = true;
-        credentialsFile = config.sops.secrets.mealie_credentials.path;
+        credentialsFile = config.sops.templates."mealie-secrets.env".path;
         # Setup local PostgreSQL DB server for Mealie.
-        database.createLocally = true; # Default: false
+        # We leave this disabled so host configurations can flexibly customize.
+        database.createLocally = false; # Default: false
         listenAddress = meta.address; # Default: '0.0.0.0'
-        settings = {
-          ALLOW_SIGNUP = "false";
+        # https://docs.mealie.io/documentation/getting-started/installation/backend-config/
+        settings = rec {
+          BASE_URL = "https://${meta.domain}"; # Default: 'http://localhost:8080'
+          TZ = config.time.timeZone; # Default: 'UTC'
+          # Specify the time window during which a login/auth token is valid.
+          # This must be <= 9600.
+          TOKEN_TIME = 9600; # Default: 48 (hours)
+          ALLOW_SIGNUP = "false"; # Default: 'false'
+          SECURITY_MAX_LOGIN_ATTEMPTS = 5; # Default: 5
+          SECURITY_USER_LOCKOUT_TIME = 24; # Default: 24 (hours)
+
+          # DB Integration
+          DB_ENGINE = "sqlite"; # Default: 'sqlite'
+
+          # OIDC (OpenID Connect) Authentication
+          # https://docs.mealie.io/documentation/getting-started/installation/backend-config/#openid-connect-oidc
+          # https://docs.mealie.io/documentation/getting-started/authentication/oidc-v2/
+          OIDC_AUTH_ENABLED = "true"; # Default: 'false'
+          OIDC_SIGNUP_ENABLED = "true"; # Default: 'true'
+          OIDC_AUTO_REDIRECT = "true"; # Default: 'false'
+          OIDC_REMEMBER_ME = "true"; # Default: 'false'
+          OIDC_USER_CLAIM = "preferred_username"; # Default: 'email'
+          OIDC_PROVIDER_NAME = "Kanidm"; # Default: 'OAuth'
+          OIDC_CONFIGURATION_URL = "https://${meta.domain}/oauth2/openid/${OIDC_CLIENT_ID}/.well-known/openid-configuration"; # Default: ''
+          OIDC_USER_GROUP = "mealie.access@${meta.domain}"; # Default: ''
+          OIDC_ADMIN_GROUP = "mealie.admins@${meta.domain}"; # Default: ''
+          # These should be treated as secrets, so we configure and set them to
+          # `credentialsFile` instead.
+          # OIDC_CLIENT_ID = "mealie"; # Default: ''
+          # OIDC_CLIENT_SECRET = "";
         };
         extraOptions = [ ];
       };
@@ -59,10 +88,25 @@ in
           })
         ];
 
-      sops.secrets = {
-        mealie_credentials = {
-          sopsFile = flakeRoot + "/secrets/default.yaml";
+      sops = {
+        secrets = {
+          "kanidm/mealie_oidc_client_secret" = { };
         };
+        templates =
+          let
+            inherit (lib) optionalString;
+            kaniCfg = config.yakumo.services.kanidm;
+          in
+          {
+            "mealie-secrets.env" = {
+              content = ''
+                OIDC_CLIENT_ID=mealie
+                ${optionalString kaniCfg.enable ''
+                  OIDC_CLIENT_SECRET=${config.sops.placeholder."kanidm/mealie_oidc_client_secret"}
+                ''}
+              '';
+            };
+          };
       };
     }
   ]);

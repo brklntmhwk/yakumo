@@ -33,7 +33,6 @@ in
         user = "headscale"; # Default: 'headscale'
         settings = {
           server_url = "https://${meta.domain}";
-          client_secret_path = config.sops.secrets.headscale_oidc_secret.path;
           database = {
             # Use SQLite for Headscale in order to avoid this chicken and egg deadlock:
             # - We expect Headscale to be hosted on a cloud VPS, and it needs the
@@ -99,22 +98,11 @@ in
           # and Tailscale clients.
           noise.private_key_path = "/var/lib/headscale/noise_private.key";
           # OIDC (OpenID Connect)
-          oidc =
-            let
-              kanidmCfg = config.yakumo.services.kanidm;
-              kanidmMeta = config.yakumo.services.metadata.kanidm;
-              issuerUrl =
-                # Kanidm's specific OIDC issuer URL format requires appending the client ID.
-                # Format: https://<kanidm_origin>/oauth2/openid/<kanidm_system_name>
-                if kanidmCfg.enable then "https://${kanidmMeta.domain}/oauth2/openid/headscale" else "";
-            in
+          oidc = mkMerge [
             {
               allowed_domains = [ ];
               allowed_users = [ ];
-              # Set this in lower case because Kanidm standardizes on lowercase client IDs.
-              client_id = "headscale"; # Default: ''
               extra_params = { };
-              issuer = issuerUrl; # Default: ''
               # PKCE (Proof Key for Code Exchange): Adds an additional security layer
               # to the OAuth 2.0 authorization code flow by preventing authorization
               # code interception attacks.
@@ -133,7 +121,21 @@ in
                 "profile"
                 "email"
               ];
-            };
+            }
+            (mkIf kaniCfg.enable (
+              let
+                kanidmCfg = config.yakumo.services.kanidm;
+                kaniMeta = config.yakumo.services.metadata.kanidm;
+              in
+              {
+                # Kanidm's specific OIDC issuer URL format requires appending the client ID.
+                # Format: https://<kanidm_origin>/oauth2/openid/<kanidm_system_name>
+                issuer = "https://${kaniMeta.domain}/oauth2/openid/headscale"; # Default: ''
+                client_id = "headscale"; # Default: ''
+                client_secret_path = config.sops.secrets."kanidm/headscale_oidc_client_secret".path; # Default: null
+              }
+            ))
+          ];
           # ACLs (Access Control Lists)
           # https://tailscale.com/kb/1018/acls/
           policy =

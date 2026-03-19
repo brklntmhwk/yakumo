@@ -34,8 +34,8 @@ in
             ;
           enable = true;
           user = "paperless"; # Default: 'paperless'
-          environmentFile = config.sops.secrets.paperless_env.path; # Default: null
-          passwordFile = config.sops.secrets.paperless_passwd.path;
+          environmentFile = config.sops.secrets."paperless/env_file".path; # Default: null
+          passwordFile = config.sops.secrets."paperless/passwd_file".path;
           consumptionDir = "${paperlessCfg.dataDir}/consume";
           # Allow all users can write to the consumption directory if set to true.
           consumptionDirIsPublic = false; # Default: false
@@ -81,7 +81,7 @@ in
             (mkIf rusticCfg.enable {
               services.rustic.backups = {
                 paperless = {
-                  environmentFile = config.sops.secrets.rustic_paperless_env.path;
+                  environmentFile = config.sops.secrets."paperless/rustic_env_file".path;
                   timerConfig = {
                     OnCalendar = "*-*-* 02:30:00"; # Run daily at 2:30 a.m.
                     Persistent = true;

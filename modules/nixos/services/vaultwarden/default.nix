@@ -32,7 +32,7 @@ in
           inherit (meta) domain;
           enable = true;
           backupDir = "/var/backup/vaultwarden"; # Default: null
-          environmentFile = config.sops.secrets.vaultwarden_env.path; # Default: [ ]
+          environmentFile = config.sops.secrets."vault/env_file".path; # Default: [ ]
           # Use Caddy instead.
           configureNginx = false; # Default: false
           configurePostgres = false; # Default: false
@@ -114,7 +114,7 @@ in
             (mkIf rusticCfg.enable {
               services.rustic.backups = {
                 vaultwarden = {
-                  environmentFile = config.sops.secrets.rustic_vaultwarden_env.path;
+                  environmentFile = config.sops.secrets."vault/rustic_env_file".path;
                   timerConfig = {
                     OnCalendar = "*-*-* 03:30:00"; # Run daily at 3:30 a.m.
                     Persistent = true;

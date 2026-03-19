@@ -25,7 +25,8 @@ in
 
   config = mkIf cfg.enable (
     let
-      tailscaleCfg = config.services.tailscale;
+      tailCfg = config.services.tailscale;
+      # headMeta = config.yakumo.services.metadata.headscale;
     in
     mkMerge [
       {
@@ -34,14 +35,23 @@ in
           enable = true;
           openFirewall = false; # Default: false
           # Pass extra params to `--auth-key` after the auth key.
+          # `tailscale up --auth-key AUTH_KEY_FILE AUTH_KEY_PARAMS... UP_FLAGS...`
           # See: https://tailscale.com/docs/features/oauth-clients#register-new-nodes-using-oauth-credentials
           authKeyParameters = { }; # Default: { }
-          authKeyFile = config.sops.secrets.tailscale_authkey.path; # Default: null
+          authKeyFile = config.sops.secrets."tailscale/auth_key_file".path; # Default: null
           disableTaildrop = !cfg.taildrop.enable; # Default: false
           disableUpstreamLogging = false; # Default: false
+          # https://tailscale.com/docs/reference/tailscaled
           extraDaemonFlags = [ ]; # Default: [ ]
+          # `tailscale set SET_FLAGS...`
+          # https://tailscale.com/docs/reference/tailscale-cli#set
           extraSetFlags = [ ]; # Default: [ ]
-          extraUpFlags = [ ]; # Default: [ ]
+          # `tailscale up --auth-key AUTH_KEY_FILE AUTH_KEY_PARAMS... UP_FLAGS...`
+          # https://tailscale.com/docs/reference/tailscale-cli#up
+          extraUpFlags = [
+            # "--login-server"
+            # "https://${headMeta.domain}"
+          ]; # Default: [ ]
           interfaceName = "tailscale0"; # Default: 'tailscale0'
           # Specify the username or user ID of whom is allowed to fetch
           # Tailscale TLS certificates for the node.
@@ -57,7 +67,7 @@ in
         networking.firewall = {
           enable = true;
           trustedInterfaces = [ "tailscale0" ];
-          allowedUDPPorts = [ tailscaleCfg.port ];
+          allowedUDPPorts = [ tailCfg.port ];
         };
 
         # TODO: Consider introducing nftables.

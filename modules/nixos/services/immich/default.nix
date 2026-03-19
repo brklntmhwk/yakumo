@@ -35,7 +35,7 @@ in
           group = "immich"; # Default: 'immich'
           user = "immich"; # Default: 'immich'
           host = meta.address; # Default: 'localhost'
-          secretsFile = config.sops.secrets.immich_secrets.path;
+          secretsFile = config.sops.secrets."immich/secrets_file".path;
           openFirewall = false; # Default: false
           # Specify device paths to hardware acceleration devices that
           # immich should have access to.
@@ -166,7 +166,7 @@ in
       (mkIf rusticCfg.enable {
         yakumo.services.rustic.backups = {
           immich = {
-            environmentFile = config.sops.secrets.rustic_immich_env.path;
+            environmentFile = config.sops.secrets."immich/rustic_env_file".path;
             timerConfig = {
               OnCalendar = "*-*-* 04:00:00"; # Run daily at 4 a.m.
               Persistent = true;

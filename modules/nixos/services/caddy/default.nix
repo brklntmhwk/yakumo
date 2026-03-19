@@ -45,12 +45,14 @@ in
       # https://acme-staging-v02.api.letsencrypt.org/directory
       # Prod: null should be preferred as it omits the `acme_ca` option to enable
       # automatic issuer fallback.
+      # https://caddyserver.com/docs/caddyfile/options#acme-ca
       acmeCA = null; # Default: null
       # Prefer saved config over any specified config passed with `--config`.
       resume = false; # Default: false
       # This morphs into Caddyfile unlike 'services.caddy.settings'
       # (Caddy JSON configuration file).
       # configFile = {};
+      # This will be appended to the resulting Caddyfile.
       extraConfig = "";
     };
 

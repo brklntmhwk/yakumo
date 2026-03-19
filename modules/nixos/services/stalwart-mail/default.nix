@@ -42,7 +42,7 @@ in
           # The value(s) given will be set for the `LoadCredential` Systemd setting.
           # For the macro syntax, see: https://stalw.art/docs/configuration/macros
           credentials = {
-            user_admin_password = config.sops.secrets.stalwart_admin_password.path;
+            user_admin_password = config.sops.secrets."stalwart/admin_passwd".path;
           };
           # For the available options, see:
           # https://stalw.art/docs/category/configuration/
@@ -79,7 +79,7 @@ in
             # https://stalw.art/docs/auth/authorization/administrator/#fallback-administrator
             authentication.fallback-admin = {
               user = "admin";
-              secret = "%{file:/run/credentials/stalwart-mail.service/stalwart_admin_password}%";
+              secret = "%{file:/run/credentials/stalwart-mail.service/stalwart/admin_passwd}%";
             };
             # DKIM (DomainKeys Identified Mail)
             # https://stalw.art/docs/mta/authentication/dkim/sign
@@ -291,7 +291,7 @@ in
             (mkIf rusticCfg.enable {
               services.rustic.backups = {
                 stalwart = {
-                  environmentFile = config.sops.secrets.rustic_stalwart_env.path;
+                  environmentFile = config.sops.secrets."stalwart/rustic_env_file".path;
                   timerConfig = {
                     OnCalendar = "*-*-* 03:00:00"; # Run daily at 3 a.m.
                     Persistent = true;

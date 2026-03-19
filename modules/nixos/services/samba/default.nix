@@ -80,7 +80,7 @@ in
           "invalid users" = [
             "root"
           ];
-          "passdb backend" = "tdbsam:${config.sops.secrets.samba_passdb.path}"; # Default: 'tdbsam'
+          "passdb backend" = "tdbsam:${config.sops.secrets."samba/passdb".path}"; # Default: 'tdbsam'
           "security" = "user"; # Default: 'user' (Options: 'auto', 'domain', 'ads')
           # Make the share visible only to users with the R&W access permissions
           # to the share during share enumeration.

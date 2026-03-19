@@ -28,7 +28,7 @@ in
       # Allow changes made on the AdGuard Home web UI to persist
       # between service restarts.
       mutableSettings = true; # Default: true
-      openFirewall = true; # Default: false
+      openFirewall = false; # Default: false
       settings = {
         dhcp.enabled = true;
       };

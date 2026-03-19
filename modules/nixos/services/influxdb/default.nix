@@ -28,8 +28,8 @@ in
           enable = true;
           initialSetup = {
             username = "admin"; # Default: 'admin'
-            passwordFile = config.sops.secrets.influxdb_passwd.path;
-            tokenFile = config.sops.secrets.influxdb_token.path;
+            passwordFile = config.sops.secrets."influxdb/passwd_file".path;
+            tokenFile = config.sops.secrets."influxdb/token_file".path;
             bucket = "default";
             organization = "default";
             # Set how long the bucket retains data (0 means infinite).
@@ -47,13 +47,9 @@ in
               };
             };
           };
-          users = {
-            # TODO: Refactor this so this module doesn't know about the users.
-            otogaki = {
-              passwordFile = config.sops.secrets.login_passwd_otogaki.path;
-              present = true; # Default: true
-            };
-          };
+          # As the `initialSetup.username` will automatically be added, we don't
+          # need any more users.
+          users = { };
         };
         settings = {
           reporting-disabled = true;

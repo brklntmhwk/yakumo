@@ -13,6 +13,8 @@ let
     nameValuePair
     types
     ;
+  metadata = config.yakumo.services.metadata;
+
   serviceSubmodule =
     { config, ... }:
     {
@@ -43,6 +45,14 @@ let
         reverseProxy = {
           caddyIntegration = {
             enable = mkEnableOption "reverse proxy integaration feat. Caddy";
+            acme = {
+              enable = mkEnableOption "acme";
+              host = mkOption {
+                type = types.nullOr types.str;
+                default = null;
+                description = "ACME host name.";
+              };
+            };
             extraConfig = mkOption {
               type = types.lines;
               default = ''
@@ -68,6 +78,19 @@ in
   };
 
   config = {
+    assertions = [
+      {
+        assertion =
+          let
+            inherit (builtins) attrValues;
+            inherit (lib) any;
+            requiresCaddy = any (meta: meta.reverseProxy.caddyIntegration.enable) (attrValues metadata);
+          in
+          requiresCaddy -> config.yakumo.services.caddy.enable;
+        message = "Caddy must be enabled if using Caddy reverse proxy integration";
+      }
+    ];
+
     yakumo.services.metadata = {
       # Sorted by port number.
       rustic = {
@@ -178,11 +201,6 @@ in
         address = "127.0.0.1";
         port = 8222;
       };
-      anki-sync-server = {
-        domain = "anki.yakumo.local";
-        address = "127.0.0.1";
-        port = 8384;
-      };
       kanidm = {
         domain = "idm.yakumo.local";
         address = "127.0.0.1";
@@ -201,7 +219,15 @@ in
       syncthing = {
         domain = "sync.yakumo.local";
         address = "127.0.0.1";
-        port = 22067;
+        port = 8384;
+        extraPorts = {
+          relay = 22067;
+        };
+      };
+      anki-sync-server = {
+        domain = "anki.yakumo.local";
+        address = "127.0.0.1";
+        port = 27701;
       };
       paperless-ngx = {
         domain = "paperless.yakumo.local";
@@ -217,16 +243,21 @@ in
 
     services.caddy.virtualHosts =
       let
-        proxiedServices = filterAttrs (_: meta: meta.reverseProxy.enable) config.yakumo.services.metadata;
+        proxiedServices = filterAttrs (_: meta: meta.reverseProxy.caddyIntegration.enable) metadata;
       in
       mapAttrs' (
         _: meta:
+        let
+          caddyCfg = meta.reverseProxy.caddyIntegration;
+        in
         nameValuePair meta.domain {
           # Specify a host of an existing Let's Encrypt certificate.
           # Useful when we use DNS challenges but Caddy doesn't support our DNS provider.
-          useACMEHost = "yakumo.net";
+          # This doesn't create any certificates or add subdomains to existing ones
+          # either.
+          useACMEHost = mkIf caddyCfg.acme.enable caddyCfg.acme.host;
           extraConfig = ''
-            ${meta.reverseProxy.extraConfig}
+            ${caddyCfg.extraConfig}
           '';
         }
       ) proxiedServices;

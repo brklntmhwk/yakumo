@@ -97,8 +97,8 @@ in
             # Auto-remove an entity from Kanidm when deleting them in this provisioning config.
             autoRemove = true; # Default: true
             instanceUrl = "https://${meta.bindAddress}";
-            adminPasswordFile = config.sops.secrets.kanidm_admin_passwd.path;
-            idmAdminPasswordFile = config.sops.secrets.kanidm_idm_admin_passwd.path;
+            adminPasswordFile = config.sops.secrets."kanidm/admin_passwd".path;
+            idmAdminPasswordFile = config.sops.secrets."kanidm/idm_admin_passwd".path;
             groups = {
               vpn_users = { };
             };

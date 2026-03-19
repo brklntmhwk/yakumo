@@ -29,7 +29,7 @@ in
           port # Default: 8080
           ;
         enable = true;
-        environmentFile = config.sops.secrets.shiori_env.path; # Default: null
+        environmentFile = config.sops.secrets."shiori/env_file".path; # Default: null
         # Shiori can use MySQL or PostgreSQL.
         databaseUrl = "postgres:///shiori?host=/run/postgresql";
         webRoot = "/"; # Default: '/'

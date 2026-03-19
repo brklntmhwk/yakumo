@@ -120,7 +120,7 @@ in
               host = pgMeta.bindAddress; # Default: '127.0.0.1:3306'
               path = "${config.services.grafana.dataDir}/data/grafana.db";
               # Not applicable for 'sqlite3'.
-              password = config.sops.secrets.grafana_db_passwd.path; # Default: ''
+              password = config.sops.secrets."grafana/db_passwd".path; # Default: ''
               # Not applicable for 'sqlite3'.
               user = "grafana"; # Default: 'grafana'
               ca_cert_path = null; # Default: null
@@ -143,8 +143,8 @@ in
             admin_email = "";
             admin_user = "admin"; # Default: 'admin'
             allow_embedding = false; # Default: false
-            admin_password = config.sops.secrets.grafana_admin_passwd.path;
-            secret_key = config.sops.secrets.grafana_secret_key.path; # Default: 'SW2YcwTIb9zpOOhoPsMm'
+            admin_password = config.sops.secrets."grafana/admin_passwd".path;
+            secret_key = config.sops.secrets."grafana/secret_key".path; # Default: 'SW2YcwTIb9zpOOhoPsMm'
             content_security_policy = false; # Default: false
             content_security_policy_report_only = false; # Default: false
             cookie_samesite = "lax"; # Default: 'lax' (Options: 'strict', 'none', 'disabled')
@@ -202,7 +202,7 @@ in
             enabled = false; # Default: false
             host = "localhost:25"; # Default: 'localhost:25'
             user = null; # Default: null
-            password = config.sops.secrets.grafana_smtp_passwd.path; # Default: ''
+            password = config.sops.secrets."grafana/smtp_passwd".path; # Default: ''
             cert_file = null; # Default: null
             ehlo_identity = null; # Default: null
             from_name = "Grafana"; # Default: 'Grafana'

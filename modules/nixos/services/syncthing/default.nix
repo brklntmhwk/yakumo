@@ -22,24 +22,26 @@ in
 
   config = mkIf cfg.enable (mkMerge [
     {
-      services.syncthing = {
+      services.syncthing = rec {
         enable = true;
         group = "syncthing"; # Default: 'syncthing'
         user = "syncthing"; # Default: 'syncthing'
         # Overwrite the all_proxy env variable for the Syncthing process.
         all_proxy = "socks5://address.com:1234"; # Default: null
+        # TODO: Consider setting these leveraging ACME.
         # Specify the path to the `cert.pem` file.
         # This will be copied into Syncthing's configDir.
         cert = "path/to/cert-pem-file"; # Default: null
         # Specify the path to the `key.pem` file.
         # This will be copied into Syncthing's configDir.
         key = "path/to/key-pem-file"; # Default: null
-        guiPasswordFile = config.sops.secrets.syncthing_gui_passwd.path; # Default: null
-        configDir = "";
+        # Specify the address to serve the web UI at.
+        guiAddress = meta.bindAddress;
+        guiPasswordFile = config.sops.secrets."syncthing/gui_passwd_file".path; # Default: null
+        configDir = dataDir;
         dataDir = "/var/lib/syncthing";
         databaseDir = "";
         extraFlags = [ ];
-        guiAddress = meta.bindAddress;
         # Delete the devices that are not configured via the devices option.
         # If set to false, devices added via the web UI will persist and
         # have to be deleted manually.
@@ -56,12 +58,13 @@ in
         openDefaultPorts = false; # Default: false
         # Auto-launch Syncthing as a system service.
         systemService = true; # Default: true
+        # https://docs.syncthing.net/users/relaying.html
         relay = {
           enable = true;
           listenAddress = "";
           statusListenAddress = "";
-          port = 22067; # Default: 22067
-          statusPort = 22067; # Default: 22067
+          port = meta.extraPorts.relay; # Default: 22067
+          statusPort = meta.extraPorts.relay; # Default: 22067
           # Specify extra args to pass to strelaysrv.
           extraOptions = [ ];
           # Global bandwidth rate limit in bytes per second.
@@ -77,6 +80,7 @@ in
         settings = {
           devices = { };
           folders = { };
+          # https://docs.syncthing.net/users/config.html
           options = {
             # Apply bandwidth limits to devices in the same broadcast domain
             # as the local device if set to true.
