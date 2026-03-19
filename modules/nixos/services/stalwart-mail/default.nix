@@ -52,7 +52,7 @@ in
             # changes made dynamically via its web admin UI.
             # https://stalw.art/docs/configuration/overview/#local-and-database-settings
             config.local-keys = [
-              # defaults
+              # Defaults
               "store.*"
               "directory.*"
               "tracer.*"
@@ -68,7 +68,7 @@ in
               "storage.fts"
               "storage.directory"
               "certificate.*"
-              # custom
+              # Customs
               "auth.dkim.*"
               "signature.*"
               "resolver.*"

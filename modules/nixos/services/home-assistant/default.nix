@@ -73,6 +73,20 @@ in
         "backup"
       ];
       extraArgs = [ ];
+      # https://www.home-assistant.io/integrations/?brands=featured
+      extraComponents = [
+        # Defaults
+        "default_config"
+        "met"
+        "esphome"
+        # Customs
+        "forecast_solar"
+        "mqtt"
+        "spotify"
+        "wake_word"
+        "whisper"
+        "wyoming"
+      ];
       # Specify additional packages to add to `propagatedBuildInputs`.
       extraPackages = [ ];
       blueprints = {
