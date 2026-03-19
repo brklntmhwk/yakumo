@@ -97,14 +97,14 @@ in
             # https://stalw.art/docs/server/tls/certificates/
             certificate.default =
               let
-                acmeCerts = config.security.acme.certs;
+                acmeCertsDir = config.security.acme.certs.${domain}.directory;
               in
               {
                 # Specify this certificate as the default for the situation where
                 # the client doesn't provide an SNI server name.
                 default = true;
-                cert = "%{file:${acmeCerts.${domain}.directory}/fullchain.pem}%";
-                private-key = "%{file:${acmeCerts.${domain}.directory}/key.pem}%";
+                cert = "%{file:${acmeCertsDir}/fullchain.pem}%";
+                private-key = "%{file:${acmeCertsDir}/key.pem}%";
               };
             # Generate the RSA signing key (legacy) for DKIM as well as the ED25519 one
             # for backward compatibility; some legacy enterprise firewalls and
@@ -244,6 +244,9 @@ in
           };
         };
 
+        # Add the stalwart-mail user to the acme group, granting it the right to
+        # read the `fullchain.pem` and `key.pem` files directly from '/var/lib/acme/'
+        # without needing to copy or duplicate the sensitive files.
         users.groups.acme.members = [ "stalwart-mail" ];
 
         networking.firewall.allowedTCPPorts = [
@@ -263,11 +266,11 @@ in
               mkdir -p /var/lib/stalwart-mail/dkim
 
               if [[ ! -e /var/lib/stalwart-mail/dkim/rsa-${domain}.key ]]; then
-                echo "Generating RSA DKIM key for ${domain}..."
+                echo "Generating RSA DKIM key for ${domain}"
                 ${getExe pkgs.openssl} genrsa -traditional -out /var/lib/stalwart-mail/dkim/rsa-${domain}.key 2048
               fi
               if [[ ! -e /var/lib/stalwart-mail/dkim/ed25519-${domain}.key ]]; then
-                echo "Generating ED25519 DKIM key for ${domain}..."
+                echo "Generating ED25519 DKIM key for ${domain}"
                 ${getExe pkgs.openssl} genpkey -algorithm ed25519 -out /var/lib/stalwart-mail/dkim/ed25519-${domain}.key
               fi
             '';

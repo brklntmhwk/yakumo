@@ -149,6 +149,7 @@ in
 
         yakumo =
           let
+            rusticCfg = config.yakumo.services.rustic;
             yosugaCfg = config.yakumo.system.persistence.yosuga;
           in
           mkMerge [
@@ -157,6 +158,33 @@ in
                 caddyIntegration.enable = true;
               };
             }
+            (mkIf rusticCfg.enable {
+              services.rustic.backups = {
+                kanidm = {
+                  environmentFile = config.sops.secrets."kanidm/rustic_env_file".path;
+                  timerConfig = {
+                    # Run daily at 11:30 PM, safely after Kanidm's 10:00 PM internal backup.
+                    OnCalendar = "*-*-* 23:30:00";
+                    Persistent = true;
+                  };
+                  settings = {
+                    repository = "s3:https://your-s3-endpoint/bucket/kanidm";
+                    backup = {
+                      sources = [
+                        # Target the native online_backup path, not the live database.
+                        kaniCfg.serverSettings.online_backup.path
+                        # kaniCfg.server.settings.online_backup.path
+                      ];
+                    };
+                    forget = {
+                      keep-daily = 7;
+                      keep-weekly = 4;
+                      prune = true;
+                    };
+                  };
+                };
+              };
+            })
             (mkIf yosugaCfg.enable {
               system.persistence.yosuga = {
                 directories = [
@@ -177,6 +205,10 @@ in
             owner = "kanidm";
           };
           "kanidm/idm_admin_passwd" = {
+            sopsFile = rootPath + "/secrets/default.yaml";
+            owner = "kanidm";
+          };
+          "kanidm/rustic_env_file" = {
             sopsFile = rootPath + "/secrets/default.yaml";
             owner = "kanidm";
           };
