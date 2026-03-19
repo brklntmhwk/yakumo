@@ -17,7 +17,7 @@
     system = {
       role = "server";
       nix = {
-        enableFlake = true;
+        flake.enable = true;
       };
       networking = {
         manager = "networkmanager";

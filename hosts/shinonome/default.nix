@@ -27,7 +27,7 @@ in
     system = {
       role = "workstation";
       nix = {
-        enableFlake = true;
+        flake.enable = true;
       };
       networking = {
         manager = "networkmanager";

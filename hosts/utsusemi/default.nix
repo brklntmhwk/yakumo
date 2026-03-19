@@ -16,7 +16,7 @@
   yakumo.system = {
     role = "workstation";
     nix = {
-      enableFlake = true;
+      flake.enable = true;
     };
   };
 

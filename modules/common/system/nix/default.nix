@@ -18,7 +18,9 @@ let
 in
 {
   options.yakumo.system.nix = {
-    enableFlake = mkEnableOption "Nix Flakes";
+    flake = {
+      enable = mkEnableOption "Nix Flakes";
+    };
     package = mkPackageOption pkgs "nix" { };
   };
 
