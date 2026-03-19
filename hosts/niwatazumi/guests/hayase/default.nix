@@ -17,6 +17,7 @@
     services = {
       anki-sync-server = {
         enable = true;
+        users = [ ];
       };
       calibre-web = {
         enable = true;

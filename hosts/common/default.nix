@@ -2,6 +2,11 @@
 
 {
   yakumo = {
+    system = {
+      # persistence.yosuga = {
+      #   enable = true;
+      # };
+    };
     services = {
       openssh.enable = true;
     };
