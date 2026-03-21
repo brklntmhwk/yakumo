@@ -12,7 +12,7 @@ let
     mkIf
     mkOption
     types
-  ;
+    ;
   inherit (murakumo.utils) anyHasPrefix;
   mediaMods = config.yakumo.desktop.apps.media.modules;
 in

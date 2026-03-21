@@ -10,7 +10,7 @@ let
   inherit (lib)
     mkDefault
     mkIf
-  ;
+    ;
   inherit (murakumo.utils) anyHasPrefix;
   hardwareMods = config.yakumo.hardware.modules;
 in
