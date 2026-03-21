@@ -42,6 +42,8 @@ rec {
 
   anyAttrByPath = path: attrs: any (val: attrByPath path false val) (attrValues attrs);
 
+  anyHasPrefix = prefix: list: any (hasPrefix prefix) list;
+
   getDirNames =
     dir:
     pipe (readDir dir) [

@@ -2,20 +2,20 @@
   config,
   lib,
   pkgs,
+  murakumo,
   ...
 }:
 
 let
   inherit (lib)
-    any
-    hasPrefix
     mkDefault
     mkIf
-    ;
+  ;
+  inherit (murakumo.utils) anyHasPrefix;
   hardwareMods = config.yakumo.hardware.modules;
 in
 {
-  config = mkIf (any (mod: hasPrefix "ups" mod) hardwareMods) {
+  config = mkIf (anyHasPrefix "ups" hardwareMods) {
     power.ups = {
       enable = true;
       # - "none": doesn't start anything. Use the Integrated Power Management or

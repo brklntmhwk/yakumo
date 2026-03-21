@@ -1,15 +1,17 @@
 {
   config,
   lib,
+  murakumo,
   ...
 }:
 
 let
-  inherit (lib) any hasPrefix mkIf;
+  inherit (lib) mkIf;
+  inherit (murakumo.utils) anyHasPrefix;
   hardwareMods = config.yakumo.hardware.modules;
 in
 {
-  config = mkIf (any (mod: hasPrefix "gpu" mod) hardwareMods) {
+  config = mkIf (anyHasPrefix "gpu" hardwareMods) {
     hardware.graphics = {
       enable = true;
     };

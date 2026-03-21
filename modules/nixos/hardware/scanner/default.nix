@@ -2,15 +2,17 @@
   config,
   lib,
   pkgs,
+  murakumo,
   ...
 }:
 
 let
-  inherit (lib) any hasPrefix mkIf;
+  inherit (lib) mkIf;
+  inherit (murakumo.utils) anyHasPrefix;
   hardwareMods = config.yakumo.hardware.modules;
 in
 {
-  config = mkIf (any (mod: hasPrefix "scanner" mod) hardwareMods) {
+  config = mkIf (anyHasPrefix "scanner" hardwareMods) {
     hardware.sane = {
       enable = true;
       openFirewall = true;

@@ -2,15 +2,17 @@
   config,
   lib,
   pkgs,
+  murakumo,
   ...
 }:
 
 let
-  inherit (lib) any hasPrefix mkIf;
+  inherit (lib) mkIf;
+  inherit (murakumo.utils) anyHasPrefix;
   hardwareMods = config.yakumo.hardware.modules;
 in
 {
-  config = mkIf (any (mod: hasPrefix "printer" mod) hardwareMods) {
+  config = mkIf (anyHasPrefix "printer" hardwareMods) {
     # Enable printing support through the CUPS (Common UNIX Printing System) daemon.
     services.printing = {
       enable = true;

@@ -2,20 +2,20 @@
   config,
   lib,
   pkgs,
+  murakumo,
   ...
 }:
 
 let
   inherit (lib)
-    any
-    hasPrefix
     mkIf
     mkOption
     ;
+  inherit (murakumo.utils) anyHasPrefix;
   hardwareMods = config.yakumo.hardware.modules;
 in
 {
-  config = mkIf (any (mod: hasPrefix "bluetooth" mod) hardwareMods) {
+  config = mkIf (anyHasPrefix "bluetooth" hardwareMods) {
     hardware.bluetooth = {
       enable = true;
       powerOnBoot = true;

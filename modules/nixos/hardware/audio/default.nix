@@ -2,20 +2,20 @@
   config,
   lib,
   pkgs,
+  murakumo,
   ...
 }:
 
 let
   inherit (lib)
-    any
-    hasPrefix
     mkForce
     mkIf
     ;
+  inherit (murakumo.utils) anyHasPrefix;
   hardwareMods = config.yakumo.hardware.modules;
 in
 {
-  config = mkIf (any (mod: hasPrefix "audio" mod) hardwareMods) {
+  config = mkIf (anyHasPrefix "audio" hardwareMods) {
     # See https://wiki.nixos.org/wiki/PipeWire for more details.
     services.pulseaudio.enable = mkForce false;
     services.pipewire = {

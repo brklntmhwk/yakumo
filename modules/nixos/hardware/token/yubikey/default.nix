@@ -9,16 +9,15 @@
 let
   inherit (builtins) attrValues;
   inherit (lib)
-    any
-    hasPrefix
     elem
     mkIf
     ;
   inherit (murakumo.platforms) isLinux;
+  inherit (murakumo.utils) anyHasPrefix;
   hardwareMods = config.yakumo.hardware.modules;
 in
 {
-  config = mkIf (any (mod: hasPrefix "token/yubikey" mod) hardwareMods) {
+  config = mkIf (anyHasPrefix "token/yubikey" hardwareMods) {
     environment.systemPackages = attrValues {
       inherit (pkgs)
         yubikey-manager # The modern CLI tool (ykman)

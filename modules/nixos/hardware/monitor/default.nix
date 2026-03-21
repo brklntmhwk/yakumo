@@ -8,16 +8,15 @@
 
 let
   inherit (lib)
-    any
-    hasPrefix
     mkIf
     mkMerge
     ;
   inherit (murakumo.platforms) isx86_64;
+  inherit (murakumo.utils) anyHasPrefix;
   hardwareMods = config.yakumo.hardware.modules;
 in
 {
-  config = mkIf (any (mod: hasPrefix "monitor" mod) hardwareMods) (mkMerge [
+  config = mkIf (anyHasPrefix "monitor" hardwareMods) (mkMerge [
     {
       yakumo.user.packages = builtins.attrValues {
         inherit (pkgs)

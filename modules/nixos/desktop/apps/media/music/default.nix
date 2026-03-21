@@ -2,22 +2,22 @@
   config,
   lib,
   pkgs,
+  murakumo,
   ...
 }:
 
 let
   inherit (builtins) attrValues;
   inherit (lib)
-    any
-    hasPrefix
     mkIf
     mkOption
     types
-    ;
+  ;
+  inherit (murakumo.utils) anyHasPrefix;
   mediaMods = config.yakumo.desktop.apps.media.modules;
 in
 {
-  config = mkIf (any (mod: hasPrefix "music" mod) mediaMods) {
+  config = mkIf (anyHasPrefix "music" mediaMods) {
     yakumo.user.packages = attrValues {
       inherit (pkgs)
         mpv # Classic media player based on MPlayer and mplayer2
