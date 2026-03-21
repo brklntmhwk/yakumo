@@ -13,6 +13,7 @@ let
   inherit (lib)
     all
     any
+    attrByPath
     attrsToList
     count
     filterAttrs
@@ -38,6 +39,8 @@ rec {
   countAttrs = pred: attrs: count (attr: pred attr.name attr.value) (attrsToList attrs);
 
   anyEnabled = attrs: any (subModule: subModule.enable or false) (attrValues attrs);
+
+  anyAttrByPath = path: attrs: any (val: attrByPath path false val) (attrValues attrs);
 
   getDirNames =
     dir:
