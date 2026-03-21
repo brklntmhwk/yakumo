@@ -16,6 +16,7 @@ in
 
   config = mkIf cfg.enable (
     let
+      yosugaCfg = config.yakumo.system.persistence.yosuga;
       caddyCfg = config.yakumo.services.caddy;
     in
     mkMerge [
@@ -71,6 +72,18 @@ in
           };
         };
       }
+      (mkIf yosugaCfg.enable {
+        yakumo.system.persistence.yosuga = {
+          directories = [
+            {
+              path = "/var/lib/acme";
+              user = "acme";
+              group = "acme";
+              mode = "0755";
+            }
+          ];
+        };
+      })
       (mkIf caddyCfg.enable {
         # Specify systemd services to call `systemctl try-reload-or-restart` on.
         security.acme.defaults.reloadServices = [ "caddy" ];
