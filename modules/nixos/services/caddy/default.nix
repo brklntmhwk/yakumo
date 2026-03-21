@@ -2,6 +2,7 @@
 {
   config,
   lib,
+  rootPath,
   ...
 }:
 
@@ -31,15 +32,15 @@ in
       user = "caddy"; # Default: 'caddy'
       # Specify your email address, which will be used when creating an ACME account
       # with your CA.
-      email = null; # Default: null
-      environmentFile = config.sops.secrets.caddy_env.path; # Default: null
+      email = config.security.acme.defaults.email; # Default: null
+      environmentFile = config.sops.secrets."caddy/env_file".path; # Default: null
       dataDir = "/var/lib/caddy";
       logDir = "/var/log/caddy";
       # See: https://caddyserver.com/docs/caddyfile/options#log
       logFormat = ''
         level ERROR
       '';
-      # Specify the URL to the ACME CA's directory.
+      # Specify the URL to the ACME CA's (Certificate Authority's) directory.
       # For testing or dev, setting this to the following for Let's Encrypt's staging
       # endpoint is recommended:
       # https://acme-staging-v02.api.letsencrypt.org/directory
@@ -56,7 +57,10 @@ in
       extraConfig = "";
     };
 
-    # Ensure the Caddy user has permission to read the ACME certificates.
-    users.users.caddy.extraGroups = [ "acme" ];
+    sops.secrets = {
+      "caddy/env_file" = {
+        sopsFile = rootPath + "/secrets/default.yaml";
+      };
+    };
   };
 }

@@ -1,6 +1,7 @@
 {
   config,
   lib,
+  murakumo,
   ...
 }:
 
@@ -49,7 +50,8 @@ let
               enable = mkEnableOption "acme";
               host = mkOption {
                 type = types.nullOr types.str;
-                default = null;
+                # TODO: Consider handling the root domain at the project root.
+                default = "yakumo.org";
                 description = "ACME host name.";
               };
             };
@@ -78,18 +80,22 @@ in
   };
 
   config = {
-    assertions = [
-      {
-        assertion =
-          let
-            inherit (builtins) attrValues;
-            inherit (lib) any;
-            requiresCaddy = any (meta: meta.reverseProxy.caddyIntegration.enable) (attrValues metadata);
-          in
-          requiresCaddy -> config.yakumo.services.caddy.enable;
-        message = "Caddy must be enabled if using Caddy reverse proxy integration";
-      }
-    ];
+    assertions =
+      let
+        inherit (murakumo) anyAttrByPath;
+        requiresCaddy = anyAttrByPath [ "reverseProxy" "caddyIntegration" "enable" ] metadata;
+        requiresACME = anyAttrByPath [ "reverseProxy" "caddyIntegration" "acme" "enable" ] metadata;
+      in
+      [
+        {
+          assertion = requiresCaddy -> config.yakumo.services.caddy.enable;
+          message = "Caddy must be enabled if using Caddy reverse proxy integration";
+        }
+        {
+          assertion = requiresACME -> config.yakumo.security.acme.enable;
+          message = "ACME must be enabled if using Caddy ACME integration";
+        }
+      ];
 
     yakumo.services.metadata = {
       # Sorted by port number.
@@ -182,7 +188,7 @@ in
         port = 8084;
       };
       owntracks = {
-        domain = "owntracks.yakumo.local";
+        domain = "geo.yakumo.local";
         address = "127.0.0.1";
         port = 8085;
       };
@@ -255,7 +261,7 @@ in
           # Useful when we use DNS challenges but Caddy doesn't support our DNS provider.
           # This doesn't create any certificates or add subdomains to existing ones
           # either.
-          useACMEHost = mkIf caddyCfg.acme.enable caddyCfg.acme.host;
+          useACMEHost = mkIf caddyCfg.acme.enable caddyCfg.acme.host; # Default: null
           extraConfig = ''
             ${caddyCfg.extraConfig}
           '';
