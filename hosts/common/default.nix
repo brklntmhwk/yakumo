@@ -19,6 +19,9 @@ in
         enable = true;
         directories = [
           "/etc/nixos"
+          "/var/log/journal"
+          "/var/lib/nixos"
+          "/var/lib/systemd/timers"
         ]
         ++ optional (anyHasPrefix "bluetooth" hardwareMods) "/var/lib/bluetooth"
         ++ optional (netManager == "networkmanager") "/etc/NetworkManager/system-connections";
