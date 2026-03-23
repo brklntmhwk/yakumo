@@ -8,6 +8,7 @@
 let
   inherit (lib) mkIf optional;
   inherit (murakumo.utils) anyHasPrefix;
+  isWsl = (config ? wsl) && config.wsl.enable;
   systemRole = config.yakumo.system.role;
   hardwareMods = config.yakumo.hardware.modules;
   netManager = config.yakumo.system.networking.manager;
@@ -15,7 +16,7 @@ in
 {
   yakumo = {
     system = {
-      persistence.yosuga = {
+      persistence.yosuga = mkIf (!isWsl) {
         enable = true;
         directories = [
           "/etc/nixos"
