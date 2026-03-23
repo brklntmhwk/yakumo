@@ -2,6 +2,7 @@
   config,
   lib,
   rootPath,
+  yakumo,
   ...
 }:
 
@@ -44,16 +45,15 @@ in
             # from the Certificate Authority.
             # Recommended to use the same email for all certs to avoid account creation
             # limits.
-            email = "contact@younagi.dev"; # Default: null
+            email = yakumo.security.acme_email; # Default: null
             # Specify which group to run the ACME client (LEGO).
             group = "acme"; # Default: 'acme'
           };
           certs = {
-            # TODO: Consider handling the root domain at the project root as TOML or Nix attrset.
             # This will automatically be the value of the `domain` option.
-            "yakumo.org" = {
+            "${yakumo.network.base_domain}" = {
               extraDomainNames = [
-                "*.yakumo.org"
+                "*.${yakumo.network.base_domain}"
               ]; # Default: [ ]
             };
           };

@@ -2,6 +2,7 @@
   config,
   lib,
   murakumo,
+  yakumo,
   ...
 }:
 
@@ -50,8 +51,7 @@ let
               enable = mkEnableOption "acme";
               host = mkOption {
                 type = types.nullOr types.str;
-                # TODO: Consider handling the root domain at the project root.
-                default = "yakumo.org";
+                default = yakumo.network.base_domain;
                 description = "ACME host name.";
               };
             };

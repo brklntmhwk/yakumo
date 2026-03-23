@@ -1,0 +1,27 @@
+# ================================================
+# YAKUMO PROJECT METADATA
+# The Single Source of Truth for global variables.
+# ================================================
+
+[project]
+name = "yakumo"
+
+[[user]]
+username = "otogaki"
+name = "Ohma Togaki"
+email = "otogaki@yakumo.org"
+
+[[user]]
+username = "rkawata"
+name = "Reiji Kawata"
+email = "rkawata@yakumo.org"
+
+[network]
+# The primary apex domain for all self-hosted services.
+base_domain = "yakumo.org"
+# The local network mesh domain (e.g., Tailscale/Headscale magic DNS).
+internal_domain = "yakumo.local"
+
+[security]
+acme_provider = "cloudflare"
+acme_email = "contact@younagi.dev"

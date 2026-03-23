@@ -7,7 +7,13 @@
 
 let
   inherit (self) inputs;
-  inherit (builtins) mapAttrs pathExists toString;
+  inherit (builtins)
+    fromTOML
+    mapAttrs
+    pathExists
+    readFile
+    toString
+    ;
   inherit (lib)
     genAttrs
     getName
@@ -17,6 +23,7 @@ let
     ;
 
   defaultOverlays = [ self.overlays.default ];
+  yakumo = fromTOML (readFile ../metadata.toml);
 
   throwNotFoundErr =
     {
@@ -85,7 +92,7 @@ let
           )
         ]
         # Use `lib.optionals` instead of `lib.optional` here;
-        # the former returns the given list as is if the condition is true.
+        # the former returns the given list as is if the condition is met.
         ++ optionals (userConfigPath != null) [ userConfigPath ]
         ++ optionals (platformType == "nixos") [ self.nixosModules.default ]
         ++ optionals (platformType == "darwin") [ self.darwinModules.default ]
@@ -99,6 +106,7 @@ let
             name
             username
             system
+            yakumo
             ;
           rootPath = self;
         };
