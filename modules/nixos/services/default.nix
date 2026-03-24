@@ -9,12 +9,14 @@
 let
   inherit (lib)
     filterAttrs
+    hasSuffix
     mapAttrs'
     mkEnableOption
     mkOption
     nameValuePair
     types
     ;
+  inherit (yakumoMeta.network) base_domain internal_domain;
   metadata = config.yakumo.services.metadata;
 
   serviceSubmodule =
@@ -59,15 +61,11 @@ let
               enable = mkEnableOption "acme";
               host = mkOption {
                 type = types.nullOr types.str;
-                # Automatically select the correct wildcard certificate based on
-                # the domain suffix.
-                default =
-                  let
-                    inherit (lib) hasSuffix;
-                    inherit (yakumoMeta.network) base_domain internal_domain;
-                  in
-                  if hasSuffix internal_domain config.domain then internal_domain else base_domain;
-                description = "ACME host name.";
+                default = if hasSuffix internal_domain config.domain then internal_domain else base_domain;
+                description = ''
+                  ACME host name. This automatically resolves based on the service
+                  domain.
+                '';
               };
             };
             extraConfig = mkOption {
@@ -115,64 +113,64 @@ in
     yakumo.services.metadata = {
       # Sorted by port number.
       rustic = {
-        domain = "backup.yakumo.local";
+        domain = "backup.${internal_domain}";
         address = "127.0.0.1";
         # Use 0 as a placeholder if it doesn't bind to a port.
         # Rustic is typically a CLI tool, but if using rest-server it defaults to 8000.
         port = 0;
       };
       caddy = {
-        domain = "proxy.yakumo.local";
+        domain = "proxy.${internal_domain}";
         address = "127.0.0.1";
         port = 443;
       };
       samba = {
-        domain = "smb.yakumo.local";
+        domain = "smb.${internal_domain}";
         address = "127.0.0.1";
         port = 445;
       };
       mosquitto = {
-        domain = "mqtt.yakumo.local";
+        domain = "mqtt.${internal_domain}";
         address = "127.0.0.1";
         port = 1883;
       };
       immich = {
-        domain = "media.yakumo.local";
+        domain = "media.${internal_domain}";
         address = "127.0.0.1";
         port = 2283;
       };
       ntfy-sh = {
-        domain = "ntfy.yakumo.local";
+        domain = "ntfy.${internal_domain}";
         address = "127.0.0.1";
         port = 2586;
       };
       adguardhome = {
-        domain = "adguard.yakumo.local";
+        domain = "adguard.${internal_domain}";
         address = "127.0.0.1";
         port = 3000;
       };
       forgejo = {
-        domain = "git.yakumo.local";
+        domain = "git.${internal_domain}";
         address = "127.0.0.1";
         port = 3001;
       };
       grafana = {
-        domain = "grafana.yakumo.local";
+        domain = "grafana.${internal_domain}";
         address = "127.0.0.1";
         port = 3002;
       };
       garage = {
-        domain = "s3.yakumo.local";
+        domain = "s3.${internal_domain}";
         address = "127.0.0.1";
         port = 3900;
       };
       postgresql = {
-        domain = "db.yakumo.local";
+        domain = "db.${internal_domain}";
         address = "127.0.0.1";
         port = 5432;
       };
       stalwart-mail = {
-        domain = "mail.yakumo.local";
+        domain = "mail.${base_domain}";
         address = "127.0.0.1";
         port = 8080;
         extraPorts = {
@@ -183,62 +181,62 @@ in
         };
       };
       headscale = {
-        domain = "headscale.yakumo.local";
+        domain = "headscale.${internal_domain}";
         address = "127.0.0.1";
         port = 8081;
       };
       shiori = {
-        domain = "bookmarks.yakumo.local";
+        domain = "bookmarks.${internal_domain}";
         address = "127.0.0.1";
         port = 8082;
       };
       calibre-web = {
-        domain = "books.yakumo.local";
+        domain = "books.${internal_domain}";
         address = "127.0.0.1";
         port = 8083;
       };
       calibre-server = {
-        domain = "calibre.yakumo.local";
+        domain = "calibre.${internal_domain}";
         address = "127.0.0.1";
         port = 8084;
       };
       owntracks = {
-        domain = "geo.yakumo.local";
+        domain = "geo.${internal_domain}";
         address = "127.0.0.1";
         port = 8085;
       };
       influxdb = {
-        domain = "influx.yakumo.local";
+        domain = "influx.${internal_domain}";
         address = "127.0.0.1";
         port = 8086;
       };
       home-assistant = {
-        domain = "hass.yakumo.local";
+        domain = "hass.${internal_domain}";
         address = "127.0.0.1";
         port = 8123;
       };
       vaultwarden = {
-        domain = "vault.yakumo.local";
+        domain = "vault.${internal_domain}";
         address = "127.0.0.1";
         port = 8222;
       };
       kanidm = {
-        domain = "idm.yakumo.local";
+        domain = "idm.${internal_domain}";
         address = "127.0.0.1";
         port = 8443;
       };
       mealie = {
-        domain = "recipes.yakumo.local";
+        domain = "recipes.${internal_domain}";
         address = "127.0.0.1";
         port = 9000;
       };
       telegraf = {
-        domain = "telegraf.yakumo.local";
+        domain = "telegraf.${internal_domain}";
         address = "127.0.0.1";
         port = 9273; # Default Prometheus metric listener port.
       };
       syncthing = {
-        domain = "sync.yakumo.local";
+        domain = "sync.${internal_domain}";
         address = "127.0.0.1";
         port = 8384;
         extraPorts = {
@@ -246,17 +244,17 @@ in
         };
       };
       anki-sync-server = {
-        domain = "anki.yakumo.local";
+        domain = "anki.${internal_domain}";
         address = "127.0.0.1";
         port = 27701;
       };
       paperless-ngx = {
-        domain = "paperless.yakumo.local";
+        domain = "paperless.${internal_domain}";
         address = "127.0.0.1";
         port = 28981;
       };
       tailscale = {
-        domain = "tailscale.yakumo.local";
+        domain = "tailscale.${internal_domain}";
         address = "127.0.0.1";
         port = 41641;
       };
