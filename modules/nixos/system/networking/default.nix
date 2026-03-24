@@ -13,8 +13,9 @@ let
     mkOption
     types
     ;
-  systemRole = config.yakumo.system.role;
   cfg = config.yakumo.system.networking;
+  systemRole = config.yakumo.system.role;
+  yosugaCfg = config.yakumo.system.persistence.yosuga;
   managers = [
     "networkmanager"
     "networkd"
@@ -40,7 +41,12 @@ in
     (mkIf (cfg.manager == "networkmanager") {
       # https://wiki.nixos.org/wiki/NetworkManager
       networking.networkmanager.enable = true;
-      yakumo.user.extraGroups = [ "networkmanager" ];
+      yakumo = {
+        user.extraGroups = [ "networkmanager" ];
+        system.persistence.yosuga = mkIf yosugaCfg.enable {
+          directories = [ "/etc/NetworkManager/system-connections" ];
+        };
+      };
     })
     (mkIf (cfg.manager == "networkd") {
       # Increase the log level.
@@ -71,7 +77,7 @@ in
             # This may look more verbose than the one below, but semantically better;
             # you can understand the associations on the face of it.
             matchConfig.Name = "en*"; # e.g., 'enp112s0'
-            # This does the exact same thing as above. (i.e., Syntactic sugar)
+            # This does the exact same thing as above (i.e., Syntactic sugar).
             # https://github.com/NixOS/nixpkgs/commit/f8dbe5f376978947067283c6d03087d7948c50de
             # Is it just me, or wouldn't this sort of abstraction merely cause
             # confusion?
