@@ -2,7 +2,7 @@
   config,
   lib,
   murakumo,
-  yakumo,
+  yakumoMeta,
   ...
 }:
 
@@ -47,11 +47,19 @@ let
         reverseProxy = {
           caddyIntegration = {
             enable = mkEnableOption "reverse proxy integaration feat. Caddy";
+            serverAliases = mkOption {
+              type = types.listOf types.str;
+              default = [ ];
+              description = ''
+                Additional virtual hosts' names served by this exact same virtual host
+                configuration (e.g., for mail server's autoconfig & autodiscover).
+              '';
+            };
             acme = {
               enable = mkEnableOption "acme";
               host = mkOption {
                 type = types.nullOr types.str;
-                default = yakumo.network.base_domain;
+                default = yakumoMeta.network.base_domain;
                 description = "ACME host name.";
               };
             };
@@ -254,18 +262,19 @@ in
       mapAttrs' (
         _: meta:
         let
+          inherit (caddyCfg) acme extraConfig serverAliases;
           caddyCfg = meta.reverseProxy.caddyIntegration;
         in
         nameValuePair meta.domain {
+          inherit extraConfig serverAliases;
+
           # Specify a host of an existing Let's Encrypt certificate.
           # Useful when we use DNS challenges but Caddy doesn't support our DNS provider.
           # This doesn't create any certificates or add subdomains to existing ones
           # either.
-          useACMEHost = mkIf caddyCfg.acme.enable caddyCfg.acme.host; # Default: null
-          extraConfig = ''
-            ${caddyCfg.extraConfig}
-          '';
+          useACMEHost = mkIf acme.enable acme.host; # Default: null
         }
+
       ) proxiedServices;
   };
 }
