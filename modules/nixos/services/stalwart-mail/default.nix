@@ -109,6 +109,7 @@ in
             # Generate the RSA signing key (legacy) for DKIM as well as the ED25519 one
             # for backward compatibility; some legacy enterprise firewalls and
             # rigid institutional spam filters still don't know how to read ED25519.
+            #
             # https://stalw.art/docs/mta/authentication/dkim/sign#signatures
             signature = {
               "rsa-${domain}" = {
@@ -284,10 +285,26 @@ in
           mkMerge [
             {
               services.metadata = {
-                # TODO: Revisit this Caddy configuration.
                 # https://stalw.art/docs/server/reverse-proxy/caddy
                 stalwart-mail.reverseProxy = {
-                  caddyIntegration.enable = true;
+                  caddyIntegration = {
+                    enable = true;
+                    acme.enable = true;
+                    serverAliases = [
+                      "${domain}"
+                      # MTA-STS (Mail Transfer Agent Strict Transport Security):
+                      # A security mechanism for email systems to protect against
+                      # eavesdropping and tampering of emails during transmission.
+                      # https://stalw.art/docs/mta/transport-security/mta-sts/
+                      "mta-sts.${domain}"
+                      # Autoconfig and Autodiscover: Protocols designed to simplify
+                      # the configuration of email clients by automatically providing
+                      # them with the necessary server settings.
+                      # https://stalw.art/docs/server/autoconfig/
+                      "autoconfig.${domain}"
+                      "autodiscover.${domain}"
+                    ];
+                  };
                 };
               };
             }
