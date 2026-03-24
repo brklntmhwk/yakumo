@@ -54,10 +54,15 @@ in
               [ ] ++ optional caddyCfg.enable "caddy" ++ optional stalwartCfg.enable "stalwart-mail";
           };
           certs = {
-            # This will automatically be the value of the `domain` option.
+            # These keys will automatically be the value of the `domain` option.
             "${yakumoMeta.network.base_domain}" = {
               extraDomainNames = [
                 "*.${yakumoMeta.network.base_domain}"
+              ]; # Default: [ ]
+            };
+            "${yakumoMeta.network.internal_domain}" = {
+              extraDomainNames = [
+                "*.${yakumoMeta.network.internal_domain}"
               ]; # Default: [ ]
             };
           };

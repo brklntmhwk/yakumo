@@ -20,7 +20,7 @@ email = "rkawata@yakumo.org"
 # The primary apex domain for all self-hosted services.
 base_domain = "yakumo.org"
 # The local network mesh domain (e.g., Tailscale/Headscale magic DNS).
-internal_domain = "yakumo.local"
+internal_domain = "mesh.yakumo.org"
 
 [security]
 acme_provider = "cloudflare"

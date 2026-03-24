@@ -59,7 +59,14 @@ let
               enable = mkEnableOption "acme";
               host = mkOption {
                 type = types.nullOr types.str;
-                default = yakumoMeta.network.base_domain;
+                # Automatically select the correct wildcard certificate based on
+                # the domain suffix.
+                default =
+                  let
+                    inherit (lib) hasSuffix;
+                    inherit (yakumoMeta.network) base_domain internal_domain;
+                  in
+                  if hasSuffix internal_domain config.domain then internal_domain else base_domain;
                 description = "ACME host name.";
               };
             };
