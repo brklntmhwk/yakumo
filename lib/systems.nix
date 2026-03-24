@@ -23,7 +23,7 @@ let
     ;
 
   defaultOverlays = [ self.overlays.default ];
-  yakumo = fromTOML (readFile ../metadata.toml);
+  yakumoMeta = fromTOML (readFile ../metadata.toml);
 
   throwNotFoundErr =
     {
@@ -106,7 +106,7 @@ let
             name
             username
             system
-            yakumo
+            yakumoMeta
             ;
           rootPath = self;
         };
