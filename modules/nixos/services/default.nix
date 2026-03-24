@@ -46,12 +46,12 @@ let
         };
         reverseProxy = {
           caddyIntegration = {
-            enable = mkEnableOption "reverse proxy integaration feat. Caddy";
+            enable = mkEnableOption "reverse proxy integration feat. Caddy";
             serverAliases = mkOption {
               type = types.listOf types.str;
               default = [ ];
               description = ''
-                Additional virtual hosts' names served by this exact same virtual host
+                Additional virtual host names served by this exact same virtual host
                 configuration (e.g., for mail server's autoconfig & autodiscover).
               '';
             };
@@ -271,7 +271,7 @@ in
           # Specify a host of an existing Let's Encrypt certificate.
           # Useful when we use DNS challenges but Caddy doesn't support our DNS provider.
           # This doesn't create any certificates or add subdomains to existing ones
-          # either.
+          # either; you still need to manually create them via `security.acme.certs.*`.
           useACMEHost = mkIf acme.enable acme.host; # Default: null
         }
 
