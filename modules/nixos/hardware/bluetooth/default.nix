@@ -13,6 +13,7 @@ let
     ;
   inherit (murakumo.utils) anyHasPrefix;
   hardwareMods = config.yakumo.hardware.modules;
+  yosugaCfg = config.yakumo.system.persistence.yosuga;
 in
 {
   config = mkIf (anyHasPrefix "bluetooth" hardwareMods) {
@@ -43,6 +44,10 @@ in
           ReconnectAttempts = 0;
         };
       };
+    };
+
+    yakumo.system.persistence.yosuga = mkIf yosugaCfg.enable {
+      directories = [ "/var/lib/bluetooth" ];
     };
   };
 }

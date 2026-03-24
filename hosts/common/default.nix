@@ -1,17 +1,13 @@
 {
   config,
   lib,
-  murakumo,
   ...
 }:
 
 let
-  inherit (lib) mkIf optional;
-  inherit (murakumo.utils) anyHasPrefix;
+  inherit (lib) mkIf;
   isWsl = (config ? wsl) && config.wsl.enable;
   systemRole = config.yakumo.system.role;
-  hardwareMods = config.yakumo.hardware.modules;
-  netManager = config.yakumo.system.networking.manager;
 in
 {
   yakumo = {
@@ -23,9 +19,7 @@ in
           "/var/log/journal"
           "/var/lib/nixos"
           "/var/lib/systemd/timers"
-        ]
-        ++ optional (anyHasPrefix "bluetooth" hardwareMods) "/var/lib/bluetooth"
-        ++ optional (netManager == "networkmanager") "/etc/NetworkManager/system-connections";
+        ];
         files = [
           "/etc/machine-id"
           "/etc/ssh/ssh_host_ecdsa_key"

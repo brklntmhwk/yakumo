@@ -2,7 +2,7 @@
   config,
   lib,
   rootPath,
-  yakumo,
+  yakumoMeta,
   ...
 }:
 
@@ -19,6 +19,7 @@ in
     let
       yosugaCfg = config.yakumo.system.persistence.yosuga;
       caddyCfg = config.yakumo.services.caddy;
+      stalwartCfg = config.yakumo.services.stalwart-mail;
     in
     mkMerge [
       {
@@ -45,15 +46,18 @@ in
             # from the Certificate Authority.
             # Recommended to use the same email for all certs to avoid account creation
             # limits.
-            email = yakumo.security.acme_email; # Default: null
+            email = yakumoMeta.security.acme_email; # Default: null
             # Specify which group to run the ACME client (LEGO).
             group = "acme"; # Default: 'acme'
+            # Specify systemd services to call `systemctl try-reload-or-restart` on.
+            reloadServices =
+              [ ] ++ optional caddyCfg.enable "caddy" ++ optional stalwartCfg.enable "stalwart-mail";
           };
           certs = {
             # This will automatically be the value of the `domain` option.
-            "${yakumo.network.base_domain}" = {
+            "${yakumoMeta.network.base_domain}" = {
               extraDomainNames = [
-                "*.${yakumo.network.base_domain}"
+                "*.${yakumoMeta.network.base_domain}"
               ]; # Default: [ ]
             };
           };
@@ -85,9 +89,6 @@ in
         };
       })
       (mkIf caddyCfg.enable {
-        # Specify systemd services to call `systemctl try-reload-or-restart` on.
-        security.acme.defaults.reloadServices = [ "caddy" ];
-
         # Add the Caddy service user to the global ACME group so Caddy can read
         # every ACME certificate.
         users.groups.acme.members = [ "caddy" ];
