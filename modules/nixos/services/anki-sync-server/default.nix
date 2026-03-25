@@ -26,7 +26,7 @@ let
         default = null;
         description = ''
           File containing the password accepted by anki-sync-server for
-          the associated username.  Make sure to make readable only by
+          the associated username. Make sure to make it readable only by
           root.
         '';
       };
