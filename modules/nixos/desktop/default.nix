@@ -62,6 +62,15 @@ in
           wtype # Keypress simulator
           ;
       };
+
+      programs.thunar = {
+        enable = true;
+        plugins = attrValues {
+          inherit (pkgs)
+            # Add Thunar plugins here.
+            ;
+        };
+      };
     })
   ];
 }

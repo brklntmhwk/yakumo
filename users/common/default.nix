@@ -1,6 +1,10 @@
 { pkgs, ... }:
 
 {
+  yakumo.desktop = {
+    xdg.enable = true;
+  };
+
   time.timeZone = "Asia/Tokyo";
 
   environment.systemPackages =

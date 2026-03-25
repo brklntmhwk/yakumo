@@ -93,39 +93,34 @@ in
           style = import ../../configs/wofi/style.nix { inherit theme; };
         };
       };
-      apps = {
-        browsers = {
-          brave = {
-            enable = true;
-          };
-          nyxt = {
-            enable = true;
-            config = ../../configs/nyxt/init.lisp;
-          };
+    };
+    tools = {
+      browsers = {
+        brave = {
+          enable = true;
         };
-        media = {
-          modules = [
-            "music"
-            "video"
-          ];
-        };
-        misc = {
-          thunar = {
-            enable = true;
-          };
+        nyxt = {
+          enable = true;
+          config = ../../configs/nyxt/init.lisp;
         };
       };
-    };
-    editors = {
-      emacs = {
-        enable = true;
-        ametsuchi.enable = true;
+      editors = {
+        emacs = {
+          enable = true;
+          ametsuchi.enable = true;
+        };
       };
-    };
-    programs = {
-      wthrr = {
-        enable = true;
-        settings = import ../../configs/wthrr;
+      media = {
+        modules = [
+          "music"
+          "video"
+        ];
+      };
+      misc = {
+        wthrr = {
+          enable = true;
+          settings = import ../../configs/wthrr;
+        };
       };
     };
     services = {

@@ -16,15 +16,17 @@ in
     ../common # Common configs among user's hosts
   ];
 
-  yakumo.desktop = {
-    enable = true;
-    terminal = {
-      wezterm = {
-        enable = true;
-        # settings = import ./configs/wezterm { };
+  yakumo = {
+    desktop = {
+      enable = true;
+      terminal = {
+        wezterm = {
+          enable = true;
+          # settings = import ./configs/wezterm { };
+        };
       };
     };
-    apps = {
+    tools = {
       media = {
         modules = [
           "music"

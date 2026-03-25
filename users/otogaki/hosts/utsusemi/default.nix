@@ -34,16 +34,18 @@ in
         };
       };
     };
-    editors = {
-      emacs = {
-        enable = true;
-        ametsuchi.enable = true;
+    tools = {
+      editors = {
+        emacs = {
+          enable = true;
+          ametsuchi.enable = true;
+        };
       };
-    };
-    programs = {
-      wthrr = {
-        enable = true;
-        settings = import ../../configs/wthrr;
+      misc = {
+        wthrr = {
+          enable = true;
+          settings = import ../../configs/wthrr;
+        };
       };
     };
   };

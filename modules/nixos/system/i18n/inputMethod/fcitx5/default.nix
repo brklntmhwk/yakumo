@@ -44,7 +44,7 @@ in
     let
       inherit (builtins) attrValues;
       inherit (lib) optional;
-      emacsCfg = config.yakumo.editors.emacs;
+      emacsCfg = config.yakumo.tools.editors.emacs;
     in
     {
       i18n.inputMethod = {

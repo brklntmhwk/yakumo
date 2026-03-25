@@ -46,9 +46,9 @@ in
         # The value of 'config.users.defaultUserShell' will be set here for normal users.
         # For the detailed implementation, see:
         # https://github.com/NixOS/nixpkgs/commit/a323d146b7be3bc066b4ec74db72888ea32792fb
-        # shell = config.yakumo.shell.default;
+        # shell = config.yakumo.tools.shell.default;
       };
-      shell = {
+      tools.shell = {
         zsh = {
           enable = true;
           defaultShell = true;
@@ -66,29 +66,29 @@ in
           shellAliases = {
             ".." = "cd ..";
           };
-          #      abbreviations = {
-          #        bctl = "bluetoothctl";
-          #        jctl = "journalctl";
-          #        nctl = "networkctl";
-          #        snctl = "sudo networkctl";
-          #        sctl = "systemctl";
-          #        usctl = "systemctl --user";
-          #        usctlr = "systemctl --user restart";
-          #        usctls = "systemctl --user status";
-          #        ssctl = "sudo systemctl";
-          #        ssctlr = "sudo systemctl restart";
-          #        ssctls = "sudo systemctl status";
-          #        ga = "git add";
-          #        gc = "git commit";
-          #        gco = "git checkout";
-          #        gl = "git log";
-          #        gp = "git push";
-          #        ls = "eza";
-          #        lsl = "eza -al --accessed --binary --group --header --modified";
-          #        lsla = "lsl --sort=accessed";
-          #        lslm = "lsl --sort=modified";
-          #        mkdir = "mkdir -pv";
-          #      };
+          # abbreviations = {
+          #   bctl = "bluetoothctl";
+          #   jctl = "journalctl";
+          #   nctl = "networkctl";
+          #   snctl = "sudo networkctl";
+          #   sctl = "systemctl";
+          #   usctl = "systemctl --user";
+          #   usctlr = "systemctl --user restart";
+          #   usctls = "systemctl --user status";
+          #   ssctl = "sudo systemctl";
+          #   ssctlr = "sudo systemctl restart";
+          #   ssctls = "sudo systemctl status";
+          #   ga = "git add";
+          #   gc = "git commit";
+          #   gco = "git checkout";
+          #   gl = "git log";
+          #   gp = "git push";
+          #   ls = "eza";
+          #   lsl = "eza -al --accessed --binary --group --header --modified";
+          #   lsla = "lsl --sort=accessed";
+          #   lslm = "lsl --sort=modified";
+          #   mkdir = "mkdir -pv";
+          # };
           syntaxHighlighting = {
             highlighters = [ ];
             styles = { };
@@ -128,42 +128,44 @@ in
     }
     (mkIf (systemRole == "workstation") {
       user.packages = catAttrs "package" (attrValues cursorThemes);
-      ai = {
-        agents = {
-          claude-code = {
-            enable = true;
+      tools = {
+        ai = {
+          agents = {
+            claude-code = {
+              enable = true;
+            };
+            gemini-cli = {
+              enable = true;
+            };
           };
-          gemini-cli = {
+          mcp = {
             enable = true;
+            filesystem = {
+              enable = true;
+              paths = [ "${config.yakumo.user.home}/projects" ];
+            };
+            github.enable = true;
           };
         };
-        mcp = {
-          enable = true;
-          filesystem = {
+        misc = {
+          cli-utils.enable = true;
+          tui-utils.enable = true;
+          bottom = {
             enable = true;
-            paths = [ "${config.yakumo.user.home}/projects" ];
+            settings = import ../../configs/bottom { inherit theme; };
           };
-          github.enable = true;
-        };
-      };
-      programs = {
-        cli-utils.enable = true;
-        tui-utils.enable = true;
-        bottom = {
-          enable = true;
-          settings = import ../../configs/bottom { inherit theme; };
-        };
-        git = {
-          enable = true;
-          config = import ../../configs/git { inherit config; };
-        };
-        television = {
-          enable = true;
-          channels = [
-            "files"
-            "nix-search-tv"
-          ];
-          settings = import ../../configs/television { inherit theme; };
+          git = {
+            enable = true;
+            config = import ../../configs/git { inherit config; };
+          };
+          television = {
+            enable = true;
+            channels = [
+              "files"
+              "nix-search-tv"
+            ];
+            settings = import ../../configs/television { inherit theme; };
+          };
         };
       };
     })

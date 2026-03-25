@@ -18,7 +18,7 @@
       inherit (builtins) map;
       inherit (lib) elem mkIf;
       opensshCfg = config.services.openssh;
-      xdgCfg = config.yakumo.xdg;
+      xdgCfg = config.yakumo.desktop.xdg;
       hardwareMods = config.yakumo.hardware.modules;
     in
     {
