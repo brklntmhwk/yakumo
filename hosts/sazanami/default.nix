@@ -23,12 +23,6 @@
         manager = "networkmanager";
         wifi.enable = true;
       };
-      # virt = {
-      #   microvm.host = {
-      #     enable = true;
-      #     wanInterface = "enp1s0";
-      #   };
-      # };
     };
     hardware = {
       modules = [
@@ -36,6 +30,35 @@
         "ssd"
         # "ups/goldenmate"
       ];
+    };
+    services = {
+      adguardhome = {
+        enable = true;
+      };
+      caddy = {
+        enable = true;
+      };
+      home-assistant = {
+        enable = true;
+      };
+      kanidm = {
+        enable = true;
+      };
+      mosquitto = {
+        enable = true;
+      };
+      owntracks = {
+        enable = true;
+        mqttIntegration = {
+          enable = true;
+        };
+        frontend = {
+          enable = true;
+        };
+      };
+      vaultwarden = {
+        enable = true;
+      };
     };
   };
 

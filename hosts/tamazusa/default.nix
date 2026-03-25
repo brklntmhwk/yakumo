@@ -23,18 +23,23 @@
         manager = "networkmanager";
         wifi.enable = true;
       };
-      # virt = {
-      #   microvm.host = {
-      #     enable = true;
-      #     wanInterface = "enp1s0";
-      #   };
-      # };
     };
     hardware = {
       modules = [
         # "cpu/amd"
         "ssd"
       ];
+    };
+    services = {
+      headscale = {
+        enable = true;
+      };
+      ntfy-sh = {
+        enable = true;
+      };
+      stalwart-mail = {
+        enable = true;
+      };
     };
   };
 
