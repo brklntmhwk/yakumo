@@ -8,17 +8,12 @@
 
 let
   inherit (builtins) attrValues;
-  inherit (lib)
-    mkIf
-    mkOption
-    types
-    ;
+  inherit (lib) mkIf;
   inherit (murakumo.utils) anyHasPrefix;
-  inherit (murakumo.platforms) isLinux;
   mediaMods = config.yakumo.tools.media.modules;
 in
 {
-  config = mkIf (anyHasPrefix "video" mediaMods && isLinux) {
+  config = mkIf (anyHasPrefix "video" mediaMods) {
     yakumo.user.packages = attrValues {
       inherit (pkgs)
         mpv # Classic media player based on MPlayer and mplayer2
