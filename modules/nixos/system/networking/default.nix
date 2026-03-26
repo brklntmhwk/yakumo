@@ -16,6 +16,8 @@ let
   cfg = config.yakumo.system.networking;
   systemRole = config.yakumo.system.role;
   yosugaCfg = config.yakumo.system.persistence.yosuga;
+  isNm = cfg.manager == "networkmanager";
+  isNetworkd = cfg.manager == "networkd";
   managers = [
     "networkmanager"
     "networkd"
@@ -36,9 +38,11 @@ in
       # Disable global DHCP.
       # Enable it locally if necessary.
       # (e.g., `networking.interfaces.enp112s0.useDHCP = true;`)
+      # `systemd.network.wait-online.anyInterface` looks up this value and set it
+      # as its default value too.
       networking.useDHCP = mkDefault false;
     }
-    (mkIf (cfg.manager == "networkmanager") {
+    (mkIf isNm {
       # https://wiki.nixos.org/wiki/NetworkManager
       networking.networkmanager.enable = true;
       yakumo = {
@@ -48,7 +52,7 @@ in
         };
       };
     })
-    (mkIf (cfg.manager == "networkd") {
+    (mkIf isNetworkd {
       # Increase the log level.
       # https://nixos.wiki/wiki/Systemd-networkd
       # systemd.services."systemd-networkd".environment.SYSTEMD_LOG_LEVEL =
@@ -74,6 +78,9 @@ in
         networks = {
           "30-wired" = {
             enable = true;
+            linkConfig = {
+              RequiredForOnline = "no"; # Prevent hangs at boot.
+            };
             # This may look more verbose than the one below, but semantically better;
             # you can understand the associations on the face of it.
             matchConfig.Name = "en*"; # e.g., 'enp112s0'
@@ -82,13 +89,38 @@ in
             # Is it just me, or wouldn't this sort of abstraction merely cause
             # confusion?
             # name = "en*";
-            networkConfig.DHCP = "yes";
+            networkConfig = {
+              DHCP = "yes";
+            };
           };
           "30-wireless" = {
             enable = true;
-            matchConfig.Name = "wl*"; # e.g., 'wlp111s0'
-            networkConfig.DHCP = "yes";
+            linkConfig = {
+              RequiredForOnline = "no"; # Prevent hangs at boot.
+            };
+            matchConfig.Name = "wl*"; # e.g., 'wlp111s0', 'wlan0'
+            networkConfig = {
+              DHCP = "yes";
+            };
           };
+        };
+        # `systemd-network-wait-online@` service configurations.
+        wait-online = {
+          # Whether to enable the systemd-networkd-wait-online service.
+          enable = true; # Default: true
+          # Prevent boot hangs caused by networkd waiting for all interfaces to be online.
+          # This tells it to proceed as long as at least one is connected.
+          anyInterface = true; # Default: config.networking.useDHCP (true)
+          # Specify the timeout limit for the network to appear online (in seconds).
+          # Set this to 0 to disable.
+          timeout = 30; # Default: 120
+        };
+      };
+      boot.initrd.systemd.network = {
+        wait-online = {
+          enable = true; # Default: true
+          anyInterface = true; # Default: config.networking.useDHCP (true)
+          timeout = 15; # Default: 120
         };
       };
     })
