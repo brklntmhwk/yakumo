@@ -31,7 +31,10 @@ in
       };
       networking = {
         manager = "networkmanager";
-        wifi.enable = true;
+        wifi = {
+          enable = true;
+          backend = "iwd";
+        };
       };
     };
     hardware = {

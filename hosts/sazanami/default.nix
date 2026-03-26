@@ -20,8 +20,11 @@
         flake.enable = true;
       };
       networking = {
-        manager = "networkmanager";
-        wifi.enable = true;
+        manager = "networkd";
+        wifi = {
+          enable = true;
+          backend = "iwd";
+        };
       };
     };
     hardware = {
