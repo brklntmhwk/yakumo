@@ -71,7 +71,7 @@ in
       # https://nixos.wiki/wiki/Systemd-networkd
       networking.useNetworkd = true;
     })
-    (mkIf (systemRole == "workstation" && cfg.manager == "networkd") {
+    (mkIf (systemRole == "workstation" && isNetworkd) {
       systemd.network = {
         # Cover all LAN & WAN interfaces.
         # As for the number prefix, the smaller, the higher the priority is.
