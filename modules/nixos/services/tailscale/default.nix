@@ -12,7 +12,7 @@ let
     mkIf
     mkMerge
     mkOption
-types
+    types
     ;
   cfg = config.yakumo.services.tailscale;
   meta = config.yakumo.services.metadata.tailscale;
