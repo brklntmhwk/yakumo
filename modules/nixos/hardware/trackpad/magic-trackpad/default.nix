@@ -21,6 +21,8 @@ in
     # seems to be established yet.
     # https://www.reddit.com/r/AsahiLinux/comments/1g2inh6/after_waking_up_from_suspend_apple_magic_trackpad/
     #
+    # As a workaround, using it connected via Bluetooth works wonder somehow.
+    #
     # Simulate unplugging/plugging the USB cable or toggling the power
     # upon waking from sleep to fix the cursor-freeze bug.
     powerManagement.resumeCommands = ''
