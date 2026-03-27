@@ -16,6 +16,7 @@ let
     types
     ;
   cfg = config.yakumo.tools.misc.git;
+  helper = import ./_helper.nix { inherit config lib; };
 in
 {
   options.yakumo.tools.misc.git = {
@@ -24,6 +25,10 @@ in
     config = mkOption {
       type =
         let
+          inherit (builtins)
+            foldl'
+            isList
+            ;
           gitini = types.attrsOf (types.attrsOf types.anything);
         in
         types.either gitini (types.listOf gitini)
@@ -32,13 +37,13 @@ in
             loc: defs:
             let
               config =
-                builtins.foldl'
+                foldl'
                   (
                     acc:
                     { value, ... }@x:
                     acc
                     // (
-                      if builtins.isList value then
+                      if isList value then
                         {
                           ordered = acc.ordered ++ value;
                         }
@@ -70,9 +75,9 @@ in
       };
     };
     lfs = {
-      enable = lib.mkEnableOption "git-lfs (Large File Storage)";
-      package = lib.mkPackageOption pkgs "git-lfs" { };
-      enablePureSSHTransfer = lib.mkEnableOption "Enable pure SSH transfer in server side by adding git-lfs-transfer to environment.systemPackages";
+      enable = mkEnableOption "git-lfs (Large File Storage)";
+      package = mkPackageOption pkgs "git-lfs" { };
+      enablePureSSHTransfer = mkEnableOption "Enable pure SSH transfer in server side by adding git-lfs-transfer to environment.systemPackages";
     };
     package = mkPackageOption pkgs "git" { };
     packageWrapped = mkOption {
@@ -129,6 +134,13 @@ in
           required = true;
         };
       };
+    })
+    (mkIf helper.hasValidSigningSetup {
+      yakumo.tools.misc.ssh.allowedSigners = [
+        {
+          inherit (helper) email key;
+        }
+      ];
     })
   ]);
 }

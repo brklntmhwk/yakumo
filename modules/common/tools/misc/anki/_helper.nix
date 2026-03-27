@@ -1,10 +1,9 @@
 # Based on:
 # https://github.com/nix-community/home-manager/blob/c6fe2944ad9f2444b2d767c4a5edee7c166e8a95/modules/programs/anki/helper.nix
 {
-  lib,
   config,
+  lib,
   pkgs,
-  ...
 }:
 let
   cfg = config.yakumo.tools.misc.anki;
