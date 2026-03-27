@@ -31,7 +31,7 @@ in
         database.createLocally = false; # Default: false
         listenAddress = meta.address; # Default: '0.0.0.0'
         # https://docs.mealie.io/documentation/getting-started/installation/backend-config/
-        settings = rec {
+        settings = {
           BASE_URL = "https://${meta.domain}"; # Default: 'http://localhost:8080'
           TZ = config.time.timeZone; # Default: 'UTC'
           # Specify the time window during which a login/auth token is valid.
@@ -53,7 +53,7 @@ in
           OIDC_REMEMBER_ME = "true"; # Default: 'false'
           OIDC_USER_CLAIM = "preferred_username"; # Default: 'email'
           OIDC_PROVIDER_NAME = "Kanidm"; # Default: 'OAuth'
-          OIDC_CONFIGURATION_URL = "https://${meta.domain}/oauth2/openid/${OIDC_CLIENT_ID}/.well-known/openid-configuration"; # Default: ''
+          OIDC_CONFIGURATION_URL = "https://${meta.domain}/oauth2/openid/mealie/.well-known/openid-configuration"; # Default: ''
           OIDC_USER_GROUP = "mealie.access@${meta.domain}"; # Default: ''
           OIDC_ADMIN_GROUP = "mealie.admins@${meta.domain}"; # Default: ''
           # These should be treated as secrets, so we configure and set them to

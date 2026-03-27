@@ -4,7 +4,7 @@
 }:
 
 let
-  inherit (builtins) foldl' isString;
+  inherit (builtins) foldl' isList isString;
   inherit (lib) recursiveUpdate;
   cfg = config.yakumo.tools.misc.git;
 

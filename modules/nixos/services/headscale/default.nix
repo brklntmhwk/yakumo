@@ -98,44 +98,47 @@ in
           # and Tailscale clients.
           noise.private_key_path = "/var/lib/headscale/noise_private.key";
           # OIDC (OpenID Connect)
-          oidc = mkMerge [
-            {
-              allowed_domains = [ ];
-              allowed_users = [ ];
-              extra_params = { };
-              # PKCE (Proof Key for Code Exchange): Adds an additional security layer
-              # to the OAuth 2.0 authorization code flow by preventing authorization
-              # code interception attacks.
-              # https://datatracker.ietf.org/doc/html/rfc7636
-              pkce = {
-                enabled = true; # Default: false
-                # Use SHA256 hashed code verifier.
-                method = "S256"; # Default: 'S256' (Options: 'plain')
-              };
-              # Specify the scopes obtained from the IdP (e.g., Kanidm).
-              # Make them align with the defaults the IdP defines.
-              scope = [
-                # Ensure to always include the "openid" scope (required).
-                # Default: "openid", "profile", and "email"
-                "openid"
-                "profile"
-                "email"
-              ];
-            }
-            (mkIf kaniCfg.enable (
-              let
-                kanidmCfg = config.yakumo.services.kanidm;
-                kaniMeta = config.yakumo.services.metadata.kanidm;
-              in
+          oidc =
+            let
+              kaniCfg = config.yakumo.services.kanidm;
+            in
+            mkMerge [
               {
-                # Kanidm's specific OIDC issuer URL format requires appending the client ID.
-                # Format: https://<kanidm_origin>/oauth2/openid/<kanidm_system_name>
-                issuer = "https://${kaniMeta.domain}/oauth2/openid/headscale"; # Default: ''
-                client_id = "headscale"; # Default: ''
-                client_secret_path = config.sops.secrets."kanidm/headscale_oidc_client_secret".path; # Default: null
+                allowed_domains = [ ];
+                allowed_users = [ ];
+                extra_params = { };
+                # PKCE (Proof Key for Code Exchange): Adds an additional security layer
+                # to the OAuth 2.0 authorization code flow by preventing authorization
+                # code interception attacks.
+                # https://datatracker.ietf.org/doc/html/rfc7636
+                pkce = {
+                  enabled = true; # Default: false
+                  # Use SHA256 hashed code verifier.
+                  method = "S256"; # Default: 'S256' (Options: 'plain')
+                };
+                # Specify the scopes obtained from the IdP (e.g., Kanidm).
+                # Make them align with the defaults the IdP defines.
+                scope = [
+                  # Ensure to always include the "openid" scope (required).
+                  # Default: "openid", "profile", and "email"
+                  "openid"
+                  "profile"
+                  "email"
+                ];
               }
-            ))
-          ];
+              (mkIf kaniCfg.enable (
+                let
+                  kaniMeta = config.yakumo.services.metadata.kanidm;
+                in
+                {
+                  # Kanidm's specific OIDC issuer URL format requires appending the client ID.
+                  # Format: https://<kanidm_origin>/oauth2/openid/<kanidm_system_name>
+                  issuer = "https://${kaniMeta.domain}/oauth2/openid/headscale"; # Default: ''
+                  client_id = "headscale"; # Default: ''
+                  client_secret_path = config.sops.secrets."kanidm/headscale_oidc_client_secret".path; # Default: null
+                }
+              ))
+            ];
           # ACLs (Access Control Lists)
           # https://tailscale.com/kb/1018/acls/
           policy =

@@ -46,7 +46,7 @@ in
         };
       };
     }
-    (mkIf cfg.enableFlake {
+    (mkIf cfg.flake.enable {
       environment.systemPackages = [ pkgs.git ];
       nix.settings = {
         experimental-features = [

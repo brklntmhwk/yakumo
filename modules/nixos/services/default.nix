@@ -12,6 +12,7 @@ let
     hasSuffix
     mapAttrs'
     mkEnableOption
+    mkIf
     mkOption
     nameValuePair
     types
@@ -87,7 +88,6 @@ in
   options.yakumo.services = {
     metadata = mkOption {
       type = types.attrsOf (types.submodule serviceSubmodule);
-      readOnly = true;
       description = "Service metadata to look up among service modules.";
     };
   };
@@ -95,7 +95,7 @@ in
   config = {
     assertions =
       let
-        inherit (murakumo) anyAttrByPath;
+        inherit (murakumo.utils) anyAttrByPath;
         requiresCaddy = anyAttrByPath [ "reverseProxy" "caddyIntegration" "enable" ] metadata;
         requiresACME = anyAttrByPath [ "reverseProxy" "caddyIntegration" "acme" "enable" ] metadata;
       in

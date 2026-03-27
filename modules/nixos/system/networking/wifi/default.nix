@@ -6,6 +6,7 @@
 }:
 
 let
+  inherit (builtins) attrValues;
   inherit (lib)
     mkEnableOption
     mkIf

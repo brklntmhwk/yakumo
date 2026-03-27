@@ -108,7 +108,7 @@ in
       {
         yakumo = {
           user.packages = [ starshipWrapped ];
-          shell = {
+          tools.shell = {
             starship.packageWrapped = starshipWrapped;
             zsh = mkIf zshCfg.enable {
               initExtraLast = ''

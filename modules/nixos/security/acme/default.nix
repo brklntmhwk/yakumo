@@ -17,6 +17,7 @@ in
 
   config = mkIf cfg.enable (
     let
+      inherit (lib) optional;
       yosugaCfg = config.yakumo.system.persistence.yosuga;
       caddyCfg = config.yakumo.services.caddy;
       stalwartCfg = config.yakumo.services.stalwart-mail;
