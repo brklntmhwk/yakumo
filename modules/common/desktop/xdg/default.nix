@@ -71,7 +71,6 @@ in
 
         # 'd': Create directory if it doesn't exist.
         # Otherwise, it safely fixes permissions/ownership without touching content.
-        # '%h' for the home directory.
         # Format: Type Path Mode User Group Age Argument
         # e.g., `[ "d /home/otogaki/Documents 0755 otogaki yakumo - -" ... ]`
         systemd.user.tmpfiles.rules = map (
