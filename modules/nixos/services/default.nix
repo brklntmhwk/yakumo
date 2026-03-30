@@ -148,6 +148,9 @@ in
         domain = "adguard.${internal_domain}";
         address = "127.0.0.1";
         port = 3000;
+        extraPorts = {
+          dns = 53;
+        };
       };
       forgejo = {
         domain = "git.${internal_domain}";
