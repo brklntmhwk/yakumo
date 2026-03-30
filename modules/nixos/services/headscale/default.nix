@@ -15,10 +15,18 @@ let
     ;
   cfg = config.yakumo.services.headscale;
   meta = config.yakumo.services.metadata.headscale;
+  jsonFormat = pkgs.formats.json { };
 in
 {
   options.yakumo.services.headscale = {
     enable = mkEnableOption "headscale";
+    acls = {
+      settings = mkOption {
+        inherit (jsonFormat) type;
+        default = { };
+        description = "Headscale ACL policy rules.";
+      };
+    };
   };
 
   config = mkIf cfg.enable (mkMerge [
@@ -84,7 +92,7 @@ in
             # Inject these search domains to Tailscale clients.
             # With MagicDNS enabled, our tailnet base_domain is always
             # the first search domain.
-            search_domains = [ "yakumo.internal" ];
+            search_domains = [ ];
           };
           # Time before deletion of an inactive ephemeral node.
           ephemeral_node_inactivity_timeout = "30m"; # Default: '30m'
@@ -141,34 +149,12 @@ in
             ];
           # ACLs (Access Control Lists)
           # https://tailscale.com/kb/1018/acls/
-          policy =
-            let
-              aclsHuJson = pkgs.writeText "headscale-acls.hujson" ''
-                {
-                  "acls": [
-                    {
-                      "action": "accept",
-                      "src": [ "*" ],
-                      "dst": [ "*:*" ]
-                    }
-                  ],
-                  "ssh": [
-                    {
-                      "action": "check",
-                      "src": [ "autogroup:members" ],
-                      "dst": [ "autogroup:self" ],
-                      "users": [ "autogroup:nonroot", "root" ],
-                    }
-                  ]
-                }
-              '';
-            in
-            {
-              mode = "file"; # Default: 'file' (Options: 'database')
-              # The path to a HuJSON file that contains ACL policies.
-              # Needed only when the mode option is set to 'file'.
-              path = aclsHuJson;
-            };
+          policy = mkIf (cfg.acls.settings != { }) {
+            mode = "file"; # Default: 'file' (Options: 'database')
+            # The path to a HuJSON file that contains ACL policies.
+            # Needed only when the mode option is set to 'file'.
+            path = jsonFormat.generate "headscale-acls.hujson" cfg.acls.settings;
+          };
           prefixes = {
             # Specify the strategy applied for allocation of IPs to nodes.
             # 'sequential': assigns the next free IP from the previous given IP.
@@ -183,16 +169,27 @@ in
         };
       };
 
-      yakumo.services.metadata.headscale.reverseProxy = {
-        caddyIntegration.enable = true;
-      };
-
-      sops.secrets = {
-        headscale_oidc_secret = {
-          sopsFile = rootPath + "/secrets/default.yaml";
-          owner = "headscale";
-        };
-      };
+      yakumo =
+        let
+          yosugaCfg = config.yakumo.system.persistence.yosuga;
+        in
+        mkMerge [
+          {
+            services.metadata.headscale.reverseProxy = {
+              caddyIntegration.enable = true;
+            };
+          }
+          (mkIf yosugaCfg.enable {
+            system.persistence.yosuga = {
+              directories = [
+                {
+                  path = "/var/lib/headscale";
+                  mode = "0700";
+                }
+              ];
+            };
+          })
+        ];
     }
   ]);
 }
