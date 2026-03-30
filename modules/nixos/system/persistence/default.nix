@@ -72,7 +72,7 @@ in
           # Format: 'systemd-cryptsetup@<your_device_mapper_name>.service'
           after = [ "systemd-cryptsetup@crypted.service" ];
           before = [ "sysroot.mount" ];
-          unitConfig.DefaultDependencies = "no";
+          unitConfig.DefaultDependencies = false;
           serviceConfig.Type = "oneshot";
           script = ''
             mkdir -p /mnt

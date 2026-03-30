@@ -104,7 +104,8 @@ in
 
       mountOptions = [
         "bind"
-        "x-gvfs-hide"
+        "x-gvfs-hide" # Hide bind mounts from file managers.
+        "X-fstrim.notrim" # Don't discard unused blocks on a mounted filesystem.
       ]
       ++ (optional cfg.allowTrash "x-gvfs-trash");
       baseBindMountConfig = {
@@ -146,6 +147,7 @@ in
         suppressedUnits = mkIf (any (f: f.path == "/etc/machine-id") cfg.files) [
           "systemd-machine-id-commit.service"
         ];
+        # Bind-mount only the persistent directories required at Stage 1 (initrd).
         mounts =
           let
             inherit (lib) elem filter;
@@ -171,6 +173,7 @@ in
         services.systemd-machine-id-commit.unitConfig.ConditionFirstBoot = mkIf (any (
           f: f.path == "/etc/machine-id"
         ) cfg.files) true;
+        # Do some pre-flight checks to ensure the target/source directories and files exist.
         tmpfiles.rules =
           let
             inherit (builtins) concatMap;
@@ -188,6 +191,7 @@ in
             ];
           in
           (concatMap mkDirRules cfg.directories) ++ (concatMap mkFileRules cfg.files);
+        # Bind-mount the persistent directories and files using systemd mount.
         mounts =
           let
             mkBindMount =
