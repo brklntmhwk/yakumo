@@ -1,24 +1,29 @@
 # This is supposed to be used with Niri.
-{ systemWideBinPath }:
+{ config, lib }:
 
+let
+  inherit (lib) getExe;
+  wrappedNiri = config.yakumo.desktop.lockers.hyprlock.wrappedPackage;
+  wrappedHyprlock = config.yakumo.desktop.lockers.hyprlock.wrappedPackage;
+in
 {
   events = [
-    # `loginctl lock-session` doesn't do its job, guiding us straight to the screen.
+    # `loginctl lock-` doesn't do its job, guiding us straight to the screen.
     # {
     #   event = "before-sleep";
     #   command = "loginctl lock-session";
     # }
     {
       event = "before-sleep";
-      command = "${systemWideBinPath}/pidof hyprlock || ${systemWideBinPath}/hyprlock";
+      command = "${getExe wrappedHyprlock}/pidof hyprlock || ${getExe wrappedHyprlock}/hyprlock";
     }
     {
       event = "lock";
-      command = "${systemWideBinPath}/pidof hyprlock || ${systemWideBinPath}/hyprlock";
+      command = "${getExe wrappedHyprlock}/pidof hyprlock || ${getExe wrappedHyprlock}/hyprlock";
     }
     {
       event = "after-resume";
-      command = "${systemWideBinPath}/niri msg action power-on-monitors";
+      command = "${getExe wrappedHyprlock}/niri msg action power-on-monitors";
     }
   ];
   timeouts = [

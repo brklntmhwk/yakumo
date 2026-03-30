@@ -46,7 +46,7 @@ in
       '';
     };
     package = mkPackageOption pkgs "hyprlock" { };
-    packageWrapped = mkOption {
+    wrappedPackage = mkOption {
       type = types.package;
       readOnly = true;
       description = ''
@@ -76,7 +76,7 @@ in
       };
     in
     {
-      yakumo.desktop.lockers.hyprlock.packageWrapped = hyprlockWrapped;
+      yakumo.desktop.lockers.hyprlock.wrappedPackage = hyprlockWrapped;
       environment.systemPackages = [ hyprlockWrapped ];
 
       # Enable PAM access for authentication.

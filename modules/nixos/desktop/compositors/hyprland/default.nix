@@ -139,7 +139,7 @@ in
         apply = p: genFinalPackage p { enableXWayland = cfg.xwayland.enable; };
       };
     cursorPackage = mkPackageOption pkgs "rose-pine-hyprcursor" { };
-    packageWrapped = mkOption {
+    wrappedPackage = mkOption {
       type = types.package;
       default = cfg.package;
       readOnly = true;
@@ -266,7 +266,7 @@ in
           };
         in
         {
-          yakumo.desktop.compositors.hyprland.packageWrapped = hyprlandWrapped;
+          yakumo.desktop.compositors.hyprland.wrappedPackage = hyprlandWrapped;
           yakumo.user.packages =
             attrValues {
               inherit (pkgs)

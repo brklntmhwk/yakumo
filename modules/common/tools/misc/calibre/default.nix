@@ -25,7 +25,7 @@ in
       description = "List of Calibre plugins to install.";
     };
     package = mkPackageOption pkgs "calibre" { };
-    packageWrapped = mkOption {
+    wrappedPackage = mkOption {
       type = types.package;
       readOnly = true;
       description = ''
@@ -56,7 +56,7 @@ in
       finalPackage = if (length cfg.plugins > 0) then calibreWrapped else cfg.package;
     in
     {
-      yakumo.tools.misc.calibre.packageWrapped = finalPackage;
+      yakumo.tools.misc.calibre.wrappedPackage = finalPackage;
       yakumo.user.packages = [ finalPackage ];
     }
   );

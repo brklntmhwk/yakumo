@@ -65,7 +65,7 @@ in
       '';
     };
     package = mkPackageOption pkgs "starship" { };
-    packageWrapped = mkOption {
+    wrappedPackage = mkOption {
       type = types.package;
       readOnly = true;
       description = ''
@@ -109,7 +109,7 @@ in
         yakumo = {
           user.packages = [ starshipWrapped ];
           tools.shell = {
-            starship.packageWrapped = starshipWrapped;
+            starship.wrappedPackage = starshipWrapped;
             zsh = mkIf zshCfg.enable {
               initExtraLast = ''
                 eval "$(${getExe starshipWrapped} init zsh)"

@@ -36,7 +36,7 @@ in
     #   default = { };
     # };
     package = mkPackageOption pkgs "wezterm" { };
-    packageWrapped = mkOption {
+    wrappedPackage = mkOption {
       type = types.package;
       readOnly = true;
       description = ''
@@ -67,7 +67,7 @@ in
       };
     in
     {
-      yakumo.desktop.terminal.wezterm.packageWrapped = weztermWrapped;
+      yakumo.desktop.terminal.wezterm.wrappedPackage = weztermWrapped;
       yakumo.user.packages = [ weztermWrapped ];
     }
   );

@@ -39,7 +39,7 @@ in
       '';
     };
     package = mkPackageOption pkgs "waybar" { };
-    packageWrapped = mkOption {
+    wrappedPackage = mkOption {
       type = types.package;
       readOnly = true;
       description = ''
@@ -71,7 +71,7 @@ in
       };
     in
     {
-      yakumo.desktop.ui.waybar.packageWrapped = waybarWrapped;
+      yakumo.desktop.ui.waybar.wrappedPackage = waybarWrapped;
       yakumo.user.packages = [ waybarWrapped ];
 
       # Ensure to remove any manual exec commands written in compositors' configs

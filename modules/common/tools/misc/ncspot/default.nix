@@ -37,7 +37,7 @@ in
       '';
     };
     package = mkPackageOption pkgs "ncspot" { };
-    packageWrapped = mkOption {
+    wrappedPackage = mkOption {
       type = types.package;
       readOnly = true;
       description = ''
@@ -63,7 +63,7 @@ in
       };
     in
     {
-      yakumo.tools.misc.ncspot.packageWrapped = ncspotWrapped;
+      yakumo.tools.misc.ncspot.wrappedPackage = ncspotWrapped;
       yakumo.user.packages = [ ncspotWrapped ];
     }
   );

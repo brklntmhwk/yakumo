@@ -185,7 +185,7 @@ in
       '';
     };
     package = mkPackageOption pkgs "zsh" { };
-    packageWrapped = mkOption {
+    wrappedPackage = mkOption {
       type = types.package;
       readOnly = true;
       description = ''
@@ -358,7 +358,7 @@ in
         };
       in
       {
-        yakumo.tools.shell.zsh.packageWrapped = zshWrapped;
+        yakumo.tools.shell.zsh.wrappedPackage = zshWrapped;
         yakumo.user.packages = [ zshWrapped ] ++ pluginPackages;
 
         users.defaultUserShell = mkIf cfg.defaultShell zshWrapped;

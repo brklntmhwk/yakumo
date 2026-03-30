@@ -44,7 +44,7 @@ in
       '';
     };
     package = mkPackageOption pkgs "bottom" { };
-    packageWrapped = mkOption {
+    wrappedPackage = mkOption {
       type = types.package;
       readOnly = true;
       description = ''
@@ -70,7 +70,7 @@ in
       };
     in
     {
-      yakumo.tools.misc.bottom.packageWrapped = bottomWrapped;
+      yakumo.tools.misc.bottom.wrappedPackage = bottomWrapped;
       yakumo.user.packages = [ bottomWrapped ];
     }
   );
