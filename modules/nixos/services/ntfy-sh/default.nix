@@ -47,24 +47,42 @@ in
         };
       };
 
-      yakumo.services.metadata.ntfy-sh.reverseProxy = {
-        caddyIntegration = {
-          enable = true;
-          # https://docs.ntfy.sh/config/#nginxapache2caddy
-          extraConfig = ''
-            reverse_proxy ${meta.bindAddress}
+      yakumo =
+        let
+          yosugaCfg = config.yakumo.system.persistence.yosuga;
+        in
+        mkMerge [
+          {
+            services.metadata.ntfy-sh.reverseProxy = {
+              caddyIntegration = {
+                enable = true;
+                # https://docs.ntfy.sh/config/#nginxapache2caddy
+                extraConfig = ''
+                  reverse_proxy ${meta.bindAddress}
 
-            # Redirect HTTP to HTTPS, but only for GET topic addresses, since we want
-            # it to work with curl without the annoying https:// prefix
-            @httpget {
-                protocol http
-                method GET
-                path_regexp ^/([-_a-z0-9]{0,64}$|docs/|static/)
-            }
-            redir @httpget https://{host}{uri}
-          '';
-        };
-      };
+                  # Redirect HTTP to HTTPS, but only for GET topic addresses, since we want
+                  # it to work with curl without the annoying https:// prefix
+                  @httpget {
+                      protocol http
+                      method GET
+                      path_regexp ^/([-_a-z0-9]{0,64}$|docs/|static/)
+                  }
+                  redir @httpget https://{host}{uri}
+                '';
+              };
+            };
+          }
+          (mkIf yosugaCfg.enable {
+            system.persistence.yosuga = {
+              directories = [
+                {
+                  path = "/var/lib/ntfy-sh";
+                  mode = "0700";
+                }
+              ];
+            };
+          })
+        ];
 
       sops.secrets = {
         "ntfy/env_file" = {

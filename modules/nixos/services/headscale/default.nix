@@ -185,6 +185,7 @@ in
             system.persistence.yosuga = {
               directories = [
                 {
+                  inherit (config.services.headscale) group user;
                   path = "/var/lib/headscale";
                   mode = "0700";
                 }

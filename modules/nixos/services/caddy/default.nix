@@ -57,6 +57,30 @@ in
       extraConfig = "";
     };
 
+    yakumo =
+      let
+        yosugaCfg = config.yakumo.system.persistence.yosuga;
+        caddyCfg = config.services.caddy;
+      in
+      mkMerge [
+        (mkIf yosugaCfg.enable {
+          system.persistence.yosuga = {
+            directories = [
+              {
+                inherit (caddyCfg) group user;
+                path = caddyCfg.dataDir;
+                mode = "0700";
+              }
+              {
+                inherit (caddyCfg) group user;
+                path = caddyCfg.logDir;
+                mode = "0700";
+              }
+            ];
+          };
+        })
+      ];
+
     sops.secrets = {
       "caddy/env_file" = {
         sopsFile = rootPath + "/secrets/default.yaml";
