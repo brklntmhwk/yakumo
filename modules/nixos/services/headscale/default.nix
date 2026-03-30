@@ -12,6 +12,8 @@ let
     mkEnableOption
     mkIf
     mkMerge
+    mkOption
+    types
     ;
   cfg = config.yakumo.services.headscale;
   meta = config.yakumo.services.metadata.headscale;
