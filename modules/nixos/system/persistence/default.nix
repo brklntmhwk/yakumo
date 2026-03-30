@@ -19,11 +19,13 @@ in
         btrfs-diff = pkgs.writeShellApplication {
           name = "btrfs-diff";
           # Inject the required tools into the script's PATH
-          runtimeInputs = with pkgs; [
-            btrfs-progs
-            coreutils
-            gnused
-          ];
+          runtimeInputs = builtins.attrValues {
+            inherit (pkgs)
+              btrfs-progs
+              coreutils
+              gnused
+              ;
+          };
           text = ''
             # Fallback assuming manual mounting at /mnt
             ROOT_BLANK="/mnt/root-blank"
