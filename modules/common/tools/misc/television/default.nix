@@ -95,7 +95,7 @@ in
       };
     };
     package = mkPackageOption pkgs "television" { };
-    packageWrapped = mkOption {
+    wrappedPackage = mkOption {
       type = types.package;
       readOnly = true;
       description = ''
@@ -181,7 +181,7 @@ in
         };
       in
       {
-        yakumo.tools.misc.television.packageWrapped = televisionWrapped;
+        yakumo.tools.misc.television.wrappedPackage = televisionWrapped;
         yakumo.user.packages = [
           televisionWrapped
         ]

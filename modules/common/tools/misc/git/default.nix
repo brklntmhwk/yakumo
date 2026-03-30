@@ -80,7 +80,7 @@ in
       enablePureSSHTransfer = mkEnableOption "Enable pure SSH transfer in server side by adding git-lfs-transfer to environment.systemPackages";
     };
     package = mkPackageOption pkgs "git" { };
-    packageWrapped = mkOption {
+    wrappedPackage = mkOption {
       type = types.package;
       readOnly = true;
       description = ''
@@ -117,7 +117,7 @@ in
         };
       in
       {
-        yakumo.tools.misc.git.packageWrapped = gitWrapped;
+        yakumo.tools.misc.git.wrappedPackage = gitWrapped;
         yakumo.user.packages = [
           gitWrapped
         ]

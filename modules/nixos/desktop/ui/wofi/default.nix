@@ -38,7 +38,7 @@ in
       '';
     };
     package = mkPackageOption pkgs "wofi" { };
-    packageWrapped = mkOption {
+    wrappedPackage = mkOption {
       type = types.package;
       readOnly = true;
       description = ''
@@ -78,7 +78,7 @@ in
       };
     in
     {
-      yakumo.desktop.ui.wofi.packageWrapped = wofiWrapped;
+      yakumo.desktop.ui.wofi.wrappedPackage = wofiWrapped;
       yakumo.user.packages = [ wofiWrapped ];
     }
   );

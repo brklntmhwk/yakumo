@@ -165,7 +165,7 @@ in
       };
     };
     package = mkPackageOption pkgs "niri" { };
-    packageWrapped = mkOption {
+    wrappedPackage = mkOption {
       type = types.package;
       default = cfg.package;
       readOnly = true;
@@ -314,7 +314,7 @@ in
           };
         in
         {
-          yakumo.desktop.compositors.niri.packageWrapped = niriWrapped;
+          yakumo.desktop.compositors.niri.wrappedPackage = niriWrapped;
           yakumo.user.packages =
             attrValues { inherit (pkgs) ; } ++ optional cfg.xwayland.enable pkgs.xwayland-satellite;
           environment.systemPackages = [

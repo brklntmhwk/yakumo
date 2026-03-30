@@ -27,6 +27,33 @@ in
       };
     };
     desktop = {
+      enable = true;
+      compositors = {
+        niri = {
+          enable = true;
+          xwayland.enable = true;
+          settings = recursiveUpdate (import ../../configs/niri { inherit theme; }) (
+            import ../../configs/niri/config-tsutsuyami.nix
+          );
+          loginSettings = import ../../configs/niri/login-tsutsuyami.nix;
+          greeter.regreet = {
+            enable = true;
+          }
+          // (import ../../configs/regreet { inherit theme; });
+        };
+      };
+      lockers = {
+        hyprlock = {
+          enable = true;
+          settings = import ../../configs/hyprlock { inherit theme; };
+        };
+      };
+      daemons = {
+        swayidle = {
+          enable = true;
+          settings = import ../../configs/swayidle { inherit config lib; };
+        };
+      };
       terminal = {
         wezterm = {
           enable = true;

@@ -9,6 +9,7 @@ let
   inherit (lib)
     mkEnableOption
     mkIf
+    mkMerge
     ;
   cfg = config.yakumo.services.mosquitto;
   meta = config.yakumo.services.metadata.mosquitto;
@@ -56,5 +57,22 @@ in
       ];
       settings = { };
     };
+
+    yakumo =
+      let
+        yosugaCfg = config.yakumo.system.persistence.yosuga;
+      in
+      mkMerge [
+        (mkIf yosugaCfg.enable {
+          system.persistence.yosuga = {
+            directories = [
+              {
+                path = config.services.mosquitto.dataDir;
+                mode = "0700";
+              }
+            ];
+          };
+        })
+      ];
   };
 }

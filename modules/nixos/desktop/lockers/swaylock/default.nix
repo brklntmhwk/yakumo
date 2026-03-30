@@ -46,7 +46,7 @@ in
       };
     };
     package = mkPackageOption pkgs "swaylock" { };
-    packageWrapped = mkOption {
+    wrappedPackage = mkOption {
       type = types.package;
       readOnly = true;
       description = ''
@@ -95,7 +95,7 @@ in
       };
     in
     {
-      yakumo.desktop.lockers.swaylock.packageWrapped = swaylockWrapped;
+      yakumo.desktop.lockers.swaylock.wrappedPackage = swaylockWrapped;
       environment.systemPackages = [ swaylockWrapped ];
 
       # Enable PAM access for authentication.

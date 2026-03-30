@@ -9,6 +9,7 @@ let
   inherit (lib)
     mkEnableOption
     mkIf
+    mkMerge
     ;
   cfg = config.yakumo.services.calibre-web;
   meta = config.yakumo.services.metadata.calibre-web;
@@ -44,8 +45,27 @@ in
       };
     };
 
-    yakumo.services.metadata.calibre-web.reverseProxy = {
-      caddyIntegration.enable = true;
-    };
+    yakumo =
+      let
+        yosugaCfg = config.yakumo.system.persistence.yosuga;
+      in
+      mkMerge [
+        {
+          services.metadata.calibre-web.reverseProxy = {
+            caddyIntegration.enable = true;
+          };
+        }
+        (mkIf yosugaCfg.enable {
+          system.persistence.yosuga = {
+            directories = [
+              {
+                inherit (config.services.calibre-web) group user;
+                path = "/var/lib/calibre-web";
+                mode = "0700";
+              }
+            ];
+          };
+        })
+      ];
   };
 }

@@ -26,7 +26,7 @@ in
       description = "Gemini CLI's settings.json in Nix-representable JSON format.";
     };
     package = mkPackageOption pkgs "gemini-cli" { };
-    packageWrapped = mkOption {
+    wrappedPackage = mkOption {
       type = types.package;
       readOnly = true;
       description = ''
@@ -56,7 +56,7 @@ in
       };
     in
     {
-      yakumo.tools.ai.agents.gemini-cli.packageWrapped = geminiCliWrapped;
+      yakumo.tools.ai.agents.gemini-cli.wrappedPackage = geminiCliWrapped;
       yakumo.user.packages = [ geminiCliWrapped ];
     }
   );

@@ -26,7 +26,7 @@ in
       description = "Claude Code's settings.json in Nix-representable JSON format.";
     };
     package = mkPackageOption pkgs "claude-code" { };
-    packageWrapped = mkOption {
+    wrappedPackage = mkOption {
       type = types.package;
       readOnly = true;
       description = ''
@@ -62,7 +62,7 @@ in
       };
     in
     {
-      yakumo.tools.ai.agents.claude-code.packageWrapped = claudeCodeWrapped;
+      yakumo.tools.ai.agents.claude-code.wrappedPackage = claudeCodeWrapped;
       yakumo.user.packages = [ claudeCodeWrapped ];
     }
   );
