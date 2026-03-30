@@ -152,13 +152,16 @@ in
             inherit (utils) pathsNeededForBoot;
             initrdDirs = filter (d: elem d.path pathsNeededForBoot) cfg.directories;
 
-            mkInitrdBindMount = d: {
-              description = "Bind mount for persistent stage 1 directory ${d.path}.";
-              before = [ "initrd-nixos-activation.service" ];
-              wantedBy = [ "initrd.target" ];
-              what = "/sysroot${cfg.persistentStoragePath}${d.path}";
-              where = "/sysroot${d.path}";
-            } // baseBindMountConfig;
+            mkInitrdBindMount =
+              d:
+              {
+                description = "Bind mount for persistent stage 1 directory ${d.path}.";
+                before = [ "initrd-nixos-activation.service" ];
+                wantedBy = [ "initrd.target" ];
+                what = "/sysroot${cfg.persistentStoragePath}${d.path}";
+                where = "/sysroot${d.path}";
+              }
+              // baseBindMountConfig;
           in
           map mkInitrdBindMount initrdDirs;
       };
@@ -170,7 +173,7 @@ in
         ) cfg.files) true;
         tmpfiles.rules =
           let
-            inherit (lib) concatMap;
+            inherit (builtins) concatMap;
 
             # Format: Type Path Mode User Group Age Argument
             # 'd': Create the directory if it doesn't exist.
@@ -187,13 +190,16 @@ in
           (concatMap mkDirRules cfg.directories) ++ (concatMap mkFileRules cfg.files);
         mounts =
           let
-            mkBindMount = type: item: {
-              description = "Bind mount for persistent ${type} ${item.path}.";
-              before = [ "local-fs.target" ];
-              wantedBy = [ "local-fs.target" ];
-              what = "${cfg.persistentStoragePath}${item.path}";
-              where = item.path;
-            } // baseBindMountConfig;
+            mkBindMount =
+              type: item:
+              {
+                description = "Bind mount for persistent ${type} ${item.path}.";
+                before = [ "local-fs.target" ];
+                wantedBy = [ "local-fs.target" ];
+                what = "${cfg.persistentStoragePath}${item.path}";
+                where = item.path;
+              }
+              // baseBindMountConfig;
           in
           map (mkBindMount "directory") cfg.directories ++ map (mkBindMount "file") cfg.files;
       };
