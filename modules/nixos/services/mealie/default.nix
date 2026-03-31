@@ -37,6 +37,7 @@ in
           # Specify the time window during which a login/auth token is valid.
           # This must be <= 9600.
           TOKEN_TIME = 9600; # Default: 48 (hours)
+          # Whether to allow user sign-up without token.
           ALLOW_SIGNUP = "false"; # Default: 'false'
           SECURITY_MAX_LOGIN_ATTEMPTS = 5; # Default: 5
           SECURITY_USER_LOCKOUT_TIME = 24; # Default: 24 (hours)
@@ -66,6 +67,7 @@ in
 
       yakumo =
         let
+          dataDir = "/var/lib/private/mealie";
           yosugaCfg = config.yakumo.system.persistence.yosuga;
         in
         mkMerge [
@@ -74,14 +76,37 @@ in
               caddyIntegration.enable = true;
             };
           }
+          (mkIf rusticCfg.enable {
+            services.rustic.backups = {
+              mealie = {
+                environmentFile = config.sops.secrets."mealie/rustic_env_file".path;
+                timerConfig = {
+                  OnCalendar = "*-*-* 04:15:00"; # Run daily at 4:15 a.m.
+                  Persistent = true;
+                };
+                settings = {
+                  repository = "s3:https://your-s3-endpoint/bucket/mealie";
+                  backup = {
+                    sources = [ dataDir ];
+                  };
+                  forget = {
+                    keep-daily = 7;
+                    keep-weekly = 4;
+                    keep-monthly = 6;
+                    prune = true;
+                  };
+                };
+              };
+            };
+          })
           (mkIf yosugaCfg.enable {
             system.persistence.yosuga = {
               directories = [
+                # Specify the private data directory as the upstream module enables
+                # `serviceConfig.DynamicUser` for the Mealie systemd service.
                 {
-                  path = "/var/lib/mealie";
-                  user = "mealie";
-                  group = "mealie";
-                  mode = "0750";
+                  path = dataDir;
+                  mode = "0700";
                 }
               ];
             };
@@ -91,6 +116,9 @@ in
       sops = {
         secrets = {
           "kanidm/mealie_oidc_client_secret" = { };
+          "mealie/rustic_env_file" = {
+            sopsFile = rootPath + "/secrets/default.yaml";
+          };
         };
         templates =
           let

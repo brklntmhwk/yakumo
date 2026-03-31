@@ -31,16 +31,63 @@ in
         enable = true;
         environmentFile = config.sops.secrets."shiori/env_file".path; # Default: null
         # Shiori can use MySQL or PostgreSQL.
-        databaseUrl = "postgres:///shiori?host=/run/postgresql";
+        databaseUrl = "postgres:///shiori?host=/run/postgresql"; # Default: null
         webRoot = "/"; # Default: '/'
       };
 
-      yakumo.services.metadata.shiori.reverseProxy = {
-        caddyIntegration.enable = true;
-      };
+      yakumo =
+        let
+          dataDir = "/var/lib/private/shiori";
+          yosugaCfg = config.yakumo.system.persistence.yosuga;
+        in
+        mkMerge [
+          {
+            services.metadata.shiori.reverseProxy = {
+              caddyIntegration.enable = true;
+            };
+          }
+          (mkIf rusticCfg.enable {
+            services.rustic.backups = {
+              shiori = {
+                environmentFile = config.sops.secrets."shiori/rustic_env_file".path;
+                timerConfig = {
+                  OnCalendar = "*-*-* 05:00:00"; # Run daily at 5 a.m.
+                  Persistent = true;
+                };
+                settings = {
+                  repository = "s3:https://your-s3-endpoint/bucket/shiori";
+                  backup = {
+                    sources = [ dataDir ];
+                  };
+                  forget = {
+                    keep-daily = 7;
+                    keep-weekly = 4;
+                    keep-monthly = 6;
+                    prune = true;
+                  };
+                };
+              };
+            };
+          })
+          (mkIf yosugaCfg.enable {
+            system.persistence.yosuga = {
+              directories = [
+                # Specify the private data directory as the upstream module enables
+                # `serviceConfig.DynamicUser` for the Mealie systemd service.
+                {
+                  path = dataDir;
+                  mode = "0700";
+                }
+              ];
+            };
+          })
+        ];
 
       sops.secrets = {
         "shiori/env_file" = {
+          sopsFile = rootPath + "/secrets/default.yaml";
+        };
+        "shiori/rustic_env_file" = {
           sopsFile = rootPath + "/secrets/default.yaml";
         };
       };

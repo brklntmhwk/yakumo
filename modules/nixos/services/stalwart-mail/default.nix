@@ -39,7 +39,7 @@ in
           # Set credentials env vars to configure Stalwart-Mail secrets.
           # These secrets can be accessed in configuration values with the macros such as
           # %{file:/run/credentials/stalwart-mail.service/VAR_NAME}%.
-          # The value(s) given will be set for the `LoadCredential` Systemd setting.
+          # The value(s) given will be set for the `LoadCredential` systemd setting.
           # For the macro syntax, see: https://stalw.art/docs/configuration/macros
           credentials = {
             user_admin_password = config.sops.secrets."stalwart/admin_passwd".path;
@@ -101,7 +101,7 @@ in
               in
               {
                 # Specify this certificate as the default for the situation where
-                # the client doesn't provide an SNI server name.
+                # the client doesn't provide an SNI (Server Name Indication) server name.
                 default = true;
                 cert = "%{file:${acmeCertsDir}/fullchain.pem}%";
                 private-key = "%{file:${acmeCertsDir}/key.pem}%";

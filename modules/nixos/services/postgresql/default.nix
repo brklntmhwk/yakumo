@@ -101,7 +101,7 @@ in
             postgresql = {
               environmentFile = config.sops.secrets."postgresql/rustic_env_file".path;
               timerConfig = {
-                OnCalendar = "*-*-* 03:00:00"; # Run daily at 3 a.m.
+                OnCalendar = "*-*-* 03:15:00"; # Run daily at 3:15 a.m.
                 Persistent = true;
               };
               settings = {
@@ -131,7 +131,7 @@ in
               }
               # If setting up local pg_dump staging for Rustic, persist that too.
               {
-                path = "/var/backup/postgresql";
+                path = pgBackupCfg.location;
                 user = "postgres";
                 group = "postgres";
                 mode = "0700";
@@ -142,6 +142,10 @@ in
       ];
 
     sops.secrets = {
+      "postgresql/passwd_file" = {
+        sopsFile = rootPath + "/secrets/default.yaml";
+        owner = "postgres";
+      };
       "postgresql/rustic_env_file" = {
         sopsFile = rootPath + "/secrets/default.yaml";
         owner = "postgres";

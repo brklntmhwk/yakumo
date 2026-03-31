@@ -9,6 +9,7 @@ let
   inherit (lib)
     mkEnableOption
     mkIf
+    mkMerge
     mkOption
     types
     ;
@@ -58,12 +59,64 @@ in
         users
         ;
       enable = true;
+      # This will be bound to `SYNC_BASE`.
+      # e.g., '/f/foo/' for User 'foo'
       baseDirectory = "%S/%N"; # Default: '%S/%N'
       openFirewall = false; # Default: false
     };
 
-    yakumo.services.metadata.anki-sync-server.reverseProxy = {
-      caddyIntegration.enable = true;
+    yakumo =
+      let
+        dataDir = "/var/lib/private/anki-sync-server";
+        yosugaCfg = config.yakumo.system.persistence.yosuga;
+      in
+      mkMerge [
+        {
+          services.metadata.anki-sync-server.reverseProxy = {
+            caddyIntegration.enable = true;
+          };
+        }
+        (mkIf rusticCfg.enable {
+          services.rustic.backups = {
+            anki-sync-server = {
+              environmentFile = config.sops.secrets."anki-sync-server/rustic_env_file".path;
+              timerConfig = {
+                OnCalendar = "*-*-* 04:30:00"; # Run daily at 4:30 a.m.
+                Persistent = true;
+              };
+              settings = {
+                repository = "s3:https://your-s3-endpoint/bucket/mealie";
+                backup = {
+                  sources = [ dataDir ];
+                };
+                forget = {
+                  keep-daily = 7;
+                  keep-weekly = 4;
+                  keep-monthly = 6;
+                  prune = true;
+                };
+              };
+            };
+          };
+        })
+        (mkIf yosugaCfg.enable {
+          system.persistence.yosuga = {
+            directories = [
+              # Specify the private data directory as the upstream module enables
+              # `serviceConfig.DynamicUser` for the Mealie systemd service.
+              {
+                path = dataDir;
+                mode = "0700";
+              }
+            ];
+          };
+        })
+      ];
+
+    sops.secrets = {
+      "anki-sync-server/rustic_env_file" = {
+        sopsFile = rootPath + "/secrets/default.yaml";
+      };
     };
   };
 }

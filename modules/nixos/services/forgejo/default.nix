@@ -39,9 +39,10 @@ in
               name = "forgejo"; # Default: 'forgejo'
               user = "forgejo"; # Default: 'forgejo'
               host = pgMeta.address; # Default: '127.0.0.1'
+              # Default: '${config.services.forgejo.stateDir}/data/forgejo.db'
               path = "${forgejoCfg.stateDir}/data/forgejo.db";
-              passwordFile = config.sops.secrets.postgres_passwd.path;
-              socket = "/run/mysqld/mysqld.sock";
+              passwordFile = config.sops.secrets."postgresql/passwd_file".path; # Default: null
+              socket = "/run/mysqld/mysqld.sock"; # Default: null
             };
           dump = {
             enable = true; # Default: false
@@ -62,10 +63,11 @@ in
           };
           group = "forgejo"; # Default: 'forgejo'
           user = "forgejo"; # Default: 'forgejo'
-          customDir = "${forgejoCfg.stateDir}/custom";
-          stateDir = "/var/lib/forgejo";
+          customDir = "${forgejoCfg.stateDir}/custom"; # Default: '${config.services.forgejo.stateDir}/custom'
+          stateDir = "/var/lib/forgejo"; # Default: '/var/lib/forgejo'
           repositoryRoot = "${forgejoCfg.stateDir}/repositories";
           useWizard = false; # Default: false
+          # The value(s) given will be set for the `LoadCredential` systemd setting.
           secrets = { };
           settings = {
             log = {
@@ -89,18 +91,25 @@ in
           };
         };
 
-      yakumo = mkMerge [
-        {
-          services = {
-            metadata.forgejo.reverseProxy = {
-              caddyIntegration.enable = true;
+      yakumo =
+        let
+          rusticCfg = config.yakumo.services.rustic;
+          yosugaCfg = config.yakumo.system.persistence.yosuga;
+        in
+        mkMerge [
+          {
+            services = {
+              metadata.forgejo.reverseProxy = {
+                caddyIntegration.enable = true;
+              };
             };
-
-            rustic.backups = {
+          }
+          (mkIf rusticCfg.enable {
+            services.rustic.backups = {
               forgejo = {
                 environmentFile = config.sops.secrets."forgejo/rustic_env_file".path;
                 timerConfig = {
-                  OnCalendar = "*-*-* 05:30:00"; # Run daily at 5:30 a.m.
+                  OnCalendar = "*-*-* 04:45:00"; # Run daily at 4:45 a.m.
                   Persistent = true;
                 };
                 settings = {
@@ -118,9 +127,19 @@ in
                 };
               };
             };
-          };
-        }
-      ];
+          })
+          (mkIf yosugaCfg.enable {
+            system.persistence.yosuga = {
+              directories = [
+                {
+                  inherit (forgejoCfg) group user;
+                  path = forgejoCfg.stateDir;
+                  mode = "0700";
+                }
+              ];
+            };
+          })
+        ];
 
       sops.secrets = {
         "forgejo/rustic_env_file" = {

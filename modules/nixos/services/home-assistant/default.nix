@@ -119,7 +119,7 @@ in
             home-assistant = {
               environmentFile = config.sops.secrets."hass/rustic_env_file".path;
               timerConfig = {
-                OnCalendar = "*-*-* 04:00:00"; # Run daily at 4 a.m.
+                OnCalendar = "*-*-* 03:45:00"; # Run daily at 3:45 a.m.
                 Persistent = true;
               };
               settings = {

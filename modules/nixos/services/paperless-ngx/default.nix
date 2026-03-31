@@ -84,7 +84,7 @@ in
                 paperless = {
                   environmentFile = config.sops.secrets."paperless/rustic_env_file".path;
                   timerConfig = {
-                    OnCalendar = "*-*-* 02:30:00"; # Run daily at 2:30 a.m.
+                    OnCalendar = "*-*-* 02:45:00"; # Run daily at 2:45 a.m.
                     Persistent = true;
                   };
                   settings = {
