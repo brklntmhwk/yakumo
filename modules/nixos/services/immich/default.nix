@@ -23,6 +23,7 @@ in
 
   config = mkIf cfg.enable (
     let
+      inherit (meta) address domain port;
       backupDir = "/var/backup/immich";
       immichCfg = config.services.immich;
       rusticCfg = config.yakumo.services.rustic;
@@ -30,11 +31,11 @@ in
     mkMerge [
       {
         services.immich = {
-          inherit (meta) port; # Default: 2283
+          inherit port; # Default: 2283
           enable = true;
           group = "immich"; # Default: 'immich'
           user = "immich"; # Default: 'immich'
-          host = meta.address; # Default: 'localhost'
+          host = address; # Default: 'localhost'
           secretsFile = config.sops.secrets."immich/secrets_file".path;
           openFirewall = false; # Default: false
           # Specify device paths to hardware acceleration devices that
@@ -120,7 +121,7 @@ in
             newVersionCheck.enabled = false; # Default: false
             # Domain for publicly shared links, including http(s)://.
             server = {
-              externalDomain = "https://${meta.domain}"; # Default: ''
+              externalDomain = "https://${domain}"; # Default: ''
               loginPageMessage = "A trip down memory lane.";
             };
           };
@@ -142,9 +143,8 @@ in
               system.persistence.yosuga = {
                 directories = [
                   {
+                    inherit (immichCfg) group user;
                     path = immichCfg.mediaLocation;
-                    user = "immich";
-                    group = "immich";
                     mode = "0750";
                   }
                 ];
@@ -187,10 +187,9 @@ in
                 ];
               };
               forget = {
-                keep-daily = 14;
+                keep-daily = 7;
                 keep-weekly = 4;
-                keep-monthly = 12;
-                keep-yearly = 2;
+                keep-monthly = 3;
                 prune = true;
               };
             };

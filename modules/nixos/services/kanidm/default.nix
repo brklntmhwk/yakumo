@@ -199,8 +199,10 @@ in
                       ];
                     };
                     forget = {
-                      keep-daily = 7;
-                      keep-weekly = 4;
+                      keep-daily = 14;
+                      keep-weekly = 8;
+                      keep-monthly = 12;
+                      keep-yearly = 3;
                       prune = true;
                     };
                   };

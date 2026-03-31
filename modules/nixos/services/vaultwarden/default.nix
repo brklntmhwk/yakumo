@@ -134,10 +134,11 @@ in
                       ];
                     };
                     forget = {
+                      keep-hourly = 24;
                       keep-daily = 14;
-                      keep-weekly = 4;
+                      keep-weekly = 8;
                       keep-monthly = 12;
-                      keep-yearly = 2;
+                      keep-yearly = 5;
                       prune = true;
                     };
                   };
