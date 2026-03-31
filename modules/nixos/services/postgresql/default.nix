@@ -105,9 +105,16 @@ in
                 Persistent = true;
               };
               settings = {
-                repository = "s3:https://your-s3-endpoint/bucket/postgresql";
+                repository = {
+                  repository = "s3:https://your-s3-endpoint/bucket/postgresql";
+                };
                 backup = {
-                  sources = [ pgBackupCfg.location ];
+                  snapshots = [
+                    {
+                      name = "postgresql";
+                      sources = [ pgBackupCfg.location ];
+                    }
+                  ];
                 };
                 forget = {
                   keep-daily = 7;

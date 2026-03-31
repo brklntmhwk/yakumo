@@ -55,9 +55,16 @@ in
                   Persistent = true;
                 };
                 settings = {
-                  repository = "s3:https://your-s3-endpoint/bucket/shiori";
+                  repository = {
+                    repository = "s3:https://your-s3-endpoint/bucket/shiori";
+                  };
                   backup = {
-                    sources = [ dataDir ];
+                    snapshots = [
+                      {
+                        name = "shiori";
+                        sources = [ dataDir ];
+                      }
+                    ];
                   };
                   forget = {
                     keep-daily = 7;

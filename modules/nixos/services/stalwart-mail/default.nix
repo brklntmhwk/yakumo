@@ -317,9 +317,16 @@ in
                     Persistent = true;
                   };
                   settings = {
-                    repository = "s3:https://your-s3-endpoint/bucket/stalwart-mail";
+                    repository = {
+                      repository = "s3:https://your-s3-endpoint/bucket/stalwart-mail";
+                    };
                     backup = {
-                      sources = [ stalwartCfg.dataDir ];
+                      snapshots = [
+                        {
+                          name = "stalwart-mail";
+                          sources = [ stalwartCfg.dataDir ];
+                        }
+                      ];
                     };
                     forget = {
                       keep-daily = 7;

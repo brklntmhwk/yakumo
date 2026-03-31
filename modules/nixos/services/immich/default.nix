@@ -172,11 +172,18 @@ in
               Persistent = true;
             };
             settings = {
-              repository = "s3:https://your-s3-endpoint/bucket/immich";
+              repository = {
+                repository = "s3:https://your-s3-endpoint/bucket/immich";
+              };
               backup = {
-                sources = [
-                  immichCfg.mediaLocation
-                  backupDir
+                snapshots = [
+                  {
+                    name = "immich";
+                    sources = [
+                      immichCfg.mediaLocation
+                      backupDir
+                    ];
+                  }
                 ];
               };
               forget = {

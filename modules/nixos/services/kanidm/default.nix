@@ -42,18 +42,18 @@ in
               inherit domain;
               bindaddress = bindAddress;
               ldapbindaddress = null; # Default: null
+              origin = "https://${domain}";
               db_path = "${dataDir}/kanidm.db"; # Default: '/var/lib/kanidm/kanidm.db'
               log_level = "info"; # Default: 'info' (Options: 'debug', 'trace')
-              origin = "https://${domain}";
               role = "WriteReplica"; # Default: 'WriteReplica' (Options: 'WriteReplicaNoUI', 'ReadOnlyReplica')
               tls_chain = "${acmeCertsDir}/fullchain.pem";
               tls_key = "${acmeCertsDir}/key.pem";
               online_backup = {
-                # Specify \the number of backups to keep. 0 results in no backup.
+                # Specify the number of backups to keep. 0 results in no backup.
                 versions = 7; # Default: 0
                 path = "${dataDir}/backups";
                 # Schedule backups in cron format.
-                # Run daily at 0:00 a.m.
+                # Run daily at 22:00 p.m. (UTC)
                 schedule = "00 22 * * *"; # Default: '00 22 * * *'
               };
             };
@@ -183,12 +183,19 @@ in
                     Persistent = true;
                   };
                   settings = {
-                    repository = "s3:https://your-s3-endpoint/bucket/kanidm";
+                    repository = {
+                      repository = "s3:https://your-s3-endpoint/bucket/kanidm";
+                    };
                     backup = {
-                      sources = [
-                        # Target the native online_backup path, not the live database.
-                        kaniCfg.serverSettings.online_backup.path
-                        # kaniCfg.server.settings.online_backup.path
+                      snapshots = [
+                        {
+                          name = "kanidm";
+                          sources = [
+                            # Target the native online_backup path, not the live database.
+                            kaniCfg.serverSettings.online_backup.path
+                            # kaniCfg.server.settings.online_backup.path
+                          ];
+                        }
                       ];
                     };
                     forget = {

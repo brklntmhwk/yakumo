@@ -85,9 +85,16 @@ in
                   Persistent = true;
                 };
                 settings = {
-                  repository = "s3:https://your-s3-endpoint/bucket/mealie";
+                  repository = {
+                    repository = "s3:https://your-s3-endpoint/bucket/mealie";
+                  };
                   backup = {
-                    sources = [ dataDir ];
+                    snapshots = [
+                      {
+                        name = "mealie";
+                        sources = [ dataDir ];
+                      }
+                    ];
                   };
                   forget = {
                     keep-daily = 7;

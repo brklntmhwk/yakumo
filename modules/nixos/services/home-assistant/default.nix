@@ -123,10 +123,17 @@ in
                 Persistent = true;
               };
               settings = {
-                repository = "s3:https://your-s3-endpoint/bucket/home-assistant";
+                repository = {
+                  repository = "s3:https://your-s3-endpoint/bucket/home-assistant";
+                };
                 backup = {
-                  sources = [
-                    hassCfg.configDir
+                  snapshots = [
+                    {
+                      name = "hass";
+                      sources = [
+                        hassCfg.configDir
+                      ];
+                    }
                   ];
                   # Exclude the high-churn SQLite WAL and SHM files to prevent
                   # backup errors.

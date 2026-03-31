@@ -120,10 +120,17 @@ in
                     Persistent = true;
                   };
                   settings = {
-                    repository = "s3:https://your-s3-endpoint/bucket/vaultwarden";
+                    repository = {
+                      repository = "s3:https://your-s3-endpoint/bucket/vaultwarden";
+                    };
                     backup = {
-                      sources = [
-                        vaultCfg.backupDir
+                      snapshots = [
+                        {
+                          name = "vaultwarden";
+                          sources = [
+                            vaultCfg.backupDir
+                          ];
+                        }
                       ];
                     };
                     forget = {

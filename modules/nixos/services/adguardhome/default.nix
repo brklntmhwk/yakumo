@@ -102,6 +102,7 @@ in
             # and check the result.
             enable_dnssec = true;
           };
+          # Filters a.k.a. Blocklists.
           filters = [
             {
               enabled = true;
@@ -154,6 +155,9 @@ in
           };
           http = {
             # `address` will automatically be set to `${cfg.host}:${toString cfg.port}`.
+            # Web session TTL (Time To Live).
+            # Web users will stay signed in for this amount of time.
+            session_ttl = "720h"; # 30 days
           };
           language = "en";
           querylog = {
@@ -200,18 +204,23 @@ in
               password = config.sops.secrets."adguardhome/admin_passwd".path;
             }
           ];
-          # Web session TTL (Time To Live) in hours.
-          # Web users will stay signed in for this hours long.
-          web_session_ttl = 720; # 3 days
         };
       };
 
-      networking.firewall = {
-        # Open DNS ports.
-        # The upstream module option `openFirewall` doesn't handle this.
-        allowedTCPPorts = [ extraPorts.dns ];
-        allowedUDPPorts = [ extraPorts.dns ];
-      };
+      networking.firewall =
+        let
+          inherit (builtins) attrValues;
+        in
+        {
+          # Open DNS ports.
+          # The upstream module option `openFirewall` doesn't handle this.
+          allowedTCPPorts = attrValues {
+            inherit (extraPorts) dns tls;
+          };
+          allowedUDPPorts = attrValues {
+            inherit (extraPorts) dns tls;
+          };
+        };
 
       yakumo =
         let

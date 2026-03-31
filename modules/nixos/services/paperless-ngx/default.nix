@@ -88,10 +88,17 @@ in
                     Persistent = true;
                   };
                   settings = {
-                    repository = "s3:https://your-s3-endpoint/bucket/paperless";
+                    repository = {
+                      repository = "s3:https://your-s3-endpoint/bucket/paperless";
+                    };
                     backup = {
-                      sources = [
-                        paperlessCfg.exporter.directory
+                      snapshots = [
+                        {
+                          name = "paperless";
+                          sources = [
+                            paperlessCfg.exporter.directory
+                          ];
+                        }
                       ];
                     };
                     forget = {

@@ -113,10 +113,17 @@ in
                   Persistent = true;
                 };
                 settings = {
-                  repository = "s3:https://your-s3-endpoint/bucket/forgejo";
+                  repository = {
+                    repository = "s3:https://your-s3-endpoint/bucket/forgejo";
+                  };
                   backup = {
-                    sources = [
-                      config.services.forgejo.dump.backupDir
+                    snapshots = [
+                      {
+                        name = "forgejo";
+                        sources = [
+                          config.services.forgejo.dump.backupDir
+                        ];
+                      }
                     ];
                   };
                   forget = {
