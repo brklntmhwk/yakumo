@@ -145,20 +145,21 @@ in
         port = 2586;
       };
       adguardhome = {
-        domain = "adguard.${internal_domain}";
+        domain = "dns.${internal_domain}";
         address = "127.0.0.1";
         port = 3000;
         extraPorts = {
           dns = 53;
+          tls = 853;
         };
       };
       forgejo = {
-        domain = "git.${internal_domain}";
+        domain = "vcs.${internal_domain}";
         address = "127.0.0.1";
         port = 3001;
       };
       grafana = {
-        domain = "grafana.${internal_domain}";
+        domain = "mon.${internal_domain}";
         address = "127.0.0.1";
         port = 3002;
       };
@@ -184,7 +185,7 @@ in
         };
       };
       headscale = {
-        domain = "headscale.${internal_domain}";
+        domain = "head.${internal_domain}";
         address = "127.0.0.1";
         port = 8081;
       };
@@ -257,7 +258,7 @@ in
         port = 28981;
       };
       tailscale = {
-        domain = "tailscale.${internal_domain}";
+        domain = "tail.${internal_domain}";
         address = "127.0.0.1";
         port = 41641;
       };
