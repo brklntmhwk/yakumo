@@ -22,22 +22,34 @@ in
 
   config = mkIf cfg.enable (mkMerge [
     {
-      services.shiori = {
-        inherit (meta)
-          # If empty, Shiori listens on all interfaces.
-          address # Default: ''
-          port # Default: 8080
-          ;
-        enable = true;
-        environmentFile = config.sops.secrets."shiori/env_file".path; # Default: null
-        # Shiori can use MySQL or PostgreSQL.
-        databaseUrl = "postgres:///shiori?host=/run/postgresql"; # Default: null
-        webRoot = "/"; # Default: '/'
+      services = {
+        shiori = {
+          inherit (meta)
+            # If empty, Shiori listens on all interfaces.
+            address # Default: ''
+            port # Default: 8080
+            ;
+          enable = true;
+          environmentFile = config.sops.secrets."shiori/env_file".path; # Default: null
+          # Shiori can use MySQL or PostgreSQL.
+          databaseUrl = "postgres:///shiori?host=/run/postgresql"; # Default: null
+          webRoot = "/"; # Default: '/'
+        };
+        postgresql = {
+          ensureDatabases = [ "shiori" ];
+          ensureUsers = [
+            {
+              name = "shiori";
+              ensureDBOwnership = true;
+            }
+          ];
+        };
       };
 
       yakumo =
         let
-          dataDir = "/var/lib/private/shiori";
+          dataDir = "/var/lib/shiori";
+          privateDatadir = "/var/lib/private/shiori";
           yosugaCfg = config.yakumo.system.persistence.yosuga;
         in
         mkMerge [
@@ -62,15 +74,15 @@ in
                     snapshots = [
                       {
                         name = "shiori";
-                        sources = [ dataDir ];
+                        sources = [ privateDatadir ];
                       }
                     ];
                   };
                   forget = {
                     keep-hourly = 24;
-                    keep-daily = 7;
-                    keep-weekly = 4;
-                    keep-monthly = 6;
+                    keep-daily = 14;
+                    keep-weekly = 8;
+                    keep-monthly = 12;
                     prune = true;
                   };
                 };
@@ -83,7 +95,7 @@ in
                 # Specify the private data directory as the upstream module enables
                 # `serviceConfig.DynamicUser` for the Mealie systemd service.
                 {
-                  path = dataDir;
+                  path = privateDatadir;
                   mode = "0700";
                 }
               ];

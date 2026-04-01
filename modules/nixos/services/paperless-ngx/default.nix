@@ -48,7 +48,9 @@ in
           dataDir = "/var/lib/paperless"; # Default: '/var/lib/paperless'
           # This is where actual PDF files are stored.
           mediaDir = "${paperlessCfg.dataDir}/media";
-          # Configure local PostgreSQL DB server.
+          # Configure local PostgreSQL DB server. Enabling this automatically does:
+          # - Configure `ensureDatabases` & `ensureUsers` in `services.postgresql`
+          # for Paperless-ngx.
           database.createLocally = true; # Default: false
           # TODO: Consider implementing and using a systemd backup service & Rustic for backups instead.
           # Configure the document exporter.

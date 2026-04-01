@@ -38,20 +38,21 @@ in
         # Check the config file syntactically at compile time.
         checkConfig = true; # Default: true
         dataDir = "/var/lib/postgresql/${config.services.postgresql.package.psqlSchema}";
-        # TODO: Consider configuring these options in each module.
-        ensureDatabases = [
-          # Add PostgreSQL DB for each service here to ensure their presence.
-        ];
-        ensureUsers = [
-          # Add PostgreSQL DB users for each service here to ensure their presence.
-        ];
-        # extensions = [];
+        # NOTE: Configure these options in each module that uses Postgresql DB.
+        # ensureDatabases = [
+        #   # Add PostgreSQL DB for each service here to ensure their presence.
+        # ];
+        # ensureUsers = [
+        #   # Add PostgreSQL DB users for each service here to ensure their presence.
+        # ];
+        # List of PostgreSQL extensions to install.
+        extensions = [ ];
         # Define the mapping from system users to DB users.
         # Each line should look like:
         # 'map-name-0 system-username-0 database-username-0'
         identMap = ""; # Default: ''
         # Pass additional args to `initdb` during data directory initialization.
-        initdbArgs = [ ];
+        initdbArgs = [ ]; # Default: [ ]
         # Specify a file that contains SQL statements to execute on first startup.
         initialScript = null; # Default: null
         # Configure the syscall filter for `postgresql.service`.

@@ -67,7 +67,7 @@ in
 
       yakumo =
         let
-          dataDir = "/var/lib/private/mealie";
+          privateDatadir = "/var/lib/private/mealie";
           yosugaCfg = config.yakumo.system.persistence.yosuga;
         in
         mkMerge [
@@ -92,7 +92,7 @@ in
                     snapshots = [
                       {
                         name = "mealie";
-                        sources = [ dataDir ];
+                        sources = [ privateDatadir ];
                       }
                     ];
                   };
@@ -112,7 +112,7 @@ in
                 # Specify the private data directory as the upstream module enables
                 # `serviceConfig.DynamicUser` for the Mealie systemd service.
                 {
-                  path = dataDir;
+                  path = privateDatadir;
                   mode = "0700";
                 }
               ];
