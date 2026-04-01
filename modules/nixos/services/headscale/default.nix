@@ -145,7 +145,7 @@ in
                   # Format: https://<kanidm_origin>/oauth2/openid/<kanidm_system_name>
                   issuer = "https://${kaniMeta.domain}/oauth2/openid/headscale"; # Default: ''
                   client_id = "headscale"; # Default: ''
-                  client_secret_path = config.sops.secrets."kanidm/headscale_oidc_client_secret".path; # Default: null
+                  client_secret_path = config.sops.secrets."kanidm/headscale_oauth2_client_secret".path; # Default: null
                 }
               ))
             ];
