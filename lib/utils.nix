@@ -9,6 +9,8 @@ let
     head
     map
     readDir
+    stringLength
+    substring
     ;
   inherit (lib)
     all
@@ -28,6 +30,8 @@ let
     pathExists
     pipe
     removeSuffix
+    splitString
+    toUpper
     zipAttrsWith
     ;
 in
@@ -43,6 +47,12 @@ rec {
   anyAttrByPath = path: attrs: any (val: attrByPath path false val) (attrValues attrs);
 
   anyHasPrefix = prefix: list: any (hasPrefix prefix) list;
+
+  capitalize =
+    str:
+    if str == "" then "" else (toUpper (substring 0 1 str)) + (substring 1 (stringLength str - 1) str);
+
+  formatString = str: concatStringsSep " " (map capitalize (splitString "-" str));
 
   getDirNames =
     dir:
