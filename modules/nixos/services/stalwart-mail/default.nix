@@ -199,8 +199,8 @@ in
                 # certificate issuance, autoconfig/autodiscover protocols,
                 # well-known resources, metrics collection, and OAuth authentication.
                 # We leave the external HTTPS traffic handling job to a reverse proxy
-                # here instead of having Stalwart-Mail handle it directly on Port 443.
-                # By doing so also allows a reverse proxy to centrally manage
+                # here, instead of having Stalwart-Mail handle it directly on Port 443.
+                # By doing so, a reverse proxy can centrally manage
                 # Let's Encrypt (ACME) and overall certificate renewals.
                 http = {
                   bind = "[::]:${port}";
@@ -239,8 +239,49 @@ in
             };
             # https://stalw.art/docs/mta/outbound/dns/
             resolver = {
-              # Options: 'cloudflare', 'cloudflare-tls', 'quad9', 'quad9-tls', 'google', 'custom'
-              type = "system";
+              # Options: 'cloudflare', 'cloudflare-tls', 'quad9', 'quad9-tls', 'google', 'custom', 'system'
+              type = "system"; # Use the system's default DNS resolver.
+              # The maximum number of concurrent resolution requests made.
+              concurrency = 2;
+              # The time window to timeout when no response is received.
+              timeout = "10s";
+              # The maximum number of resolution request attempts before regarded
+              # as failure.
+              attempts = 3;
+              # Whether to preserve the intermediate name servers in the DNS
+              # resolution results.
+              preserve-intermediates = true;
+              # Whether to try using TCP for resolution requests if an error occurs
+              # during a UDP resolution request.
+              try-tcp-on-error = true;
+              # Whether to use EDNS (Extension mechanisms for DNS) for resolution
+              # requests. This is required for some DNS features (e.g., DNSSEC).
+              edns = true;
+            };
+            # https://stalw.art/docs/mta/reports/analysis
+            report.analysis = {
+              # A list of addresses from which reports will be intercepted and analyzed.
+              addresses = [
+                "abuse@*"
+                "dmarc@*"
+                "noreply-dmarc-support@*"
+                "noreply-smtp-tls-reporting@*"
+                "postmaster@*"
+              ];
+              # Whether reports should be forwarded to their final recipient
+              # after analysis.
+              forward = false;
+              # The duration for which reports should be stored before deletion.
+              # Set this to false to disable storage.
+              store = "30d";
+            };
+            # https://stalw.art/docs/email/imap/#folders
+            email.folders = {
+              archive = {
+                name = "Archive";
+                create = true; # Whether to create the folder if it doesn't exist.
+                subscribe = true; # Whether to subscribe to the folder by default.
+              };
             };
           };
         };
