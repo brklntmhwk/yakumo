@@ -28,30 +28,35 @@ email = "rkawata@yakumo.org"
 name = "tsutsuyami"
 username = "otogaki"
 platform = "x86_64-linux"
+variant = "nixos"
 role = "workstation"
 
 [[hosts]]
 name = "shinonome"
 username = "otogaki"
 platform = "aarch64-linux"
+variant = "nixos-apple-silicon"
 role = "workstation"
 
 [[hosts]]
 name = "utsusemi"
 username = "otogaki"
 platform = "x86_64-linux"
+variant = "nixos-wsl"
 role = "workstation"
 
 [[hosts]]
 name = "momokagari"
 username = "rkawata"
 platform = "aarch64-darwin"
+variant = "nix-darwin"
 role = "workstation"
 
 [[hosts]]
 name = "niwatazumi"
 username = "otogaki"
 platform = "x86_64-linux"
+variant = "nixos"
 role = "server"
 services = [
   "rustic",
@@ -62,6 +67,7 @@ services = [
 name = "sazanami"
 username = "otogaki"
 platform = "x86_64-linux"
+variant = "nixos"
 role = "server"
 services = [
   "adguardhome",
@@ -78,6 +84,7 @@ services = [
 name = "tamazusa"
 username = "otogaki"
 platform = "x86_64-linux"
+variant = "nixos"
 role = "server"
 services = [
   "headscale",
