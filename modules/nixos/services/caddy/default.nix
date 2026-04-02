@@ -22,17 +22,21 @@ in
         assertion = systemRole == "server";
         message = "System role must be server to use Caddy";
       }
+      {
+        assersion = cfg.enable -> config.yakumo.security.acme.enable;
+        message = "ACME must be enabled if using Caddy";
+      }
     ];
 
     services.caddy = {
+      # Specify your email address, which will be used when creating an ACME account
+      # with your CA.
+      inherit (config.security.acme.defaults) email; # Default: null
       enable = true;
       # Reload Caddy instead of restarting it when config file changes.
       enableReload = true; # Default: true
       group = "caddy"; # Default: 'caddy'
       user = "caddy"; # Default: 'caddy'
-      # Specify your email address, which will be used when creating an ACME account
-      # with your CA.
-      email = config.security.acme.defaults.email; # Default: null
       environmentFile = config.sops.secrets."caddy/env_file".path; # Default: null
       dataDir = "/var/lib/caddy";
       logDir = "/var/log/caddy";
@@ -56,6 +60,10 @@ in
       # This will be appended to the resulting Caddyfile.
       extraConfig = "";
     };
+
+    # Add the Caddy service user to the global ACME group so Caddy can read
+    # every ACME certificate.
+    users.groups.acme.members = [ "caddy" ];
 
     yakumo =
       let

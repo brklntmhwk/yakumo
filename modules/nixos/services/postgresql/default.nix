@@ -3,6 +3,7 @@
   config,
   lib,
   rootPath,
+  yakumoMeta,
   ...
 }:
 
@@ -92,12 +93,12 @@ in
 
     yakumo =
       let
-        rusticCfg = config.yakumo.services.rustic;
+        inherit (lib) elem;
         yosugaCfg = config.yakumo.system.persistence.yosuga;
         pgBackupCfg = config.services.postgresqlBackup;
       in
       mkMerge [
-        (mkIf rusticCfg.enable {
+        (mkIf (elem "rustic" yakumoMeta.allServices) {
           services.rustic.backups = {
             postgresql = {
               environmentFile = config.sops.secrets."postgresql/rustic_env_file".path;

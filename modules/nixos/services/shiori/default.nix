@@ -3,6 +3,7 @@
   config,
   lib,
   rootPath,
+  yakumoMeta,
   ...
 }:
 
@@ -32,6 +33,7 @@ in
           enable = true;
           environmentFile = config.sops.secrets."shiori/env_file".path; # Default: null
           # Shiori can use MySQL or PostgreSQL.
+          # This will be the value of `SHIORI_DATABASE_URL`.
           databaseUrl = "postgres:///shiori?host=/run/postgresql"; # Default: null
           webRoot = "/"; # Default: '/'
         };
@@ -48,6 +50,7 @@ in
 
       yakumo =
         let
+          inherit (lib) elem;
           dataDir = "/var/lib/shiori";
           privateDatadir = "/var/lib/private/shiori";
           yosugaCfg = config.yakumo.system.persistence.yosuga;
@@ -58,7 +61,7 @@ in
               caddyIntegration.enable = true;
             };
           }
-          (mkIf rusticCfg.enable {
+          (mkIf (elem "rustic" yakumoMeta.allServices) {
             services.rustic.backups = {
               shiori = {
                 environmentFile = config.sops.secrets."shiori/rustic_env_file".path;

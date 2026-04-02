@@ -3,6 +3,7 @@
   config,
   lib,
   rootPath,
+  yakumoMeta,
   ...
 }:
 
@@ -105,7 +106,7 @@ in
 
     yakumo =
       let
-        rusticCfg = config.yakumo.services.rustic;
+        inherit (lib) elem;
         hassCfg = config.services.home-assistant;
       in
       mkMerge [
@@ -114,7 +115,7 @@ in
             caddyIntegration.enable = true;
           };
         }
-        (mkIf rusticCfg.enable {
+        (mkIf (elem "rustic" yakumoMeta.allServices) {
           services.rustic.backups = {
             home-assistant = {
               environmentFile = config.sops.secrets."hass/rustic_env_file".path;

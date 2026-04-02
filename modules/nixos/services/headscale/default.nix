@@ -4,6 +4,7 @@
   lib,
   pkgs,
   rootPath,
+  yakumoMeta,
   ...
 }:
 
@@ -110,7 +111,7 @@ in
           # OIDC (OpenID Connect)
           oidc =
             let
-              kaniCfg = config.yakumo.services.kanidm;
+              inherit (lib) elem;
             in
             mkMerge [
               {
@@ -136,7 +137,7 @@ in
                   "email"
                 ];
               }
-              (mkIf kaniCfg.enable (
+              (mkIf (elem "kanidm" yakumoMeta.allServices) (
                 let
                   kaniMeta = config.yakumo.services.metadata.kanidm;
                 in

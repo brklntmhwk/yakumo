@@ -13,6 +13,7 @@ let
     mkMerge
     ;
   cfg = config.yakumo.services.garage;
+  meta = config.yakumo.services.metadata.garage;
 in
 {
   options.yakumo.services.garage = {

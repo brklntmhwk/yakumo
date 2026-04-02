@@ -4,6 +4,7 @@
   lib,
   pkgs,
   rootPath,
+  yakumoMeta,
   ...
 }:
 
@@ -23,10 +24,10 @@ in
 
   config = mkIf cfg.enable (
     let
+      inherit (lib) elem;
       inherit (meta) address domain port;
       backupDir = "/var/backup/immich";
       immichCfg = config.services.immich;
-      rusticCfg = config.yakumo.services.rustic;
     in
     mkMerge [
       {
@@ -163,7 +164,7 @@ in
           };
         };
       }
-      (mkIf rusticCfg.enable {
+      (mkIf (elem "rustic" yakumoMeta.allServices) {
         yakumo.services.rustic.backups = {
           immich = {
             environmentFile = config.sops.secrets."immich/rustic_env_file".path;

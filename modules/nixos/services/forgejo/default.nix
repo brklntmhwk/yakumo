@@ -3,6 +3,7 @@
   config,
   lib,
   rootPath,
+  yakumoMeta,
   ...
 }:
 
@@ -93,7 +94,7 @@ in
 
       yakumo =
         let
-          rusticCfg = config.yakumo.services.rustic;
+          inherit (lib) elem;
           yosugaCfg = config.yakumo.system.persistence.yosuga;
         in
         mkMerge [
@@ -104,7 +105,7 @@ in
               };
             };
           }
-          (mkIf rusticCfg.enable {
+          (mkIf (elem "rustic" yakumoMeta.allServices) {
             services.rustic.backups = {
               forgejo = {
                 environmentFile = config.sops.secrets."forgejo/rustic_env_file".path;

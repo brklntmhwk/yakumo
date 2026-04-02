@@ -6,6 +6,7 @@
   lib,
   pkgs,
   rootPath,
+  yakumoMeta,
   ...
 }:
 
@@ -30,6 +31,13 @@ in
     in
     mkMerge [
       {
+        assertions = [
+          {
+            assertion = cfg.enable -> config.yakumo.security.acme.enable;
+            message = "ACME must be enabled if using Stalwart-Mail";
+          }
+        ];
+
         services.stalwart-mail = {
           enable = true;
           # Leave this disabled and manually add ports to
@@ -320,7 +328,7 @@ in
 
         yakumo =
           let
-            rusticCfg = config.yakumo.services.rustic;
+            inherit (lib) elem;
             yosugaCfg = config.yakumo.system.persistence.yosuga;
           in
           mkMerge [
@@ -349,7 +357,7 @@ in
                 };
               };
             }
-            (mkIf rusticCfg.enable {
+            (mkIf (elem "rustic" yakumoMeta.allServices) {
               services.rustic.backups = {
                 stalwart = {
                   environmentFile = config.sops.secrets."stalwart/rustic_env_file".path;

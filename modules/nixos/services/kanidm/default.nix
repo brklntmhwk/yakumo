@@ -26,6 +26,7 @@ in
 
   config = mkIf cfg.enable (
     let
+      inherit (lib) elem;
       inherit (meta) bindAddress domain;
       kaniCfg = config.services.kanidm;
       dataDir = "/var/lib/kanidm";
@@ -136,7 +137,7 @@ in
                     "headscale.access"
                   ];
                 };
-              }) yakumoMeta.user;
+              }) yakumoMeta.users;
               # https://kanidm.github.io/kanidm/stable/accounts/groups.html
               groups = {
                 "forgejo.access" = { };
@@ -158,14 +159,13 @@ in
                   mkOauth2Resource =
                     name: fn:
                     let
-                      appCfg = config.yakumo.services.${name};
-                      appMeta = config.yakumo.services.metadata.${name};
-                      resourceAttrs = fn appMeta;
+                      resourceMeta = config.yakumo.services.metadata.${name};
+                      resourceAttrs = fn resourceMeta;
                     in
-                    mkIf appCfg.enable {
+                    mkIf (elem name yakumoMeta.allServices) {
                       ${name} = {
                         displayName = mkDefault (formatString name);
-                        originLanding = mkDefault "https://${appMeta.domain}/";
+                        originLanding = mkDefault "https://${resourceMeta.domain}/";
                         preferShortUsername = mkDefault true;
                         basicSecretFile = mkForce config.sops.secrets."kanidm/${name}_oauth2_client_secret".path;
                       }
@@ -254,7 +254,6 @@ in
 
         yakumo =
           let
-            rusticCfg = config.yakumo.services.rustic;
             yosugaCfg = config.yakumo.system.persistence.yosuga;
           in
           mkMerge [
@@ -266,7 +265,7 @@ in
                 };
               };
             }
-            (mkIf rusticCfg.enable {
+            (mkIf (elem "rustic" yakumoMeta.allServices) {
               services.rustic.backups = {
                 kanidm = {
                   environmentFile = config.sops.secrets."kanidm/rustic_env_file".path;

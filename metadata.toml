@@ -6,22 +6,108 @@
 [project]
 name = "yakumo"
 
-[[user]]
+[network]
+base_domain = "yakumo.org" # The primary apex domain for all self-hosted services.
+internal_domain = "mesh.yakumo.org" # The local network mesh domain (e.g., Tailscale/Headscale magic DNS).
+dns_provider = "cloudflare"
+
+[security]
+acme_email = "contact@younagi.dev"
+
+[[users]]
 username = "otogaki"
 name = "Ohma Togaki"
 email = "otogaki@yakumo.org"
 
-[[user]]
+[[users]]
 username = "rkawata"
 name = "Reiji Kawata"
 email = "rkawata@yakumo.org"
 
-[network]
-# The primary apex domain for all self-hosted services.
-base_domain = "yakumo.org"
-# The local network mesh domain (e.g., Tailscale/Headscale magic DNS).
-internal_domain = "mesh.yakumo.org"
+[[hosts]]
+name = "tsutsuyami"
+username = "otogaki"
+role = "workstation"
 
-[security]
-acme_provider = "cloudflare"
-acme_email = "contact@younagi.dev"
+[[hosts]]
+name = "shinonome"
+username = "otogaki"
+role = "workstation"
+
+[[hosts]]
+name = "utsusemi"
+username = "otogaki"
+role = "workstation"
+
+[[hosts]]
+name = "momokagari"
+username = "rkawata"
+role = "workstation"
+
+[[hosts]]
+name = "niwatazumi"
+role = "server"
+services = [
+  "rustic",
+  "tailscale"
+]
+
+[[hosts]]
+name = "sazanami"
+role = "server"
+services = [
+  "adguardhome",
+  "caddy",
+  "home-assistant",
+  "kanidm",
+  "mosquitto",
+  "owntracks",
+  "tailscale",
+  "vaultwarden"
+]
+
+[[hosts]]
+name = "tamazusa"
+role = "server"
+services = [
+  "headscale",
+  "ntfy-sh",
+  "stalwart-mail",
+  "tailscale"
+]
+
+[[guests]]
+name = "hayase"
+hostname = "niwatazumi"
+services = [
+  "anki-sync-server",
+  "calibre-web",
+  "forgejo",
+  "mealie",
+  "paperless-ngx",
+  "shiori"
+]
+
+[[guests]]
+name = "minamo"
+hostname = "niwatazumi"
+services = [
+  "grafana"
+]
+
+[[guests]]
+name = "minamoto"
+hostname = "niwatazumi"
+services = [
+  "influxdb",
+  "postgresql"
+]
+
+[[guests]]
+name = "wadatsumi"
+hostname = "niwatazumi"
+services = [
+  "garage",
+  "immich",
+  "samba"
+]

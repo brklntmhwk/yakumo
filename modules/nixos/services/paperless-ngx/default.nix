@@ -6,6 +6,7 @@
   lib,
   pkgs,
   rootPath,
+  yakumoMeta,
   ...
 }:
 
@@ -27,8 +28,8 @@ in
   config = mkIf cfg.enable (
     let
       inherit (builtins) toJSON;
+      inherit (lib) elem;
       paperlessCfg = config.services.paperless;
-      kaniCfg = config.yakumo.services.kanidm;
     in
     mkMerge [
       {
@@ -141,7 +142,6 @@ in
 
         yakumo =
           let
-            rusticCfg = config.yakumo.services.rustic;
             yosugaCfg = config.yakumo.system.persistence.yosuga;
           in
           mkMerge [
@@ -152,7 +152,7 @@ in
                 };
               };
             }
-            (mkIf rusticCfg.enable {
+            (mkIf (elem "rustic" yakumoMeta.allServices) {
               services.rustic.backups = {
                 paperless = {
                   environmentFile = config.sops.secrets."paperless/rustic_env_file".path;
@@ -219,8 +219,7 @@ in
           };
         };
       }
-      # TODO: Implement a globally accessible service status options instead.
-      (mkIf kaniCfg.enable {
+      (mkIf (elem "kanidm" yakumoMeta.allServices) {
         services.paperless.settings = {
           PAPERLESS_APPS = "allauth.socialaccount.providers.openid_connect";
           # This is used for login and signup setups via social account providers

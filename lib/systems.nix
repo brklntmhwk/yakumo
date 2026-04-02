@@ -15,15 +15,24 @@ let
     toString
     ;
   inherit (lib)
+    concatMap
     genAttrs
     getName
     mkDefault
     optionals
+    unique
     warn
     ;
 
   defaultOverlays = [ self.overlays.default ];
-  yakumoMeta = fromTOML (readFile ../metadata.toml);
+  yakumoMeta =
+    let
+      m = fromTOML (readFile ../metadata.toml);
+    in
+    m
+    // {
+      allServices = unique (concatMap (x: x.services or [ ]) (m.hosts ++ m.guests));
+    };
 
   throwNotFoundErr =
     {
@@ -105,7 +114,6 @@ let
             inputs
             name
             username
-            system
             yakumoMeta
             ;
           rootPath = self;

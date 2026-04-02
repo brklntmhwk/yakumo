@@ -3,6 +3,7 @@
   config,
   lib,
   rootPath,
+  yakumoMeta,
   ...
 }:
 
@@ -46,6 +47,15 @@ in
     in
     mkMerge [
       {
+        assertions = [
+          {
+            assertion = cfg.enable -> (yakumoMeta.service.vpn == "headscale");
+            message = ''
+              Headscale must be specified globally as the VPN solution if using Tailscale
+            '';
+          }
+        ];
+
         services.tailscale = {
           inherit (meta) port; # Default: 41641
           enable = true;

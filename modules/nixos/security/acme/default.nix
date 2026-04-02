@@ -18,6 +18,8 @@ in
   config = mkIf cfg.enable (
     let
       inherit (lib) optional;
+      inherit (yakumoMeta.network) base_domain dns_provider internal_domain;
+      inherit (yakumoMeta.security) acme_email;
       yosugaCfg = config.yakumo.system.persistence.yosuga;
       caddyCfg = config.yakumo.services.caddy;
       stalwartCfg = config.yakumo.services.stalwart-mail;
@@ -29,15 +31,6 @@ in
           # This is necessary to use ACME.
           acceptTerms = true;
           defaults = {
-            credentialFiles = {
-              # API token with DNS:Edit permission (since v3.1.0).
-              CF_DNS_API_TOKEN_FILE = config.sops.secrets."acme/cf_dns_token".path;
-              # API token with Zone:Read permission (since v3.1.0).
-              CF_ZONE_API_TOKEN_FILE = config.sops.secrets."acme/cf_zone_token".path;
-            };
-            # For the valid provider list, see:
-            # https://go-acme.github.io/lego/dns/
-            dnsProvider = "cloudflare"; # Default: null
             # Enable DNS propagation check. It verifies whether changes to our domain's
             # DNS records—such as updating an IP address, switching hosting providers,
             # or modifying email settings—have been successfully updated across the
@@ -56,15 +49,30 @@ in
           };
           certs = {
             # These keys will automatically be the value of the `domain` option.
-            "${yakumoMeta.network.base_domain}" = {
+            "${base_domain}" = {
               extraDomainNames = [
-                "*.${yakumoMeta.network.base_domain}"
+                "*.${base_domain}"
               ]; # Default: [ ]
             };
-            "${yakumoMeta.network.internal_domain}" = {
+            "${internal_domain}" = {
               extraDomainNames = [
-                "*.${yakumoMeta.network.internal_domain}"
+                "*.${internal_domain}"
               ]; # Default: [ ]
+            };
+          };
+        };
+      }
+      (mkIf (dns_provider == "cloudflare") {
+        security.acme = {
+          defaults = {
+            # For the valid provider list, see:
+            # https://go-acme.github.io/lego/dns/
+            dnsProvider = dns_provider; # Default: null
+            credentialFiles = {
+              # API token with DNS:Edit permission (since v3.1.0).
+              CF_DNS_API_TOKEN_FILE = config.sops.secrets."acme/cf_dns_token".path;
+              # API token with Zone:Read permission (since v3.1.0).
+              CF_ZONE_API_TOKEN_FILE = config.sops.secrets."acme/cf_zone_token".path;
             };
           };
         };
@@ -81,7 +89,7 @@ in
             group = "acme";
           };
         };
-      }
+      })
       (mkIf yosugaCfg.enable {
         yakumo.system.persistence.yosuga = {
           directories = [
@@ -93,11 +101,6 @@ in
             }
           ];
         };
-      })
-      (mkIf caddyCfg.enable {
-        # Add the Caddy service user to the global ACME group so Caddy can read
-        # every ACME certificate.
-        users.groups.acme.members = [ "caddy" ];
       })
     ]
   );

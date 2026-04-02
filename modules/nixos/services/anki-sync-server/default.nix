@@ -2,6 +2,8 @@
 {
   config,
   lib,
+  rootPath,
+  yakumoMeta,
   ...
 }:
 
@@ -67,6 +69,7 @@ in
 
     yakumo =
       let
+        inherit (lib) elem;
         dataDir = "/var/lib/private/anki-sync-server";
         yosugaCfg = config.yakumo.system.persistence.yosuga;
       in
@@ -76,7 +79,7 @@ in
             caddyIntegration.enable = true;
           };
         }
-        (mkIf rusticCfg.enable {
+        (mkIf (elem "rustic" yakumoMeta.allServices) {
           services.rustic.backups = {
             anki-sync-server = {
               environmentFile = config.sops.secrets."anki-sync-server/rustic_env_file".path;
