@@ -118,66 +118,13 @@
         imports = lib'.mapFilterModulesRecursively ./modules import [ "darwin" ];
       };
 
-      nixosConfigurations =
-        lib'.mkNixOsHosts {
-          tsutsuyami = {
-            system = "x86_64-linux";
-            username = "otogaki";
-          };
-          utsusemi = {
-            system = "x86_64-linux";
-            username = "otogaki";
-            extraModules = [ inputs.nixos-wsl.nixosModules.default ];
-          };
-          shinonome = {
-            system = "aarch64-linux";
-            username = "otogaki";
-            extraModules = [
-              inputs.nixos-apple-silicon.nixosModules.default
-            ];
-          };
-          # niwatazumi = {
-          #   system = "x86_64-linux";
-          #   username = "otogaki";
-          # };
-          # sazanami = {
-          #   system = "x86_64-linux";
-          #   username = "otogaki";
-          # };
-          # tamazusa = {
-          #   system = "x86_64-linux";
-          #   username = "otogaki";
-          # };
-        }
-        // lib'.mkNixOsGuests "niwatazumi" {
-          # hayase = {
-          #   system = "x86_64-linux";
-          #   username = "otogaki";
-          # };
-          # minamo = {
-          #   system = "x86_64-linux";
-          #   username = "otogaki";
-          # };
-          # minamoto = {
-          #   system = "x86_64-linux";
-          #   username = "otogaki";
-          # };
-          # wadatsumi = {
-          #   system = "x86_64-linux";
-          #   username = "otogaki";
-          # };
-        };
+      nixosConfigurations = lib'.mkNixOsHosts // lib'.mkNixOsGuests;
 
       # These are not for external use.
       # darwinModules.default = {
       #   imports = lib'.mapFilterModulesRecursively ./modules import [ "nixos" ];
       # };
 
-      # darwinConfigurations = lib'.mkDarwinHosts {
-      #   momokagari = {
-      #     system = "aarch64-darwin";
-      #     username = "rkawata";
-      #   };
-      # };
+      # darwinConfigurations = lib'.mkDarwinHosts;
     };
 }

@@ -45,86 +45,86 @@ platform = "x86_64-linux"
 variant = "nixos-wsl"
 role = "workstation"
 
-[[hosts]]
-name = "momokagari"
-username = "rkawata"
-platform = "aarch64-darwin"
-variant = "nix-darwin"
-role = "workstation"
+# [[hosts]]
+# name = "momokagari"
+# username = "rkawata"
+# platform = "aarch64-darwin"
+# variant = "nix-darwin"
+# role = "workstation"
 
-[[hosts]]
-name = "niwatazumi"
-username = "otogaki"
-platform = "x86_64-linux"
-variant = "nixos"
-role = "server"
-services = [
-  "rustic",
-  "tailscale"
-]
+# [[hosts]]
+# name = "niwatazumi"
+# username = "otogaki"
+# platform = "x86_64-linux"
+# variant = "nixos"
+# role = "server"
+# services = [
+#   "rustic",
+#   "tailscale"
+# ]
 
-[[hosts]]
-name = "sazanami"
-username = "otogaki"
-platform = "x86_64-linux"
-variant = "nixos"
-role = "server"
-services = [
-  "adguardhome",
-  "caddy",
-  "home-assistant",
-  "kanidm",
-  "mosquitto",
-  "owntracks",
-  "tailscale",
-  "vaultwarden"
-]
+# [[hosts]]
+# name = "sazanami"
+# username = "otogaki"
+# platform = "x86_64-linux"
+# variant = "nixos"
+# role = "server"
+# services = [
+#   "adguardhome",
+#   "caddy",
+#   "home-assistant",
+#   "kanidm",
+#   "mosquitto",
+#   "owntracks",
+#   "tailscale",
+#   "vaultwarden"
+# ]
 
-[[hosts]]
-name = "tamazusa"
-username = "otogaki"
-platform = "x86_64-linux"
-variant = "nixos"
-role = "server"
-services = [
-  "headscale",
-  "ntfy-sh",
-  "stalwart-mail",
-  "tailscale"
-]
+# [[hosts]]
+# name = "tamazusa"
+# username = "otogaki"
+# platform = "x86_64-linux"
+# variant = "nixos"
+# role = "server"
+# services = [
+#   "headscale",
+#   "ntfy-sh",
+#   "stalwart-mail",
+#   "tailscale"
+# ]
 
-[[guests]]
-name = "hayase"
-hostname = "niwatazumi"
-services = [
-  "anki-sync-server",
-  "calibre-web",
-  "forgejo",
-  "mealie",
-  "paperless-ngx",
-  "shiori"
-]
+# [[guests]]
+# name = "hayase"
+# hostname = "niwatazumi"
+# services = [
+#   "anki-sync-server",
+#   "calibre-web",
+#   "forgejo",
+#   "mealie",
+#   "paperless-ngx",
+#   "shiori"
+# ]
 
-[[guests]]
-name = "minamo"
-hostname = "niwatazumi"
-services = [
-  "grafana"
-]
+# [[guests]]
+# name = "minamo"
+# hostname = "niwatazumi"
+# services = [
+#   "grafana"
+# ]
 
-[[guests]]
-name = "minamoto"
-hostname = "niwatazumi"
-services = [
-  "influxdb",
-  "postgresql"
-]
+# [[guests]]
+# name = "minamoto"
+# hostname = "niwatazumi"
+# services = [
+#   "influxdb",
+#   "postgresql"
+# ]
 
-[[guests]]
-name = "wadatsumi"
-hostname = "niwatazumi"
-services = [
-  "garage",
-  "immich",
-  "samba"
-]
+# [[guests]]
+# name = "wadatsumi"
+# hostname = "niwatazumi"
+# services = [
+#   "garage",
+#   "immich",
+#   "samba"
+# ]

@@ -8,17 +8,22 @@
 let
   inherit (self) inputs;
   inherit (builtins)
+    filter
     fromTOML
-    mapAttrs
+    listToAttrs
     pathExists
     readFile
     toString
     ;
   inherit (lib)
     concatMap
+    findFirst
     genAttrs
     getName
+    hasPrefix
+    hasSuffix
     mkDefault
+    nameValuePair
     optionals
     unique
     warn
@@ -31,8 +36,30 @@ let
     in
     m
     // {
-      allServices = unique (concatMap (x: x.services or [ ]) (m.hosts ++ m.guests));
+      allServices = unique (concatMap (x: x.services or [ ]) ((m.hosts or [ ]) ++ (m.guests or [ ])));
     };
+  enrichedGuests = map (
+    guest:
+    let
+      parentHost =
+        findFirst (h: h.name == guest.hostname)
+          (throw "Parent host ${guest.hostname} not found for guest ${guest.name}")
+          (yakumoMeta.hosts or [ ]);
+    in
+    guest
+    //
+      {
+        inherit (parentHost) username platform variant;
+      }
+        (yakumoMeta.guests or [ ])
+  );
+
+  isNixOsSystem = s: hasSuffix "linux" (s.platform or "") && hasPrefix "nixos" (s.variant or "");
+  isDarwinSystem = s: hasSuffix "darwin" (s.platform or "") && (s.variant or "") == "nix-darwin";
+
+  nixosHostMeta = filter isNixOsSystem (yakumoMeta.hosts or [ ]);
+  nixosGuestMeta = filter isNixOsSystem enrichedGuests;
+  darwinHostMeta = filter isDarwinSystem (yakumoMeta.hosts or [ ]);
 
   throwNotFoundErr =
     {
@@ -51,21 +78,27 @@ let
 
   mkSystem =
     {
+      metadata,
       builder,
-      platformType,
+      overlays ? defaultOverlays,
       isGuest ? false,
     }:
-    name:
-    {
-      username,
-      system,
-      overlays ? defaultOverlays,
-      extraModules ? [ ],
-      hostName ? name,
-      hostConfigPath ? ../hosts/${name},
+    let
+      inherit (metadata)
+        name
+        username
+        platform
+        variant
+        ;
+      parentHostName = metadata.hostname or null;
+      hostConfigPath =
+        if isGuest && parentHostName != null then
+          ../hosts/${parentHostName}/guests/${name}
+        else
+          ../hosts/${name};
       # Guests are typically headless server nodes, so we default to skipping the user profile.
-      userConfigPath ? if isGuest then null else ../users/${username}/hosts/${name},
-    }:
+      userConfigPath = if isGuest then null else ../users/${username}/hosts/${name};
+    in
     if hostConfigPath != null && !pathExists hostConfigPath then
       throwNotFoundErr {
         inherit name;
@@ -84,11 +117,11 @@ let
           hostConfigPath
           {
             # The name of this machine on the network.
-            networking.hostName = mkDefault hostName;
+            networking.hostName = mkDefault name;
             nixpkgs = {
               inherit overlays;
               config.allowUnfreePredicate = pkg: warn "Allowing unfree package: ${getName pkg}" true;
-              hostPlatform = system;
+              hostPlatform = platform;
             };
           }
           # Feed the current system's 'pkgs' into 'mkMurakumo' to build the Murakumo scope
@@ -103,10 +136,13 @@ let
         # Use `lib.optionals` instead of `lib.optional` here;
         # the former returns the given list as is if the condition is met.
         ++ optionals (userConfigPath != null) [ userConfigPath ]
-        ++ optionals (platformType == "nixos") [ self.nixosModules.default ]
-        ++ optionals (platformType == "darwin") [ self.darwinModules.default ]
+        ++ optionals (isNixOsSystem metadata) [ self.nixosModules.default ]
+        ++ optionals (isDarwinSystem metadata) [ self.darwinModules.default ]
         ++ optionals isGuest [ inputs.microvm.nixosModules.microvm ]
-        ++ extraModules;
+        ++ optionals (variant == "nixos-apple-silicon") [
+          inputs.nixos-apple-silicon.nixosModules.default
+        ]
+        ++ optionals (variant == "nixos-wsl") [ inputs.nixos-wsl.nixosModules.default ];
 
         # Put these into the modules' scope and make them accesible.
         specialArgs = {
@@ -128,32 +164,34 @@ in
     "aarch64-darwin"
   ];
 
-  mkNixOsHosts = mapAttrs (mkSystem {
-    builder = inputs.nixpkgs.lib.nixosSystem;
-    platformType = "nixos";
-  });
+  mkNixOsHosts = listToAttrs (
+    map (
+      host:
+      nameValuePair host.name (mkSystem {
+        metadata = host;
+        builder = inputs.nixpkgs.lib.nixosSystem;
+      })
+    ) nixosHostMeta
+  );
 
-  mkNixOsGuests =
-    parentHostName:
-    mapAttrs (
-      guestName: args:
-      mkSystem
-        {
-          builder = inputs.nixpkgs.lib.nixosSystem;
-          platformType = "nixos";
-          isGuest = true;
-        }
-        guestName
-        (
-          args
-          // {
-            hostConfigPath = args.hostConfigPath or ../hosts/${parentHostName}/guests/${guestName};
-          }
-        )
-    );
+  mkNixOsGuests = listToAttrs (
+    map (
+      guest:
+      nameValuePair guest.name (mkSystem {
+        metadata = guest;
+        builder = inputs.nixpkgs.lib.nixosSystem;
+        isGuest = true;
+      })
+    ) nixosGuestMeta
+  );
 
-  mkDarwinHosts = mapAttrs (mkSystem {
-    builder = inputs.darwin.lib.darwinSystem;
-    platformType = "darwin";
-  });
+  mkDarwinHosts = listToAttrs (
+    map (
+      host:
+      nameValuePair host.name (mkSystem {
+        metadata = host;
+        builder = inputs.darwin.lib.darwinSystem;
+      })
+    ) darwinHostMeta
+  );
 }
