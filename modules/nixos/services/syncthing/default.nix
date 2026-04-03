@@ -100,7 +100,7 @@ in
           # https://docs.syncthing.net/users/strelaysrv.html#strelaysrv
           relay = {
             # Whether to enable the Syncthing relay systemd service.
-            inherit (cfg.relay) enable;
+            inherit (cfg.relay) enable; # Default: false
             listenAddress = address; # Default: ''
             statusListenAddress = address; # Default: ''
             port = extraPorts.relay; # Default: 22067
@@ -163,6 +163,7 @@ in
 
         yakumo =
           let
+            inherit (lib) optionals;
             yosugaCfg = config.yakumo.system.persistence.yosuga;
           in
           mkMerge [
