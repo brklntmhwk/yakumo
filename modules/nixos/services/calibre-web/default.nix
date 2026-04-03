@@ -23,12 +23,12 @@ in
 
   config = mkIf cfg.enable {
     assertions =
-        let
-          inherit (murakumo.assertions) assertServiceUp;
-        in
-        [
-          (assertServiceUp "calibre-web" rootMeta.allServices)
-        ];
+      let
+        inherit (murakumo.assertions) assertServiceUp;
+      in
+      [
+        (assertServiceUp "calibre-web" rootMeta.allServices)
+      ];
 
     services.calibre-web = {
       enable = true;

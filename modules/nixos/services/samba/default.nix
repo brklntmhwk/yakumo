@@ -22,12 +22,12 @@ in
 
   config = mkIf cfg.enable {
     assertions =
-        let
-          inherit (murakumo.assertions) assertServiceUp;
-        in
-        [
-          (assertServiceUp "samba" rootMeta.allServices)
-        ];
+      let
+        inherit (murakumo.assertions) assertServiceUp;
+      in
+      [
+        (assertServiceUp "samba" rootMeta.allServices)
+      ];
 
     services.samba = {
       enable = true;
