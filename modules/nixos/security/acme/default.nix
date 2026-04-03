@@ -2,7 +2,7 @@
   config,
   lib,
   rootPath,
-  yakumoMeta,
+  rootMeta,
   ...
 }:
 
@@ -18,8 +18,8 @@ in
   config = mkIf cfg.enable (
     let
       inherit (lib) optional;
-      inherit (yakumoMeta.network) base_domain dns_provider internal_domain;
-      inherit (yakumoMeta.security) acme_email;
+      inherit (rootMeta.network) base_domain dns_provider internal_domain;
+      inherit (rootMeta.security) acme_email;
       yosugaCfg = config.yakumo.system.persistence.yosuga;
       caddyCfg = config.yakumo.services.caddy;
       stalwartCfg = config.yakumo.services.stalwart-mail;
@@ -40,7 +40,7 @@ in
             # from the Certificate Authority.
             # Recommended to use the same email for all certs to avoid account creation
             # limits.
-            email = yakumoMeta.security.acme_email; # Default: null
+            email = rootMeta.security.acme_email; # Default: null
             # Specify which group to run the ACME client (LEGO).
             group = "acme"; # Default: 'acme'
             # Specify systemd services to call `systemctl try-reload-or-restart` on.

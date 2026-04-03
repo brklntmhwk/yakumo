@@ -30,7 +30,7 @@ let
     ;
 
   defaultOverlays = [ self.overlays.default ];
-  yakumoMeta =
+  rootMeta =
     let
       m = fromTOML (readFile ../metadata.toml);
     in
@@ -38,27 +38,28 @@ let
     // {
       allServices = unique (concatMap (x: x.services or [ ]) ((m.hosts or [ ]) ++ (m.guests or [ ])));
     };
-  # Fill the guest entries with some of their host's properties.
+  # Fill the guest entries with some of their host's properties (e.g., `platform`).
   enrichedGuests = map (
     guest:
     let
-      parentHost =
-        findFirst (h: h.name == guest.hostname)
-          (throw "Parent host ${guest.hostname} not found for guest ${guest.name}")
-          (yakumoMeta.hosts or [ ]);
+      parentHost = findFirst (
+        h: h.name == guest.hostname
+      ) (throw "Parent host ${guest.hostname} not found for guest ${guest.name}") (rootMeta.hosts or [ ]);
     in
     guest
     // {
       inherit (parentHost) username platform variant;
     }
-  ) (yakumoMeta.guests or [ ]);
+  ) (rootMeta.guests or [ ]);
 
+  # These may come across as weird logic, but are fine; the root metadata, that they'll
+  # refer to, are the Single Source of Truth for global constants.
   isNixOsSystem = s: hasSuffix "linux" (s.platform or "") && hasPrefix "nixos" (s.variant or "");
   isDarwinSystem = s: hasSuffix "darwin" (s.platform or "") && (s.variant or "") == "nix-darwin";
 
-  nixosHostMeta = filter isNixOsSystem (yakumoMeta.hosts or [ ]);
+  nixosHostMeta = filter isNixOsSystem (rootMeta.hosts or [ ]);
   nixosGuestMeta = filter isNixOsSystem enrichedGuests;
-  darwinHostMeta = filter isDarwinSystem (yakumoMeta.hosts or [ ]);
+  darwinHostMeta = filter isDarwinSystem (rootMeta.hosts or [ ]);
 
   throwNotFoundErr =
     {
@@ -149,7 +150,7 @@ let
             inputs
             name
             username
-            yakumoMeta
+            rootMeta
             ;
           rootPath = self;
         };
