@@ -106,27 +106,39 @@ in
           useRoutingFeatures = cfg.routingRole; # Default: 'none'
         };
 
-        networking.firewall = {
-          enable = true;
-          trustedInterfaces = [ interfaceName ];
-          allowedUDPPorts = [ port ];
-          # Perform a reverse path filter test on a packet.
-          # Options: 'strict', 'loose', or bool
-          # - 'strict' (or `true`): Drops the packet if it's asymmetrical: A response
-          # to the packet isn't sent via the same interface as the one the packet
-          # arrives on.
-          # - 'loose': Only drops the packet if the source address is not reachable
-          # via any interfaces.
-          # - `false`: Disables it.
-          # Set it to "loose" to prevent the firewall from aggressively dropping
-          # asymmetrical VPN routing. This is required to use Tailscale Exit Nodes.
-          # Also, setting `services.tailscale.useRoutingFeatures` to either 'client'
-          # or 'both' automatically sets this to 'loose'.
-          # checkReversePath = "loose"; # Default: true
+        # https://wiki.nixos.org/wiki/Tailscale#Native_nftables_Support_(Modern_Setup)
+        networking = {
+          # The modern solution to packet filtering as of 2026.
+          nftables = {
+            enable = true;
+          };
+          firewall = {
+            enable = true;
+            trustedInterfaces = [ interfaceName ];
+            allowedUDPPorts = [ port ];
+            # Perform a reverse path filter test on a packet.
+            # Options: 'strict', 'loose', or bool
+            # - 'strict' (or `true`): Drops the packet if it's asymmetrical: A response
+            # to the packet isn't sent via the same interface as the one the packet
+            # arrives on.
+            # - 'loose': Only drops the packet if the source address is not reachable
+            # via any interfaces.
+            # - `false`: Disables it.
+            # Set it to "loose" to prevent the firewall from aggressively dropping
+            # asymmetrical VPN routing. This is required to use Tailscale Exit Nodes.
+            # Also, setting `services.tailscale.useRoutingFeatures` to either 'client'
+            # or 'both' automatically sets this to 'loose'.
+            # checkReversePath = "loose"; # Default: true
+          };
         };
 
-        # TODO: Consider introducing nftables.
-        # See: https://wiki.nixos.org/wiki/Tailscale#Native_nftables_Support_(Modern_Setup)
+        # https://wiki.nixos.org/wiki/Tailscale#Native_nftables_Support_(Modern_Setup)
+        systemd.services.tailscaled.serviceConfig.Environment = [
+          # As the Tailscale's default firewall mode is iptables, manually set it
+          # to nftables if you want.
+          # https://tailscale.com/docs/features/firewall-mode
+          "TS_DEBUG_FIREWALL_MODE=nftables"
+        ];
 
         yakumo =
           let

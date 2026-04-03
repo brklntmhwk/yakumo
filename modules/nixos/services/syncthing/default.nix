@@ -28,7 +28,13 @@ in
   config = mkIf cfg.enable (
     let
       inherit (meta) address bindAddress extraPorts;
-      inherit (config.services.syncthing) configDir dataDir group user relay;
+      inherit (config.services.syncthing)
+        configDir
+        dataDir
+        group
+        user
+        relay
+        ;
     in
     mkMerge [
       {

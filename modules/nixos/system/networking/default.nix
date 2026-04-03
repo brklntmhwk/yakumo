@@ -18,6 +18,8 @@ let
   yosugaCfg = config.yakumo.system.persistence.yosuga;
   isNm = cfg.manager == "networkmanager";
   isNetworkd = cfg.manager == "networkd";
+  isWorkstation = systemRole == "workstation";
+  isServer = systemRole == "server";
   managers = [
     "networkmanager"
     "networkd"
@@ -28,7 +30,9 @@ in
   options.yakumo.system.networking = {
     manager = mkOption {
       type = types.enum managers;
-      default = "none";
+      # Networkd is better for servers/routers.
+      # https://nixos.wiki/wiki/Systemd-networkd
+      default = if isServer then "networkd" else "none";
       description = "Manager of networking.";
     };
   };
@@ -70,8 +74,30 @@ in
       # For the detailed instructions, see:
       # https://nixos.wiki/wiki/Systemd-networkd
       networking.useNetworkd = true;
+
+      systemd.network = {
+        # `systemd-network-wait-online@` service configurations.
+        wait-online = {
+          # Whether to enable the systemd-networkd-wait-online service.
+          enable = mkDefault true; # Default: true
+          # Prevent boot hangs caused by networkd waiting for all interfaces to be online.
+          # This tells it to proceed as long as at least one is connected.
+          anyInterface = mkDefault true; # Default: `config.networking.useDHCP` (true)
+          # Specify the timeout limit for the network to appear online (in seconds).
+          # Set this to 0 to disable.
+          timeout = mkDefault 30; # Default: 120
+        };
+      };
+      boot.initrd.systemd.network = {
+        # The initrd (Stage 1) version of the one above.
+        wait-online = {
+          enable = mkDefault true; # Default: true
+          anyInterface = mkDefault true; # Default: `config.networking.useDHCP` (true)
+          timeout = mkDefault 15; # Default: 120
+        };
+      };
     })
-    (mkIf (systemRole == "workstation" && isNetworkd) {
+    (mkIf (isWorkstation && isNetworkd) {
       systemd.network = {
         # Cover all LAN & WAN interfaces.
         # As for the number prefix, the smaller, the higher the priority is.
@@ -79,7 +105,11 @@ in
           "30-wired" = {
             enable = true;
             linkConfig = {
-              RequiredForOnline = "no"; # Prevent hangs at boot.
+              # To prevent hangs at boot, explicitly set this to 'no' as it
+              # defaults to 'yes' unexpectedly.
+              # This tells systemd-networkd, "This port is not always connected and
+              # not required to be online".
+              RequiredForOnline = "no";
             };
             # This may look more verbose than the one below, but semantically better;
             # you can understand the associations on the face of it.
@@ -104,30 +134,11 @@ in
             };
           };
         };
-        # `systemd-network-wait-online@` service configurations.
-        wait-online = {
-          # Whether to enable the systemd-networkd-wait-online service.
-          enable = true; # Default: true
-          # Prevent boot hangs caused by networkd waiting for all interfaces to be online.
-          # This tells it to proceed as long as at least one is connected.
-          anyInterface = true; # Default: config.networking.useDHCP (true)
-          # Specify the timeout limit for the network to appear online (in seconds).
-          # Set this to 0 to disable.
-          timeout = 30; # Default: 120
-        };
+        # Disable the wait-online service for daily drivers.
+        wait-online.enable = false;
       };
-      boot.initrd.systemd.network = {
-        wait-online = {
-          enable = true; # Default: true
-          anyInterface = true; # Default: config.networking.useDHCP (true)
-          timeout = 15; # Default: 120
-        };
-      };
-    })
-    (mkIf (systemRole == "server") {
-      # Networkd is better for servers/routers.
-      # https://nixos.wiki/wiki/Systemd-networkd
-      yakumo.system.networking.manager = mkDefault "networkd";
+      # Disable the wait-online service for daily drivers.
+      boot.initrd.systemd.network.wait-online.enable = false;
     })
   ];
 }
