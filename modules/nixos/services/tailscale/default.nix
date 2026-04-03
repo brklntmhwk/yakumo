@@ -43,7 +43,7 @@ in
 
   config = mkIf cfg.enable (
     let
-      tailCfg = config.services.tailscale;
+      inherit (config.services.tailscale) interfaceName port;
       headMeta = config.yakumo.services.metadata.headscale;
     in
     mkMerge [
@@ -108,8 +108,8 @@ in
 
         networking.firewall = {
           enable = true;
-          trustedInterfaces = [ tailCfg.interfaceName ];
-          allowedUDPPorts = [ tailCfg.port ];
+          trustedInterfaces = [ interfaceName ];
+          allowedUDPPorts = [ port ];
           # Perform a reverse path filter test on a packet.
           # Options: 'strict', 'loose', or bool
           # - 'strict' (or `true`): Drops the packet if it's asymmetrical: A response
