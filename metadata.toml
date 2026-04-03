@@ -60,6 +60,7 @@ role = "workstation"
 # role = "server"
 # services = [
 #   "rustic",
+#   "syncthing",
 #   "tailscale"
 # ]
 
