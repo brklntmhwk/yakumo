@@ -2,6 +2,8 @@
 {
   config,
   lib,
+  murakumo,
+  rootMeta,
   rootPath,
   ...
 }:
@@ -19,6 +21,14 @@ in
   };
 
   config = mkIf cfg.enable {
+    assertions =
+        let
+          inherit (murakumo.assertions) assertServiceUp;
+        in
+        [
+          (assertServiceUp "samba" rootMeta.allServices)
+        ];
+
     services.samba = {
       enable = true;
       # This adds

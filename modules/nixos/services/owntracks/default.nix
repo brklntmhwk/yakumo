@@ -5,6 +5,8 @@
   config,
   lib,
   pkgs,
+  murakumo,
+  rootMeta,
   ...
 }:
 
@@ -92,12 +94,17 @@ in
       '';
     in
     {
-      assertions = [
-        (optionalAttrs mqttCfg.enable {
-          assertion = (mqttCfg.broker == "mosquitto") -> config.yakumo.services.mosquitto.enable;
-          message = "Mosquitto must be enabled for MQTT integration if used as a broker";
-        })
-      ];
+      assertions =
+        let
+          inherit (murakumo.assertions) assertServiceUp;
+        in
+        [
+          (assertServiceUp "owntracks" rootMeta.allServices)
+          (optionalAttrs mqttCfg.enable {
+            assertion = (mqttCfg.broker == "mosquitto") -> config.yakumo.services.mosquitto.enable;
+            message = "Mosquitto must be enabled for MQTT integration if used as a broker";
+          })
+        ];
 
       environment.systemPackages = [ cfg.package ] ++ optional cfg.frontend.enable cfg.frontend.package;
 

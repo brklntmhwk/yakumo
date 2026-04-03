@@ -2,6 +2,8 @@
 {
   config,
   lib,
+  murakumo,
+  rootMeta,
   ...
 }:
 
@@ -19,6 +21,14 @@ in
   };
 
   config = mkIf cfg.enable {
+    assertions =
+        let
+          inherit (murakumo.assertions) assertServiceUp;
+        in
+        [
+          (assertServiceUp "calibre-server" rootMeta.allServices)
+        ];
+
     services.calibre-server = {
       inherit (meta)
         port # Default: 8080

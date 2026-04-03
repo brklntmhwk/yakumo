@@ -4,7 +4,7 @@
   lib,
   murakumo,
   rootPath,
-  yakumoMeta,
+  rootMeta,
   ...
 }:
 
@@ -33,6 +33,14 @@ in
     in
     mkMerge [
       {
+        assertions =
+          let
+            inherit (murakumo.assertions) assertServiceUp;
+          in
+          [
+            (assertServiceUp "kanidm" rootMeta.allServices)
+          ];
+
         services.kanidm = (
           let
             acmeCertsDir = config.security.acme.certs.${domain}.directory;
@@ -137,7 +145,7 @@ in
                     "headscale.access"
                   ];
                 };
-              }) yakumoMeta.users;
+              }) rootMeta.users;
               # https://kanidm.github.io/kanidm/stable/accounts/groups.html
               groups = {
                 "forgejo.access" = { };
@@ -162,7 +170,7 @@ in
                       resourceMeta = config.yakumo.services.metadata.${name};
                       resourceAttrs = fn resourceMeta;
                     in
-                    mkIf (elem name yakumoMeta.allServices) {
+                    mkIf (elem name rootMeta.allServices) {
                       ${name} = {
                         displayName = mkDefault (formatString name);
                         originLanding = mkDefault "https://${resourceMeta.domain}/";
@@ -265,7 +273,7 @@ in
                 };
               };
             }
-            (mkIf (elem "rustic" yakumoMeta.allServices) {
+            (mkIf (elem "rustic" rootMeta.allServices) {
               services.rustic.backups = {
                 kanidm = {
                   environmentFile = config.sops.secrets."kanidm/rustic_env_file".path;

@@ -5,8 +5,9 @@
   config,
   lib,
   pkgs,
+  murakumo,
   rootPath,
-  yakumoMeta,
+  rootMeta,
   ...
 }:
 
@@ -33,6 +34,14 @@ in
     in
     mkMerge [
       {
+        assertions =
+          let
+            inherit (murakumo.assertions) assertServiceUp;
+          in
+          [
+            (assertServiceUp "paperless-ngx" rootMeta.allServices)
+          ];
+
         services.paperless = {
           inherit (meta)
             address # Default: '127.0.0.1'
@@ -149,7 +158,7 @@ in
                 };
               };
             }
-            (mkIf (elem "rustic" yakumoMeta.allServices) {
+            (mkIf (elem "rustic" rootMeta.allServices) {
               services.rustic.backups = {
                 paperless = {
                   environmentFile = config.sops.secrets."paperless/rustic_env_file".path;
@@ -216,7 +225,7 @@ in
           };
         };
       }
-      (mkIf (elem "kanidm" yakumoMeta.allServices) {
+      (mkIf (elem "kanidm" rootMeta.allServices) {
         services.paperless.settings = {
           PAPERLESS_APPS = "allauth.socialaccount.providers.openid_connect";
           # This is used for login and signup setups via social account providers

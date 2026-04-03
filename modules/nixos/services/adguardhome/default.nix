@@ -2,8 +2,9 @@
 {
   config,
   lib,
+  murakumo,
   rootPath,
-  yakumoMeta,
+  rootMeta,
   ...
 }:
 
@@ -31,6 +32,14 @@ in
         ;
     in
     {
+      assertions =
+        let
+          inherit (murakumo.assertions) assertServiceUp;
+        in
+        [
+          (assertServiceUp "adguardhome" rootMeta.allServices)
+        ];
+
       services.adguardhome = {
         inherit port; # Default: 3000
         enable = true;
@@ -148,7 +157,7 @@ in
             rewrites = [
               {
                 enabled = true;
-                domain = "*.${yakumoMeta.network.internal_domain}";
+                domain = "*.${rootMeta.network.internal_domain}";
                 answer = "";
               }
             ];

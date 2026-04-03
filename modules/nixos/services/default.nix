@@ -2,7 +2,7 @@
   config,
   lib,
   murakumo,
-  yakumoMeta,
+  rootMeta,
   ...
 }:
 
@@ -17,7 +17,7 @@ let
     nameValuePair
     types
     ;
-  inherit (yakumoMeta.network) base_domain internal_domain;
+  inherit (rootMeta.network) base_domain internal_domain;
   metadata = config.yakumo.services.metadata;
 
   serviceSubmodule =

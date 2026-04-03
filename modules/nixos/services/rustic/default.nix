@@ -6,6 +6,8 @@
   lib,
   pkgs,
   utils,
+  murakumo,
+  rootMeta,
   ...
 }:
 
@@ -74,6 +76,15 @@ in
         ;
     in
     {
+
+      assertions =
+        let
+          inherit (murakumo.assertions) assertServiceUp;
+        in
+        [
+          (assertServiceUp "rustic" rootMeta.allServices)
+        ];
+
       systemd.services = mapAttrs' (
         name: backup:
         let

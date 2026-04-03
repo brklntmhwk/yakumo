@@ -2,8 +2,9 @@
 {
   config,
   lib,
+  murakumo,
   rootPath,
-  yakumoMeta,
+  rootMeta,
   ...
 }:
 
@@ -23,6 +24,14 @@ in
 
   config = mkIf cfg.enable (mkMerge [
     {
+      assertions =
+        let
+          inherit (murakumo.assertions) assertServiceUp;
+        in
+        [
+          (assertServiceUp "paperless-ngx" rootMeta.allServices)
+        ];
+
       services = {
         shiori = {
           inherit (meta)
@@ -61,7 +70,7 @@ in
               caddyIntegration.enable = true;
             };
           }
-          (mkIf (elem "rustic" yakumoMeta.allServices) {
+          (mkIf (elem "rustic" rootMeta.allServices) {
             services.rustic.backups = {
               shiori = {
                 environmentFile = config.sops.secrets."shiori/rustic_env_file".path;

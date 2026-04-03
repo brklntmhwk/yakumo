@@ -2,6 +2,8 @@
 {
   config,
   lib,
+  murakumo,
+  rootMeta,
   ...
 }:
 
@@ -20,6 +22,14 @@ in
   };
 
   config = mkIf cfg.enable {
+    assertions =
+      let
+        inherit (murakumo.assertions) assertServiceUp;
+      in
+      [
+        (assertServiceUp "mosquitto" rootMeta.allServices)
+      ];
+
     services.mosquitto = {
       enable = true;
       dataDir = "/var/lib/mosquitto";

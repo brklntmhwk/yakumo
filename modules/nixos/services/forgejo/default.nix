@@ -2,8 +2,9 @@
 {
   config,
   lib,
+  murakumo,
   rootPath,
-  yakumoMeta,
+  rootMeta,
   ...
 }:
 
@@ -23,10 +24,15 @@ in
 
   config = mkIf cfg.enable (
     let
+      inherit (murakumo.assertions) assertServiceUp;
       forgejoCfg = config.services.forgejo;
     in
     mkMerge [
       {
+        assertions = [
+          (assertServiceUp "forgejo" rootMeta.allServices)
+        ];
+
         services.forgejo = {
           enable = true;
           database =
@@ -105,7 +111,7 @@ in
                 };
               };
             }
-            (mkIf (elem "rustic" yakumoMeta.allServices) {
+            (mkIf (elem "rustic" rootMeta.allServices) {
               services.rustic.backups = {
                 forgejo = {
                   environmentFile = config.sops.secrets."forgejo/rustic_env_file".path;

@@ -2,8 +2,9 @@
 {
   config,
   lib,
+  murakumo,
   rootPath,
-  yakumoMeta,
+  rootMeta,
   ...
 }:
 
@@ -53,6 +54,14 @@ in
   };
 
   config = mkIf cfg.enable {
+    assertions =
+      let
+        inherit (murakumo.assertions) assertServiceUp;
+      in
+      [
+        (assertServiceUp "anki-sync-server" rootMeta.allServices)
+      ];
+
     # https://docs.ankiweb.net/sync-server.html
     services.anki-sync-server = {
       inherit (meta)
@@ -79,7 +88,7 @@ in
             caddyIntegration.enable = true;
           };
         }
-        (mkIf (elem "rustic" yakumoMeta.allServices) {
+        (mkIf (elem "rustic" rootMeta.allServices) {
           services.rustic.backups = {
             anki-sync-server = {
               environmentFile = config.sops.secrets."anki-sync-server/rustic_env_file".path;

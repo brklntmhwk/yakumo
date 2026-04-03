@@ -3,8 +3,9 @@
   config,
   lib,
   pkgs,
+  murakumo,
   rootPath,
-  yakumoMeta,
+  rootMeta,
   ...
 }:
 
@@ -29,6 +30,14 @@ in
     in
     mkMerge [
       {
+        assertions =
+          let
+            inherit (murakumo.assertions) assertServiceUp;
+          in
+          [
+            (assertServiceUp "vaultwarden" rootMeta.allServices)
+          ];
+
         services.vaultwarden = {
           inherit (meta) domain;
           enable = true;
@@ -112,7 +121,7 @@ in
                 };
               };
             }
-            (mkIf (elem "rustic" yakumoMeta.allServices) {
+            (mkIf (elem "rustic" rootMeta.allServices) {
               services.rustic.backups = {
                 vaultwarden = {
                   environmentFile = config.sops.secrets."vault/rustic_env_file".path;

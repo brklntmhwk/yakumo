@@ -2,6 +2,8 @@
 {
   config,
   lib,
+  murakumo,
+  rootMeta,
   rootPath,
   ...
 }:
@@ -22,6 +24,14 @@ in
 
   config = mkIf cfg.enable (mkMerge [
     {
+      assertions =
+        let
+          inherit (murakumo.assertions) assertServiceUp;
+        in
+        [
+          (assertServiceUp "influxdb" rootMeta.allServices)
+        ];
+
       services.influxdb2 = {
         enable = true;
         provision = {

@@ -5,8 +5,9 @@
   config,
   lib,
   pkgs,
+  murakumo,
   rootPath,
-  yakumoMeta,
+  rootMeta,
   ...
 }:
 
@@ -31,12 +32,17 @@ in
     in
     mkMerge [
       {
-        assertions = [
-          {
-            assertion = cfg.enable -> config.yakumo.security.acme.enable;
-            message = "ACME must be enabled if using Stalwart-Mail";
-          }
-        ];
+        assertions =
+          let
+            inherit (murakumo.assertions) assertServiceUp;
+          in
+          [
+            (assertServiceUp "stalwart-mail" rootMeta.allServices)
+            {
+              assertion = cfg.enable -> config.yakumo.security.acme.enable;
+              message = "ACME must be enabled if using Stalwart-Mail";
+            }
+          ];
 
         services.stalwart-mail = {
           enable = true;
@@ -357,7 +363,7 @@ in
                 };
               };
             }
-            (mkIf (elem "rustic" yakumoMeta.allServices) {
+            (mkIf (elem "rustic" rootMeta.allServices) {
               services.rustic.backups = {
                 stalwart = {
                   environmentFile = config.sops.secrets."stalwart/rustic_env_file".path;

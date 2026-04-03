@@ -3,8 +3,9 @@
   config,
   lib,
   pkgs,
+  murakumo,
   rootPath,
-  yakumoMeta,
+  rootMeta,
   ...
 }:
 
@@ -34,6 +35,14 @@ in
 
   config = mkIf cfg.enable (mkMerge [
     {
+      assertions =
+        let
+          inherit (murakumo.assertions) assertServiceUp;
+        in
+        [
+          (assertServiceUp "headscale" rootMeta.allServices)
+        ];
+
       services.headscale = {
         inherit (meta)
           address # Default: '127.0.0.1'
@@ -137,7 +146,7 @@ in
                   "email"
                 ];
               }
-              (mkIf (elem "kanidm" yakumoMeta.allServices) (
+              (mkIf (elem "kanidm" rootMeta.allServices) (
                 let
                   kaniMeta = config.yakumo.services.metadata.kanidm;
                 in

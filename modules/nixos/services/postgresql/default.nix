@@ -2,8 +2,9 @@
 {
   config,
   lib,
+  murakumo,
   rootPath,
-  yakumoMeta,
+  rootMeta,
   ...
 }:
 
@@ -22,6 +23,14 @@ in
   };
 
   config = mkIf cfg.enable {
+    assertions =
+      let
+        inherit (murakumo.assertions) assertServiceUp;
+      in
+      [
+        (assertServiceUp "postgresql" rootMeta.allServices)
+      ];
+
     services = {
       postgresql = {
         enable = true;
@@ -98,7 +107,7 @@ in
         pgBackupCfg = config.services.postgresqlBackup;
       in
       mkMerge [
-        (mkIf (elem "rustic" yakumoMeta.allServices) {
+        (mkIf (elem "rustic" rootMeta.allServices) {
           services.rustic.backups = {
             postgresql = {
               environmentFile = config.sops.secrets."postgresql/rustic_env_file".path;

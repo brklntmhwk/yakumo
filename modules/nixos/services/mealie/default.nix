@@ -2,8 +2,9 @@
 {
   config,
   lib,
+  murakumo,
   rootPath,
-  yakumoMeta,
+  rootMeta,
   ...
 }:
 
@@ -27,6 +28,14 @@ in
     in
     mkMerge [
       {
+        assertions =
+          let
+            inherit (murakumo.assertions) assertServiceUp;
+          in
+          [
+            (assertServiceUp "mealie" rootMeta.allServices)
+          ];
+
         services.mealie = {
           inherit (meta) port; # Default: 9000
           enable = true;
@@ -81,7 +90,7 @@ in
                 caddyIntegration.enable = true;
               };
             }
-            (mkIf (elem "rustic" yakumoMeta.allServices) {
+            (mkIf (elem "rustic" rootMeta.allServices) {
               services.rustic.backups = {
                 mealie = {
                   environmentFile = config.sops.secrets."mealie/rustic_env_file".path;
@@ -140,7 +149,7 @@ in
               "mealie-secrets.env" = {
                 content = ''
                   OIDC_CLIENT_ID=mealie
-                  ${optionalString (elem "kanidm" yakumoMeta.allServices) ''
+                  ${optionalString (elem "kanidm" rootMeta.allServices) ''
                     OIDC_CLIENT_SECRET=${config.sops.placeholder."kanidm/mealie_oidc_client_secret"}
                   ''}
                 '';

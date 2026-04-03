@@ -3,6 +3,8 @@
   config,
   lib,
   pkgs,
+  murakumo,
+  rootMeta,
   rootPath,
   ...
 }:
@@ -43,6 +45,14 @@ in
     in
     mkMerge [
       {
+        assertions =
+          let
+            inherit (murakumo.assertions) assertServiceUp;
+          in
+          [
+            (assertServiceUp "grafana" rootMeta.allServices)
+          ];
+
         services.grafana = {
           enable = true;
           dataDir = "/var/lib/grafana";

@@ -2,7 +2,9 @@
 {
   config,
   lib,
+  murakumo,
   rootPath,
+  rootMeta,
   ...
 }:
 
@@ -17,16 +19,21 @@ in
   };
 
   config = mkIf cfg.enable {
-    assertions = [
-      {
-        assertion = systemRole == "server";
-        message = "System role must be server to use Caddy";
-      }
-      {
-        assersion = cfg.enable -> config.yakumo.security.acme.enable;
-        message = "ACME must be enabled if using Caddy";
-      }
-    ];
+    assertions =
+      let
+        inherit (murakumo.assertions) assertServiceUp;
+      in
+      [
+        (assertServiceUp "caddy" rootMeta.allServices)
+        {
+          assertion = systemRole == "server";
+          message = "System role must be server to use Caddy";
+        }
+        {
+          assersion = cfg.enable -> config.yakumo.security.acme.enable;
+          message = "ACME must be enabled if using Caddy";
+        }
+      ];
 
     services.caddy = {
       # Specify your email address, which will be used when creating an ACME account

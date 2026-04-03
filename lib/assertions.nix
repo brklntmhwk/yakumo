@@ -1,21 +1,22 @@
 { lib }:
 
 let
-  inherit (builtins) map;
-  inherit (lib) concatStringsSep elem sort;
+  inherit (lib) concatMapStringsSep elem;
 in
 {
-  # https://github.com/nix-community/home-manager/commit/5f433eb164832fc507c3e1ba2a798f8c00578316
-  # NOTE: Deprecated in favor of a directory-based platform modularization.
-  assertPlatform = module: pkgs: platforms: {
-    assertion = elem pkgs.stdenv.hostPlatform.system platforms;
+  # This doesn't technically assert whether the service is up, but simply checks
+  # whether it's specified as any host's service in the project's metadata; therefore
+  # the second param should always be the service list based on the metadata.
+  assertServiceUp = service: allServices: {
+    assertion = elem service allServices;
     message =
       let
-        platformsStr = concatStringsSep "\n" (map (p: "  - ${p}") (sort (a: b: a < b) platforms));
+        servicesStr = concatMapStringsSep "\n" (s: "- ${s}") allServices;
       in
       ''
-        The module ${module} does not support your platform. It only supports:
-        ${platformsStr}
+        No hosts run service '${service}'.
+        The following services should be currently up and running:
+        ${servicesStr}
       '';
   };
 }

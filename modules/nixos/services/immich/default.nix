@@ -3,8 +3,9 @@
   config,
   lib,
   pkgs,
+  murakumo,
+  rootMeta,
   rootPath,
-  yakumoMeta,
   ...
 }:
 
@@ -31,6 +32,14 @@ in
     in
     mkMerge [
       {
+        assertions =
+          let
+            inherit (murakumo.assertions) assertServiceUp;
+          in
+          [
+            (assertServiceUp "immich" rootMeta.allServices)
+          ];
+
         services.immich = {
           inherit port; # Default: 2283
           enable = true;
@@ -164,7 +173,7 @@ in
           };
         };
       }
-      (mkIf (elem "rustic" yakumoMeta.allServices) {
+      (mkIf (elem "rustic" rootMeta.allServices) {
         yakumo.services.rustic.backups = {
           immich = {
             environmentFile = config.sops.secrets."immich/rustic_env_file".path;

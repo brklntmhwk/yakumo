@@ -2,8 +2,9 @@
 {
   config,
   lib,
+  murakumo,
   rootPath,
-  yakumoMeta,
+  rootMeta,
   ...
 }:
 
@@ -22,6 +23,14 @@ in
   };
 
   config = mkIf cfg.enable {
+    assertions =
+      let
+        inherit (murakumo.assertions) assertServiceUp;
+      in
+      [
+        (assertServiceUp "home-assistant" rootMeta.allServices)
+      ];
+
     services.home-assistant = {
       enable = true;
       openFirewall = false; # Default: false
@@ -115,7 +124,7 @@ in
             caddyIntegration.enable = true;
           };
         }
-        (mkIf (elem "rustic" yakumoMeta.allServices) {
+        (mkIf (elem "rustic" rootMeta.allServices) {
           services.rustic.backups = {
             home-assistant = {
               environmentFile = config.sops.secrets."hass/rustic_env_file".path;
