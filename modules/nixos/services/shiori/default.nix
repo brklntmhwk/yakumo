@@ -3,8 +3,8 @@
   config,
   lib,
   murakumo,
-  rootPath,
   rootMeta,
+  rootPath,
   ...
 }:
 
@@ -29,7 +29,7 @@ in
           inherit (murakumo.assertions) assertServiceUp;
         in
         [
-          (assertServiceUp "paperless-ngx" rootMeta.allServices)
+          (assertServiceUp "shiori" rootMeta.allServices)
         ];
 
       services = {
