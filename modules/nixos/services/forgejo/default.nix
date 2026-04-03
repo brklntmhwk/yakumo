@@ -21,13 +21,13 @@ in
     enable = mkEnableOption "forgejo";
   };
 
-  config = mkIf cfg.enable (mkMerge [
-    {
-      services.forgejo =
-        let
-          forgejoCfg = config.services.forgejo;
-        in
-        {
+  config = mkIf cfg.enable (
+    let
+      forgejoCfg = config.services.forgejo;
+    in
+    mkMerge [
+      {
+        services.forgejo = {
           enable = true;
           database =
             let
@@ -92,70 +92,71 @@ in
           };
         };
 
-      yakumo =
-        let
-          inherit (lib) elem;
-          yosugaCfg = config.yakumo.system.persistence.yosuga;
-        in
-        mkMerge [
-          {
-            services = {
-              metadata.forgejo.reverseProxy = {
-                caddyIntegration.enable = true;
-              };
-            };
-          }
-          (mkIf (elem "rustic" yakumoMeta.allServices) {
-            services.rustic.backups = {
-              forgejo = {
-                environmentFile = config.sops.secrets."forgejo/rustic_env_file".path;
-                timerConfig = {
-                  OnCalendar = "*-*-* 04:45:00"; # Run daily at 4:45 a.m.
-                  Persistent = true;
-                };
-                settings = {
-                  repository = {
-                    repository = "s3:https://your-s3-endpoint/bucket/forgejo";
-                  };
-                  backup = {
-                    snapshots = [
-                      {
-                        name = "forgejo";
-                        sources = [
-                          config.services.forgejo.dump.backupDir
-                        ];
-                      }
-                    ];
-                  };
-                  forget = {
-                    keep-daily = 7;
-                    keep-weekly = 4;
-                    keep-monthly = 6;
-                    prune = true;
-                  };
+        yakumo =
+          let
+            inherit (lib) elem;
+            yosugaCfg = config.yakumo.system.persistence.yosuga;
+          in
+          mkMerge [
+            {
+              services = {
+                metadata.forgejo.reverseProxy = {
+                  caddyIntegration.enable = true;
                 };
               };
-            };
-          })
-          (mkIf yosugaCfg.enable {
-            system.persistence.yosuga = {
-              directories = [
-                {
-                  inherit (forgejoCfg) group user;
-                  path = forgejoCfg.stateDir;
-                  mode = "0700";
-                }
-              ];
-            };
-          })
-        ];
+            }
+            (mkIf (elem "rustic" yakumoMeta.allServices) {
+              services.rustic.backups = {
+                forgejo = {
+                  environmentFile = config.sops.secrets."forgejo/rustic_env_file".path;
+                  timerConfig = {
+                    OnCalendar = "*-*-* 04:45:00"; # Run daily at 4:45 a.m.
+                    Persistent = true;
+                  };
+                  settings = {
+                    repository = {
+                      repository = "s3:https://your-s3-endpoint/bucket/forgejo";
+                    };
+                    backup = {
+                      snapshots = [
+                        {
+                          name = "forgejo";
+                          sources = [
+                            config.services.forgejo.dump.backupDir
+                          ];
+                        }
+                      ];
+                    };
+                    forget = {
+                      keep-daily = 7;
+                      keep-weekly = 4;
+                      keep-monthly = 6;
+                      prune = true;
+                    };
+                  };
+                };
+              };
+            })
+            (mkIf yosugaCfg.enable {
+              system.persistence.yosuga = {
+                directories = [
+                  {
+                    inherit (forgejoCfg) group user;
+                    path = forgejoCfg.stateDir;
+                    mode = "0700";
+                  }
+                ];
+              };
+            })
+          ];
 
-      sops.secrets = {
-        "forgejo/rustic_env_file" = {
-          sopsFile = rootPath + "/secrets/default.yaml";
-          owner = "forgejo";
+        sops.secrets = {
+          "forgejo/rustic_env_file" = {
+            sopsFile = rootPath + "/secrets/default.yaml";
+            owner = "forgejo";
+          };
         };
-      };
-    }
-  ]);
+      }
+    ]
+  );
 }

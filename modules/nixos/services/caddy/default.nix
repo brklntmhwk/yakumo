@@ -7,7 +7,7 @@
 }:
 
 let
-  inherit (lib) mkEnableOption mkIf;
+  inherit (lib) mkEnableOption mkIf mkMerge;
   cfg = config.yakumo.services.caddy;
   systemRole = config.yakumo.system.role;
 in

@@ -112,9 +112,6 @@ in
               # If a file's modification time and size are identical for two consecutive
               # checks, it'll be consumed.
               PAPERLESS_CONSUMER_POLLING_DELAY = 5;
-              # Set the delay in seconds between each check done while waiting for
-              # a single file to remain unmodified.
-              PAPERLESS_CONSUMER_POLLING_DELAY = 3;
               PAPERLESS_CONSUMER_ENABLE_BARCODES = true;
               PAPERLESS_CONSUMER_ENABLE_ASN_BARCODE = true;
               PAPERLESS_CONSUMER_BARCODE_SCANNER = "PYZBAR"; # Default: "PYZBAR" (Options: 'ZXING')

@@ -38,6 +38,7 @@ let
     // {
       allServices = unique (concatMap (x: x.services or [ ]) ((m.hosts or [ ]) ++ (m.guests or [ ])));
     };
+  # Fill the guest entries with some of their host's properties.
   enrichedGuests = map (
     guest:
     let
@@ -47,12 +48,10 @@ let
           (yakumoMeta.hosts or [ ]);
     in
     guest
-    //
-      {
-        inherit (parentHost) username platform variant;
-      }
-        (yakumoMeta.guests or [ ])
-  );
+    // {
+      inherit (parentHost) username platform variant;
+    }
+  ) (yakumoMeta.guests or [ ]);
 
   isNixOsSystem = s: hasSuffix "linux" (s.platform or "") && hasPrefix "nixos" (s.variant or "");
   isDarwinSystem = s: hasSuffix "darwin" (s.platform or "") && (s.variant or "") == "nix-darwin";
