@@ -3,8 +3,8 @@
   config,
   lib,
   murakumo,
-  rootPath,
   rootMeta,
+  rootPath,
   ...
 }:
 
@@ -144,26 +144,60 @@ in
             # - 'nxdomain': Respond with NXDOMAIN code.
             # - 'refused': Respond with REFUSED code.
             blocking_mode = "default";
+            # Specify how long the clients should cache a filtered response in seconds.
+            blocked_response_ttl = 10;
+            # Time interval in hours for updating filters.
+            filters_update_interval = 24;
+            # Whether to enable network-wide parental controls, such as blocking adult
+            # content, scheduling restrictions by day and time, etc.
+            parental_enabled = false;
             # Whether any kind of filtering and protection should be performed.
             protection_enabled = true;
+            #
+            protection_disabled_until = null;
             # Whether filtering of DNS requests based on rule lists should be performed.
             filtering_enabled = true;
             safe_search = {
-              enabled = true;
+              enabled = false;
+              bing = true;
+              duckduckgo = true;
+              ecosia = true;
+              google = true;
+              pixabay = true;
+              yandex = true;
+              youtube = true;
             };
             # List of legacy DNS rewrites, where `domain` is the domain or wildcard
             # you want to be rewritten and `answer` is IP address, CNAME record,
             # `A` or `AAAA` special values.
+            # This tells Adguardhome, "If someone asks for this `domain`, give them
+            # this `answer` immediately".
             rewrites = [
               {
                 enabled = true;
                 domain = "*.${rootMeta.network.internal_domain}";
-                answer = "";
+                answer = address;
               }
             ];
           };
           http = {
-            # `address` will automatically be set to `${cfg.host}:${toString cfg.port}`.
+            # `address` will automatically be set to:
+            # `${config.services.adguardhome.host}:${toString config.services.adguardhome.port}`.
+            # DNS-over-HTTPS.
+            doh = {
+              # List of HTTP route patterns for DoH requests.
+              # Default routes are: `GET /dns-query`, `POST /dns-query`,
+              # `GET /dns-query/{ClientID}`, `POST /dns-query/{ClientID}`.
+              routes = "";
+              # Whether to allow DoH queries via unencrypted HTTP (e.g., to use
+              # with reverse proxies).
+              insecure_enabled = false;
+            };
+            # Profiling HTTP handler configuration.
+            # https://github.com/adguardteam/adguardhome/wiki/Configuration#pprof
+            pprof = {
+              enabled = false;
+            };
             # Web session TTL (Time To Live).
             # Web users will stay signed in for this amount of time.
             session_ttl = "720h"; # 30 days
