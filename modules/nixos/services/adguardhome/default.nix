@@ -223,7 +223,7 @@ in
             # Whether to enable network-wide parental controls, such as blocking adult
             # content, scheduling restrictions by day and time, etc.
             parental_enabled = false;
-            parental_cache_size = 1048576;
+            parental_cache_size = 1048576; # Parental Control cache size, in bytes.
             # Whether any kind of filtering and protection should be performed.
             protection_enabled = true;
             # Timestamp until when the protection is disabled.
@@ -232,7 +232,7 @@ in
             # Safe Browsing is a protective feature that safeguards users from
             # malicious websites, phishing scams, malware distribution, etc.
             safebrowsing_enabled = true;
-            safebrowsing_cache_size = 1048576;
+            safebrowsing_cache_size = 1048576; # Safe Browsing cache size, in bytes.
             # Safe Search is a feature that forces search engines to filter out
             # explicit, violent, or adult content from their search results.
             safe_search = {
@@ -245,7 +245,7 @@ in
               yandex = true;
               youtube = true;
             };
-            safesearch_cache_size = 1048576;
+            safesearch_cache_size = 1048576; # Safe Search cache size, in bytes.
             # List of legacy DNS rewrites, where `domain` is the domain or wildcard
             # you want to be rewritten and `answer` is IP address, CNAME record,
             # `A` or `AAAA` special values.
