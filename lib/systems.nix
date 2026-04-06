@@ -33,7 +33,7 @@ let
   rootMeta =
     let
       m = fromTOML (readFile ../metadata.toml);
-      mkServicesFrom =
+      mkServiceListFrom =
         target: svcs:
         concatMap (
           t:
@@ -50,7 +50,7 @@ let
     in
     m
     // {
-      allServices = unique (mkServicesFrom "hosts" m.hosts ++ mkServicesFrom "guests" m.guests);
+      allServices = unique (mkServiceListFrom "hosts" m.hosts ++ mkServiceListFrom "guests" m.guests);
     };
   # Fill the guest entries with some of their host's properties (e.g., `platform`).
   enrichedGuests = map (
