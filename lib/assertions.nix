@@ -1,21 +1,22 @@
 { lib }:
 
 let
-  inherit (lib) concatMapStringsSep elem;
+  inherit (lib) any concatMapStringsSep hasSuffix;
 in
 {
-  # This doesn't technically assert whether the service is up, but simply checks
+  # This doesn't technically assert whether the service is actually up, but simply checks
   # whether it's specified as any host's service in the project's metadata; therefore
   # the second param should always be the service list based on the metadata.
-  assertServiceUp = service: allServices: {
-    assertion = elem service allServices;
+  # e.g., 'niwatazumi/tailscale'
+  assertServiceUp = service: svcList: {
+    assertion = any (hasSuffix service) svcList;
     message =
       let
-        servicesStr = concatMapStringsSep "\n" (s: "- ${s}") allServices;
+        servicesStr = concatMapStringsSep "\n" (s: "- ${s}") svcList;
       in
       ''
-        No hosts run service '${service}'.
-        The following services should be currently up and running:
+        No hosts are running service '${service}'.
+        The following services are currently up and running:
         ${servicesStr}
       '';
   };

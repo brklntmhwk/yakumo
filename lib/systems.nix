@@ -33,10 +33,24 @@ let
   rootMeta =
     let
       m = fromTOML (readFile ../metadata.toml);
+      mkServicesFrom =
+        target: svcs:
+        concatMap (
+          t:
+          map (
+            svc:
+            if target == "hosts" then
+              "${t.name}/${svc}"
+            else if target == "guests" then
+              "${t.hostname}/${t.name}/${svc}"
+            else
+              throw "${target} is an invalid value. Must be either 'hosts' or 'guests'"
+          ) (t.services or [ ])
+        ) svcs;
     in
     m
     // {
-      allServices = unique (concatMap (x: x.services or [ ]) ((m.hosts or [ ]) ++ (m.guests or [ ])));
+      allServices = unique (mkServicesFrom "hosts" m.hosts ++ mkServicesFrom "guests" m.guests);
     };
   # Fill the guest entries with some of their host's properties (e.g., `platform`).
   enrichedGuests = map (
