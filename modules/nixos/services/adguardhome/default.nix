@@ -57,10 +57,63 @@ in
           auth_attempts = 5;
           # The duration of blocking period in minutes.
           block_auth_min = 15;
+          # Persistent and runtime clients settings.
+          clients = {
+            # An array of explicitly configured clients.
+            persistent = [ ];
+            # Control runtime client data sources.
+            runtime_sources = {
+              # Request WHOIS information for clients with public IP addresses.
+              whois = true;
+              # Consider the operating system's ARP (Address Resolution Protocol) table.
+              arp = true;
+              # Perform rDNS lookups for client's address.
+              rdns = true;
+              # Check AdGuard Home's DHCP leases for client's address.
+              dhcp = true;
+              # Follow the operating system's hosts files.
+              hosts = true;
+            };
+          };
           # Built-in DHCP server.
           # https://github.com/AdguardTeam/AdGuardHome/wiki/DHCP
           dhcp = {
             enabled = false;
+            # Network interface name (eth0, en0, and so on).
+            interface_name = "";
+            # The domain name used for the hostnames of its clients, and by
+            # AdGuard Home's DHCP server.
+            local_domain_name = "lan";
+            dhcpv4 = {
+              gateway_ip = "";
+              # Time to wait for an ICMP reply to detect an IP conflict, in milliseconds.
+              # 0 means to disable it.
+              icmp_timeout_msec = 1000;
+              # Lease duration in seconds.
+              # If set to 0, use the default duration: 24 hours.
+              lease_duration = 86400;
+              # The start of the leased IP address range.
+              range_start = "";
+              # The end of the leased IP address range.
+              range_end = "";
+              subnet_mask = "";
+              # Custom DHCP options. For more details, see:
+              # https://github.com/AdguardTeam/AdGuardHome/wiki/DHCP
+              options = [ ];
+            };
+            dhcpv6 = {
+              # The first IP address to be assigned to a client.
+              range_start = "";
+              # Same as the dhcpv4 above.
+              lease_duration = 86400;
+              # RA (Router Advertisement) is an ICMPv6 message (Type 134) used in IPv6
+              # networks to automatically inform devices (nodes) about network prefixes,
+              # default gateways, and configuration methods (SLAAC or DHCPv6).
+              # Send RA packets forcing the clients to use SLAAC.
+              ra_slaac_only = false;
+              # Send RA packets allowing the clients to choose.
+              ra_allow_slaac = false;
+            };
           };
           dns = {
             # If true, anonymize clients' IP addresses in logs and stats.
@@ -71,6 +124,21 @@ in
             port = extraPorts.dns;
             # Whether to turn on the DNS cache globally.
             cache_enabled = true;
+            # DNS cache size in bytes.
+            cache_size = 100000000; # 100MB
+            # The minimum TTL override, in seconds.
+            # If the TTL of a response from upstream is below this value, the TTL
+            # is replaced with it. Must be less than or equal to `cache_ttl_max`.
+            cache_ttl_min = 3600; # 1 hour
+            # The maximum version of `cache_ttl_min`.
+            cache_ttl_max = 86400; # 24 hours
+            # Make AdGuard Home respond from the cache even when the entries are
+            # expired and also try to refresh them.
+            cache_optimistic = true;
+            # TTL for answers from optimistic cache.
+            cache_optimistic_answer_ttl = "30s";
+            # The maximum amount of time that expired entries remain in the optimistic cache.
+            cache_optimistic_max_age = "12h";
             # Whether to allow info from the system hosts file to be used
             # to resolve queries.
             hostsfile_enabled = true;
@@ -146,19 +214,29 @@ in
             blocking_mode = "default";
             # Specify how long the clients should cache a filtered response in seconds.
             blocked_response_ttl = 10;
+            # Time interval in minutes for keeping cache records.
+            cache_time = 30;
+            # Whether filtering of DNS requests based on rule lists should be performed.
+            filtering_enabled = true;
             # Time interval in hours for updating filters.
             filters_update_interval = 24;
             # Whether to enable network-wide parental controls, such as blocking adult
             # content, scheduling restrictions by day and time, etc.
             parental_enabled = false;
+            parental_cache_size = 1048576;
             # Whether any kind of filtering and protection should be performed.
             protection_enabled = true;
-            #
+            # Timestamp until when the protection is disabled.
             protection_disabled_until = null;
-            # Whether filtering of DNS requests based on rule lists should be performed.
-            filtering_enabled = true;
+            # Whether to enable filtering of DNS requests based on safebrowsing.
+            # Safe Browsing is a protective feature that safeguards users from
+            # malicious websites, phishing scams, malware distribution, etc.
+            safebrowsing_enabled = true;
+            safebrowsing_cache_size = 1048576;
+            # Safe Search is a feature that forces search engines to filter out
+            # explicit, violent, or adult content from their search results.
             safe_search = {
-              enabled = false;
+              enabled = false; # Whether to enable it globally.
               bing = true;
               duckduckgo = true;
               ecosia = true;
@@ -167,6 +245,7 @@ in
               yandex = true;
               youtube = true;
             };
+            safesearch_cache_size = 1048576;
             # List of legacy DNS rewrites, where `domain` is the domain or wildcard
             # you want to be rewritten and `answer` is IP address, CNAME record,
             # `A` or `AAAA` special values.
@@ -203,13 +282,64 @@ in
             session_ttl = "720h"; # 30 days
           };
           language = "en";
+          log = {
+            enabled = true;
+            # Path to the log file.
+            # Adguardhome writes to stdout if empty and syslog writes system log
+            # (or eventlog on Windows).
+            file = "";
+            # Maximum number of old log files to retain.
+            # 0 means, "Retain all old log files".
+            max_backups = 0;
+            # Maximum size of the log file before it gets rotated, in megabytes.
+            max_size = 100;
+            # Maximum number of days to retain old log files.
+            max_age = 3;
+            # Whether to enable GZIP compression of the log files.
+            compress = false;
+            # Whether to use the computer's local time for formatting the timestamps.
+            local_time = false;
+            # Whether to enable verbose debug output.
+            verbose = false;
+          };
+          os = {
+            # The name of the user group to switch to after the startup.
+            group = "";
+            # The name of the user to switch to after the startup.
+            user = "";
+            # Limit on the maximum number of open files for the server process
+            # (on unixlike OSs).
+            # If set to 0, use the system's default value.
+            rlimit_nofile = 0;
+          };
           querylog = {
             enabled = true;
+            # Custom directory for storing query log files.
+            dir_path = "";
+            # Whether to write query logs to a file.
+            file_enabled = true;
+            # Time interval for query log files rotation in the human-readble duration
+            # format.
             interval = "24h";
+            # Number of entries kept in memory before they are flushed to disk.
+            size_memory = 1000;
+            # Whether to ignore hosts from the `ignored` list.
+            ignored_enabled = true;
+            # List of host names that should not be written to log.
+            # For the AdBlock rule syntax, see:
+            # https://adguard-dns.io/kb/general/dns-filtering-syntax/
+            ignored = [ ];
           };
           statistics = {
             enabled = true;
+            # Custom directory for storing statistics.
+            dir_path = "";
+            # Time interval for statistics in the human-readble duration format.
             interval = "24h";
+            # Whether to ignore hosts from the `ignored` list.
+            ignored_enabled = true;
+            # List of host names that should not be written to log.
+            ignored = [ ];
           };
           theme = "auto"; # Options: 'dark', 'light'
           # HTTPS/DoH/DoQ/DoT settings.
@@ -219,13 +349,26 @@ in
             in
             {
               enabled = true;
+              # If set, it's used to:
+              # - detect ClientIDs by using the ServerName field of ClientHello messages
+              # - respond to Discovery of Designated Resolvers (DDR) queries
+              # - perform additional connection validations
+              # If not specified, the above-mentioned features are disabled.
+              server_name = address;
+              # The path to the DNSCrypt configuration file.
+              # Must be set if `port_dnscrypt` is not 0.
+              dnscrypt_config_file = "";
               # Whether to force HTTP-to-HTTPS redirect.
               force_https = false; # A reverse proxy (e.g., Caddy) handles this.
-              server_name = address;
               # Filesystem path to a PEM certificate.
               certificate_path = "${acmeCertsDir}/fullchain.pem";
               # Filesystem path to a PEM private key.
               private_key_path = "${acmeCertsDir}/key.pem";
+              # If set, this array of strings allows overriding the default set of
+              # TLS cipher suites to use.
+              # For the valid strings, see:
+              # https://pkg.go.dev/crypto/tls#pkg-constants
+              override_tls_ciphers = [ ];
               # The DNSCrypt port.
               port_dnscrypt = 0; # 0 disables this.
               # The HTTPS port. Used for both web UI and DNS-over-HTTPS.
