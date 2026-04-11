@@ -99,9 +99,20 @@ in
           dns = {
             # Define the base domain to create the hostnames for MagicDNS.
             base_domain = meta.domain;
+            # MagicDNS: Automatically registers DNS names for devices in your network.
+            # Under the hood, it generates a "fully qualified domain name" for every
+            # device on your tailnet, which is made up of these two parts:
+            # - A machine name
+            # - Your tailnet DNS name
+            # e.g., If the machine name is 'hogehoge', and your tailnet DNS name is
+            # 'foo-bar.ts.net', then it'll be 'hogehoge.foo-bar.ts.net'.
+            # In the meantime, it also adds search domains to your network.
+            # As a result, you can refer to the full domain by only typing the machine
+            # name (i.e., 'hogehoge' in the example above).
+            # https://tailscale.com/docs/features/magicdns
             magic_dns = true; # Default: 'true'
             nameservers.global = config.networking.nameservers;
-            # Inject these search domains to Tailscale clients.
+            # Inject these search domains to Tailscale cli/ents.
             # With MagicDNS enabled, our tailnet base_domain is always
             # the first search domain.
             search_domains = [ ];
