@@ -90,6 +90,7 @@ in
           "invalid users" = [
             "root"
           ];
+          # Use Samba's TDB (Trivial Database) for the password system.
           "passdb backend" = "tdbsam:${config.sops.secrets."samba/passdb".path}"; # Default: 'tdbsam'
           "security" = "user"; # Default: 'user' (Options: 'auto', 'domain', 'ads')
           # Make the share visible only to users with the R&W access permissions
